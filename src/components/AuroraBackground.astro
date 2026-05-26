@@ -1,0 +1,91 @@
+---
+---
+<div class="aurora" aria-hidden="true">
+  <div class="aurora__orb aurora__orb--pink"></div>
+  <div class="aurora__orb aurora__orb--orange"></div>
+  <div class="aurora__orb aurora__orb--pink-2"></div>
+  <div class="aurora__orb aurora__orb--orange-2"></div>
+</div>
+
+<style>
+  .aurora {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .aurora__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    will-change: transform;
+  }
+
+  .aurora__orb--pink {
+    width: 600px;
+    height: 400px;
+    background: rgba(230, 43, 127, 0.12);
+    top: -10%;
+    right: -5%;
+    animation: aurora-drift-1 30s ease-in-out infinite alternate;
+  }
+
+  .aurora__orb--orange {
+    width: 500px;
+    height: 350px;
+    background: rgba(250, 98, 68, 0.10);
+    bottom: 10%;
+    left: -8%;
+    animation: aurora-drift-2 35s ease-in-out infinite alternate;
+  }
+
+  .aurora__orb--pink-2 {
+    width: 400px;
+    height: 300px;
+    background: rgba(230, 43, 127, 0.08);
+    top: 50%;
+    left: 30%;
+    animation: aurora-drift-3 28s ease-in-out infinite alternate;
+  }
+
+  .aurora__orb--orange-2 {
+    width: 350px;
+    height: 250px;
+    background: rgba(250, 98, 68, 0.07);
+    top: 20%;
+    right: 20%;
+    animation: aurora-drift-4 32s ease-in-out infinite alternate;
+  }
+
+  @keyframes aurora-drift-1 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-60px, 40px) scale(1.1); }
+    100% { transform: translate(30px, -30px) scale(0.95); }
+  }
+
+  @keyframes aurora-drift-2 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, -30px) scale(1.05); }
+    100% { transform: translate(-40px, 20px) scale(1.1); }
+  }
+
+  @keyframes aurora-drift-3 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, 50px) scale(1.08); }
+    100% { transform: translate(-30px, -20px) scale(0.92); }
+  }
+
+  @keyframes aurora-drift-4 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-50px, 30px) scale(1.12); }
+    100% { transform: translate(20px, -40px) scale(0.98); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aurora__orb {
+      animation: none;
+    }
+  }
+</style>

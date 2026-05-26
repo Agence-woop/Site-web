@@ -1,0 +1,114 @@
+---
+import Logo from './Logo.astro';
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <Logo size="lg" />
+        <p class="footer__desc">
+          L'agence d'acquisition et d'identit&eacute; de marque d&eacute;di&eacute;e &agrave; la sant&eacute;, au bien-&ecirc;tre et au recrutement sp&eacute;cialis&eacute; au Qu&eacute;bec.
+        </p>
+      </div>
+      <div class="footer__col">
+        <h5 class="footer__heading">Pages</h5>
+        <a href="/" class="footer__link">Accueil</a>
+        <a href="/services-medical" class="footer__link">Marketing Sant&eacute; & M&eacute;dical</a>
+        <a href="/services-recrutement" class="footer__link">Marketing RH & Recrutement</a>
+        <a href="/equipe" class="footer__link">&Eacute;quipe</a>
+        <span class="footer__link footer__link--disabled">Blog &middot; Bient&ocirc;t</span>
+      </div>
+      <div class="footer__col">
+        <h5 class="footer__heading">Services</h5>
+        <a href="/services-medical" class="footer__link">M&eacute;dical & bien-&ecirc;tre</a>
+        <a href="/services-recrutement" class="footer__link">Recrutement</a>
+      </div>
+      <div class="footer__col">
+        <h5 class="footer__heading">Contact</h5>
+        <a href="mailto:contact@agencewoop.ca" class="footer__link">contact@agencewoop.ca</a>
+        <span class="footer__link">Montr&eacute;al, Qu&eacute;bec</span>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; 2026 Agence WOOP</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    z-index: 1;
+    padding: 64px 0 32px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+  }
+
+  @media (min-width: 768px) {
+    .footer__grid {
+      grid-template-columns: 1.8fr 1fr 1fr 1fr;
+      gap: 32px;
+    }
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer__desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 320px;
+  }
+
+  .footer__heading {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .footer__link {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    display: block;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .footer__link:hover {
+    color: var(--text-primary);
+  }
+
+  .footer__link--disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .footer__link--disabled:hover {
+    color: var(--text-secondary);
+  }
+
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+</style>
