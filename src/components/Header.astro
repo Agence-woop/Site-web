@@ -2,17 +2,19 @@
 import Logo from './Logo.astro';
 import Button from './Button.astro';
 
+const base = import.meta.env.BASE_URL;
+
 const navItems = [
-  { label: 'Marketing Santé & Médical', href: '/services-medical' },
-  { label: 'Marketing RH & Recrutement', href: '/services-recrutement' },
-  { label: 'Équipe', href: '/equipe' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Marketing Santé & Médical', href: `${base}/services-medical` },
+  { label: 'Marketing RH & Recrutement', href: `${base}/services-recrutement` },
+  { label: 'Équipe', href: `${base}/equipe` },
+  { label: 'Contact', href: `${base}/contact` },
   { label: 'Blog (Bientôt)', href: '#', disabled: true },
 ];
 ---
 <header class="header" id="header">
   <nav class="header__nav container" aria-label="Navigation principale">
-    <a href="/" class="header__logo" aria-label="WOOP - Accueil">
+    <a href={`${base}/`} class="header__logo" aria-label="WOOP - Accueil">
       <Logo size="md" />
     </a>
 
@@ -41,7 +43,7 @@ const navItems = [
           </li>
         ))}
       </ul>
-      <Button variant="primary" href="/contact">
+      <Button variant="primary" href={`${base}/contact`}>
         R&eacute;server un appel d&eacute;couverte
       </Button>
     </div>

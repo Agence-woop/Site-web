@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import BentoCard from '../components/BentoCard.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 <Layout
   title="Agence WOOP — Marketing Santé & Recrutement | Québec"
@@ -20,7 +22,7 @@ import BentoCard from '../components/BentoCard.astro';
         L'agence d&eacute;di&eacute;e &agrave; la sant&eacute;, au bien-&ecirc;tre et aux cabinets de recrutement sp&eacute;cialis&eacute;s au Qu&eacute;bec. Nous b&acirc;tissons des marques qui attirent et des campagnes qui convertissent.
       </p>
       <div class="hero__ctas">
-        <Button variant="primary" href="/contact">R&eacute;server un appel d&eacute;couverte</Button>
+        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
         <Button variant="secondary" href="#approche">Voir nos services</Button>
       </div>
     </div>
@@ -84,7 +86,7 @@ import BentoCard from '../components/BentoCard.astro';
       <span class="kicker">02 — Pour qui ?</span>
       <h2 class="section-title">Deux secteurs. Deux expertises.</h2>
       <div class="personas">
-        <a href="/services-medical" class="persona-card">
+        <a href={`${base}/services-medical`} class="persona-card">
           <div class="persona-card__top">
             <span class="persona-card__badge">Persona A &middot; Sant&eacute;</span>
           </div>
@@ -94,7 +96,7 @@ import BentoCard from '../components/BentoCard.astro';
             <span class="persona-card__cta">D&eacute;couvrir nos services sant&eacute; &rarr;</span>
           </div>
         </a>
-        <a href="/services-recrutement" class="persona-card">
+        <a href={`${base}/services-recrutement`} class="persona-card">
           <div class="persona-card__top">
             <span class="persona-card__badge">Persona B &middot; Recrutement</span>
           </div>
@@ -166,7 +168,7 @@ import BentoCard from '../components/BentoCard.astro';
         <div class="team-strip__info">
           <h3 class="team-strip__title">Le trio WOOP</h3>
           <p class="team-strip__text">Trois experts, aucune sous-traitance. Vous savez qui fait quoi sur votre projet.</p>
-          <Button variant="tertiary" href="/equipe">Rencontrer l'&eacute;quipe</Button>
+          <Button variant="tertiary" href={`${base}/equipe`}>Rencontrer l'&eacute;quipe</Button>
         </div>
         <div class="team-strip__members">
           <div class="team-strip__member">
@@ -193,7 +195,7 @@ import BentoCard from '../components/BentoCard.astro';
   <section class="cta-final">
     <div class="container">
       <h2 class="cta-final__title">Parlons de votre projet.</h2>
-      <Button variant="primary" href="/contact">R&eacute;server un appel d&eacute;couverte</Button>
+      <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
     </div>
   </section>
 

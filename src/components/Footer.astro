@@ -1,5 +1,7 @@
 ---
 import Logo from './Logo.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 <footer class="footer">
   <div class="container">
@@ -12,16 +14,16 @@ import Logo from './Logo.astro';
       </div>
       <div class="footer__col">
         <h5 class="footer__heading">Pages</h5>
-        <a href="/" class="footer__link">Accueil</a>
-        <a href="/services-medical" class="footer__link">Marketing Sant&eacute; & M&eacute;dical</a>
-        <a href="/services-recrutement" class="footer__link">Marketing RH & Recrutement</a>
-        <a href="/equipe" class="footer__link">&Eacute;quipe</a>
+        <a href={`${base}/`} class="footer__link">Accueil</a>
+        <a href={`${base}/services-medical`} class="footer__link">Marketing Sant&eacute; & M&eacute;dical</a>
+        <a href={`${base}/services-recrutement`} class="footer__link">Marketing RH & Recrutement</a>
+        <a href={`${base}/equipe`} class="footer__link">&Eacute;quipe</a>
         <span class="footer__link footer__link--disabled">Blog &middot; Bient&ocirc;t</span>
       </div>
       <div class="footer__col">
         <h5 class="footer__heading">Services</h5>
-        <a href="/services-medical" class="footer__link">M&eacute;dical & bien-&ecirc;tre</a>
-        <a href="/services-recrutement" class="footer__link">Recrutement</a>
+        <a href={`${base}/services-medical`} class="footer__link">M&eacute;dical & bien-&ecirc;tre</a>
+        <a href={`${base}/services-recrutement`} class="footer__link">Recrutement</a>
       </div>
       <div class="footer__col">
         <h5 class="footer__heading">Contact</h5>

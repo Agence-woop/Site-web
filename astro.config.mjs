@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://agence-woop.ca',
+  site: 'https://agence-woop.github.io',
+  base: '/Site-web',
 });
