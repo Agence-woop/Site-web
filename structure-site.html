@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  STRUCTURE DU SITE WOOP V4 — RÉFÉRENCE DE CONTENU
+  ============================================================
+  Ce fichier décrit, page par page et section par section,
+  le contenu et l'objectif de chaque page du site (5 pages).
+  C'est la référence de CONTENU et d'ARCHITECTURE.
+
+  → Le détail rédactionnel complet est dans brief.md.
+  → Ce document sert de vue d'ensemble visuelle de la structure.
+  ============================================================
+-->
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WOOP V4 — Structure du site web</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+@font-face {
+  font-family: 'Ganky';
+  src: url('./Ganky-Regular.otf') format('opentype');
+  font-weight: normal; font-style: normal; font-display: swap;
+}
+:root {
+  --woop-orange: #FA6244;
+  --woop-pink: #E62B7F;
+  --woop-gradient: linear-gradient(90deg, #FA6244 0%, #E62B7F 100%);
+  --bg-deep: #0a0a0f;
+  --bg-elevated: #16161e;
+  --bg-card: rgba(255,255,255,0.03);
+  --text-primary: #f5f5f7;
+  --text-secondary: #a8a8b3;
+  --text-muted: #6e6e7a;
+  --border-subtle: rgba(255,255,255,0.07);
+  --border-accent: rgba(230,43,127,0.32);
+  --font-display: 'Ganky', 'Arial Black', sans-serif;
+  --font-body: 'Inter', -apple-system, Arial, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: #060608; color: var(--text-primary); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+body { display: flex; flex-direction: column; align-items: center; padding: 32px 16px 64px; gap: 28px; }
+
+.page, .cover {
+  width: 210mm; min-height: 297mm; position: relative;
+  background: var(--bg-deep); overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+}
+.page { padding: 18mm 16mm 16mm 16mm; }
+
+@page { size: A4; margin: 0; }
+.no-print { display: block; }
+@media print {
+  html, body { background: #fff; }
+  body { padding: 0; gap: 0; display: block; }
+  .no-print { display: none !important; }
+  .page, .cover { width: 210mm; height: 297mm; min-height: 297mm; box-shadow: none; page-break-after: always; break-after: page; }
+  .page:last-child, .cover:last-child { page-break-after: auto; break-after: auto; }
+}
+
+.page-topbar {
+  font-size: 8px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--text-muted); display: flex; align-items: center; gap: 7px; margin-bottom: 10mm;
+}
+.page-topbar .dot, .page-footer .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--woop-pink); display: inline-block; }
+.page-footer {
+  position: absolute; left: 16mm; right: 16mm; bottom: 11mm;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted);
+  padding-top: 12px; border-top: 1px solid var(--border-subtle);
+}
+.page-footer .dot { margin-right: 7px; }
+
+.kicker {
+  font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--woop-pink); font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.kicker::before { content: ''; width: 26px; height: 2px; background: var(--woop-gradient); display: inline-block; }
+h1.page-title {
+  font-family: var(--font-display); font-size: 40px; line-height: 1;
+  text-transform: uppercase; color: var(--woop-pink); margin-bottom: 8px;
+}
+.page-url {
+  font-family: 'SF Mono', Menlo, monospace; font-size: 11px; color: var(--woop-orange);
+  margin-bottom: 16px;
+}
+.page-intro {
+  font-size: 12px; line-height: 1.6; color: var(--text-secondary);
+  max-width: 160mm; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);
+}
+.page-intro em { color: var(--text-primary); font-style: normal; font-weight: 600; }
+
+/* Section block */
+.sec {
+  border: 1px solid var(--border-subtle); border-radius: 14px;
+  background: var(--bg-card); padding: 16px 18px; margin-bottom: 12px;
+  position: relative; overflow: hidden;
+}
+.sec::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+  background: var(--woop-gradient);
+}
+.sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.sec-num { font-family: var(--font-display); font-size: 17px; color: var(--woop-pink); flex-shrink: 0; margin-right: 10px; }
+.sec-name {
+  font-family: var(--font-display); font-size: 17px; text-transform: uppercase;
+  color: var(--text-primary); line-height: 1;
+}
+.sec-goal {
+  font-size: 10px; color: var(--woop-orange); font-style: italic;
+  margin-bottom: 9px;
+}
+.sec-body { font-size: 11px; line-height: 1.6; color: var(--text-secondary); }
+.sec-body strong { color: var(--text-primary); font-weight: 600; }
+.sec-body ul { list-style: none; margin: 6px 0 0; }
+.sec-body li { padding-left: 14px; position: relative; margin-bottom: 3px; }
+.sec-body li::before {
+  content: ''; position: absolute; left: 0; top: 6px;
+  width: 4px; height: 4px; border-radius: 50%; background: var(--woop-pink);
+}
+.cta-tag {
+  display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; color: #fff; background: var(--woop-gradient);
+  border-radius: 100px; padding: 3px 10px; margin: 2px 4px 2px 0;
+}
+.cta-line { margin-top: 8px; }
+.cta-label {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 700; margin-right: 6px;
+}
+
+/* COVER */
+.cover {
+  display: flex; flex-direction: column; justify-content: center; padding: 30mm 22mm;
+  background:
+    radial-gradient(ellipse 60% 40% at 78% 18%, rgba(250,98,68,0.20), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 15% 85%, rgba(230,43,127,0.16), transparent 70%),
+    var(--bg-deep);
+}
+.cover-label { font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 28mm; }
+.cover-mega {
+  font-family: var(--font-display); font-size: 92px; line-height: 0.88;
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.cover-mega .grad { background: var(--woop-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.cover-sub {
+  font-size: 16px; line-height: 1.5; color: var(--text-secondary);
+  max-width: 130mm; margin-bottom: 24mm;
+}
+.cover-tag {
+  align-self: flex-start; font-family: var(--font-display); font-size: 18px;
+  text-transform: uppercase; color: var(--woop-pink);
+  border: 1.5px solid var(--border-accent); border-radius: 100px; padding: 7px 22px; margin-bottom: 22mm;
+}
+.cover-meta { display: flex; gap: 50px; border-top: 1px solid var(--border-subtle); padding-top: 20px; }
+.cover-meta-label { font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--woop-pink); font-weight: 700; margin-bottom: 6px; }
+.cover-meta-value { font-size: 12px; color: var(--text-primary); }
+
+/* TOC */
+.toc-list { display: flex; flex-direction: column; gap: 10px; }
+.toc-item {
+  display: flex; align-items: center; gap: 14px;
+  border: 1px solid var(--border-subtle); border-radius: 12px;
+  padding: 14px 16px; background: var(--bg-card);
+}
+.toc-num { font-family: var(--font-display); font-size: 22px; color: var(--woop-pink); width: 40px; flex-shrink: 0; margin-right: 14px; }
+.toc-text { flex: 1; }
+.toc-name { font-family: var(--font-display); font-size: 16px; text-transform: uppercase; margin-bottom: 2px; }
+.toc-desc { font-size: 10px; color: var(--text-secondary); }
+.toc-url { font-family: 'SF Mono', Menlo, monospace; font-size: 9px; color: var(--woop-orange); }
+
+/* note box */
+.notebox {
+  border: 1px solid var(--border-accent); border-radius: 12px;
+  background: rgba(230,43,127,0.06); padding: 14px 16px; margin-top: 10px;
+}
+.notebox-label {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--woop-pink); font-weight: 700; margin-bottom: 6px;
+}
+.notebox p { font-size: 10.5px; line-height: 1.55; color: var(--text-secondary); }
+.notebox strong { color: var(--text-primary); }
+
+.help-bar {
+  width: 210mm; max-width: 100%; font-family: 'Inter', sans-serif;
+  background: rgba(230,43,127,0.08); border: 1px solid rgba(230,43,127,0.32);
+  border-radius: 12px; padding: 14px 20px; color: #a8a8b3; font-size: 12px; line-height: 1.5;
+}
+.help-bar strong { color: #f5f5f7; }
+</style>
+</head>
+<body>
+<!-- BARRE AIDE -->
+
+<!-- ============ COUVERTURE ============ -->
+<div class="cover">
+  <div class="cover-label">Structure du site · V4 · Confidentiel · Mai 2026</div>
+  <div class="cover-mega">Structure<br><span class="grad">du site</span></div>
+  <div class="cover-tag">WOOP V4</div>
+  <div class="cover-sub">
+    Architecture détaillée et contenu de chaque page du site agence-woop.ca. Wireframe textuel validé, prêt pour la phase de production technique.
+  </div>
+  <div class="cover-meta">
+    <div>
+      <div class="cover-meta-label">Préparé par</div>
+      <div class="cover-meta-value">Gauthier Figueres</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Pour</div>
+      <div class="cover-meta-value">Kevin · Emma</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Pages</div>
+      <div class="cover-meta-value">5 pages + Blog (Bientôt)</div>
+    </div>
+    <div>
+      <div class="cover-meta-label">Étape</div>
+      <div class="cover-meta-value">Avant production Claude Code</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SOMMAIRE ============ -->
+<div class="page">
+  <div class="page-topbar"><span class="dot"></span>WOOP V4 · Structure du site</div>
+  <div class="kicker">Sommaire</div>
+  <h1 class="page-title">Les 5 pages du site</h1>
+  <p class="page-intro">
+    Le site WOOP V4 est un site <em>multi-pages</em> de 5 pages, plus un Blog en préparation. La page Services parapluie a été supprimée : la segmentation Santé / Recrutement se fait directement depuis l'Accueil et la navigation. Chaque page a un objectif unique : <em>déclencher une demande d'appel découverte</em>.
+  </p>
+  <div class="toc-list">
+    <div class="toc-item">
+      <div class="toc-num">01</div>
+      <div class="toc-text">
+        <div class="toc-name">Accueil</div>
+        <div class="toc-desc">Hero, positionnement, conviction centrale, segmentation des deux personas, preuve & équipe.</div>
+      </div>
+      <div class="toc-url">/</div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">02</div>
+      <div class="toc-text">
+        <div class="toc-name">Marketing Santé & Médical</div>
+        <div class="toc-desc">Page persona A. Cliniques santé, médico-esthétique, bien-être, sport.</div>
+      </div>
+      <div class="toc-url">/services-medical</div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">03</div>
+      <div class="toc-text">
+        <div class="toc-name">Marketing RH & Recrutement</div>
+        <div class="toc-desc">Page persona B. Cabinets de recrutement — attirer talents et mandats.</div>
+      </div>
+      <div class="toc-url">/services-recrutement</div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">04</div>
+      <div class="toc-text">
+        <div class="toc-name">Équipe</div>
+        <div class="toc-desc">Le trio nommé, la méthodologie en 4 étapes, la promesse « aucune sous-traitance ».</div>
+      </div>
+      <div class="toc-url">/equipe</div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">05</div>
+      <div class="toc-text">
+        <div class="toc-name">Contact</div>
+        <div class="toc-desc">Layout split : promesse + formulaire de demande d'appel découverte.</div>
+      </div>
+      <div class="toc-url">/contact</div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">—</div>
+      <div class="toc-text">
+        <div class="toc-name">Blog</div>
+        <div class="toc-desc">Placeholder « Bientôt » en V1. Activé en V1.1.</div>
+      </div>
+      <div class="toc-url">/blog</div>
+    </div>
+  </div>
+  <div class="notebox">
+    <div class="notebox-label">Menu header</div>
+    <p><strong>Marketing Santé & Médical</strong> &nbsp;|&nbsp; <strong>Marketing RH & Recrutement</strong> &nbsp;|&nbsp; Équipe &nbsp;|&nbsp; Contact &nbsp;|&nbsp; Blog (Bientôt) &nbsp;|&nbsp; <strong>[Réserver un appel découverte]</strong></p>
+  </div>
+  <div class="page-footer"><span><span class="dot"></span>WOOP V4 · Structure du site</span><span>02</span></div>
+</div>
+
+<!-- ============ PAGE 01 — ACCUEIL ============ -->
+<div class="page">
+  <div class="page-topbar"><span class="dot"></span>WOOP V4 · Structure du site</div>
+  <div class="kicker">Page 01</div>
+  <h1 class="page-title">Accueil</h1>
+  <div class="page-url">agence-woop.ca/</div>
+  <p class="page-intro">
+    La page d'entrée. Elle parle aux <em>deux personas</em>, pose le positionnement en cinq secondes et oriente vers les pages dédiées. Parcours : je comprends qui est WOOP → je vois l'approche → je me reconnais → la preuve me rassure → je prends contact.
+  </p>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01</span><span class="sec-name">Hero</span></div>
+    <div class="sec-goal">Poser le positionnement en 5 secondes.</div>
+    <div class="sec-body">
+      <strong>Eyebrow :</strong> Agence d'acquisition · Québec<br>
+      <strong>H1 :</strong> Une agence pensée par un <em>clinicien</em>, conçue par un <em>créatif</em>, activée par une <em>experte</em> en acquisition.<br>
+      <strong>Sous-titre :</strong> L'agence dédiée à la santé, au bien-être et aux cabinets de recrutement spécialisés au Québec. Nous bâtissons des marques qui attirent et des campagnes qui convertissent.<br>
+      <strong>Visuel :</strong> filigrane Ganky XL « WOOP » en arrière-plan.
+      <div class="cta-line"><span class="cta-label">CTA</span><span class="cta-tag">Réserver un appel découverte</span><span class="cta-tag" style="background:transparent;border:1px solid var(--border-accent);color:var(--woop-pink);">Voir nos services</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02</span><span class="sec-name">Notre approche — Bento « Marque + Performance »</span></div>
+    <div class="sec-goal">Marteler la conviction n°1 et présenter l'approche.</div>
+    <div class="sec-body">
+      Kicker : « 01 — Notre approche ». Grille Bento mixte :
+      <ul>
+        <li>Grosse carte rose 2×2 — <strong>Marque forte = CPL bas</strong> (conviction centrale)</li>
+        <li>Cartes : Publicité en ligne (Ads) · Branding · Méthode Flywheel · Site & landing</li>
+        <li>Carte contour — Vocation : Santé. Recrutement.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">03</span><span class="sec-name">Segmentation des deux personas</span></div>
+    <div class="sec-goal">Le cœur du parcours — chaque visiteur choisit son camp.</div>
+    <div class="sec-body">
+      Kicker : « 02 — Pour qui ? ». Deux grandes cartes côte à côte :
+      <ul>
+        <li><strong>Vous dirigez une clinique santé ou médicale</strong> → CTA vers /services-medical</li>
+        <li><strong>Vous dirigez un cabinet de recrutement</strong> → CTA vers /services-recrutement</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">04</span><span class="sec-name">Preuve & équipe</span></div>
+    <div class="sec-goal">Crédibiliser par l'expertise, les avis clients et les visages.</div>
+    <div class="sec-body">
+      Kicker : « 03 — La preuve ». Trois temps :
+      <ul>
+        <li><strong>L'expertise :</strong> « 16 ans » en Ganky XL — 8 ans en milieu clinique, 4 ans en marketing, 4 ans en acquisition publicitaire. + angle fondateurs (Gauthier clinicien et ancien directeur de clinique, internalisation totale).</li>
+        <li><strong>Avis clients :</strong> 3 témoignages nominatifs en cartes Bento (David Caron · Expoze Recrutement / Joachim Donnet · Plomberie J. Donnet / Marie-Josée Bélanger · ZoneRH).</li>
+        <li><strong>Le trio :</strong> bande équipe condensée + lien vers /equipe.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">05</span><span class="sec-name">CTA final</span></div>
+    <div class="sec-goal">Convertir.</div>
+    <div class="sec-body">
+      Bloc gradient pleine largeur. Titre : « Parlons de votre projet. »
+      <div class="cta-line"><span class="cta-label">CTA</span><span class="cta-tag">Réserver un appel découverte</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span><span class="dot"></span>WOOP V4 · Structure du site</span><span>03</span></div>
+</div>
+
+<!-- ============ PAGE 02 — MÉDICAL ============ -->
+<div class="page">
+  <div class="page-topbar"><span class="dot"></span>WOOP V4 · Structure du site</div>
+  <div class="kicker">Page 02</div>
+  <h1 class="page-title">Marketing Santé & Médical</h1>
+  <div class="page-url">agence-woop.ca/services-medical</div>
+  <p class="page-intro">
+    Page dédiée au <em>persona A — Santé</em>. Vocabulaire clinique, sous-secteurs santé (clinique médicale, médico-esthétique, bien-être, sport). Parcours : je me reconnais d'abord, puis je découvre l'offre. 5 sections, 4 CTA répartis.
+  </p>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01</span><span class="sec-name">Hero persona Santé</span></div>
+    <div class="sec-goal">Accroche sectorielle immédiate.</div>
+    <div class="sec-body">
+      <strong>Eyebrow :</strong> Persona A · Santé<br>
+      <strong>H1 :</strong> Marketing médical qui <em>attire</em>, <em>convertit</em> et <em>fidélise</em>.<br>
+      <strong>Sous-titre :</strong> Stratégie, branding, publicité et expérience patient pour cliniques santé/médicales et bien-être.
+      <div class="cta-line"><span class="cta-label">CTA 1</span><span class="cta-tag">Réserver un appel découverte</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02</span><span class="sec-name">Pour qui — mini-cas types</span></div>
+    <div class="sec-goal">Que le visiteur se reconnaisse (placé tôt, volontairement).</div>
+    <div class="sec-body">
+      3 à 4 mini-cas, chacun avec le déclic + le résultat visé. Exemples :
+      <ul>
+        <li>Une clinique dentaire qui veut remplir son agenda</li>
+        <li>Un centre de bien-être qui veut sortir du lot</li>
+        <li>Un groupe médical en croissance qui structure sa marque</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">03</span><span class="sec-name">Grille des services Médical — Bento</span></div>
+    <div class="sec-goal">Présenter l'offre, « Expérience patient » en signature.</div>
+    <div class="sec-body">
+      <ul>
+        <li>Carte signature rose 2×2 — <strong>Expérience patient</strong> (badge « Santé uniquement »)</li>
+        <li>Publicité en ligne · Branding clinique · Connaissance des ordres professionnels · Rédaction médicale · Stratégie & conseil</li>
+      </ul>
+      <div class="cta-line"><span class="cta-label">CTA 2</span><span class="cta-tag">Discuter de vos besoins</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">04</span><span class="sec-name">Ce qui nous distingue</span></div>
+    <div class="sec-goal">Le différenciateur unique : l'angle clinicien.</div>
+    <div class="sec-body">
+      Bloc gradient. Titre : « Pensée par un clinicien. » Texte sur le parcours de Gauthier — infirmier clinicien, direction des opérations médicales dans l'aéromédical, ancien directeur de clinique privée, expert des soins en communauté et régions éloignées. <strong>L'employeur n'est jamais nommé.</strong>
+      <div class="cta-line"><span class="cta-label">CTA 3</span><span class="cta-tag">Parler à Gauthier</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">05</span><span class="sec-name">CTA final</span></div>
+    <div class="sec-goal">Convertir.</div>
+    <div class="sec-body">
+      Bloc gradient. Titre : « Parlons de votre clinique. »
+      <div class="cta-line"><span class="cta-label">CTA 4</span><span class="cta-tag">Réserver un appel découverte</span></div>
+    </div>
+  </div>
+
+  <div class="notebox">
+    <div class="notebox-label">À compléter plus tard</div>
+    <p>Prévoir un <strong>emplacement « avis client santé »</strong> (aucun avis santé disponible pour l'instant) et un <strong>emplacement « résultat chiffré »</strong> à remplir quand la donnée sera disponible.</p>
+  </div>
+
+  <div class="page-footer"><span><span class="dot"></span>WOOP V4 · Structure du site</span><span>04</span></div>
+</div>
+
+<!-- ============ PAGE 03 — RECRUTEMENT ============ -->
+<div class="page">
+  <div class="page-topbar"><span class="dot"></span>WOOP V4 · Structure du site</div>
+  <div class="kicker">Page 03</div>
+  <h1 class="page-title">Marketing RH & Recrutement</h1>
+  <div class="page-url">agence-woop.ca/services-recrutement</div>
+  <p class="page-intro">
+    Page dédiée au <em>persona B — Recrutement</em>. Même architecture que la page Médical, par cohérence. Angle double : aider les cabinets à attirer les bons <em>talents</em> comme les bons <em>mandats / clients</em>. 5 sections, 4 CTA.
+  </p>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01</span><span class="sec-name">Hero persona Recrutement</span></div>
+    <div class="sec-goal">Accroche sectorielle — la double promesse.</div>
+    <div class="sec-body">
+      <strong>Eyebrow :</strong> Persona B · Recrutement<br>
+      <strong>H1 :</strong> Marketing pour cabinets de recrutement qui attirent les <em>meilleurs talents</em> — et les <em>meilleurs mandats</em>.<br>
+      <strong>Sous-titre :</strong> Marque employeur, acquisition de mandats, attractivité candidat et branding cabinet. Nous vous aidons à attirer les bons talents comme les bons clients.
+      <div class="cta-line"><span class="cta-label">CTA 1</span><span class="cta-tag">Réserver un appel découverte</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02</span><span class="sec-name">Pour qui — mini-cas types</span></div>
+    <div class="sec-goal">Couvrir les deux faces du métier.</div>
+    <div class="sec-body">
+      3 à 4 mini-cas, déclic + résultat visé. Exemples :
+      <ul>
+        <li>Un cabinet spécialisé qui veut sortir du lot auprès des candidats</li>
+        <li>Une firme qui veut décrocher plus de mandats d'entreprises</li>
+        <li>Un cabinet en croissance qui structure sa marque</li>
+        <li>Un consultant RH indépendant qui veut crédibiliser son approche</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">03</span><span class="sec-name">Grille des services Recrutement — Bento</span></div>
+    <div class="sec-goal">Présenter l'offre, « Marque employeur » en signature.</div>
+    <div class="sec-body">
+      <ul>
+        <li>Carte signature rose 2×2 — <strong>Marque employeur</strong></li>
+        <li>Publicité candidat · Acquisition de mandats / clients · Branding cabinet · Attractivité chiffrée · Rédaction RH · Stratégie de mandat</li>
+      </ul>
+      <div class="cta-line"><span class="cta-label">CTA 2</span><span class="cta-tag">Discuter de vos besoins</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">04</span><span class="sec-name">Ce qui nous distingue</span></div>
+    <div class="sec-goal">La légitimité : un marketeur qui connaît le secteur.</div>
+    <div class="sec-body">
+      Bloc gradient. Titre : « Le marketing du recrutement, par quelqu'un qui connaît votre métier. » Kevin est designer et directeur artistique ; son <strong>expertise marketing</strong> s'est développée au sein du secteur du recrutement. <strong>Il n'a pas été recruteur</strong> — c'est un marketeur qui connaît vos enjeux.
+      <div class="cta-line"><span class="cta-label">CTA 3</span><span class="cta-tag">Parler à Kevin</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">05</span><span class="sec-name">CTA final</span></div>
+    <div class="sec-goal">Convertir.</div>
+    <div class="sec-body">
+      Bloc gradient. Titre : « Parlons de votre cabinet. »
+      <div class="cta-line"><span class="cta-label">CTA 4</span><span class="cta-tag">Réserver un appel découverte</span></div>
+    </div>
+  </div>
+
+  <div class="notebox">
+    <div class="notebox-label">Réutilisation des avis</div>
+    <p>Les avis <strong>David Caron (Expoze Recrutement)</strong> et <strong>Marie-Josée Bélanger (ZoneRH)</strong> — clients du secteur recrutement / RH — sont à réutiliser sur cette page.</p>
+  </div>
+
+  <div class="page-footer"><span><span class="dot"></span>WOOP V4 · Structure du site</span><span>05</span></div>
+</div>
+
+<!-- ============ PAGE 04 — ÉQUIPE ============ -->
+<div class="page">
+  <div class="page-topbar"><span class="dot"></span>WOOP V4 · Structure du site</div>
+  <div class="kicker">Page 04</div>
+  <h1 class="page-title">Équipe</h1>
+  <div class="page-url">agence-woop.ca/equipe</div>
+  <p class="page-intro">
+    La page qui incarne la promesse <em>« Aucune sous-traitance — vous savez qui fait quoi sur votre projet. »</em> Trio nommé, méthodologie concrète. 5 sections, 2 CTA.
+  </p>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01</span><span class="sec-name">Hero Équipe</span></div>
+    <div class="sec-goal">Poser la promesse d'équipe.</div>
+    <div class="sec-body">
+      <strong>Eyebrow :</strong> L'équipe WOOP<br>
+      <strong>H1 :</strong> Trois experts. <em>Aucune sous-traitance.</em> Vous savez qui fait quoi sur votre projet.<br>
+      <strong>Sous-titre :</strong> Un trio complémentaire et nommé. Vous parlez aux fondateurs directement, du premier appel à la mise en ligne.
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02</span><span class="sec-name">Le trio</span></div>
+    <div class="sec-goal">Incarner — créer la confiance par les visages.</div>
+    <div class="sec-body">
+      3 cartes portrait (style KREM du moodboard) : photo, nom Ganky, rôle, bio étoffée.
+      <ul>
+        <li><strong>Gauthier Figueres</strong> — Co-fondateur · Stratégie. Infirmier clinicien, dirige les opérations médicales dans l'aéromédical, ancien directeur de clinique privée, expert des soins en communauté et régions éloignées, inscrit en MBA. Pilote la stratégie et les comptes Santé.</li>
+        <li><strong>Kevin</strong> — Co-fondateur · Création. Designer et directeur artistique, expertise marketing développée dans le secteur du recrutement. Pilote l'identité de marque et les comptes Recrutement.</li>
+        <li><strong>Emma</strong> — Paid media. Spécialiste Google Ads et Meta Ads, conception de landing pages de conversion, 4 ans d'expérience en acquisition. Internalise toute l'acquisition payante.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">03</span><span class="sec-name">Notre méthodologie</span></div>
+    <div class="sec-goal">Donner du concret au « vous savez qui fait quoi ».</div>
+    <div class="sec-body">
+      Kicker « Notre méthode ». 4 étapes en Bento ou timeline :
+      <ul>
+        <li><strong>01 Diagnostic</strong> — appel découverte + audit</li>
+        <li><strong>02 Stratégie & marque</strong> — positionnement, identité</li>
+        <li><strong>03 Acquisition</strong> — campagnes, landing pages</li>
+        <li><strong>04 Optimisation</strong> — mesure, itération (le flywheel)</li>
+      </ul>
+      <div class="cta-line"><span class="cta-label">CTA 1</span><span class="cta-tag">Discuter de votre projet</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">04</span><span class="sec-name">La promesse équipe</span></div>
+    <div class="sec-goal">Transformer le trio en argument commercial.</div>
+    <div class="sec-body">
+      Bloc statement. Titre : « Pas d'agence anonyme. Pas d'usine à projets. » Texte : vous parlez directement aux fondateurs, vous savez qui pilote votre projet.
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">05</span><span class="sec-name">CTA final</span></div>
+    <div class="sec-goal">Convertir.</div>
+    <div class="sec-body">
+      Bloc gradient. Titre : « Envie de savoir qui s'occuperait de votre projet ? »
+      <div class="cta-line"><span class="cta-label">CTA 2</span><span class="cta-tag">Réserver un appel découverte</span></div>
+    </div>
+  </div>
+
+  <div class="page-footer"><span><span class="dot"></span>WOOP V4 · Structure du site</span><span>06</span></div>
+</div>
+
+<!-- ============ PAGE 05 — CONTACT ============ -->
+<div class="page">
+  <div class="page-topbar"><span class="dot"></span>WOOP V4 · Structure du site</div>
+  <div class="kicker">Page 05</div>
+  <h1 class="page-title">Contact</h1>
+  <div class="page-url">agence-woop.ca/contact</div>
+  <p class="page-intro">
+    La page la plus dépouillée du site. Objectif unique : <em>déclencher une demande d'appel découverte</em>. Layout split — promesse à gauche, formulaire à droite.
+  </p>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01</span><span class="sec-name">Layout split — Promesse + Formulaire</span></div>
+    <div class="sec-goal">Convertir sans distraction.</div>
+    <div class="sec-body">
+      <strong>Colonne gauche — la promesse</strong>
+      <ul>
+        <li>Eyebrow : 30 minutes · Sans engagement</li>
+        <li>H1 : « Parlons de votre projet. »</li>
+        <li>Sous-titre : Un appel découverte de 30 minutes avec Gauthier ou Kevin. On discute de votre projet et on partage notre regard sur votre présence en ligne.</li>
+        <li><strong>01 — L'appel</strong> · 30 minutes, téléphone ou visio. On discute de votre projet, de vos objectifs.</li>
+        <li><strong>02 — Notre regard</strong> · On partage nos premières observations sur votre site, vos réseaux, votre présence en ligne.</li>
+        <li><strong>03 — Vous décidez</strong> · Aucune obligation. Vous repartez avec un point de vue clair sur vos priorités.</li>
+      </ul>
+      <strong>Colonne droite — le formulaire</strong> (Bento rose plein)
+      <ul>
+        <li>Champs : Prénom et nom · Email professionnel · Nom de votre structure</li>
+        <li>Menu « Vous êtes… » : Clinique santé/médicale · Clinique médico-esthétique · Cabinet de recrutement · Bien-être (yoga, pilates…) · Sport / Gym · Autre</li>
+        <li>Quelques mots sur votre projet</li>
+      </ul>
+      <div class="cta-line"><span class="cta-label">Bouton</span><span class="cta-tag">Envoyer ma demande</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02</span><span class="sec-name">Coordonnées directes</span></div>
+    <div class="sec-goal">Offrir un canal de contact alternatif.</div>
+    <div class="sec-body">
+      Email : contact@agencewoop.ca · Localisation : Montréal, Québec.<br>
+      Emplacement réservé pour un futur bouton de réservation en ligne.
+    </div>
+  </div>
+
+  <div class="notebox">
+    <div class="notebox-label">À décider plus tard</div>
+    <p>Réservation en ligne : piste <strong>Google Business Profile</strong> (prise de rendez-vous) à étudier. Le design prévoit l'emplacement — décision d'outil non bloquante pour le lancement.</p>
+  </div>
+
+  <div class="page-footer"><span><span class="dot"></span>WOOP V4 · Structure du site</span><span>07</span></div>
+</div>
+
+</body>
+</html>
