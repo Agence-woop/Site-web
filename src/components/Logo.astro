@@ -1,0 +1,33 @@
+---
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { size = 'md' } = Astro.props;
+
+const sizeMap = {
+  sm: '20px',
+  md: '28px',
+  lg: '40px',
+};
+---
+<span class="logo" style={`font-size: ${sizeMap[size]}`}>
+  W<span class="logo__oo">OO</span>P
+</span>
+
+<style>
+  .logo {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .logo__oo {
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>

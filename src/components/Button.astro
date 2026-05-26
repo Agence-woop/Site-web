@@ -1,0 +1,87 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'tertiary';
+  href?: string;
+  tag?: 'a' | 'button';
+}
+
+const { variant = 'primary', href, tag } = Astro.props;
+const Tag = tag ?? (href ? 'a' : 'button');
+---
+<Tag
+  class:list={['btn', `btn--${variant}`]}
+  href={href}
+  role={Tag === 'a' ? undefined : 'button'}
+>
+  <slot />
+  {variant === 'primary' && <span class="btn__arrow" aria-hidden="true">&rarr;</span>}
+  {variant === 'tertiary' && <span class="btn__arrow" aria-hidden="true">&rarr;</span>}
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: transform 300ms ease, box-shadow 300ms ease;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .btn--primary {
+    background: var(--woop-gradient);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: var(--radius-button);
+  }
+
+  .btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(230, 43, 127, 0.3);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 14px 28px;
+    border-radius: var(--radius-button);
+  }
+
+  .btn--secondary:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-accent);
+  }
+
+  .btn--tertiary {
+    background: transparent;
+    color: var(--woop-pink);
+    padding: 0;
+    font-weight: 600;
+  }
+
+  .btn--tertiary:hover {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
+    .btn--primary:hover,
+    .btn--secondary:hover,
+    .btn--tertiary:hover {
+      transform: none;
+    }
+  }
+</style>

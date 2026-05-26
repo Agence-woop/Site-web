@@ -1,0 +1,698 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import BentoCard from '../components/BentoCard.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+<Layout
+  title="Agence WOOP — Marketing Santé & Recrutement | Québec"
+  description="L'agence de marketing dédiée à la santé, au bien-être et aux cabinets de recrutement spécialisés au Québec. Marque + performance."
+>
+
+  <!-- ===== SECTION 1 — HERO ===== -->
+  <section class="hero section">
+    <div class="container">
+      <div class="hero__watermark" aria-hidden="true">WOOP</div>
+      <span class="hero__eyebrow">Agence d'acquisition &middot; Qu&eacute;bec</span>
+      <h1 class="hero__title">
+        Une agence pens&eacute;e par un <span class="hero__keyword gradient-text">CLINICIEN</span>, con&ccedil;ue par un <span class="hero__keyword gradient-text">CR&Eacute;ATIF</span>, activ&eacute;e par une <span class="hero__keyword gradient-text">EXPERTE</span> en acquisition.
+      </h1>
+      <p class="hero__subtitle">
+        L'agence d&eacute;di&eacute;e &agrave; la sant&eacute;, au bien-&ecirc;tre et aux cabinets de recrutement sp&eacute;cialis&eacute;s au Qu&eacute;bec. Nous b&acirc;tissons des marques qui attirent et des campagnes qui convertissent.
+      </p>
+      <div class="hero__ctas">
+        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+        <Button variant="secondary" href="#approche">Voir nos services</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2 — NOTRE APPROCHE (BENTO) ===== -->
+  <section class="section" id="approche">
+    <div class="container">
+      <span class="kicker">01 — Notre approche</span>
+      <h2 class="section-title">Marque + Performance</h2>
+      <div class="bento-grid bento-grid--approche">
+        <div class="bento-grid__main">
+          <BentoCard variant="pink" size="large">
+            <div>
+              <span class="bento__label">Conviction n&deg;1</span>
+              <div class="bento__title-xl">Marque forte<br>= CPL bas.</div>
+            </div>
+            <p class="bento__text">Une marque solide fait baisser le co&ucirc;t d'acquisition. Pas de branding sans performance, pas de performance sans branding.</p>
+          </BentoCard>
+        </div>
+        <div class="bento-grid__side">
+          <div class="bento-grid__row">
+            <BentoCard variant="outline">
+              <span class="bento__label">Acquisition</span>
+              <div class="bento__title">Publicit&eacute; en ligne</div>
+              <p class="bento__text">Google Ads & Meta Ads. Campagnes cibl&eacute;es pour g&eacute;n&eacute;rer des demandes qualifi&eacute;es.</p>
+            </BentoCard>
+            <BentoCard variant="orange">
+              <span class="bento__label">Identit&eacute;</span>
+              <div class="bento__title">Branding</div>
+              <p class="bento__text">Logo, charte visuelle, syst&egrave;me de marque complet.</p>
+            </BentoCard>
+          </div>
+          <div class="bento-grid__row">
+            <BentoCard variant="gradient">
+              <span class="bento__label">M&eacute;thode</span>
+              <div class="bento__title">Flywheel</div>
+              <p class="bento__text">Marque &rarr; Performance &rarr; Optimisation. Un cycle vertueux.</p>
+            </BentoCard>
+            <BentoCard variant="outline">
+              <span class="bento__label">Conversion</span>
+              <div class="bento__title">Site & Landing</div>
+              <p class="bento__text">Sites de conversion et landing pages optimis&eacute;es.</p>
+            </BentoCard>
+          </div>
+        </div>
+        <div class="bento-grid__full">
+          <BentoCard variant="outline">
+            <span class="bento__label">Vocation</span>
+            <div class="bento__title">Sant&eacute;. Recrutement.</div>
+            <p class="bento__text">Deux secteurs, aucun autre. La connaissance fine du m&eacute;tier du client comme garantie de pertinence.</p>
+          </BentoCard>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3 — SEGMENTATION PERSONAS ===== -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">02 — Pour qui ?</span>
+      <h2 class="section-title">Deux secteurs. Deux expertises.</h2>
+      <div class="personas">
+        <a href={`${base}/services-medical`} class="persona-card">
+          <div class="persona-card__top">
+            <span class="persona-card__badge">Persona A &middot; Sant&eacute;</span>
+          </div>
+          <div class="persona-card__content">
+            <h3 class="persona-card__title">Vous dirigez une clinique sant&eacute; ou m&eacute;dicale</h3>
+            <p class="persona-card__desc">M&eacute;decins propri&eacute;taires, directeurs de clinique, cabinets dentaires premium, cliniques m&eacute;dico-esth&eacute;tiques, centres de bien-&ecirc;tre.</p>
+            <span class="persona-card__cta">D&eacute;couvrir nos services sant&eacute; &rarr;</span>
+          </div>
+        </a>
+        <a href={`${base}/services-recrutement`} class="persona-card">
+          <div class="persona-card__top">
+            <span class="persona-card__badge">Persona B &middot; Recrutement</span>
+          </div>
+          <div class="persona-card__content">
+            <h3 class="persona-card__title">Vous dirigez un cabinet de recrutement</h3>
+            <p class="persona-card__desc">Cabinets de recrutement sp&eacute;cialis&eacute;s, firmes de recrutement, consultants RH ind&eacute;pendants, DRH d'entreprise.</p>
+            <span class="persona-card__cta">D&eacute;couvrir nos services recrutement &rarr;</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4 — PREUVE & ÉQUIPE ===== -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">03 — La preuve</span>
+
+      <!-- Temps 1 — L'expertise -->
+      <div class="proof">
+        <div class="proof__stat">
+          <span class="proof__number">16</span>
+          <span class="proof__unit">ans</span>
+        </div>
+        <div class="proof__detail">
+          <p class="proof__breakdown">
+            <strong>8 ans</strong> en milieu clinique. <strong>4 ans</strong> en marketing. <strong>4 ans</strong> en acquisition publicitaire.
+          </p>
+          <p class="proof__text">
+            Gauthier est infirmier clinicien et ancien directeur de clinique priv&eacute;e. Toute l'&eacute;quipe est internalis&eacute;e&nbsp;: vous parlez directement aux fondateurs.
+          </p>
+        </div>
+      </div>
+
+      <!-- Temps 2 — Avis clients -->
+      <h3 class="testimonials__heading">Ce qu'en disent nos clients</h3>
+      <div class="testimonials">
+        <BentoCard variant="outline">
+          <div>
+            <p class="bento__text">&laquo;&nbsp;K&eacute;vin a su comprendre d&egrave;s le d&eacute;but les subtilit&eacute;s de ma vision marketing. Son audace, son agilit&eacute; et sa passion pour l'image de marque m'ont convaincu d&egrave;s les premiers instants. Je recommande les services de l'Agence WOOP.&nbsp;&raquo;</p>
+          </div>
+          <div class="testimonial__author">
+            <strong>David Caron</strong>
+            <span>PDG, Expoze Recrutement</span>
+          </div>
+        </BentoCard>
+        <BentoCard variant="outline">
+          <div>
+            <p class="bento__text">&laquo;&nbsp;Je recommande fortement les services de l'agence marketing WOOP et Kevin & Gauthier pour leurs services de conseils en strat&eacute;gie de communication. Il a &eacute;t&eacute; patient et &agrave; l'&eacute;coute tout au long du processus, tout en proposant des id&eacute;es innovantes.&nbsp;&raquo;</p>
+          </div>
+          <div class="testimonial__author">
+            <strong>Joachim Donnet</strong>
+            <span>PDG, Plomberie Joachim Donnet Inc.</span>
+          </div>
+        </BentoCard>
+        <BentoCard variant="outline">
+          <div>
+            <p class="bento__text">&laquo;&nbsp;Kevin et l'agence marketing WOOP ont su capter l'essence de mon projet et la traduire en un visuel &agrave; la fois clair et impactant. Son approche m&eacute;ticuleuse et sa recherche approfondie permettent d'obtenir un r&eacute;sultat &agrave; la hauteur des attentes.&nbsp;&raquo;</p>
+          </div>
+          <div class="testimonial__author">
+            <strong>Marie-Jos&eacute;e B&eacute;langer</strong>
+            <span>PDG, ZoneRH</span>
+          </div>
+        </BentoCard>
+      </div>
+
+      <!-- Temps 3 — Le trio -->
+      <div class="team-strip">
+        <div class="team-strip__info">
+          <h3 class="team-strip__title">Le trio WOOP</h3>
+          <p class="team-strip__text">Trois experts, aucune sous-traitance. Vous savez qui fait quoi sur votre projet.</p>
+          <Button variant="tertiary" href={`${base}/equipe`}>Rencontrer l'&eacute;quipe</Button>
+        </div>
+        <div class="team-strip__members">
+          <div class="team-strip__member">
+            <div class="team-strip__avatar" aria-label="Photo de Gauthier Figueres">GF</div>
+            <span class="team-strip__name">Gauthier</span>
+            <span class="team-strip__role">Strat&eacute;gie</span>
+          </div>
+          <div class="team-strip__member">
+            <div class="team-strip__avatar" aria-label="Photo de Kevin">K</div>
+            <span class="team-strip__name">Kevin</span>
+            <span class="team-strip__role">Cr&eacute;ation</span>
+          </div>
+          <div class="team-strip__member">
+            <div class="team-strip__avatar" aria-label="Photo de Emma">E</div>
+            <span class="team-strip__name">Emma</span>
+            <span class="team-strip__role">Paid media</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5 — CTA FINAL ===== -->
+  <section class="cta-final">
+    <div class="container">
+      <h2 class="cta-final__title">Parlons de votre projet.</h2>
+      <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    padding-top: 120px;
+    padding-bottom: 80px;
+    overflow: hidden;
+  }
+
+  .hero__watermark {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 20vw;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.02);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: -1;
+  }
+
+  .hero__eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    background: rgba(230, 43, 127, 0.1);
+    border: 1px solid var(--border-accent);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-weight: 700;
+    margin-bottom: 32px;
+  }
+
+  .hero__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.15;
+    color: var(--text-primary);
+    max-width: 900px;
+    margin-bottom: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .hero__title {
+      font-size: 42px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero__title {
+      font-size: 56px;
+      line-height: 1.08;
+    }
+  }
+
+  .hero__keyword {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .hero__subtitle {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .hero__subtitle {
+      font-size: 18px;
+    }
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* ===== BENTO GRID — APPROCHE ===== */
+  .bento-grid--approche {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-bento);
+    margin-top: 40px;
+  }
+
+  .bento-grid__side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-bento);
+  }
+
+  .bento-grid__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+  }
+
+  @media (min-width: 500px) {
+    .bento-grid__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .bento-grid--approche {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .bento-grid__main {
+      grid-row: 1 / 2;
+      grid-column: 1 / 2;
+    }
+
+    .bento-grid__side {
+      grid-row: 1 / 2;
+      grid-column: 2 / 3;
+    }
+
+    .bento-grid__full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ===== PERSONAS ===== */
+  .personas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+    margin-top: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .personas {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .persona-card {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 300ms ease, border-color 300ms ease;
+    position: relative;
+  }
+
+  .persona-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--woop-gradient);
+  }
+
+  .persona-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--woop-pink);
+  }
+
+  .persona-card__top {
+    padding: 24px 28px 0;
+  }
+
+  .persona-card__badge {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--woop-pink);
+    background: rgba(230, 43, 127, 0.12);
+    border: 1px solid var(--border-accent);
+    border-radius: 100px;
+    padding: 6px 14px;
+  }
+
+  .persona-card__content {
+    padding: 20px 28px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .persona-card__title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    text-transform: uppercase;
+    line-height: 1.05;
+    margin-bottom: 12px;
+  }
+
+  @media (min-width: 768px) {
+    .persona-card__title {
+      font-size: 28px;
+    }
+  }
+
+  .persona-card__desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    flex: 1;
+    margin-bottom: 20px;
+  }
+
+  .persona-card__cta {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--woop-pink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .persona-card {
+      transition: none;
+    }
+    .persona-card:hover {
+      transform: none;
+    }
+  }
+
+  /* ===== PREUVE ===== */
+  .proof {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 40px;
+    margin-bottom: 64px;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 768px) {
+    .proof {
+      flex-direction: row;
+      align-items: center;
+      gap: 48px;
+    }
+  }
+
+  .proof__stat {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .proof__number {
+    font-family: var(--font-display);
+    font-size: 100px;
+    line-height: 0.85;
+    text-transform: uppercase;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (min-width: 768px) {
+    .proof__number {
+      font-size: 140px;
+    }
+  }
+
+  .proof__unit {
+    font-family: var(--font-display);
+    font-size: 32px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .proof__breakdown {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .proof__breakdown strong {
+    color: var(--woop-pink);
+  }
+
+  .proof__text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials__heading {
+    font-family: var(--font-display);
+    font-size: 28px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  .testimonials {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+    margin-bottom: 64px;
+  }
+
+  @media (min-width: 768px) {
+    .testimonials {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .testimonial__author {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .testimonial__author strong {
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+
+  .testimonial__author span {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* ===== TEAM STRIP ===== */
+  .team-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .team-strip {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .team-strip__title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .team-strip__text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    max-width: 400px;
+  }
+
+  .team-strip__members {
+    display: flex;
+    gap: 24px;
+  }
+
+  .team-strip__member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .team-strip__avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--woop-pink);
+  }
+
+  .team-strip__name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .team-strip__role {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final {
+    position: relative;
+    z-index: 1;
+    background: var(--woop-gradient);
+    padding: 80px 0;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final {
+      padding: 100px 0;
+    }
+  }
+
+  .cta-final__title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final__title {
+      font-size: 52px;
+    }
+  }
+
+  .cta-final :global(.btn--primary) {
+    background: #fff;
+    color: var(--woop-pink);
+  }
+
+  .cta-final :global(.btn--primary:hover) {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+</style>
+
+<script>
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
+  };
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    const animatedElements = document.querySelectorAll(
+      '.bento-grid--approche > *, .personas > *, .testimonials > *, .proof, .team-strip'
+    );
+
+    animatedElements.forEach((el) => {
+      (el as HTMLElement).style.opacity = '0';
+      (el as HTMLElement).style.transform = 'translateY(24px)';
+    });
+
+    let staggerIndex = 0;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = staggerIndex * 80;
+          staggerIndex++;
+
+          setTimeout(() => {
+            el.style.transition = 'opacity 600ms ease, transform 600ms ease';
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          }, delay);
+
+          observer.unobserve(el);
+
+          setTimeout(() => { staggerIndex = 0; }, 400);
+        }
+      });
+    }, observerOptions);
+
+    animatedElements.forEach((el) => observer.observe(el));
+  }
+</script>
