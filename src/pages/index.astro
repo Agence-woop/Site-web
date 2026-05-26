@@ -14,7 +14,7 @@ const base = import.meta.env.BASE_URL;
   <section class="hero section">
     <div class="container">
       <div class="hero__watermark" aria-hidden="true">WOOP</div>
-      <span class="hero__eyebrow">Agence d'acquisition &middot; Qu&eacute;bec</span>
+      <span class="hero__eyebrow">Agence marketing &middot; Montr&eacute;al</span>
       <h1 class="hero__title">
         Une agence pens&eacute;e par un <span class="hero__keyword gradient-text">CLINICIEN</span>, con&ccedil;ue par un <span class="hero__keyword gradient-text">CR&Eacute;ATIF</span>, activ&eacute;e par une <span class="hero__keyword gradient-text">EXPERTE</span> en acquisition.
       </h1>
@@ -24,6 +24,14 @@ const base = import.meta.env.BASE_URL;
       <div class="hero__ctas">
         <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
         <Button variant="secondary" href="#approche">Voir nos services</Button>
+      </div>
+    </div>
+    <div class="hero__scroll" aria-hidden="true">
+      <span class="hero__scroll-text">D&Eacute;FILER</span>
+      <div class="hero__scroll-arrow">
+        <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+          <path d="M8 4L8 20M8 20L2 14M8 20L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
     </div>
   </section>
@@ -52,7 +60,7 @@ const base = import.meta.env.BASE_URL;
             </BentoCard>
             <BentoCard variant="orange">
               <span class="bento__label">Identit&eacute;</span>
-              <div class="bento__title">Branding</div>
+              <div class="bento__title bento__title--branding">Branding</div>
               <p class="bento__text">Logo, charte visuelle, syst&egrave;me de marque complet.</p>
             </BentoCard>
           </div>
@@ -67,6 +75,17 @@ const base = import.meta.env.BASE_URL;
               <div class="bento__title">Site & Landing</div>
               <p class="bento__text">Sites de conversion et landing pages optimis&eacute;es.</p>
             </BentoCard>
+          </div>
+        </div>
+        <div class="bento-grid__photos">
+          <div class="bento-photo">
+            <img src={`${base}/images/clinique-medicale.webp`} alt="Clinique médicale" loading="lazy" />
+          </div>
+          <div class="bento-photo">
+            <img src={`${base}/images/clinique-dentaire.webp`} alt="Clinique dentaire" loading="lazy" />
+          </div>
+          <div class="bento-photo">
+            <img src={`${base}/images/recrutement-rh.webp`} alt="Recrutement RH" loading="lazy" />
           </div>
         </div>
         <div class="bento-grid__full">
@@ -87,22 +106,22 @@ const base = import.meta.env.BASE_URL;
       <h2 class="section-title">Deux secteurs. Deux expertises.</h2>
       <div class="personas">
         <a href={`${base}/services-medical`} class="persona-card">
-          <div class="persona-card__top">
-            <span class="persona-card__badge">Persona A &middot; Sant&eacute;</span>
+          <div class="persona-card__image">
+            <img src={`${base}/images/persona-sante.webp`} alt="Professionnels de la santé" loading="lazy" />
           </div>
           <div class="persona-card__content">
             <h3 class="persona-card__title">Vous dirigez une clinique sant&eacute; ou m&eacute;dicale</h3>
-            <p class="persona-card__desc">M&eacute;decins propri&eacute;taires, directeurs de clinique, cabinets dentaires premium, cliniques m&eacute;dico-esth&eacute;tiques, centres de bien-&ecirc;tre.</p>
+            <p class="persona-card__desc">Pharmaciens propri&eacute;taires &middot; Directeurs de clinique &middot; Cabinets dentaires &middot; Cliniques m&eacute;dico-esth&eacute;tiques &middot; Centres de bien-&ecirc;tre</p>
             <span class="persona-card__cta">D&eacute;couvrir nos services sant&eacute; &rarr;</span>
           </div>
         </a>
         <a href={`${base}/services-recrutement`} class="persona-card">
-          <div class="persona-card__top">
-            <span class="persona-card__badge">Persona B &middot; Recrutement</span>
+          <div class="persona-card__image">
+            <img src={`${base}/images/persona-recrutement.webp`} alt="Professionnels du recrutement" loading="lazy" />
           </div>
           <div class="persona-card__content">
             <h3 class="persona-card__title">Vous dirigez un cabinet de recrutement</h3>
-            <p class="persona-card__desc">Cabinets de recrutement sp&eacute;cialis&eacute;s, firmes de recrutement, consultants RH ind&eacute;pendants, DRH d'entreprise.</p>
+            <p class="persona-card__desc">Cabinets de recrutement sp&eacute;cialis&eacute;s &middot; Firmes de recrutement &middot; Consultants RH ind&eacute;pendants &middot; DRH d'entreprise</p>
             <span class="persona-card__cta">D&eacute;couvrir nos services recrutement &rarr;</span>
           </div>
         </a>
@@ -118,12 +137,15 @@ const base = import.meta.env.BASE_URL;
       <!-- Temps 1 — L'expertise -->
       <div class="proof">
         <div class="proof__stat">
-          <span class="proof__number">16</span>
-          <span class="proof__unit">ans</span>
+          <div class="proof__stat-inner">
+            <span class="proof__number">16</span>
+            <span class="proof__unit">ans</span>
+          </div>
+          <span class="proof__cumul">d'exp&eacute;rience cumul&eacute;e</span>
         </div>
         <div class="proof__detail">
           <p class="proof__breakdown">
-            <strong>8 ans</strong> en milieu clinique. <strong>4 ans</strong> en marketing. <strong>4 ans</strong> en acquisition publicitaire.
+            <strong>8 ans</strong> en milieu clinique &middot; <strong>4 ans</strong> en marketing &middot; <strong>4 ans</strong> en marketing publicitaire
           </p>
           <p class="proof__text">
             Gauthier est infirmier clinicien et ancien directeur de clinique priv&eacute;e. Toute l'&eacute;quipe est internalis&eacute;e&nbsp;: vous parlez directement aux fondateurs.
@@ -131,7 +153,33 @@ const base = import.meta.env.BASE_URL;
         </div>
       </div>
 
-      <!-- Temps 2 — Avis clients -->
+      <!-- Temps 2 — Le trio (REMONTÉ AU-DESSUS des avis) -->
+      <div class="team-strip">
+        <div class="team-strip__info">
+          <h3 class="team-strip__title">Le trio WOOP</h3>
+          <p class="team-strip__text">Trois experts, aucune sous-traitance. Vous savez qui fait quoi sur votre projet.</p>
+          <Button variant="tertiary" href={`${base}/equipe`}>Rencontrer l'&eacute;quipe</Button>
+        </div>
+        <div class="team-strip__members">
+          <div class="team-strip__member">
+            <img src={`${base}/images/gauthier.webp`} alt="Gauthier Figueres" class="team-strip__avatar" loading="lazy" />
+            <span class="team-strip__name">Gauthier</span>
+            <span class="team-strip__role">Strat&eacute;gie</span>
+          </div>
+          <div class="team-strip__member">
+            <img src={`${base}/images/kevin.webp`} alt="Kevin" class="team-strip__avatar" loading="lazy" />
+            <span class="team-strip__name">Kevin</span>
+            <span class="team-strip__role">Cr&eacute;ation</span>
+          </div>
+          <div class="team-strip__member">
+            <img src={`${base}/images/emma.webp`} alt="Emma" class="team-strip__avatar" loading="lazy" />
+            <span class="team-strip__name">Emma</span>
+            <span class="team-strip__role">Paid media</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Temps 3 — Avis clients (DESCENDU SOUS le trio) -->
       <h3 class="testimonials__heading">Ce qu'en disent nos clients</h3>
       <div class="testimonials">
         <BentoCard variant="outline">
@@ -162,32 +210,6 @@ const base = import.meta.env.BASE_URL;
           </div>
         </BentoCard>
       </div>
-
-      <!-- Temps 3 — Le trio -->
-      <div class="team-strip">
-        <div class="team-strip__info">
-          <h3 class="team-strip__title">Le trio WOOP</h3>
-          <p class="team-strip__text">Trois experts, aucune sous-traitance. Vous savez qui fait quoi sur votre projet.</p>
-          <Button variant="tertiary" href={`${base}/equipe`}>Rencontrer l'&eacute;quipe</Button>
-        </div>
-        <div class="team-strip__members">
-          <div class="team-strip__member">
-            <div class="team-strip__avatar" aria-label="Photo de Gauthier Figueres">GF</div>
-            <span class="team-strip__name">Gauthier</span>
-            <span class="team-strip__role">Strat&eacute;gie</span>
-          </div>
-          <div class="team-strip__member">
-            <div class="team-strip__avatar" aria-label="Photo de Kevin">K</div>
-            <span class="team-strip__name">Kevin</span>
-            <span class="team-strip__role">Cr&eacute;ation</span>
-          </div>
-          <div class="team-strip__member">
-            <div class="team-strip__avatar" aria-label="Photo de Emma">E</div>
-            <span class="team-strip__name">Emma</span>
-            <span class="team-strip__role">Paid media</span>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -205,26 +227,27 @@ const base = import.meta.env.BASE_URL;
   /* ===== HERO ===== */
   .hero {
     position: relative;
-    min-height: 90vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     padding-top: 120px;
-    padding-bottom: 80px;
+    padding-bottom: 100px;
     overflow: hidden;
   }
 
   .hero__watermark {
     position: absolute;
     font-family: var(--font-display);
-    font-size: 20vw;
+    font-size: 42vw;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.02);
+    color: rgba(255, 255, 255, 0.035);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
     white-space: nowrap;
     z-index: -1;
+    letter-spacing: -0.02em;
   }
 
   .hero__eyebrow {
@@ -289,6 +312,42 @@ const base = import.meta.env.BASE_URL;
     gap: 16px;
   }
 
+  /* ===== SCROLL INDICATOR ===== */
+  .hero__scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+  }
+
+  .hero__scroll-text {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .hero__scroll-arrow {
+    animation: scroll-bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__scroll-arrow {
+      animation: none;
+      opacity: 0.7;
+    }
+  }
+
   /* ===== BENTO GRID — APPROCHE ===== */
   .bento-grid--approche {
     display: flex;
@@ -319,22 +378,69 @@ const base = import.meta.env.BASE_URL;
     .bento-grid--approche {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto auto auto;
     }
 
     .bento-grid__main {
       grid-row: 1 / 2;
       grid-column: 1 / 2;
+      display: flex;
+    }
+
+    .bento-grid__main > :global(*) {
+      flex: 1;
     }
 
     .bento-grid__side {
       grid-row: 1 / 2;
       grid-column: 2 / 3;
+      justify-content: stretch;
+    }
+
+    .bento-grid__photos {
+      grid-column: 1 / -1;
     }
 
     .bento-grid__full {
       grid-column: 1 / -1;
     }
+  }
+
+  .bento__title--branding {
+    font-size: 38px !important;
+  }
+
+  @media (min-width: 768px) {
+    .bento__title--branding {
+      font-size: 48px !important;
+    }
+  }
+
+  /* ===== BENTO PHOTOS ===== */
+  .bento-grid__photos {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+  }
+
+  @media (min-width: 500px) {
+    .bento-grid__photos {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .bento-photo {
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    position: relative;
+  }
+
+  .bento-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   /* ===== PERSONAS ===== */
@@ -361,6 +467,13 @@ const base = import.meta.env.BASE_URL;
     text-decoration: none;
     transition: transform 300ms ease, border-color 300ms ease;
     position: relative;
+    min-height: 420px;
+  }
+
+  @media (min-width: 768px) {
+    .persona-card {
+      min-height: 500px;
+    }
   }
 
   .persona-card::before {
@@ -371,6 +484,7 @@ const base = import.meta.env.BASE_URL;
     right: 0;
     height: 3px;
     background: var(--woop-gradient);
+    z-index: 1;
   }
 
   .persona-card:hover {
@@ -378,24 +492,37 @@ const base = import.meta.env.BASE_URL;
     border-color: var(--woop-pink);
   }
 
-  .persona-card__top {
-    padding: 24px 28px 0;
+  .persona-card__image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
   }
 
-  .persona-card__badge {
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    font-weight: 700;
-    color: var(--woop-pink);
-    background: rgba(230, 43, 127, 0.12);
-    border: 1px solid var(--border-accent);
-    border-radius: 100px;
-    padding: 6px 14px;
+  @media (min-width: 768px) {
+    .persona-card__image {
+      height: 240px;
+    }
+  }
+
+  .persona-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .persona-card__image::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to top, var(--bg-deep), transparent);
   }
 
   .persona-card__content {
-    padding: 20px 28px 28px;
+    padding: 24px 28px 28px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -406,7 +533,7 @@ const base = import.meta.env.BASE_URL;
     font-size: 24px;
     text-transform: uppercase;
     line-height: 1.05;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
 
   @media (min-width: 768px) {
@@ -417,7 +544,7 @@ const base = import.meta.env.BASE_URL;
 
   .persona-card__desc {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--text-secondary);
     flex: 1;
     margin-bottom: 20px;
@@ -458,9 +585,14 @@ const base = import.meta.env.BASE_URL;
 
   .proof__stat {
     display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .proof__stat-inner {
+    display: flex;
     align-items: baseline;
     gap: 8px;
-    flex-shrink: 0;
   }
 
   .proof__number {
@@ -487,6 +619,15 @@ const base = import.meta.env.BASE_URL;
     color: var(--text-muted);
   }
 
+  .proof__cumul {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
   .proof__breakdown {
     font-size: 18px;
     line-height: 1.5;
@@ -504,6 +645,81 @@ const base = import.meta.env.BASE_URL;
     color: var(--text-secondary);
   }
 
+  /* ===== TEAM STRIP ===== */
+  .team-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 36px;
+    margin-bottom: 64px;
+  }
+
+  @media (min-width: 768px) {
+    .team-strip {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px;
+    }
+  }
+
+  .team-strip__title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .team-strip__text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    max-width: 400px;
+  }
+
+  .team-strip__members {
+    display: flex;
+    gap: 32px;
+  }
+
+  .team-strip__member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .team-strip__avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-accent);
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .team-strip__avatar {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  .team-strip__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .team-strip__role {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
   /* ===== TESTIMONIALS ===== */
   .testimonials__heading {
     font-family: var(--font-display);
@@ -517,7 +733,6 @@ const base = import.meta.env.BASE_URL;
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--gap-bento);
-    margin-bottom: 64px;
   }
 
   @media (min-width: 768px) {
@@ -540,77 +755,6 @@ const base = import.meta.env.BASE_URL;
 
   .testimonial__author span {
     font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  /* ===== TEAM STRIP ===== */
-  .team-strip {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    padding: 32px;
-  }
-
-  @media (min-width: 768px) {
-    .team-strip {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-
-  .team-strip__title {
-    font-family: var(--font-display);
-    font-size: 22px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .team-strip__text {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-bottom: 16px;
-    max-width: 400px;
-  }
-
-  .team-strip__members {
-    display: flex;
-    gap: 24px;
-  }
-
-  .team-strip__member {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-align: center;
-  }
-
-  .team-strip__avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 16px;
-    color: var(--woop-pink);
-  }
-
-  .team-strip__name {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .team-strip__role {
-    font-size: 11px;
     color: var(--text-muted);
   }
 

@@ -5,6 +5,19 @@
   <div class="aurora__orb aurora__orb--orange"></div>
   <div class="aurora__orb aurora__orb--pink-2"></div>
   <div class="aurora__orb aurora__orb--orange-2"></div>
+  <div class="aurora__orb aurora__orb--pink-3"></div>
+  <div class="aurora__orb aurora__orb--orange-3"></div>
+</div>
+
+<div class="sideline" aria-hidden="true">
+  <svg class="sideline__svg" viewBox="0 0 2 1000" preserveAspectRatio="none">
+    <line x1="1" y1="0" x2="1" y2="1000" stroke="rgba(230,43,127,0.18)" stroke-width="1" />
+  </svg>
+  <div class="sideline__dot sideline__dot--1"></div>
+  <div class="sideline__dot sideline__dot--2"></div>
+  <div class="sideline__dot sideline__dot--3"></div>
+  <div class="sideline__dot sideline__dot--4"></div>
+  <div class="sideline__dot sideline__dot--5"></div>
 </div>
 
 <style>
@@ -19,73 +32,154 @@
   .aurora__orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(120px);
+    filter: blur(100px);
     will-change: transform;
   }
 
   .aurora__orb--pink {
-    width: 600px;
-    height: 400px;
-    background: rgba(230, 43, 127, 0.12);
-    top: -10%;
+    width: 700px;
+    height: 500px;
+    background: rgba(230, 43, 127, 0.22);
+    top: -8%;
     right: -5%;
     animation: aurora-drift-1 30s ease-in-out infinite alternate;
   }
 
   .aurora__orb--orange {
-    width: 500px;
-    height: 350px;
-    background: rgba(250, 98, 68, 0.10);
-    bottom: 10%;
-    left: -8%;
+    width: 650px;
+    height: 450px;
+    background: rgba(250, 98, 68, 0.18);
+    bottom: 5%;
+    left: -10%;
     animation: aurora-drift-2 35s ease-in-out infinite alternate;
   }
 
   .aurora__orb--pink-2 {
-    width: 400px;
-    height: 300px;
-    background: rgba(230, 43, 127, 0.08);
-    top: 50%;
-    left: 30%;
+    width: 550px;
+    height: 400px;
+    background: rgba(230, 43, 127, 0.15);
+    top: 45%;
+    left: 25%;
     animation: aurora-drift-3 28s ease-in-out infinite alternate;
   }
 
   .aurora__orb--orange-2 {
-    width: 350px;
-    height: 250px;
-    background: rgba(250, 98, 68, 0.07);
-    top: 20%;
-    right: 20%;
+    width: 500px;
+    height: 350px;
+    background: rgba(250, 98, 68, 0.14);
+    top: 15%;
+    right: 15%;
     animation: aurora-drift-4 32s ease-in-out infinite alternate;
+  }
+
+  .aurora__orb--pink-3 {
+    width: 400px;
+    height: 300px;
+    background: rgba(230, 43, 127, 0.12);
+    bottom: 30%;
+    right: 5%;
+    animation: aurora-drift-5 26s ease-in-out infinite alternate;
+  }
+
+  .aurora__orb--orange-3 {
+    width: 450px;
+    height: 350px;
+    background: rgba(250, 98, 68, 0.10);
+    top: 70%;
+    left: 5%;
+    animation: aurora-drift-6 33s ease-in-out infinite alternate;
   }
 
   @keyframes aurora-drift-1 {
     0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-60px, 40px) scale(1.1); }
-    100% { transform: translate(30px, -30px) scale(0.95); }
+    50% { transform: translate(-80px, 50px) scale(1.15); }
+    100% { transform: translate(40px, -40px) scale(0.95); }
   }
 
   @keyframes aurora-drift-2 {
     0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(50px, -30px) scale(1.05); }
-    100% { transform: translate(-40px, 20px) scale(1.1); }
+    50% { transform: translate(70px, -40px) scale(1.1); }
+    100% { transform: translate(-50px, 30px) scale(1.15); }
   }
 
   @keyframes aurora-drift-3 {
     0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(40px, 50px) scale(1.08); }
-    100% { transform: translate(-30px, -20px) scale(0.92); }
+    50% { transform: translate(50px, 60px) scale(1.12); }
+    100% { transform: translate(-40px, -30px) scale(0.92); }
   }
 
   @keyframes aurora-drift-4 {
     0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-50px, 30px) scale(1.12); }
-    100% { transform: translate(20px, -40px) scale(0.98); }
+    50% { transform: translate(-60px, 40px) scale(1.18); }
+    100% { transform: translate(30px, -50px) scale(0.98); }
+  }
+
+  @keyframes aurora-drift-5 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -30px) scale(1.1); }
+    100% { transform: translate(-30px, 50px) scale(1.05); }
+  }
+
+  @keyframes aurora-drift-6 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-50px, -40px) scale(1.08); }
+    100% { transform: translate(60px, 20px) scale(0.95); }
+  }
+
+  /* ===== SIDELINE ===== */
+  .sideline {
+    position: fixed;
+    left: 32px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    z-index: 1;
+    pointer-events: none;
+    display: none;
+  }
+
+  @media (min-width: 1100px) {
+    .sideline {
+      display: block;
+    }
+  }
+
+  .sideline__svg {
+    position: absolute;
+    inset: 0;
+    width: 2px;
+    height: 100%;
+  }
+
+  .sideline__dot {
+    position: absolute;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+    box-shadow: 0 0 12px rgba(230, 43, 127, 0.5);
+    animation: dot-pulse 4s ease-in-out infinite;
+  }
+
+  .sideline__dot--1 { top: 12%; animation-delay: 0s; }
+  .sideline__dot--2 { top: 30%; animation-delay: 0.8s; }
+  .sideline__dot--3 { top: 50%; animation-delay: 1.6s; }
+  .sideline__dot--4 { top: 70%; animation-delay: 2.4s; }
+  .sideline__dot--5 { top: 88%; animation-delay: 3.2s; }
+
+  @keyframes dot-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .aurora__orb {
       animation: none;
+    }
+    .sideline__dot {
+      animation: none;
+      opacity: 0.6;
     }
   }
 </style>
