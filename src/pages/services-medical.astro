@@ -37,7 +37,6 @@ const cases = [
   <section class="med-hero">
     <div class="container">
       <div class="med-hero__watermark" aria-hidden="true">SANT&Eacute;</div>
-      <span class="med-hero__eyebrow">Persona A &middot; Sant&eacute;</span>
       <h1 class="med-hero__title">
         Le marketing m&eacute;dical,<br>
         pens&eacute; par quelqu'un qui a<br>
@@ -57,17 +56,42 @@ const cases = [
       <span class="kicker">01 — Pour qui ?</span>
       <h2 class="section-title">Vous vous reconnaissez ?</h2>
       <div class="cases-grid">
-        {cases.map((c) => (
-          <div class="case-card">
-            <div class="case-card__photo-wrap">
-              <img src={c.photo} alt={c.title} loading="lazy" class="case-card__photo" />
-            </div>
-            <div class="case-card__body">
-              <h3 class="case-card__title">{c.title}</h3>
-              <p class="case-card__text">{c.text}</p>
-            </div>
+        <div class="case-card">
+          <div class="case-card__photo-wrap">
+            <img src={cases[0].photo} alt={cases[0].title} loading="lazy" class="case-card__photo" />
           </div>
-        ))}
+          <div class="case-card__body">
+            <h3 class="case-card__title"><span class="gradient-text">Une clinique priv&eacute;e</span> qui veut remplir son agenda</h3>
+            <p class="case-card__text">{cases[0].text}</p>
+          </div>
+        </div>
+        <div class="case-card">
+          <div class="case-card__photo-wrap">
+            <img src={cases[1].photo} alt={cases[1].title} loading="lazy" class="case-card__photo" />
+          </div>
+          <div class="case-card__body">
+            <h3 class="case-card__title"><span class="gradient-text">Un cabinet dentaire</span> qui veut sortir de l'ombre</h3>
+            <p class="case-card__text">{cases[1].text}</p>
+          </div>
+        </div>
+        <div class="case-card">
+          <div class="case-card__photo-wrap">
+            <img src={cases[2].photo} alt={cases[2].title} loading="lazy" class="case-card__photo" />
+          </div>
+          <div class="case-card__body">
+            <h3 class="case-card__title"><span class="gradient-text">Un centre m&eacute;dico-esth&eacute;tique</span> qui veut justifier ses prix</h3>
+            <p class="case-card__text">{cases[2].text}</p>
+          </div>
+        </div>
+        <div class="case-card">
+          <div class="case-card__photo-wrap">
+            <img src={cases[3].photo} alt={cases[3].title} loading="lazy" class="case-card__photo" />
+          </div>
+          <div class="case-card__body">
+            <h3 class="case-card__title"><span class="gradient-text">Un professionnel de la sant&eacute;</span> qui veut se faire conna&icirc;tre</h3>
+            <p class="case-card__text">{cases[3].text}</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -78,7 +102,7 @@ const cases = [
       <span class="kicker">02 — Nos services</span>
       <h2 class="section-title">Une offre pens&eacute;e pour le secteur m&eacute;dical.</h2>
       <div class="services-grid">
-        <div class="svc-card svc-card--signature">
+        <div class="svc-card svc-card--signature svc-card--wide">
           <div class="svc-card__icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7 7-7z"/></svg>
           </div>
@@ -86,7 +110,7 @@ const cases = [
           <h3 class="svc-card__title">Exp&eacute;rience patient</h3>
           <p class="svc-card__text">L'art de transformer chaque interaction (avant, pendant et apr&egrave;s le rendez-vous) en une raison de revenir. Site, communications, parcours patient, fid&eacute;lisation : on travaille tout ce qui se passe autour du soin.</p>
         </div>
-        <div class="svc-card">
+        <div class="svc-card svc-card--wide">
           <div class="svc-card__icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           </div>
@@ -100,7 +124,7 @@ const cases = [
           <h3 class="svc-card__title">Branding clinique</h3>
           <p class="svc-card__text">Logo, charte visuelle, ton de marque, design system complet. Une identit&eacute; qui justifie un positionnement premium et qui se distingue dans votre secteur.</p>
         </div>
-        <div class="svc-card">
+        <div class="svc-card svc-card--wide">
           <div class="svc-card__icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           </div>
@@ -122,7 +146,7 @@ const cases = [
           <h3 class="svc-card__title">Strat&eacute;gie et conseil</h3>
           <p class="svc-card__text">Audit, positionnement, plan d'action. Pour les directeurs de clinique qui veulent une vision claire avant de lancer leurs investissements marketing.</p>
         </div>
-        <div class="svc-card">
+        <div class="svc-card svc-card--wide">
           <div class="svc-card__icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </div>
@@ -197,20 +221,6 @@ const cases = [
     z-index: -1;
   }
 
-  .med-hero__eyebrow {
-    display: inline-block;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--woop-pink);
-    background: rgba(230, 43, 127, 0.1);
-    border: 1px solid var(--border-accent);
-    border-radius: 100px;
-    padding: 8px 18px;
-    font-weight: 700;
-    margin-bottom: 24px;
-  }
-
   .med-hero__title {
     font-family: var(--font-body);
     font-weight: 600;
@@ -254,10 +264,6 @@ const cases = [
 
   @media (min-width: 600px) {
     .cases-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  @media (min-width: 1024px) {
-    .cases-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
   }
 
   .case-card {
@@ -313,14 +319,9 @@ const cases = [
 
   @media (min-width: 600px) {
     .services-grid { grid-template-columns: 1fr 1fr; }
-  }
 
-  @media (min-width: 1024px) {
-    .services-grid { grid-template-columns: repeat(4, 1fr); }
-
-    .svc-card--signature {
-      grid-column: 1 / 3;
-      grid-row: 1 / 3;
+    .svc-card--wide {
+      grid-column: span 2;
     }
   }
 
@@ -388,7 +389,7 @@ const cases = [
     text-transform: uppercase;
     font-weight: 700;
     color: #fff;
-    background: rgba(0, 0, 0, 0.2);
+    background: #22c55e;
     border-radius: 100px;
     padding: 4px 12px;
     align-self: flex-start;
