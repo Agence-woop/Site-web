@@ -26,14 +26,6 @@ const base = import.meta.env.BASE_URL;
         <Button variant="secondary" href="#approche">Voir nos services</Button>
       </div>
     </div>
-    <div class="hero__scroll" aria-hidden="true">
-      <span class="hero__scroll-text">D&Eacute;FILER</span>
-      <div class="hero__scroll-arrow">
-        <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-          <path d="M8 4L8 20M8 20L2 14M8 20L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-    </div>
   </section>
 
   <!-- ===== SECTION 2 — NOTRE APPROCHE (BENTO) ===== -->
@@ -42,59 +34,45 @@ const base = import.meta.env.BASE_URL;
       <span class="kicker">01 — Notre approche</span>
       <h2 class="section-title">Marque + Performance</h2>
       <div class="bento-grid bento-grid--approche">
-        <div class="bento-grid__main">
-          <BentoCard variant="pink" size="large">
-            <div>
-              <span class="bento__label">Conviction n&deg;1</span>
-              <div class="bento__title-xl">Marque forte<br>= CPL bas.</div>
-            </div>
-            <p class="bento__text">Une marque solide fait baisser le co&ucirc;t d'acquisition. Pas de branding sans performance, pas de performance sans branding.</p>
-          </BentoCard>
+        <BentoCard variant="pink" size="large" class="bento--dominant">
+          <div>
+            <span class="bento__label">Conviction n&deg;1</span>
+            <div class="bento__title-xl">Marque forte<br>= CPL bas.</div>
+          </div>
+          <p class="bento__text">Une marque solide fait baisser le co&ucirc;t d'acquisition. Pas de branding sans performance, pas de performance sans branding.</p>
+        </BentoCard>
+        <BentoCard variant="outline" class="bento--ads">
+          <span class="bento__label">Acquisition</span>
+          <div class="bento__title">Publicit&eacute; en ligne</div>
+          <p class="bento__text">Google Ads & Meta Ads. Campagnes cibl&eacute;es pour g&eacute;n&eacute;rer des demandes qualifi&eacute;es.</p>
+        </BentoCard>
+        <BentoCard variant="orange" class="bento--branding">
+          <span class="bento__label">Identit&eacute;</span>
+          <div class="bento__title bento__title--branding">Branding</div>
+          <p class="bento__text">Logo, charte visuelle, syst&egrave;me de marque complet.</p>
+        </BentoCard>
+        <div class="bento-photo bento-photo--medical">
+          <img src={`${base}/images/clinique-medicale.webp`} alt="Clinique m&eacute;dicale" loading="lazy" />
         </div>
-        <div class="bento-grid__side">
-          <div class="bento-grid__row">
-            <BentoCard variant="outline">
-              <span class="bento__label">Acquisition</span>
-              <div class="bento__title">Publicit&eacute; en ligne</div>
-              <p class="bento__text">Google Ads & Meta Ads. Campagnes cibl&eacute;es pour g&eacute;n&eacute;rer des demandes qualifi&eacute;es.</p>
-            </BentoCard>
-            <BentoCard variant="orange">
-              <span class="bento__label">Identit&eacute;</span>
-              <div class="bento__title bento__title--branding">Branding</div>
-              <p class="bento__text">Logo, charte visuelle, syst&egrave;me de marque complet.</p>
-            </BentoCard>
-          </div>
-          <div class="bento-grid__row">
-            <BentoCard variant="gradient">
-              <span class="bento__label">M&eacute;thode</span>
-              <div class="bento__title">Flywheel</div>
-              <p class="bento__text">Marque &rarr; Performance &rarr; Optimisation. Un cycle vertueux.</p>
-            </BentoCard>
-            <BentoCard variant="outline">
-              <span class="bento__label">Conversion</span>
-              <div class="bento__title">Site & Landing</div>
-              <p class="bento__text">Sites de conversion et landing pages optimis&eacute;es.</p>
-            </BentoCard>
-          </div>
+        <BentoCard variant="gradient" class="bento--flywheel">
+          <span class="bento__label">M&eacute;thode</span>
+          <div class="bento__title">Flywheel</div>
+          <p class="bento__text">Marque &rarr; Performance &rarr; Optimisation. Un cycle vertueux.</p>
+        </BentoCard>
+        <div class="bento-photo bento-photo--dentaire">
+          <img src={`${base}/images/clinique-dentaire.webp`} alt="Clinique dentaire" loading="lazy" />
         </div>
-        <div class="bento-grid__photos">
-          <div class="bento-photo">
-            <img src={`${base}/images/clinique-medicale.webp`} alt="Clinique médicale" loading="lazy" />
-          </div>
-          <div class="bento-photo">
-            <img src={`${base}/images/clinique-dentaire.webp`} alt="Clinique dentaire" loading="lazy" />
-          </div>
-          <div class="bento-photo">
-            <img src={`${base}/images/recrutement-rh.webp`} alt="Recrutement RH" loading="lazy" />
-          </div>
+        <BentoCard variant="outline" class="bento--landing">
+          <span class="bento__label">Conversion</span>
+          <div class="bento__title">Site & Landing</div>
+          <p class="bento__text">Sites de conversion et landing pages optimis&eacute;es.</p>
+        </BentoCard>
+        <div class="bento-photo bento-photo--rh">
+          <img src={`${base}/images/recrutement-rh.webp`} alt="Recrutement RH" loading="lazy" />
         </div>
-        <div class="bento-grid__full">
-          <BentoCard variant="outline">
-            <span class="bento__label">Vocation</span>
-            <div class="bento__title">Sant&eacute;. Recrutement.</div>
-            <p class="bento__text">Deux secteurs, aucun autre. La connaissance fine du m&eacute;tier du client comme garantie de pertinence.</p>
-          </BentoCard>
-        </div>
+      </div>
+      <div class="approche-cta">
+        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
       </div>
     </div>
   </section>
@@ -105,26 +83,32 @@ const base = import.meta.env.BASE_URL;
       <span class="kicker">02 — Pour qui ?</span>
       <h2 class="section-title">Deux secteurs. Deux expertises.</h2>
       <div class="personas">
-        <a href={`${base}/services-medical`} class="persona-card">
+        <div class="persona-card">
           <div class="persona-card__image">
-            <img src={`${base}/images/persona-sante.webp`} alt="Professionnels de la santé" loading="lazy" />
+            <img src={`${base}/images/persona-sante.webp`} alt="Professionnels de la sant&eacute;" loading="lazy" />
           </div>
           <div class="persona-card__content">
-            <h3 class="persona-card__title">Vous dirigez une clinique sant&eacute; ou m&eacute;dicale</h3>
+            <h3 class="persona-card__title">Vous dirigez une <span class="gradient-text">clinique sant&eacute; ou m&eacute;dicale</span></h3>
             <p class="persona-card__desc">Pharmaciens propri&eacute;taires &middot; Directeurs de clinique &middot; Cabinets dentaires &middot; Cliniques m&eacute;dico-esth&eacute;tiques &middot; Centres de bien-&ecirc;tre</p>
-            <span class="persona-card__cta">D&eacute;couvrir nos services sant&eacute; &rarr;</span>
+            <div class="persona-card__actions">
+              <Button variant="primary" href="mailto:contact@agence-woop.ca">Parler &agrave; Gauthier</Button>
+              <a href={`${base}/services-medical`} class="persona-card__link">D&eacute;couvrir nos services sant&eacute; &rarr;</a>
+            </div>
           </div>
-        </a>
-        <a href={`${base}/services-recrutement`} class="persona-card">
+        </div>
+        <div class="persona-card">
           <div class="persona-card__image">
             <img src={`${base}/images/persona-recrutement.webp`} alt="Professionnels du recrutement" loading="lazy" />
           </div>
           <div class="persona-card__content">
-            <h3 class="persona-card__title">Vous dirigez un cabinet de recrutement</h3>
+            <h3 class="persona-card__title">Vous dirigez un <span class="gradient-text">cabinet de recrutement</span></h3>
             <p class="persona-card__desc">Cabinets de recrutement sp&eacute;cialis&eacute;s &middot; Firmes de recrutement &middot; Consultants RH ind&eacute;pendants &middot; DRH d'entreprise</p>
-            <span class="persona-card__cta">D&eacute;couvrir nos services recrutement &rarr;</span>
+            <div class="persona-card__actions">
+              <Button variant="primary" href="mailto:contact@agence-woop.ca">Parler &agrave; Kevin</Button>
+              <a href={`${base}/services-recrutement`} class="persona-card__link">D&eacute;couvrir nos services recrutement &rarr;</a>
+            </div>
           </div>
-        </a>
+        </div>
       </div>
     </div>
   </section>
@@ -134,7 +118,6 @@ const base = import.meta.env.BASE_URL;
     <div class="container">
       <span class="kicker">03 — La preuve</span>
 
-      <!-- Temps 1 — L'expertise -->
       <div class="proof">
         <div class="proof__stat">
           <div class="proof__stat-inner">
@@ -153,7 +136,6 @@ const base = import.meta.env.BASE_URL;
         </div>
       </div>
 
-      <!-- Temps 2 — Le trio (REMONTÉ AU-DESSUS des avis) -->
       <div class="team-strip">
         <div class="team-strip__info">
           <h3 class="team-strip__title">Le trio WOOP</h3>
@@ -179,7 +161,6 @@ const base = import.meta.env.BASE_URL;
         </div>
       </div>
 
-      <!-- Temps 3 — Avis clients (DESCENDU SOUS le trio) -->
       <h3 class="testimonials__heading">Ce qu'en disent nos clients</h3>
       <div class="testimonials">
         <BentoCard variant="outline">
@@ -231,7 +212,7 @@ const base = import.meta.env.BASE_URL;
     display: flex;
     align-items: center;
     padding-top: 120px;
-    padding-bottom: 100px;
+    padding-bottom: 80px;
     overflow: hidden;
   }
 
@@ -275,16 +256,11 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .hero__title {
-      font-size: 42px;
-    }
+    .hero__title { font-size: 42px; }
   }
 
   @media (min-width: 1024px) {
-    .hero__title {
-      font-size: 56px;
-      line-height: 1.08;
-    }
+    .hero__title { font-size: 56px; line-height: 1.08; }
   }
 
   .hero__keyword {
@@ -301,9 +277,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .hero__subtitle {
-      font-size: 18px;
-    }
+    .hero__subtitle { font-size: 18px; }
   }
 
   .hero__ctas {
@@ -312,97 +286,57 @@ const base = import.meta.env.BASE_URL;
     gap: 16px;
   }
 
-  /* ===== SCROLL INDICATOR ===== */
-  .hero__scroll {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-muted);
-  }
-
-  .hero__scroll-text {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  .hero__scroll-arrow {
-    animation: scroll-bounce 2s ease-in-out infinite;
-  }
-
-  @keyframes scroll-bounce {
-    0%, 100% { transform: translateY(0); opacity: 0.5; }
-    50% { transform: translateY(8px); opacity: 1; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__scroll-arrow {
-      animation: none;
-      opacity: 0.7;
-    }
-  }
-
   /* ===== BENTO GRID — APPROCHE ===== */
   .bento-grid--approche {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: var(--gap-bento);
     margin-top: 40px;
   }
 
-  .bento-grid__side {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-bento);
-  }
-
-  .bento-grid__row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-  }
-
-  @media (min-width: 500px) {
-    .bento-grid__row {
+  @media (min-width: 600px) {
+    .bento-grid--approche {
       grid-template-columns: 1fr 1fr;
     }
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 900px) {
     .bento-grid--approche {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(4, 1fr);
       grid-template-rows: auto auto auto;
     }
 
-    .bento-grid__main {
+    .bento-grid--approche > :global(.bento--dominant) {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+    .bento-grid--approche > :global(.bento--ads) {
+      grid-column: 3 / 4;
       grid-row: 1 / 2;
+    }
+    .bento-grid--approche > :global(.bento--branding) {
+      grid-column: 4 / 5;
+      grid-row: 1 / 2;
+    }
+    .bento-photo--medical {
+      grid-column: 3 / 5;
+      grid-row: 2 / 3;
+    }
+    .bento-grid--approche > :global(.bento--flywheel) {
       grid-column: 1 / 2;
-      display: flex;
+      grid-row: 3 / 4;
     }
-
-    .bento-grid__main > :global(*) {
-      flex: 1;
-    }
-
-    .bento-grid__side {
-      grid-row: 1 / 2;
+    .bento-photo--dentaire {
       grid-column: 2 / 3;
-      justify-content: stretch;
+      grid-row: 3 / 5;
     }
-
-    .bento-grid__photos {
-      grid-column: 1 / -1;
+    .bento-grid--approche > :global(.bento--landing) {
+      grid-column: 3 / 4;
+      grid-row: 3 / 4;
     }
-
-    .bento-grid__full {
-      grid-column: 1 / -1;
+    .bento-photo--rh {
+      grid-column: 4 / 5;
+      grid-row: 3 / 4;
     }
   }
 
@@ -416,23 +350,10 @@ const base = import.meta.env.BASE_URL;
     }
   }
 
-  /* ===== BENTO PHOTOS ===== */
-  .bento-grid__photos {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-  }
-
-  @media (min-width: 500px) {
-    .bento-grid__photos {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
-
   .bento-photo {
     border-radius: var(--radius-bento);
     overflow: hidden;
-    aspect-ratio: 4 / 3;
+    min-height: 180px;
     position: relative;
   }
 
@@ -441,6 +362,23 @@ const base = import.meta.env.BASE_URL;
     height: 100%;
     object-fit: cover;
     display: block;
+    position: absolute;
+    inset: 0;
+  }
+
+  .bento-photo--dentaire {
+    aspect-ratio: 3 / 4;
+  }
+
+  @media (min-width: 900px) {
+    .bento-photo--dentaire {
+      aspect-ratio: auto;
+    }
+  }
+
+  .approche-cta {
+    margin-top: 40px;
+    text-align: center;
   }
 
   /* ===== PERSONAS ===== */
@@ -471,17 +409,13 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .persona-card {
-      min-height: 500px;
-    }
+    .persona-card { min-height: 500px; }
   }
 
   .persona-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 0; left: 0; right: 0;
     height: 3px;
     background: var(--woop-gradient);
     z-index: 1;
@@ -499,9 +433,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .persona-card__image {
-      height: 240px;
-    }
+    .persona-card__image { height: 240px; }
   }
 
   .persona-card__image img {
@@ -514,9 +446,7 @@ const base = import.meta.env.BASE_URL;
   .persona-card__image::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     height: 60px;
     background: linear-gradient(to top, var(--bg-deep), transparent);
   }
@@ -537,9 +467,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .persona-card__title {
-      font-size: 28px;
-    }
+    .persona-card__title { font-size: 28px; }
   }
 
   .persona-card__desc {
@@ -547,22 +475,31 @@ const base = import.meta.env.BASE_URL;
     line-height: 1.7;
     color: var(--text-secondary);
     flex: 1;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
-  .persona-card__cta {
-    font-size: 14px;
-    font-weight: 600;
+  .persona-card__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .persona-card__link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .persona-card__link:hover {
     color: var(--woop-pink);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .persona-card {
-      transition: none;
-    }
-    .persona-card:hover {
-      transform: none;
-    }
+    .persona-card { transition: none; }
+    .persona-card:hover { transform: none; }
   }
 
   /* ===== PREUVE ===== */
@@ -570,8 +507,8 @@ const base = import.meta.env.BASE_URL;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin-top: 40px;
-    margin-bottom: 64px;
+    margin-top: 32px;
+    margin-bottom: 48px;
     align-items: flex-start;
   }
 
@@ -607,9 +544,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .proof__number {
-      font-size: 140px;
-    }
+    .proof__number { font-size: 140px; }
   }
 
   .proof__unit {
@@ -649,12 +584,14 @@ const base = import.meta.env.BASE_URL;
   .team-strip {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 40px;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-bento);
-    padding: 36px;
-    margin-bottom: 64px;
+    padding: 48px 36px;
+    margin-bottom: 48px;
+    min-height: 320px;
+    justify-content: center;
   }
 
   @media (min-width: 768px) {
@@ -662,40 +599,42 @@ const base = import.meta.env.BASE_URL;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      padding: 40px;
+      padding: 56px 48px;
+      min-height: 360px;
     }
   }
 
   .team-strip__title {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 26px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
   .team-strip__text {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--text-secondary);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     max-width: 400px;
+    line-height: 1.6;
   }
 
   .team-strip__members {
     display: flex;
-    gap: 32px;
+    gap: 40px;
   }
 
   .team-strip__member {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     text-align: center;
   }
 
   .team-strip__avatar {
-    width: 88px;
-    height: 88px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid var(--border-accent);
@@ -704,19 +643,19 @@ const base = import.meta.env.BASE_URL;
 
   @media (min-width: 768px) {
     .team-strip__avatar {
-      width: 100px;
-      height: 100px;
+      width: 140px;
+      height: 140px;
     }
   }
 
   .team-strip__name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--text-primary);
   }
 
   .team-strip__role {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-muted);
   }
 
@@ -763,14 +702,12 @@ const base = import.meta.env.BASE_URL;
     position: relative;
     z-index: 1;
     background: var(--woop-gradient);
-    padding: 80px 0;
+    padding: 64px 0;
     text-align: center;
   }
 
   @media (min-width: 768px) {
-    .cta-final {
-      padding: 100px 0;
-    }
+    .cta-final { padding: 80px 0; }
   }
 
   .cta-final__title {
@@ -782,9 +719,7 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .cta-final__title {
-      font-size: 52px;
-    }
+    .cta-final__title { font-size: 52px; }
   }
 
   .cta-final :global(.btn--primary) {
