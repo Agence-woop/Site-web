@@ -16,7 +16,7 @@ const Tag = tag ?? (href ? 'a' : 'button');
   role={Tag === 'a' ? undefined : 'button'}
 >
   <slot />
-  {(variant === 'primary' || variant === 'tertiary') && <ChevronRight size={14} />}
+  <ChevronRight size={14} />
 </Tag>
 
 <style>
@@ -52,16 +52,18 @@ const Tag = tag ?? (href ? 'a' : 'button');
   }
 
   .btn--secondary {
-    background: transparent;
+    position: relative;
     color: var(--text-primary);
-    border: 1px solid var(--border-subtle);
     padding: 14px 28px;
     border-radius: var(--radius-button);
+    background: linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
+                linear-gradient(90deg, #FA6244 0%, #E62B7F 100%) border-box;
+    border: 1.5px solid transparent;
   }
 
   .btn--secondary:hover {
     transform: translateY(-2px);
-    border-color: var(--border-accent);
+    box-shadow: 0 6px 24px rgba(230, 43, 127, 0.2);
   }
 
   .btn--tertiary {
