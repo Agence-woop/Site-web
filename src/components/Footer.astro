@@ -1,13 +1,11 @@
 ---
-import Logo from './Logo.astro';
-
 const base = import.meta.env.BASE_URL;
 ---
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
       <div class="footer__brand">
-        <Logo size="lg" />
+        <img src={`${base}/images/logo-woop.png`} alt="WOOP" class="footer__logo-img" width="150" height="36" />
         <p class="footer__desc">
           L'agence d'acquisition et d'identit&eacute; de marque d&eacute;di&eacute;e &agrave; la sant&eacute;, au bien-&ecirc;tre et au recrutement sp&eacute;cialis&eacute; au Qu&eacute;bec.
         </p>
@@ -15,8 +13,8 @@ const base = import.meta.env.BASE_URL;
       <div class="footer__col">
         <h5 class="footer__heading">Pages</h5>
         <a href={`${base}/`} class="footer__link">Accueil</a>
-        <a href={`${base}/services-medical`} class="footer__link">Marketing Sant&eacute; & M&eacute;dical</a>
-        <a href={`${base}/services-recrutement`} class="footer__link">Marketing RH & Recrutement</a>
+        <a href={`${base}/services-medical`} class="footer__link">Sant&eacute; & M&eacute;dical</a>
+        <a href={`${base}/services-recrutement`} class="footer__link">RH & Recrutement</a>
         <a href={`${base}/equipe`} class="footer__link">&Eacute;quipe</a>
         <span class="footer__link footer__link--disabled">Blog &middot; Bient&ocirc;t</span>
       </div>
@@ -72,6 +70,12 @@ const base = import.meta.env.BASE_URL;
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .footer__logo-img {
+    height: 36px;
+    width: auto;
+    display: block;
   }
 
   .footer__desc {
