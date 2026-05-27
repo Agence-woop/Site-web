@@ -108,8 +108,10 @@ const base = import.meta.env.BASE_URL;
   <section class="coords-section">
     <div class="container">
       <div class="coords-card">
-        <span class="kicker">Autre canal</span>
-        <p class="coords__intro">Vous pr&eacute;f&eacute;rez &eacute;crire ou appeler directement ? C'est ici.</p>
+        <div class="coords-card__left">
+          <span class="kicker">Autre canal</span>
+          <p class="coords__intro">Vous pr&eacute;f&eacute;rez &eacute;crire ou appeler directement ? C'est ici.</p>
+        </div>
         <div class="coords">
           <a href="mailto:contact@agence-woop.ca" class="coords__item">
             <span class="coords__icon">
@@ -415,11 +417,11 @@ const base = import.meta.env.BASE_URL;
 
   /* ===== COORDONNÉES ===== */
   .coords-section {
-    padding: 12px 0 64px;
+    padding: 40px 0 64px;
   }
 
-  @media (min-width: 768px) {
-    .coords-section { padding: 16px 0 100px; }
+  @media (min-width: 900px) {
+    .coords-section { padding: 48px 0 100px; }
   }
 
   .coords-card {
@@ -429,6 +431,17 @@ const base = import.meta.env.BASE_URL;
     padding: 32px;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  @media (min-width: 900px) {
+    .coords-card {
+      flex-direction: row;
+      align-items: center;
+      gap: 48px;
+    }
   }
 
   .coords-card::before {
@@ -441,23 +454,21 @@ const base = import.meta.env.BASE_URL;
     background: var(--woop-gradient);
   }
 
+  .coords-card__left {
+    flex: 1;
+  }
+
   .coords__intro {
     font-size: 16px;
     color: var(--text-secondary);
-    margin-bottom: 24px;
+    margin: 0;
   }
 
   .coords {
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-
-  @media (min-width: 600px) {
-    .coords {
-      flex-direction: row;
-      gap: 32px;
-    }
+    flex-shrink: 0;
   }
 
   .coords__item {
