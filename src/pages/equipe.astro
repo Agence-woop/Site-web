@@ -1,0 +1,497 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const team = [
+  {
+    name: 'Gauthier Figueres',
+    badge: 'Stratégie',
+    role: 'Co-fondateur · Stratégie',
+    photo: `${base}/images/gauthier.webp`,
+    linkedin: 'https://www.linkedin.com/in/gauthier-f-00561b203/',
+    bio: 'Infirmier clinicien de formation, Gauthier a basculé vers la gestion médicale il y a plusieurs années. Il dirige aujourd\'hui les opérations médicales dans l\'aéromédical et il est expert des soins en communauté et en régions éloignées. Ancien directeur de clinique privée, désormais inscrit en MBA, il pilote chez WOOP la stratégie et les comptes Santé.',
+  },
+  {
+    name: 'Kevin Zounias',
+    badge: 'Création',
+    role: 'Co-fondateur · Création',
+    photo: `${base}/images/kevin.webp`,
+    linkedin: 'https://www.linkedin.com/in/k%C3%A9vin-zounias/',
+    bio: 'Designer graphique de formation, Kevin a développé son expertise marketing au sein d\'un cabinet de recrutement spécialisé en santé. Cette double exposition à la création et au marketing en fait l\'œil et la main de WOOP. Il pilote l\'identité de marque de chaque projet et accompagne les comptes Recrutement.',
+  },
+  {
+    name: 'Emma Despujols',
+    badge: 'Paid Media Junior',
+    role: 'Spécialiste Paid Media Junior',
+    photo: `${base}/images/emma.webp`,
+    linkedin: 'https://www.linkedin.com/in/emma-despujols-161235211/',
+    bio: 'Diplômée d\'HEC Montréal et de l\'EmLyon Business School, actuellement en Master 2 Project Management, Emma a fait ses classes dans de grands médias français. Chez WOOP, elle pilote la performance publicitaire sur Google Ads et Meta Ads, et conçoit les landing pages de conversion.',
+  },
+];
+
+const methods = [
+  { num: '01', title: 'Diagnostic', text: 'Appel découverte et audit. On comprend votre projet, vos objectifs, et on observe votre présence en ligne actuelle.' },
+  { num: '02', title: 'Stratégie & marque', text: 'Positionnement, identité visuelle, ton de marque. On pose les fondations sur lesquelles tout le reste va s\'appuyer.' },
+  { num: '03', title: 'Acquisition', text: 'Campagnes publicitaires et landing pages de conversion. On va chercher vos prospects là où ils sont.' },
+  { num: '04', title: 'Optimisation', text: 'Mesure, itération, ajustements. On observe ce qui fonctionne, on corrige ce qui ne marche pas, et on réinvestit là où ça paie : votre marque gagne en force, votre coût pour générer un nouveau patient (ou candidat) baisse, et la machine s\'amplifie d\'elle-même.' },
+];
+---
+<Layout
+  title="L'équipe WOOP — Agence marketing santé et recrutement à Montréal"
+  description="Découvrez Gauthier, Kevin et Emma, le trio fondateur de WOOP. Aucune sous-traitance : vous parlez directement à l'équipe qui pilote votre projet."
+  ogImage="/Site-web/images/og-image.jpg"
+>
+
+  <!-- SECTION 1 — HERO -->
+  <section class="equipe-hero">
+    <div class="container">
+      <div class="equipe-hero__watermark" aria-hidden="true">&Eacute;QUIPE</div>
+      <span class="equipe-hero__eyebrow">Le trio WOOP</span>
+      <h1 class="equipe-hero__title">
+        Trois experts.<br>
+        <span class="gradient-text">Aucune sous-traitance.</span><br>
+        Vous savez qui fait quoi sur votre projet.
+      </h1>
+      <p class="equipe-hero__subtitle">
+        Un trio compl&eacute;mentaire et nomm&eacute;. Vous parlez aux fondateurs directement, du premier appel jusqu'&agrave; la livraison de votre projet.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — LE TRIO -->
+  <section class="section">
+    <div class="container">
+      <div class="trio-cards">
+        {team.map((member) => (
+          <div class="trio-card">
+            <div class="trio-card__photo-wrap">
+              <img src={member.photo} alt={member.name} class="trio-card__photo" loading="lazy" />
+              <span class="trio-card__badge">{member.badge}</span>
+            </div>
+            <div class="trio-card__body">
+              <div class="trio-card__header">
+                <div>
+                  <h2 class="trio-card__name">{member.name}</h2>
+                  <span class="trio-card__role">{member.role}</span>
+                </div>
+                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" class="trio-card__linkedin" aria-label={`LinkedIn de ${member.name}`}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+              </div>
+              <p class="trio-card__bio">{member.bio}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="trio-anchor">
+        <h3 class="trio-anchor__title gradient-text">Le trio</h3>
+        <p class="trio-anchor__tagline">Trois experts. Pas de sous-traitance.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — MÉTHODOLOGIE -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">Notre m&eacute;thode</span>
+      <h2 class="section-title">Comment on travaille ensemble.</h2>
+      <div class="method-grid">
+        {methods.map((step) => (
+          <div class="method-step">
+            <div class="method-step__num">{step.num}</div>
+            <h3 class="method-step__title">{step.title}</h3>
+            <p class="method-step__text">{step.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA INTERMÉDIAIRE -->
+  <div class="container cta-mid">
+    <Button variant="primary" href={`${base}/contact`}>Discuter de votre projet</Button>
+  </div>
+
+  <!-- SECTION 4 — PROMESSE ÉQUIPE -->
+  <section class="section">
+    <div class="container">
+      <div class="promise-card">
+        <span class="kicker">Notre promesse</span>
+        <h2 class="promise-card__title">
+          Pas d'agence anonyme.<br>
+          Pas d'usine &agrave; projets.
+        </h2>
+        <p class="promise-card__text">
+          Vous parlez directement &agrave; un membre de l'&eacute;quipe, du premier appel jusqu'&agrave; la livraison. Vous savez qui pilote votre projet. Vous savez qui est responsable de quoi. Et un fondateur reste toujours dans la boucle, du d&eacute;but &agrave; la fin.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 — CTA FINAL -->
+  <section class="section cta-final-section">
+    <div class="container">
+      <div class="cta-final">
+        <h2 class="cta-final__title">Envie de savoir qui s'occuperait de votre projet ?</h2>
+        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== HERO ===== */
+  .equipe-hero {
+    position: relative;
+    padding: 120px 0 48px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .equipe-hero { padding: 140px 0 64px; }
+  }
+
+  .equipe-hero__watermark {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 28vw;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.025);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: -1;
+    letter-spacing: -0.02em;
+  }
+
+  .equipe-hero__eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    background: rgba(230, 43, 127, 0.1);
+    border: 1px solid var(--border-accent);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .equipe-hero__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+    color: var(--text-primary);
+    max-width: 800px;
+    margin-bottom: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .equipe-hero__title { font-size: 42px; }
+  }
+
+  @media (min-width: 1024px) {
+    .equipe-hero__title { font-size: 52px; line-height: 1.15; }
+  }
+
+  .equipe-hero__subtitle {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 600px;
+  }
+
+  @media (min-width: 768px) {
+    .equipe-hero__subtitle { font-size: 18px; }
+  }
+
+  /* ===== TRIO CARDS ===== */
+  .trio-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+  }
+
+  @media (min-width: 768px) {
+    .trio-cards {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .trio-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .trio-card__photo-wrap {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  .trio-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .trio-card__badge {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: var(--woop-gradient);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 6px 16px;
+    border-radius: 100px;
+  }
+
+  .trio-card__body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .trio-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .trio-card__name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .trio-card__role {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .trio-card__linkedin {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .trio-card__linkedin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 43, 127, 0.3);
+  }
+
+  .trio-card__bio {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  /* ===== TRIO ANCHOR ===== */
+  .trio-anchor {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media (min-width: 768px) {
+    .trio-anchor {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 24px;
+    }
+  }
+
+  .trio-anchor__title {
+    font-family: var(--font-display);
+    font-size: 64px;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+  }
+
+  @media (min-width: 768px) {
+    .trio-anchor__title { font-size: 96px; }
+  }
+
+  @media (min-width: 1024px) {
+    .trio-anchor__title { font-size: 120px; }
+  }
+
+  .trio-anchor__tagline {
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  @media (min-width: 768px) {
+    .trio-anchor__tagline { font-size: 18px; }
+  }
+
+  /* ===== MÉTHODOLOGIE ===== */
+  .method-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+    margin-top: 32px;
+  }
+
+  @media (min-width: 600px) {
+    .method-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 1024px) {
+    .method-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  }
+
+  .method-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .method-step__num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .method-step__title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  .method-step__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* ===== CTA INTERMÉDIAIRE ===== */
+  .cta-mid {
+    text-align: center;
+    padding: 32px 0;
+  }
+
+  /* ===== PROMESSE ===== */
+  .promise-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promise-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  .promise-card__title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    text-transform: uppercase;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .promise-card__title { font-size: 36px; }
+  }
+
+  .promise-card__text {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 700px;
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final {
+    background: var(--woop-gradient);
+    border-radius: var(--radius-bento);
+    padding: 56px 32px;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final { padding: 72px 48px; }
+  }
+
+  .cta-final__title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 28px;
+    line-height: 1.1;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final__title { font-size: 40px; }
+  }
+
+  .cta-final :global(.btn--primary) {
+    background: #fff;
+    color: var(--woop-pink);
+  }
+
+  .cta-final :global(.btn--primary:hover) {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trio-card__linkedin {
+      transition: none;
+    }
+  }
+</style>
