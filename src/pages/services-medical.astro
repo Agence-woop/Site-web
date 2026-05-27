@@ -59,30 +59,42 @@ const cases = [
         <div class="case-card">
           <div class="case-card__photo-wrap">
             <img src={cases[0].photo} alt={cases[0].title} loading="lazy" class="case-card__photo" />
-            <span class="case-card__pill"><span class="gradient-text">Clinique priv&eacute;e</span> qui veut remplir son agenda</span>
+            <span class="case-card__pill"><span class="gradient-text">Clinique priv&eacute;e</span></span>
           </div>
-          <p class="case-card__text">{cases[0].text}</p>
+          <div class="case-card__text">
+            <p>Vous voulez remplir votre agenda. Vous avez la capacit&eacute; d'accueillir plus de patients, mais le bouche-&agrave;-oreille ne suffit plus.</p>
+            <p>Il vous faut un flux constant de nouveaux patients qualifi&eacute;s.</p>
+          </div>
         </div>
         <div class="case-card">
           <div class="case-card__photo-wrap">
             <img src={cases[1].photo} alt={cases[1].title} loading="lazy" class="case-card__photo" />
-            <span class="case-card__pill"><span class="gradient-text">Cabinet dentaire</span> qui veut sortir de l'ombre</span>
+            <span class="case-card__pill"><span class="gradient-text">Cabinet dentaire</span></span>
           </div>
-          <p class="case-card__text">{cases[1].text}</p>
+          <div class="case-card__text">
+            <p>Vous voulez sortir de l'ombre. Trop de cliniques dans votre secteur, et la v&ocirc;tre se confond avec les autres.</p>
+            <p>Votre objectif : une marque distinctive et une strat&eacute;gie pour devenir le premier choix dans votre quartier.</p>
+          </div>
         </div>
         <div class="case-card">
           <div class="case-card__photo-wrap">
             <img src={cases[2].photo} alt={cases[2].title} loading="lazy" class="case-card__photo" />
-            <span class="case-card__pill"><span class="gradient-text">Centre m&eacute;dico-esth&eacute;tique</span> qui veut justifier ses prix</span>
+            <span class="case-card__pill"><span class="gradient-text">Centre m&eacute;dico-esth&eacute;tique</span></span>
           </div>
-          <p class="case-card__text">{cases[2].text}</p>
+          <div class="case-card__text">
+            <p>Vous voulez justifier vos prix. Vos soins valent leur prix, mais vous tombez dans la guerre du moins cher.</p>
+            <p>La r&eacute;ponse : un positionnement premium et une exp&eacute;rience patient qui le confirme.</p>
+          </div>
         </div>
         <div class="case-card">
           <div class="case-card__photo-wrap">
             <img src={cases[3].photo} alt={cases[3].title} loading="lazy" class="case-card__photo" />
-            <span class="case-card__pill"><span class="gradient-text">Professionnel de la sant&eacute;</span> qui veut se faire conna&icirc;tre</span>
+            <span class="case-card__pill"><span class="gradient-text">Professionnel de la sant&eacute;</span></span>
           </div>
-          <p class="case-card__text">{cases[3].text}</p>
+          <div class="case-card__text">
+            <p>Vous voulez vous faire conna&icirc;tre. Vous &ecirc;tes excellent dans votre m&eacute;tier, mais peu visible en ligne.</p>
+            <p>Ce qu'il vous manque : une marque personnelle cr&eacute;dible et un site qui transforme les visiteurs en rendez-vous.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -313,6 +325,9 @@ const cases = [
     line-height: 1.6;
     color: var(--text-secondary);
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   /* ===== SERVICES ===== */
@@ -413,18 +428,14 @@ const cases = [
 
   .svc-card__title {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: 24px;
     text-transform: uppercase;
     line-height: 1.05;
     color: var(--text-primary);
   }
 
-  .svc-card--signature .svc-card__title {
-    font-size: 28px;
-  }
-
   @media (min-width: 768px) {
-    .svc-card--signature .svc-card__title { font-size: 36px; }
+    .svc-card__title { font-size: 28px; }
   }
 
   .svc-card__text {
