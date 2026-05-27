@@ -48,19 +48,19 @@ const base = import.meta.env.BASE_URL;
         </BentoCard>
         <BentoCard variant="orange" class="bento--branding">
           <span class="bento__label">Identit&eacute;</span>
-          <div class="bento__title bento__title--branding">Branding</div>
+          <div class="bento__title bento__title--bento-lg">Branding</div>
           <p class="bento__text">Logo, charte visuelle, syst&egrave;me de marque complet.</p>
         </BentoCard>
         <div class="bento-photo bento-photo--medical">
-          <img src={`${base}/images/clinique-medicale.webp`} alt="Clinique m&eacute;dicale" loading="lazy" />
+          <img src={`${base}/images/clinique-medicale.webp`} alt="Clinique m&eacute;dicale" loading="lazy" width="1000" height="667" />
         </div>
         <BentoCard variant="gradient" class="bento--flywheel">
           <span class="bento__label">M&eacute;thode</span>
-          <div class="bento__title">Flywheel</div>
+          <div class="bento__title bento__title--bento-lg">Flywheel</div>
           <p class="bento__text">Marque &rarr; Performance &rarr; Optimisation. Un cycle vertueux.</p>
         </BentoCard>
         <div class="bento-photo bento-photo--dentaire">
-          <img src={`${base}/images/clinique-dentaire.webp`} alt="Clinique dentaire" loading="lazy" />
+          <img src={`${base}/images/clinique-dentaire.webp`} alt="Clinique dentaire" loading="lazy" width="1000" height="1333" />
         </div>
         <BentoCard variant="outline" class="bento--landing">
           <span class="bento__label">Conversion</span>
@@ -68,7 +68,7 @@ const base = import.meta.env.BASE_URL;
           <p class="bento__text">Sites de conversion et landing pages optimis&eacute;es.</p>
         </BentoCard>
         <div class="bento-photo bento-photo--rh">
-          <img src={`${base}/images/recrutement-rh.webp`} alt="Recrutement RH" loading="lazy" />
+          <img src={`${base}/images/recrutement-rh.webp`} alt="Recrutement RH" loading="lazy" width="1000" height="667" />
         </div>
       </div>
       <div class="approche-cta">
@@ -137,26 +137,32 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <div class="team-strip">
-        <div class="team-strip__info">
+        <div class="team-strip__header">
           <h3 class="team-strip__title">Le trio WOOP</h3>
           <p class="team-strip__text">Trois experts, aucune sous-traitance. Vous savez qui fait quoi sur votre projet.</p>
           <Button variant="tertiary" href={`${base}/equipe`}>Rencontrer l'&eacute;quipe</Button>
         </div>
-        <div class="team-strip__members">
-          <div class="team-strip__member">
-            <img src={`${base}/images/gauthier.webp`} alt="Gauthier Figueres" class="team-strip__avatar" loading="lazy" />
-            <span class="team-strip__name">Gauthier</span>
-            <span class="team-strip__role">Strat&eacute;gie</span>
+        <div class="team-strip__cards">
+          <div class="team-card">
+            <div class="team-card__info">
+              <span class="team-card__name">Gauthier</span>
+              <span class="team-card__role">Co-fondateur &middot; Strat&eacute;gie</span>
+            </div>
+            <img src={`${base}/images/gauthier.webp`} alt="Gauthier Figueres" class="team-card__photo" loading="lazy" width="800" height="822" />
           </div>
-          <div class="team-strip__member">
-            <img src={`${base}/images/kevin.webp`} alt="Kevin" class="team-strip__avatar" loading="lazy" />
-            <span class="team-strip__name">Kevin</span>
-            <span class="team-strip__role">Cr&eacute;ation</span>
+          <div class="team-card">
+            <div class="team-card__info">
+              <span class="team-card__name">Kevin</span>
+              <span class="team-card__role">Co-fondateur &middot; Cr&eacute;ation</span>
+            </div>
+            <img src={`${base}/images/kevin.webp`} alt="Kevin" class="team-card__photo" loading="lazy" width="800" height="822" />
           </div>
-          <div class="team-strip__member">
-            <img src={`${base}/images/emma.webp`} alt="Emma" class="team-strip__avatar" loading="lazy" />
-            <span class="team-strip__name">Emma</span>
-            <span class="team-strip__role">Paid media</span>
+          <div class="team-card">
+            <div class="team-card__info">
+              <span class="team-card__name">Emma</span>
+              <span class="team-card__role">Paid media</span>
+            </div>
+            <img src={`${base}/images/emma.webp`} alt="Emma" class="team-card__photo" loading="lazy" width="800" height="822" />
           </div>
         </div>
       </div>
@@ -303,7 +309,7 @@ const base = import.meta.env.BASE_URL;
   @media (min-width: 900px) {
     .bento-grid--approche {
       grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: auto auto auto;
+      grid-template-rows: 1fr 1fr minmax(200px, 1fr) minmax(200px, 1fr);
     }
 
     .bento-grid--approche > :global(.bento--dominant) {
@@ -332,21 +338,21 @@ const base = import.meta.env.BASE_URL;
     }
     .bento-grid--approche > :global(.bento--landing) {
       grid-column: 3 / 4;
-      grid-row: 3 / 4;
+      grid-row: 3 / 5;
     }
     .bento-photo--rh {
       grid-column: 4 / 5;
-      grid-row: 3 / 4;
+      grid-row: 3 / 5;
     }
   }
 
-  .bento__title--branding {
-    font-size: 38px !important;
+  .bento__title--bento-lg {
+    font-size: 34px !important;
   }
 
   @media (min-width: 768px) {
-    .bento__title--branding {
-      font-size: 48px !important;
+    .bento__title--bento-lg {
+      font-size: 42px !important;
     }
   }
 
@@ -582,26 +588,21 @@ const base = import.meta.env.BASE_URL;
 
   /* ===== TEAM STRIP ===== */
   .team-strip {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-bento);
-    padding: 48px 36px;
+    padding: 36px;
     margin-bottom: 48px;
-    min-height: 320px;
-    justify-content: center;
   }
 
   @media (min-width: 768px) {
     .team-strip {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      padding: 56px 48px;
-      min-height: 360px;
+      padding: 44px;
     }
+  }
+
+  .team-strip__header {
+    margin-bottom: 28px;
   }
 
   .team-strip__title {
@@ -615,48 +616,68 @@ const base = import.meta.env.BASE_URL;
     font-size: 15px;
     color: var(--text-secondary);
     margin-bottom: 20px;
-    max-width: 400px;
+    max-width: 500px;
     line-height: 1.6;
   }
 
-  .team-strip__members {
-    display: flex;
-    gap: 40px;
+  .team-strip__cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
   }
 
-  .team-strip__member {
+  @media (min-width: 768px) {
+    .team-strip__cards {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .team-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .team-card__info {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    text-align: center;
+    gap: 4px;
+    min-width: 0;
   }
 
-  .team-strip__avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
+  .team-card__name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  .team-card__role {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .team-card__photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
     object-fit: cover;
-    border: 2px solid var(--border-accent);
+    flex-shrink: 0;
     display: block;
   }
 
   @media (min-width: 768px) {
-    .team-strip__avatar {
-      width: 140px;
-      height: 140px;
+    .team-card__photo {
+      width: 80px;
+      height: 80px;
     }
-  }
-
-  .team-strip__name {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .team-strip__role {
-    font-size: 12px;
-    color: var(--text-muted);
   }
 
   /* ===== TESTIMONIALS ===== */
