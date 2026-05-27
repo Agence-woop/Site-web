@@ -1,0 +1,481 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+<Layout
+  title="Marketing pour cabinets de recrutement au Québec — WOOP, pensé par quelqu'un du métier"
+  description="Agence marketing dédiée aux cabinets de recrutement et consultants RH au Québec. Stratégie, branding, génération de mandats et attraction de candidats, pensés par un marketeur qui a travaillé en cabinet."
+  ogImage="/Site-web/images/og-image.jpg"
+>
+
+  <!-- SECTION 1 — HERO -->
+  <section class="rh-hero">
+    <div class="container">
+      <div class="rh-hero__watermark" aria-hidden="true">RECRUTEMENT</div>
+      <h1 class="rh-hero__title">
+        Le marketing pour <span class="gradient-text">cabinets de recrutement</span>,<br>
+        pens&eacute; par quelqu'un qui les comprend<br>
+        de l'int&eacute;rieur.
+      </h1>
+      <div class="rh-hero__subtitle">
+        <p>Strat&eacute;gie, branding, g&eacute;n&eacute;ration de mandats et attraction de candidats.</p>
+        <p>Pour les cabinets de recrutement (multisecteurs ou sp&eacute;cialis&eacute;s sant&eacute;, tech, finance, construction, juridique et autres) ainsi que les consultants RH ind&eacute;pendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats.</p>
+      </div>
+      <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — POUR QUI -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">01 — Pour qui ?</span>
+      <h2 class="section-title">Vous vous reconnaissez ?</h2>
+      <div class="cas-bento">
+        <div class="cas-bento__photo-wrap">
+          <img src={`${base}/images/cas-recrutement-ambiance.webp`} alt="Ambiance cabinet de recrutement" class="cas-bento__photo" loading="lazy" />
+        </div>
+        <div class="cas-bento__list">
+          <div class="cas-item">
+            <h3 class="cas-item__title">Un cabinet qui veut d&eacute;crocher plus de mandats.</h3>
+            <p class="cas-item__text">Les entreprises confient leurs recherches &agrave; vos concurrents. Il faut se faire conna&icirc;tre aupr&egrave;s des bons d&eacute;cideurs RH.</p>
+          </div>
+          <div class="cas-item">
+            <h3 class="cas-item__title">Un cabinet qui veut attirer plus de candidats qualifi&eacute;s.</h3>
+            <p class="cas-item__text">Vos mandats restent ouverts trop longtemps faute de bons profils. Il faut construire un bassin actif et engag&eacute;.</p>
+          </div>
+          <div class="cas-item">
+            <h3 class="cas-item__title">Un cabinet qui veut se diff&eacute;rencier dans sa niche.</h3>
+            <p class="cas-item__text">Trop de cabinets se ressemblent. Il faut une marque qui dit ce qui vous rend unique : votre niche, votre m&eacute;thode, votre fit culturel.</p>
+          </div>
+          <div class="cas-item">
+            <h3 class="cas-item__title">Un cabinet en croissance qui veut professionnaliser son image.</h3>
+            <p class="cas-item__text">Vous avez les r&eacute;sultats, mais votre marque ne suit plus. Il faut un branding &agrave; la hauteur de vos ambitions.</p>
+          </div>
+          <div class="cas-item">
+            <h3 class="cas-item__title">Un consultant RH ind&eacute;pendant qui veut d&eacute;crocher ses propres mandats.</h3>
+            <p class="cas-item__text">Vous op&eacute;rez en solo, votre r&eacute;seau s'&eacute;puise, et votre visibilit&eacute; en ligne ne suit pas. Il faut une marque personnelle qui attire les clients &agrave; vous.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — NOS SERVICES -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">02 — Nos services</span>
+      <h2 class="section-title">Une offre pens&eacute;e pour le secteur du recrutement.</h2>
+      <div class="services-grid">
+        <div class="svc-card svc-card--signature svc-card--mandats">
+          <div class="svc-card__icon">
+            <img src={`${base}/images/icons/icon-generation-mandats.svg`} alt="" class="svc-card__icon-img" />
+          </div>
+          <h3 class="svc-card__title">G&eacute;n&eacute;ration de mandats</h3>
+          <p class="svc-card__text">D&eacute;crocher plus de mandats aupr&egrave;s des entreprises clientes. Campagnes Google Ads, LinkedIn Ads et Meta Ads cibl&eacute;es sur les d&eacute;cideurs RH et dirigeants.</p>
+          <p class="svc-card__text">On va chercher les entreprises qui ont besoin de vous, l&agrave; o&ugrave; elles cherchent d&eacute;j&agrave;.</p>
+        </div>
+        <div class="svc-card svc-card--signature svc-card--candidats">
+          <div class="svc-card__icon">
+            <img src={`${base}/images/icons/icon-attraction-candidats.svg`} alt="" class="svc-card__icon-img" />
+          </div>
+          <h3 class="svc-card__title">Attraction de candidats</h3>
+          <p class="svc-card__text">Construire un bassin actif et engag&eacute; de candidats qualifi&eacute;s. Campagnes cibl&eacute;es sur Meta, Google, LinkedIn et autres plateformes selon votre secteur.</p>
+          <p class="svc-card__text">On attire vers vous les bons profils, avant m&ecirc;me qu'ils cherchent activement.</p>
+        </div>
+        <div class="svc-card svc-card--branding">
+          <div class="svc-card__icon">
+            <img src={`${base}/images/icons/icon-branding-clinique.svg`} alt="" class="svc-card__icon-img" />
+          </div>
+          <h3 class="svc-card__title">Branding cabinet</h3>
+          <p class="svc-card__text">Logo, charte visuelle, ton de marque, design system complet. Une identit&eacute; qui justifie votre positionnement et qui fait de votre cabinet un endroit o&ugrave; les meilleurs candidats veulent postuler.</p>
+        </div>
+        <div class="svc-card svc-card--reseaux">
+          <div class="svc-card__icon">
+            <img src={`${base}/images/icons/icon-strategie-reseaux-sociaux.svg`} alt="" class="svc-card__icon-img" />
+          </div>
+          <h3 class="svc-card__title">Strat&eacute;gie r&eacute;seaux sociaux</h3>
+          <p class="svc-card__text">Pr&eacute;sence soign&eacute;e sur LinkedIn, Instagram, Facebook et autres plateformes adapt&eacute;es &agrave; votre cible.</p>
+          <p class="svc-card__text">Calendrier &eacute;ditorial, publications qui mettent en avant votre expertise aupr&egrave;s des entreprises clientes, et contenu qui parle aux candidats.</p>
+        </div>
+        <div class="svc-card svc-card--siteweb">
+          <div class="svc-card__icon">
+            <img src={`${base}/images/icons/icon-site-web.svg`} alt="" class="svc-card__icon-img" />
+          </div>
+          <h3 class="svc-card__title">Site web et pr&eacute;sence en ligne</h3>
+          <p class="svc-card__text">Sites de conversion pens&eacute;s pour transformer un visiteur en client, ou un candidat en candidature.</p>
+          <p class="svc-card__text">Pages d&eacute;di&eacute;es aux mandats, pages d&eacute;di&eacute;es aux candidats, articles de blog pour le r&eacute;f&eacute;rencement Google. Le tout, conforme aux meilleures pratiques web.</p>
+        </div>
+        <div class="svc-card svc-card--reputation">
+          <div class="svc-card__icon">
+            <img src={`${base}/images/icons/icon-gestion-reputation.svg`} alt="" class="svc-card__icon-img" />
+          </div>
+          <h3 class="svc-card__title">Gestion de la r&eacute;putation en ligne</h3>
+          <p class="svc-card__text">Avis Google, t&eacute;moignages clients et candidats, suivi de votre image sur le web. On vous aide &agrave; construire et prot&eacute;ger la r&eacute;putation de votre cabinet.</p>
+        </div>
+      </div>
+      <div class="services-cta">
+        <Button variant="primary" href={`${base}/contact`}>&Eacute;changer 30 minutes avec l'&eacute;quipe</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — CE QUI NOUS DISTINGUE -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">03 — Notre diff&eacute;rence</span>
+      <h2 class="section-title">Con&ccedil;ue par quelqu'un du m&eacute;tier.</h2>
+      <div class="distinguish">
+        <div class="distinguish__photo-wrap">
+          <img src={`${base}/images/kevin.webp`} alt="Kevin Zounias" class="distinguish__photo" loading="lazy" />
+        </div>
+        <div class="distinguish__content">
+          <p>Kevin est designer graphique de formation. Avant de cofonder WOOP, il a pass&eacute; plusieurs ann&eacute;es &agrave; piloter le marketing au sein d'un cabinet de recrutement sp&eacute;cialis&eacute; en sant&eacute;.</p>
+          <p>L&agrave;, il vivait au quotidien les d&eacute;fis que vous connaissez aujourd'hui : d&eacute;crocher des mandats, construire une marque qui se distingue, attirer des candidats qualifi&eacute;s, g&eacute;rer la r&eacute;putation du cabinet.</p>
+          <p>Cette double exp&eacute;rience (la cr&eacute;ation graphique et le marketing en cabinet de recrutement) change tout.</p>
+          <p>Quand on con&ccedil;oit votre strat&eacute;gie, on ne devine pas vos probl&egrave;mes.<br>On les a d&eacute;j&agrave; v&eacute;cus.</p>
+          <p class="distinguish__statement">Aucune autre agence marketing au Qu&eacute;bec ne peut dire &ccedil;a.</p>
+        </div>
+      </div>
+      <div class="distinguish-cta">
+        <Button variant="primary" href="mailto:k.zounias@agence-woop.ca">Parler &agrave; Kevin</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 — CTA FINAL -->
+  <section class="section cta-final-section">
+    <div class="container">
+      <div class="cta-final">
+        <h2 class="cta-final__title">Envie de faire grandir votre activit&eacute; de recrutement ?</h2>
+        <Button variant="primary" href={`${base}/contact`}>Parlons de votre cabinet</Button>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== HERO ===== */
+  .rh-hero {
+    position: relative;
+    padding: 120px 0 48px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .rh-hero { padding: 140px 0 64px; }
+  }
+
+  .rh-hero__watermark {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 22vw;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: -1;
+  }
+
+  .rh-hero__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+    color: var(--text-primary);
+    max-width: 900px;
+    margin-bottom: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .rh-hero__title { font-size: 40px; }
+  }
+
+  @media (min-width: 1024px) {
+    .rh-hero__title { font-size: 50px; line-height: 1.15; }
+  }
+
+  .rh-hero__subtitle {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .rh-hero__subtitle { font-size: 18px; }
+  }
+
+  /* ===== CAS (POUR QUI) — BENTO HORIZONTAL ===== */
+  .cas-bento {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+    margin-top: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .cas-bento {
+      flex-direction: row;
+      align-items: stretch;
+    }
+  }
+
+  .cas-bento__photo-wrap {
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .cas-bento__photo-wrap { width: 320px; }
+  }
+
+  .cas-bento__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 240px;
+  }
+
+  .cas-bento__list {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .cas-item__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .cas-item__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* ===== SERVICES ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+    margin-top: 32px;
+  }
+
+  @media (min-width: 600px) {
+    .services-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 1024px) {
+    .services-grid { grid-template-columns: repeat(4, 1fr); }
+
+    .svc-card--mandats   { grid-column: 1 / 3; }
+    .svc-card--candidats { grid-column: 3 / 5; }
+    .svc-card--branding  { grid-column: 1 / 2; }
+    .svc-card--reseaux   { grid-column: 2 / 3; }
+    .svc-card--siteweb   { grid-column: 3 / 4; }
+    .svc-card--reputation { grid-column: 4 / 5; }
+  }
+
+  .svc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .svc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  .svc-card--signature {
+    background: var(--woop-gradient);
+    border: none;
+    padding: 32px;
+  }
+
+  .svc-card--signature::before { display: none; }
+
+  .svc-card--signature .svc-card__title,
+  .svc-card--signature .svc-card__text {
+    color: #fff;
+  }
+
+  .svc-card--signature .svc-card__text { opacity: 0.92; }
+
+  .svc-card__icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 599px) {
+    .svc-card__icon { width: 64px; height: 64px; }
+  }
+
+  .svc-card__icon-img {
+    width: 56px;
+    height: 56px;
+    display: block;
+  }
+
+  @media (max-width: 599px) {
+    .svc-card__icon-img { width: 45px; height: 45px; }
+  }
+
+  .svc-card--signature .svc-card__icon {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .svc-card__title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    text-transform: uppercase;
+    line-height: 1.05;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .svc-card__title { font-size: 28px; }
+  }
+
+  .svc-card__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .services-cta {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  /* ===== DISTINGUISH ===== */
+  .distinguish {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+    margin-top: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .distinguish {
+      flex-direction: row;
+      align-items: stretch;
+    }
+  }
+
+  .distinguish__photo-wrap {
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .distinguish__photo-wrap { width: 280px; }
+  }
+
+  .distinguish__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 240px;
+  }
+
+  .distinguish__content {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    justify-content: center;
+  }
+
+  .distinguish__statement {
+    font-weight: 700;
+    color: var(--woop-pink);
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  .distinguish-cta {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final {
+    background: var(--woop-gradient);
+    border-radius: var(--radius-bento);
+    padding: 56px 32px;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final { padding: 72px 48px; }
+  }
+
+  .cta-final__title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 28px;
+    line-height: 1.1;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final__title { font-size: 40px; }
+  }
+
+  .cta-final :global(.btn--primary) {
+    background: #fff;
+    color: var(--woop-pink);
+  }
+
+  .cta-final :global(.btn--primary:hover) {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+</style>
