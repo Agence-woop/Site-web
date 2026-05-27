@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import BentoCard from '../components/BentoCard.astro';
+import ChevronRight from '../components/ChevronRight.astro';
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -93,7 +94,7 @@ const base = import.meta.env.BASE_URL;
             <p class="persona-card__desc">Pharmaciens propri&eacute;taires &middot; Directeurs de clinique &middot; Cabinets dentaires &middot; Cliniques m&eacute;dico-esth&eacute;tiques &middot; Centres de bien-&ecirc;tre</p>
             <div class="persona-card__actions">
               <Button variant="primary" href={`${base}/services-medical`}>D&eacute;couvrir nos services sant&eacute;</Button>
-              <a href="mailto:g.figueres@agence-woop.ca" class="persona-card__link">Parler &agrave; Gauthier &rarr;</a>
+              <a href="mailto:g.figueres@agence-woop.ca" class="persona-card__link">Parler &agrave; Gauthier <ChevronRight size={12} /></a>
             </div>
           </div>
         </div>
@@ -106,7 +107,7 @@ const base = import.meta.env.BASE_URL;
             <p class="persona-card__desc">Cabinets de recrutement sp&eacute;cialis&eacute;s &middot; Firmes de recrutement &middot; Consultants RH ind&eacute;pendants &middot; DRH d'entreprise</p>
             <div class="persona-card__actions">
               <Button variant="primary" href={`${base}/services-recrutement`}>D&eacute;couvrir nos services recrutement</Button>
-              <a href="mailto:k.zounias@agence-woop.ca" class="persona-card__link">Parler &agrave; Kevin &rarr;</a>
+              <a href="mailto:k.zounias@agence-woop.ca" class="persona-card__link">Parler &agrave; Kevin <ChevronRight size={12} /></a>
             </div>
           </div>
         </div>

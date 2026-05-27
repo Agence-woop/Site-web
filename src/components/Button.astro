@@ -1,4 +1,6 @@
 ---
+import ChevronRight from './ChevronRight.astro';
+
 interface Props {
   variant?: 'primary' | 'secondary' | 'tertiary';
   href?: string;
@@ -14,8 +16,7 @@ const Tag = tag ?? (href ? 'a' : 'button');
   role={Tag === 'a' ? undefined : 'button'}
 >
   <slot />
-  {variant === 'primary' && <span class="btn__arrow" aria-hidden="true">&rarr;</span>}
-  {variant === 'tertiary' && <span class="btn__arrow" aria-hidden="true">&rarr;</span>}
+  {(variant === 'primary' || variant === 'tertiary') && <ChevronRight size={14} />}
 </Tag>
 
 <style>
