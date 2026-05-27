@@ -105,23 +105,31 @@ const base = import.meta.env.BASE_URL;
   </section>
 
   <!-- COORDONNÉES -->
-  <section class="section">
+  <section class="coords-section">
     <div class="container">
-      <span class="kicker">Autre canal</span>
-      <p class="coords__intro">Vous pr&eacute;f&eacute;rez &eacute;crire ou appeler directement ? C'est ici.</p>
-      <div class="coords">
-        <a href="mailto:contact@agence-woop.ca" class="coords__item">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
-          contact@agence-woop.ca
-        </a>
-        <a href="tel:+14388152295" class="coords__item">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-          (438) 815-2295
-        </a>
-        <span class="coords__item">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Montr&eacute;al, Qu&eacute;bec
-        </span>
+      <div class="coords-card">
+        <span class="kicker">Autre canal</span>
+        <p class="coords__intro">Vous pr&eacute;f&eacute;rez &eacute;crire ou appeler directement ? C'est ici.</p>
+        <div class="coords">
+          <a href="mailto:contact@agence-woop.ca" class="coords__item">
+            <span class="coords__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+            </span>
+            contact@agence-woop.ca
+          </a>
+          <a href="tel:+14388152295" class="coords__item">
+            <span class="coords__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            </span>
+            (438) 815-2295
+          </a>
+          <span class="coords__item">
+            <span class="coords__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </span>
+            Montr&eacute;al, Qu&eacute;bec
+          </span>
+        </div>
       </div>
     </div>
   </section>
@@ -256,7 +264,7 @@ const base = import.meta.env.BASE_URL;
 
   /* ===== FORMULAIRE (droite) ===== */
   .contact-form-card {
-    background: var(--woop-pink);
+    background: var(--woop-gradient);
     border-radius: var(--radius-bento);
     padding: 32px;
     flex: 1;
@@ -402,6 +410,33 @@ const base = import.meta.env.BASE_URL;
   }
 
   /* ===== COORDONNÉES ===== */
+  .coords-section {
+    padding: 24px 0 64px;
+  }
+
+  @media (min-width: 768px) {
+    .coords-section { padding: 32px 0 100px; }
+  }
+
+  .coords-card {
+    background: transparent;
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius-bento);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .coords-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
   .coords__intro {
     font-size: 16px;
     color: var(--text-secondary);
@@ -424,7 +459,7 @@ const base = import.meta.env.BASE_URL;
   .coords__item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     font-size: 15px;
     color: var(--text-secondary);
     text-decoration: none;
@@ -435,9 +470,21 @@ const base = import.meta.env.BASE_URL;
     color: var(--text-primary);
   }
 
-  .coords__item svg {
-    color: var(--woop-pink);
+  .coords__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
     flex-shrink: 0;
+  }
+
+  .coords__icon svg {
+    color: #fff;
+    stroke: #fff;
   }
 
   @media (prefers-reduced-motion: reduce) {
