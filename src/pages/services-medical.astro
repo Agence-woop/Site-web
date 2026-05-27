@@ -1,0 +1,516 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const cases = [
+  {
+    photo: `${base}/images/cas-clinique-privee.webp`,
+    title: 'Une clinique privée qui veut remplir son agenda',
+    text: 'Vous avez la capacité d\'accueillir plus de patients, mais le bouche-à-oreille ne suffit plus. Il vous faut un flux constant de nouveaux patients qualifiés.',
+  },
+  {
+    photo: `${base}/images/cas-cabinet-dentaire.webp`,
+    title: 'Un cabinet dentaire qui veut sortir de l\'ombre',
+    text: 'Trop de cliniques dans votre secteur, et la vôtre se confond avec les autres. Il vous faut une marque distinctive et une stratégie pour devenir le premier choix dans votre quartier.',
+  },
+  {
+    photo: `${base}/images/cas-medico-esthetique.webp`,
+    title: 'Un centre médico-esthétique qui veut justifier ses prix',
+    text: 'Vos soins valent leur prix, mais vous tombez dans la guerre du moins cher. Il vous faut un positionnement premium et une expérience patient qui le confirme.',
+  },
+  {
+    photo: `${base}/images/cas-professionnel-sante.webp`,
+    title: 'Un professionnel de la santé qui veut se faire connaître',
+    text: 'Vous êtes excellent dans votre métier, mais peu visible en ligne. Il vous faut une marque personnelle crédible et un site qui transforme les visiteurs en rendez-vous.',
+  },
+];
+---
+<Layout
+  title="Marketing médical et santé au Québec — WOOP, pensé par un clinicien"
+  description="Agence marketing dédiée aux cliniques privées, cabinets dentaires, centres médico-esthétiques et professionnels de la santé. Stratégie, branding, génération de patient et expérience patient, pensés par un infirmier clinicien fondateur."
+  ogImage="/Site-web/images/og-image.jpg"
+>
+
+  <!-- SECTION 1 — HERO -->
+  <section class="med-hero">
+    <div class="container">
+      <div class="med-hero__watermark" aria-hidden="true">SANT&Eacute;</div>
+      <span class="med-hero__eyebrow">Persona A &middot; Sant&eacute;</span>
+      <h1 class="med-hero__title">
+        Le marketing m&eacute;dical,<br>
+        pens&eacute; par quelqu'un qui a<br>
+        <span class="gradient-text">dirig&eacute; une clinique.</span>
+      </h1>
+      <div class="med-hero__subtitle">
+        <p>Strat&eacute;gie, branding, g&eacute;n&eacute;ration de patient et exp&eacute;rience patient.</p>
+        <p>Pour les cliniques priv&eacute;es, les cabinets dentaires, les centres m&eacute;dico-esth&eacute;tiques et les professionnels de la sant&eacute; qui veulent attirer les bons patients, et les fid&eacute;liser.</p>
+      </div>
+      <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — POUR QUI -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">01 — Pour qui ?</span>
+      <h2 class="section-title">Vous vous reconnaissez ?</h2>
+      <div class="cases-grid">
+        {cases.map((c) => (
+          <div class="case-card">
+            <div class="case-card__photo-wrap">
+              <img src={c.photo} alt={c.title} loading="lazy" class="case-card__photo" />
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">{c.title}</h3>
+              <p class="case-card__text">{c.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — NOS SERVICES -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">02 — Nos services</span>
+      <h2 class="section-title">Une offre pens&eacute;e pour le secteur m&eacute;dical.</h2>
+      <div class="services-grid">
+        <div class="svc-card svc-card--signature">
+          <div class="svc-card__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7 7-7z"/></svg>
+          </div>
+          <span class="svc-card__badge">Sant&eacute; uniquement</span>
+          <h3 class="svc-card__title">Exp&eacute;rience patient</h3>
+          <p class="svc-card__text">L'art de transformer chaque interaction (avant, pendant et apr&egrave;s le rendez-vous) en une raison de revenir. Site, communications, parcours patient, fid&eacute;lisation : on travaille tout ce qui se passe autour du soin.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <h3 class="svc-card__title">G&eacute;n&eacute;ration de patient</h3>
+          <p class="svc-card__text">Campagnes Google Ads et Meta Ads, ciblage local pr&eacute;cis, landing pages de conversion. On va chercher les patients dans votre rayon, l&agrave; o&ugrave; ils cherchent d&eacute;j&agrave;.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3 class="svc-card__title">Branding clinique</h3>
+          <p class="svc-card__text">Logo, charte visuelle, ton de marque, design system complet. Une identit&eacute; qui justifie un positionnement premium et qui se distingue dans votre secteur.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3 class="svc-card__title">Site web et pr&eacute;sence en ligne</h3>
+          <p class="svc-card__text">Sites de conversion pens&eacute;s pour transformer un visiteur en rendez-vous. Pr&eacute;sence soign&eacute;e sur les r&eacute;seaux sociaux avec un calendrier &eacute;ditorial r&eacute;gulier et des publications adapt&eacute;es &agrave; votre secteur.</p>
+          <p class="svc-card__text">Le tout, conforme aux meilleures pratiques web et optimis&eacute; pour Google.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="svc-card__title">Connaissance des ordres professionnels</h3>
+          <p class="svc-card__text">Marketing m&eacute;dical respectueux des r&egrave;gles encadrant votre profession. Pas de promesse abusive, pas de risque d&eacute;ontologique. Une agence qui conna&icirc;t vos limites.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+          </div>
+          <h3 class="svc-card__title">Strat&eacute;gie et conseil</h3>
+          <p class="svc-card__text">Audit, positionnement, plan d'action. Pour les directeurs de clinique qui veulent une vision claire avant de lancer leurs investissements marketing.</p>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 class="svc-card__title">Gestion de la r&eacute;putation en ligne</h3>
+          <p class="svc-card__text">Avis Google, r&eacute;ponses aux commentaires, suivi de votre image sur le web. On vous aide &agrave; construire et prot&eacute;ger la r&eacute;putation de votre clinique, qui est aujourd'hui votre actif le plus visible.</p>
+        </div>
+      </div>
+      <div class="services-cta">
+        <Button variant="primary" href={`${base}/contact`}>&Eacute;changer 30 minutes avec l'&eacute;quipe</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — CE QUI NOUS DISTINGUE -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">03 — Notre diff&eacute;rence</span>
+      <h2 class="section-title">Pens&eacute;e par un clinicien.</h2>
+      <div class="distinguish">
+        <div class="distinguish__photo-wrap">
+          <img src={`${base}/images/gauthier.webp`} alt="Gauthier Figueres" class="distinguish__photo" loading="lazy" />
+        </div>
+        <div class="distinguish__content">
+          <p>Gauthier est infirmier clinicien. Il dirige aujourd'hui les op&eacute;rations m&eacute;dicales dans l'a&eacute;rom&eacute;dical, expert des soins en communaut&eacute; et en r&eacute;gions &eacute;loign&eacute;es.</p>
+          <p>Avant &ccedil;a, il &eacute;tait directeur d'une clinique priv&eacute;e, l&agrave; o&ugrave; il vivait au quotidien les d&eacute;fis que vous connaissez aujourd'hui : remplir l'agenda, structurer l'&eacute;quipe, g&eacute;rer la r&eacute;putation, comprendre ce qui fait revenir un patient.</p>
+          <p>Cette double exp&eacute;rience (la pratique clinique et la direction de clinique) change tout.</p>
+          <p>Quand on con&ccedil;oit votre strat&eacute;gie, on ne devine pas vos probl&egrave;mes.<br>On les a d&eacute;j&agrave; r&eacute;solus.</p>
+          <p class="distinguish__statement">Aucune autre agence marketing au Qu&eacute;bec ne peut dire &ccedil;a.</p>
+        </div>
+      </div>
+      <div class="distinguish-cta">
+        <Button variant="primary" href="mailto:g.figueres@agence-woop.ca">Parler &agrave; Gauthier</Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 — CTA FINAL -->
+  <section class="section cta-final-section">
+    <div class="container">
+      <div class="cta-final">
+        <h2 class="cta-final__title">Envie de b&acirc;tir une clinique qui se d&eacute;marque ?</h2>
+        <Button variant="primary" href={`${base}/contact`}>Parlons de votre clinique</Button>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== HERO ===== */
+  .med-hero {
+    position: relative;
+    padding: 120px 0 48px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .med-hero { padding: 140px 0 64px; }
+  }
+
+  .med-hero__watermark {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 30vw;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.025);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: -1;
+  }
+
+  .med-hero__eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    background: rgba(230, 43, 127, 0.1);
+    border: 1px solid var(--border-accent);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .med-hero__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+    color: var(--text-primary);
+    max-width: 900px;
+    margin-bottom: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .med-hero__title { font-size: 40px; }
+  }
+
+  @media (min-width: 1024px) {
+    .med-hero__title { font-size: 50px; line-height: 1.15; }
+  }
+
+  .med-hero__subtitle {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .med-hero__subtitle { font-size: 18px; }
+  }
+
+  /* ===== CAS (POUR QUI) ===== */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+    margin-top: 32px;
+  }
+
+  @media (min-width: 600px) {
+    .cases-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 1024px) {
+    .cases-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  }
+
+  .case-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .case-card__photo-wrap {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  .case-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .case-card__body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .case-card__title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--text-primary);
+  }
+
+  .case-card__text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* ===== SERVICES ===== */
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+    margin-top: 32px;
+  }
+
+  @media (min-width: 600px) {
+    .services-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 1024px) {
+    .services-grid { grid-template-columns: repeat(4, 1fr); }
+
+    .svc-card--signature {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+  }
+
+  .svc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .svc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  .svc-card--signature {
+    background: var(--woop-gradient);
+    border: none;
+    padding: 32px;
+  }
+
+  .svc-card--signature::before {
+    display: none;
+  }
+
+  .svc-card--signature .svc-card__title,
+  .svc-card--signature .svc-card__text {
+    color: #fff;
+  }
+
+  .svc-card--signature .svc-card__text {
+    opacity: 0.92;
+  }
+
+  .svc-card__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .svc-card--signature .svc-card__icon {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .svc-card__badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 100px;
+    padding: 4px 12px;
+    align-self: flex-start;
+  }
+
+  .svc-card__title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 1.05;
+    color: var(--text-primary);
+  }
+
+  .svc-card--signature .svc-card__title {
+    font-size: 28px;
+  }
+
+  @media (min-width: 768px) {
+    .svc-card--signature .svc-card__title { font-size: 36px; }
+  }
+
+  .svc-card__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .services-cta {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  /* ===== DISTINGUISH ===== */
+  .distinguish {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+    margin-top: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .distinguish {
+      flex-direction: row;
+      align-items: stretch;
+    }
+  }
+
+  .distinguish__photo-wrap {
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .distinguish__photo-wrap { width: 280px; }
+  }
+
+  .distinguish__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    min-height: 240px;
+  }
+
+  .distinguish__content {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    justify-content: center;
+  }
+
+  .distinguish__statement {
+    font-weight: 700;
+    color: var(--woop-pink);
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  .distinguish-cta {
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final {
+    background: var(--woop-gradient);
+    border-radius: var(--radius-bento);
+    padding: 56px 32px;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final { padding: 72px 48px; }
+  }
+
+  .cta-final__title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 28px;
+    line-height: 1.1;
+  }
+
+  @media (min-width: 768px) {
+    .cta-final__title { font-size: 40px; }
+  }
+
+  .cta-final :global(.btn--primary) {
+    background: #fff;
+    color: var(--woop-pink);
+  }
+
+  .cta-final :global(.btn--primary:hover) {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+</style>
