@@ -173,6 +173,21 @@
     50% { opacity: 1; transform: scale(1.2); }
   }
 
+  @media (max-width: 899px) {
+    .aurora__orb {
+      filter: blur(50px);
+      animation: none;
+      will-change: auto;
+    }
+
+    .aurora__orb--pink-2,
+    .aurora__orb--orange-2,
+    .aurora__orb--pink-3,
+    .aurora__orb--orange-3 {
+      display: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .aurora__orb {
       animation: none;
