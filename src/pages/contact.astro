@@ -1,0 +1,478 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+<Layout
+  title="Contact — WOOP | Réserver un appel découverte"
+  description="Réservez un appel découverte de 30 minutes avec Gauthier ou Kevin. On discute de votre projet et on partage notre regard sur votre présence en ligne."
+  ogImage="/Site-web/images/og-image.jpg"
+>
+
+  <section class="contact-hero">
+    <div class="container">
+      <div class="contact-hero__watermark" aria-hidden="true">CONTACT</div>
+
+      <div class="contact-split">
+        <!-- COLONNE GAUCHE — Promesse -->
+        <div class="contact-promise">
+          <span class="contact-promise__eyebrow">30 minutes &middot; Sans engagement</span>
+          <h1 class="contact-promise__title">Parlons de <span class="gradient-text">votre projet.</span></h1>
+          <p class="contact-promise__subtitle">
+            Un appel d&eacute;couverte de 30 minutes avec Gauthier ou Kevin. On discute de votre projet, de vos objectifs, et on partage notre regard sur votre pr&eacute;sence en ligne actuelle.
+          </p>
+
+          <ol class="steps">
+            <li class="step">
+              <div class="step__num">01</div>
+              <div class="step__content">
+                <h2 class="step__title">L'appel</h2>
+                <p class="step__text">30 minutes, par t&eacute;l&eacute;phone ou en visio. On vous &eacute;coute : qui vous &ecirc;tes, votre projet, vos objectifs, et ce qui freine votre d&eacute;veloppement aujourd'hui.</p>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step__num">02</div>
+              <div class="step__content">
+                <h2 class="step__title">Notre regard</h2>
+                <p class="step__text">On partage nos premi&egrave;res observations sur votre site, vos r&eacute;seaux et votre pr&eacute;sence en ligne. Concr&egrave;tement, ce qu'on voit.</p>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step__num">03</div>
+              <div class="step__content">
+                <h2 class="step__title">Vous d&eacute;cidez</h2>
+                <p class="step__text">Aucune obligation. Vous repartez avec un point de vue clair sur vos priorit&eacute;s, que l'on collabore ensemble ou non.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <!-- COLONNE DROITE — Formulaire -->
+        <div class="contact-form-card">
+          <h2 class="contact-form-card__title">R&eacute;server mon appel d&eacute;couverte</h2>
+
+          <form
+            id="contact-form"
+            action="https://formspree.io/f/mkoekgbw"
+            method="POST"
+            class="contact-form"
+          >
+            <div class="contact-form__field">
+              <label for="name" class="contact-form__label">Pr&eacute;nom et nom</label>
+              <input type="text" id="name" name="prenom_nom" required class="contact-form__input" />
+            </div>
+            <div class="contact-form__field">
+              <label for="email" class="contact-form__label">Courriel</label>
+              <input type="email" id="email" name="courriel" required class="contact-form__input" />
+            </div>
+            <div class="contact-form__field">
+              <label for="phone" class="contact-form__label">T&eacute;l&eacute;phone <span class="contact-form__hint">(facultatif, si vous pr&eacute;f&eacute;rez qu'on vous appelle)</span></label>
+              <input type="tel" id="phone" name="telephone" class="contact-form__input" />
+            </div>
+            <div class="contact-form__field">
+              <label for="structure" class="contact-form__label">Nom de votre structure <span class="contact-form__hint">(facultatif)</span></label>
+              <input type="text" id="structure" name="structure" class="contact-form__input" />
+            </div>
+            <div class="contact-form__field">
+              <label for="type" class="contact-form__label">Vous &ecirc;tes&hellip; <span class="contact-form__hint">(facultatif)</span></label>
+              <select id="type" name="type_structure" class="contact-form__input contact-form__select">
+                <option value="" disabled selected>Choisir une option</option>
+                <option value="clinique-sante">Clinique sant&eacute; / m&eacute;dicale</option>
+                <option value="clinique-esthetique">Clinique m&eacute;dico-esth&eacute;tique</option>
+                <option value="cabinet-recrutement">Cabinet de recrutement</option>
+                <option value="bien-etre">Bien-&ecirc;tre (yoga, pilates&hellip;)</option>
+                <option value="sport-gym">Sport / Gym</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div class="contact-form__field">
+              <label for="message" class="contact-form__label">Quelques mots sur votre projet</label>
+              <textarea id="message" name="message" required rows="4" class="contact-form__input contact-form__textarea"></textarea>
+            </div>
+            <button type="submit" class="contact-form__submit">Envoyer ma demande</button>
+          </form>
+
+          <div id="form-success" class="contact-form__success" hidden>
+            <p class="contact-form__success-title">Demande envoy&eacute;e.</p>
+            <p class="contact-form__success-text">Merci ! Gauthier ou Kevin vous recontactera sous 48 heures.</p>
+          </div>
+          <div id="form-error" class="contact-form__error" hidden>
+            <p>Une erreur est survenue. Veuillez r&eacute;essayer ou &eacute;crire directement &agrave; <a href="mailto:contact@agence-woop.ca">contact@agence-woop.ca</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COORDONNÉES -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">Autre canal</span>
+      <p class="coords__intro">Vous pr&eacute;f&eacute;rez &eacute;crire ou appeler directement ? C'est ici.</p>
+      <div class="coords">
+        <a href="mailto:contact@agence-woop.ca" class="coords__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+          contact@agence-woop.ca
+        </a>
+        <a href="tel:+14388152295" class="coords__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          (438) 815-2295
+        </a>
+        <span class="coords__item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Montr&eacute;al, Qu&eacute;bec
+        </span>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== HERO / SPLIT ===== */
+  .contact-hero {
+    position: relative;
+    padding: 120px 0 64px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .contact-hero { padding: 140px 0 100px; }
+  }
+
+  .contact-hero__watermark {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 28vw;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.025);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: -1;
+    letter-spacing: -0.02em;
+  }
+
+  .contact-split {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .contact-split {
+      flex-direction: row;
+      gap: 48px;
+      align-items: flex-start;
+    }
+  }
+
+  /* ===== PROMESSE (gauche) ===== */
+  .contact-promise {
+    flex: 1;
+  }
+
+  .contact-promise__eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    background: rgba(230, 43, 127, 0.1);
+    border: 1px solid var(--border-accent);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .contact-promise__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .contact-promise__title { font-size: 44px; }
+  }
+
+  .contact-promise__subtitle {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 500px;
+  }
+
+  /* ===== ÉTAPES ===== */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    counter-reset: none;
+  }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .step__num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .step__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* ===== FORMULAIRE (droite) ===== */
+  .contact-form-card {
+    background: var(--woop-pink);
+    border-radius: var(--radius-bento);
+    padding: 32px;
+    flex: 1;
+    max-width: 520px;
+  }
+
+  @media (min-width: 900px) {
+    .contact-form-card {
+      position: sticky;
+      top: 100px;
+    }
+  }
+
+  .contact-form-card__title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .contact-form__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.02em;
+  }
+
+  .contact-form__hint {
+    font-weight: 400;
+    opacity: 0.7;
+  }
+
+  .contact-form__input {
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #fff;
+    transition: border-color 200ms ease;
+  }
+
+  .contact-form__input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .contact-form__input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .contact-form__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  .contact-form__select option {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+  }
+
+  .contact-form__textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .contact-form__submit {
+    background: #fff;
+    color: var(--woop-pink);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+    padding: 14px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    margin-top: 4px;
+  }
+
+  .contact-form__submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .contact-form__submit:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  .contact-form__success {
+    text-align: center;
+    padding: 24px 0;
+  }
+
+  .contact-form__success-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .contact-form__success-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+  }
+
+  .contact-form__error {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 14px;
+    line-height: 1.5;
+  }
+
+  .contact-form__error a {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  /* ===== COORDONNÉES ===== */
+  .coords__intro {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .coords {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (min-width: 600px) {
+    .coords {
+      flex-direction: row;
+      gap: 32px;
+    }
+  }
+
+  .coords__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .coords__item:hover {
+    color: var(--text-primary);
+  }
+
+  .coords__item svg {
+    color: var(--woop-pink);
+    flex-shrink: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-form__submit {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const success = document.getElementById('form-success');
+  const error = document.getElementById('form-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    error?.setAttribute('hidden', '');
+
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' },
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        success?.removeAttribute('hidden');
+      } else {
+        error?.removeAttribute('hidden');
+      }
+    } catch {
+      error?.removeAttribute('hidden');
+    }
+  });
+</script>
