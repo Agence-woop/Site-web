@@ -77,11 +77,11 @@ const base = import.meta.env.BASE_URL;
               <label for="type" class="contact-form__label">Vous &ecirc;tes&hellip; <span class="contact-form__hint">(facultatif)</span></label>
               <select id="type" name="type_structure" class="contact-form__input contact-form__select">
                 <option value="" disabled selected>Choisir une option</option>
-                <option value="clinique-sante">Clinique sant&eacute; / m&eacute;dicale</option>
-                <option value="clinique-esthetique">Clinique m&eacute;dico-esth&eacute;tique</option>
+                <option value="clinique-privee">Clinique priv&eacute;e (m&eacute;dicale, omnipratique)</option>
+                <option value="clinique-dentaire">Clinique dentaire</option>
+                <option value="clinique-medico-esthetique">Clinique m&eacute;dico-esth&eacute;tique</option>
+                <option value="professionnel-sante">Professionnel de la sant&eacute; ind&eacute;pendant (physio, masso, acupuncture, etc.)</option>
                 <option value="cabinet-recrutement">Cabinet de recrutement</option>
-                <option value="bien-etre">Bien-&ecirc;tre (yoga, pilates&hellip;)</option>
-                <option value="sport-gym">Sport / Gym</option>
                 <option value="autre">Autre</option>
               </select>
             </div>
@@ -155,7 +155,7 @@ const base = import.meta.env.BASE_URL;
     font-family: var(--font-display);
     font-size: 28vw;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.025);
+    color: rgba(255, 255, 255, 0.12);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
