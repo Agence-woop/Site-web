@@ -142,12 +142,12 @@ const base = import.meta.env.BASE_URL;
   /* ===== HERO / SPLIT ===== */
   .contact-hero {
     position: relative;
-    padding: 120px 0 64px;
+    padding: 120px 0 24px;
     overflow: hidden;
   }
 
   @media (min-width: 768px) {
-    .contact-hero { padding: 140px 0 100px; }
+    .contact-hero { padding: 140px 0 24px; }
   }
 
   .contact-hero__watermark {
@@ -417,23 +417,23 @@ const base = import.meta.env.BASE_URL;
 
   /* ===== COORDONNÉES ===== */
   .coords-section {
-    padding: 40px 0 64px;
+    padding: 24px 0 64px;
   }
 
   @media (min-width: 900px) {
-    .coords-section { padding: 48px 0 100px; }
+    .coords-section { padding: 24px 0 100px; }
   }
 
   .coords-card {
     background: transparent;
     border: 1px solid var(--border-accent);
     border-radius: var(--radius-bento);
-    padding: 32px;
+    padding: 24px 28px;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
   }
 
   @media (min-width: 900px) {
@@ -441,6 +441,7 @@ const base = import.meta.env.BASE_URL;
       flex-direction: row;
       align-items: center;
       gap: 48px;
+      padding: 28px 32px;
     }
   }
 
@@ -456,12 +457,18 @@ const base = import.meta.env.BASE_URL;
 
   .coords-card__left {
     flex: 1;
+    min-width: 0;
+  }
+
+  .coords-card__left .kicker {
+    margin-bottom: 8px;
   }
 
   .coords__intro {
-    font-size: 16px;
+    font-size: 15px;
     color: var(--text-secondary);
     margin: 0;
+    line-height: 1.5;
   }
 
   .coords {
