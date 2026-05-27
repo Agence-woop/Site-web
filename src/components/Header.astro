@@ -125,25 +125,19 @@ const navItems = [
   }
 
   .header__menu {
+    display: none;
+  }
+
+  .header__menu--open {
     display: flex;
     flex-direction: column;
     position: fixed;
     inset: 0;
-    background: rgba(10, 10, 15, 0.98);
+    background: rgba(10, 10, 15, 0.97);
     padding: 100px 32px 48px;
     gap: 32px;
     align-items: flex-start;
     z-index: 99;
-    opacity: 0;
-    pointer-events: none;
-    contain: layout style;
-    will-change: opacity;
-    transition: opacity 200ms ease;
-  }
-
-  .header__menu--open {
-    opacity: 1;
-    pointer-events: auto;
   }
 
   .header__links {
@@ -216,20 +210,11 @@ const navItems = [
     }
 
     .header__menu {
-      position: static;
-      inset: auto;
-      background: none;
-      padding: 0;
-      gap: 24px;
-      flex-direction: row;
+      display: flex;
       align-items: center;
+      gap: 24px;
       flex: 1;
       justify-content: flex-end;
-      opacity: 1;
-      pointer-events: auto;
-      contain: none;
-      will-change: auto;
-      transition: none;
     }
 
     .header__links {
@@ -247,8 +232,7 @@ const navItems = [
   @media (prefers-reduced-motion: reduce) {
     .header,
     .header__burger-line,
-    .header__linkedin,
-    .header__menu {
+    .header__linkedin {
       transition: none;
     }
   }
