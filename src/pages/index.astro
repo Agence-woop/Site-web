@@ -207,10 +207,12 @@ const base = import.meta.env.BASE_URL;
   </section>
 
   <!-- ===== SECTION 5 — CTA FINAL ===== -->
-  <section class="cta-final">
+  <section class="section cta-final-section">
     <div class="container">
-      <h2 class="cta-final__title">Parlons de votre projet.</h2>
-      <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+      <div class="cta-final">
+        <h2 class="cta-final__title">Parlons de votre projet.</h2>
+        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+      </div>
     </div>
   </section>
 
@@ -721,15 +723,14 @@ const base = import.meta.env.BASE_URL;
 
   /* ===== CTA FINAL ===== */
   .cta-final {
-    position: relative;
-    z-index: 1;
     background: var(--woop-gradient);
-    padding: 64px 0;
+    border-radius: var(--radius-bento);
+    padding: 56px 32px;
     text-align: center;
   }
 
   @media (min-width: 768px) {
-    .cta-final { padding: 80px 0; }
+    .cta-final { padding: 72px 48px; }
   }
 
   .cta-final__title {
