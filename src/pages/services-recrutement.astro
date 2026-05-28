@@ -38,7 +38,10 @@ const base = import.meta.env.BASE_URL;
             <img src={`${base}/images/cas-recrutement-ambiance.webp`} alt="Ambiance cabinet de recrutement" class="cas-photo-bento__img" loading="lazy" />
           </div>
           <a href="#nos-services" class="cas-cta-bento">
-            <span class="cas-cta-bento__text">Vous cochez au moins une case ?<br>La suite est pour vous.</span>
+            <span class="cas-cta-bento__text">
+              <span class="cas-cta-bento__line">Vous cochez au moins une case ?</span>
+              <span class="cas-cta-bento__line">La suite est pour vous.</span>
+            </span>
             <svg class="cas-cta-bento__chevron" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           </a>
         </div>
@@ -291,6 +294,13 @@ const base = import.meta.env.BASE_URL;
     text-transform: uppercase;
     line-height: 1.15;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (max-width: 767px) {
+    .cas-cta-bento__text { gap: 12px; }
   }
 
   @media (min-width: 768px) {
@@ -326,7 +336,7 @@ const base = import.meta.env.BASE_URL;
 
   .cas-item__title {
     font-family: var(--font-display);
-    font-size: 24px;
+    font-size: 22px;
     text-transform: uppercase;
     line-height: 1.1;
     font-weight: 700;
@@ -335,11 +345,11 @@ const base = import.meta.env.BASE_URL;
   }
 
   @media (min-width: 768px) {
-    .cas-item__title { font-size: 28px; }
+    .cas-item__title { font-size: 26px; }
   }
 
   @media (min-width: 1024px) {
-    .cas-item__title { font-size: 36px; }
+    .cas-item__title { font-size: 32px; }
   }
 
   .cas-item__text {
