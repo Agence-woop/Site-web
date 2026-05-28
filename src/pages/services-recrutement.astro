@@ -237,7 +237,7 @@ const base = import.meta.env.BASE_URL;
   @media (min-width: 1024px) {
     .cas-layout {
       flex-direction: row;
-      align-items: flex-start;
+      align-items: stretch;
     }
 
     .cas-layout__left {
@@ -245,6 +245,17 @@ const base = import.meta.env.BASE_URL;
       display: flex;
       flex-direction: column;
       gap: var(--gap-bento);
+    }
+
+    .cas-photo-bento {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .cas-photo-bento__img {
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
     }
 
     .cas-list-bento {
@@ -260,6 +271,9 @@ const base = import.meta.env.BASE_URL;
   .cas-photo-bento__img {
     width: 100%;
     display: block;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center top;
   }
 
   .cas-cta-bento {
