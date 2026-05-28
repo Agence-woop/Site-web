@@ -32,11 +32,17 @@ const base = import.meta.env.BASE_URL;
     <div class="container">
       <span class="kicker">01 — Pour qui ?</span>
       <h2 class="section-title">Vous vous reconnaissez ?</h2>
-      <div class="cas-bento">
-        <div class="cas-bento__photo-wrap">
-          <img src={`${base}/images/cas-recrutement-ambiance.webp`} alt="Ambiance cabinet de recrutement" class="cas-bento__photo" loading="lazy" />
+      <div class="cas-layout">
+        <div class="cas-layout__left">
+          <div class="cas-photo-bento">
+            <img src={`${base}/images/cas-recrutement-ambiance.webp`} alt="Ambiance cabinet de recrutement" class="cas-photo-bento__img" loading="lazy" />
+          </div>
+          <a href="#nos-services" class="cas-cta-bento">
+            <span class="cas-cta-bento__text">Vous cochez au moins une case ?<br>La suite est pour vous.</span>
+            <svg class="cas-cta-bento__chevron" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
         </div>
-        <div class="cas-bento__list">
+        <div class="cas-list-bento">
           <div class="cas-item">
             <h3 class="cas-item__title gradient-text">Un cabinet qui veut d&eacute;crocher plus de mandats.</h3>
             <p class="cas-item__text">Les entreprises confient leurs recherches &agrave; vos concurrents. Il faut se faire conna&icirc;tre aupr&egrave;s des bons d&eacute;cideurs RH.</p>
@@ -63,7 +69,7 @@ const base = import.meta.env.BASE_URL;
   </section>
 
   <!-- SECTION 3 — NOS SERVICES -->
-  <section class="section">
+  <section class="section" id="nos-services">
     <div class="container">
       <span class="kicker">02 — Nos services</span>
       <h2 class="section-title">Une offre pens&eacute;e pour le secteur du recrutement.</h2>
@@ -217,57 +223,105 @@ const base = import.meta.env.BASE_URL;
     .rh-hero__subtitle { font-size: 18px; }
   }
 
-  /* ===== CAS (POUR QUI) — BENTO HORIZONTAL ===== */
-  .cas-bento {
+  /* ===== CAS (POUR QUI) — 3 BENTOS ===== */
+  .cas-layout {
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    overflow: hidden;
+    gap: var(--gap-bento);
     margin-top: 32px;
   }
 
-  @media (min-width: 768px) {
-    .cas-bento {
+  @media (min-width: 1024px) {
+    .cas-layout {
       flex-direction: row;
-      align-items: stretch;
+      align-items: flex-start;
+    }
+
+    .cas-layout__left {
+      flex: 0 0 33%;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-bento);
+    }
+
+    .cas-list-bento {
+      flex: 1;
     }
   }
 
-  .cas-bento__photo-wrap {
-    flex-shrink: 0;
+  .cas-photo-bento {
+    border-radius: var(--radius-bento);
     overflow: hidden;
   }
 
-  @media (min-width: 768px) {
-    .cas-bento__photo-wrap { width: 320px; }
-  }
-
-  .cas-bento__photo {
+  .cas-photo-bento__img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
     display: block;
-    min-height: 240px;
   }
 
-  .cas-bento__list {
+  .cas-cta-bento {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #FA6244 0%, #E62B7F 100%);
+    border-radius: var(--radius-bento);
+    padding: 28px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 200ms ease;
+  }
+
+  @media (min-width: 768px) {
+    .cas-cta-bento { padding: 40px; }
+  }
+
+  @media (min-width: 1024px) {
+    .cas-cta-bento { padding: 44px; }
+  }
+
+  .cas-cta-bento:hover {
+    transform: translateY(-2px);
+  }
+
+  .cas-cta-bento__text {
+    font-family: var(--font-display);
+    font-size: 22px;
+    text-transform: uppercase;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .cas-cta-bento__text { font-size: 26px; }
+  }
+
+  @media (min-width: 1024px) {
+    .cas-cta-bento__text { font-size: 30px; }
+  }
+
+  .cas-cta-bento__chevron {
+    color: #fff;
+    opacity: 0.7;
+  }
+
+  .cas-list-bento {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
     padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    justify-content: center;
-    flex: 1;
   }
 
   @media (min-width: 768px) {
-    .cas-bento__list { gap: 28px; }
+    .cas-list-bento { gap: 28px; padding: 32px; }
   }
 
   @media (min-width: 1024px) {
-    .cas-bento__list { gap: 36px; }
+    .cas-list-bento { gap: 36px; padding: 36px; }
   }
 
   .cas-item__title {
@@ -292,6 +346,10 @@ const base = import.meta.env.BASE_URL;
     font-size: 14px;
     line-height: 1.6;
     color: var(--text-secondary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cas-cta-bento { transition: none; }
   }
 
   /* ===== SERVICES ===== */
