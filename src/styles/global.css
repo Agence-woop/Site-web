@@ -146,6 +146,15 @@ ul {
   -webkit-text-fill-color: transparent;
 }
 
+.gradient-accent {
+  background: var(--woop-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
