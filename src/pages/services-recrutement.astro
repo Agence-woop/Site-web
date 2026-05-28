@@ -16,8 +16,8 @@ const base = import.meta.env.BASE_URL;
       <div class="rh-hero__watermark" aria-hidden="true">RECRUTEMENT</div>
       <h1 class="rh-hero__title">
         Le marketing pour <span class="gradient-text">cabinets de recrutement</span>,<br>
-        pens&eacute; par quelqu'un qui les comprend<br>
-        de l'int&eacute;rieur.
+        pens&eacute; par quelqu'un qui<br>
+        les comprend de l'int&eacute;rieur.
       </h1>
       <div class="rh-hero__subtitle">
         <p>Strat&eacute;gie, branding, g&eacute;n&eacute;ration de mandats et attraction de candidats.</p>
@@ -38,23 +38,23 @@ const base = import.meta.env.BASE_URL;
         </div>
         <div class="cas-bento__list">
           <div class="cas-item">
-            <h3 class="cas-item__title">Un cabinet qui veut d&eacute;crocher plus de mandats.</h3>
+            <h3 class="cas-item__title gradient-text">Un cabinet qui veut d&eacute;crocher plus de mandats.</h3>
             <p class="cas-item__text">Les entreprises confient leurs recherches &agrave; vos concurrents. Il faut se faire conna&icirc;tre aupr&egrave;s des bons d&eacute;cideurs RH.</p>
           </div>
           <div class="cas-item">
-            <h3 class="cas-item__title">Un cabinet qui veut attirer plus de candidats qualifi&eacute;s.</h3>
+            <h3 class="cas-item__title gradient-text">Un cabinet qui veut attirer plus de candidats qualifi&eacute;s.</h3>
             <p class="cas-item__text">Vos mandats restent ouverts trop longtemps faute de bons profils. Il faut construire un bassin actif et engag&eacute;.</p>
           </div>
           <div class="cas-item">
-            <h3 class="cas-item__title">Un cabinet qui veut se diff&eacute;rencier dans sa niche.</h3>
+            <h3 class="cas-item__title gradient-text">Un cabinet qui veut se diff&eacute;rencier dans sa niche.</h3>
             <p class="cas-item__text">Trop de cabinets se ressemblent. Il faut une marque qui dit ce qui vous rend unique : votre niche, votre m&eacute;thode, votre fit culturel.</p>
           </div>
           <div class="cas-item">
-            <h3 class="cas-item__title">Un cabinet en croissance qui veut professionnaliser son image.</h3>
+            <h3 class="cas-item__title gradient-text">Un cabinet en croissance qui veut professionnaliser son image.</h3>
             <p class="cas-item__text">Vous avez les r&eacute;sultats, mais votre marque ne suit plus. Il faut un branding &agrave; la hauteur de vos ambitions.</p>
           </div>
           <div class="cas-item">
-            <h3 class="cas-item__title">Un consultant RH ind&eacute;pendant qui veut d&eacute;crocher ses propres mandats.</h3>
+            <h3 class="cas-item__title gradient-text">Un consultant RH ind&eacute;pendant qui veut d&eacute;crocher ses propres mandats.</h3>
             <p class="cas-item__text">Vous op&eacute;rez en solo, votre r&eacute;seau s'&eacute;puise, et votre visibilit&eacute; en ligne ne suit pas. Il faut une marque personnelle qui attire les clients &agrave; vous.</p>
           </div>
         </div>
@@ -89,7 +89,8 @@ const base = import.meta.env.BASE_URL;
             <img src={`${base}/images/icons/icon-branding-clinique.svg`} alt="" class="svc-card__icon-img" />
           </div>
           <h3 class="svc-card__title">Branding cabinet</h3>
-          <p class="svc-card__text">Logo, charte visuelle, ton de marque, design system complet. Une identit&eacute; qui justifie votre positionnement et qui fait de votre cabinet un endroit o&ugrave; les meilleurs candidats veulent postuler.</p>
+          <p class="svc-card__text">Logo, charte visuelle, ton de marque, design system complet.</p>
+          <p class="svc-card__text">Une identit&eacute; qui justifie votre positionnement et qui fait de votre cabinet un endroit o&ugrave; les meilleurs candidats veulent postuler.</p>
         </div>
         <div class="svc-card svc-card--reseaux">
           <div class="svc-card__icon">
@@ -112,7 +113,8 @@ const base = import.meta.env.BASE_URL;
             <img src={`${base}/images/icons/icon-gestion-reputation.svg`} alt="" class="svc-card__icon-img" />
           </div>
           <h3 class="svc-card__title">Gestion de la r&eacute;putation en ligne</h3>
-          <p class="svc-card__text">Avis Google, t&eacute;moignages clients et candidats, suivi de votre image sur le web. On vous aide &agrave; construire et prot&eacute;ger la r&eacute;putation de votre cabinet.</p>
+          <p class="svc-card__text">Avis Google, t&eacute;moignages clients et candidats, suivi de votre image sur le web.</p>
+          <p class="svc-card__text">On vous aide &agrave; construire et prot&eacute;ger la r&eacute;putation de votre cabinet.</p>
         </div>
       </div>
       <div class="services-cta">
@@ -171,7 +173,7 @@ const base = import.meta.env.BASE_URL;
   .rh-hero__watermark {
     position: absolute;
     font-family: var(--font-display);
-    font-size: 22vw;
+    font-size: 14vw;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.12);
     top: 50%;
@@ -261,10 +263,13 @@ const base = import.meta.env.BASE_URL;
   }
 
   .cas-item__title {
-    font-size: 15px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    text-transform: uppercase;
+    line-height: 1.1;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .cas-item__text {
