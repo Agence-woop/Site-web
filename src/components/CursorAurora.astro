@@ -1,13 +1,6 @@
 ---
-// Pool size for trail particles. To tune, change this number AND ensure
-// throttle × pool_size ≥ duration (currently 40ms × 25 = 1000ms = fade duration).
-const POOL_SIZE = 25;
 ---
-<div class="cursor-aurora" aria-hidden="true">
-  {Array.from({ length: POOL_SIZE }).map(() => (
-    <div class="cursor-aurora__particle"></div>
-  ))}
-</div>
+<canvas class="cursor-aurora" aria-hidden="true"></canvas>
 
 <style>
   .cursor-aurora {
@@ -18,37 +11,6 @@ const POOL_SIZE = 25;
     height: 100%;
     pointer-events: none;
     z-index: 0;
-    overflow: hidden;
-  }
-
-  .cursor-aurora__particle {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--cursor-trail-particle-size, 100px);
-    height: var(--cursor-trail-particle-size, 100px);
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      #FA6244 0%,
-      #E62B7F 50%,
-      transparent 70%
-    );
-    opacity: 0;
-    pointer-events: none;
-    will-change: transform, opacity;
-    transform: translate3d(var(--p-x, -9999px), var(--p-y, -9999px), 0) translate(-50%, -50%) scale(1);
-  }
-
-  @keyframes cursor-particle-fade {
-    0% {
-      opacity: var(--cursor-trail-opacity, 0.18);
-      transform: translate3d(var(--p-x, 0px), var(--p-y, 0px), 0) translate(-50%, -50%) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translate3d(var(--p-x, 0px), var(--p-y, 0px), 0) translate(-50%, -50%) scale(0.6);
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -59,44 +21,99 @@ const POOL_SIZE = 25;
 </style>
 
 <script>
-  const container = document.querySelector<HTMLDivElement>('.cursor-aurora');
-  if (container) {
+  // ===== Tuning constants (modify here for post-merge adjustments) =====
+  const BRUSH_RADIUS = 90;        // brush size in CSS px
+  const BRUSH_OPACITY = 0.35;     // alpha of each brush stroke
+  const FADE_AMOUNT = 0.09;       // alpha of fade per frame (higher = shorter trail)
+  const COLOR_INNER = '#FA6244';  // WOOP orange (brush center)
+  const COLOR_OUTER = '#E62B7F';  // WOOP rose (brush mid)
+  const COMPOSITE: GlobalCompositeOperation = 'lighter';
+  const TRAIL_IDLE_MS = 600;      // stop drawing brush after this much idle time
+  // =====================================================================
+
+  const canvas = document.querySelector<HTMLCanvasElement>('.cursor-aurora');
+  if (canvas) {
     const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)');
     const isDesktop = window.matchMedia('(min-width: 1024px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     if (supportsHover.matches && isDesktop.matches && !reducedMotion.matches) {
-      const particles = Array.from(
-        container.querySelectorAll<HTMLDivElement>('.cursor-aurora__particle')
-      );
-      const POOL_SIZE = particles.length;
-      const THROTTLE_MS = 40;
-      let poolIndex = 0;
-      let lastBirth = 0;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        let mouseX = -9999;
+        let mouseY = -9999;
+        let lastMoveTime = 0;
+        let raf = 0;
 
-      const birthParticle = (x: number, y: number) => {
-        const p = particles[poolIndex];
-        poolIndex = (poolIndex + 1) % POOL_SIZE;
-        p.style.setProperty('--p-x', x + 'px');
-        p.style.setProperty('--p-y', y + 'px');
-        p.style.animation = 'none';
-        // Force reflow to restart the animation
-        void p.offsetWidth;
-        p.style.animation = 'cursor-particle-fade var(--cursor-trail-duration, 1000ms) linear forwards';
-      };
+        const setupCanvas = () => {
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = Math.floor(window.innerWidth * dpr);
+          canvas.height = Math.floor(window.innerHeight * dpr);
+          // Reset + scale in one operation, CSS pixel coordinate system from now on
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        };
 
-      const onMove = (e: MouseEvent) => {
-        const now = performance.now();
-        if (now - lastBirth < THROTTLE_MS) return;
-        lastBirth = now;
-        birthParticle(e.clientX, e.clientY);
-      };
+        const draw = () => {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
 
-      window.addEventListener('mousemove', onMove, { passive: true });
+          // Fade: destination-out + any color × FADE_AMOUNT alpha removes
+          // that fraction of existing pixels. Keeps canvas transparent at rest.
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = `rgba(0,0,0,${FADE_AMOUNT})`;
+          ctx.fillRect(0, 0, w, h);
 
-      window.addEventListener('beforeunload', () => {
-        window.removeEventListener('mousemove', onMove);
-      });
+          // Brush: only when mouse moved recently
+          const now = performance.now();
+          if (now - lastMoveTime < TRAIL_IDLE_MS) {
+            ctx.globalCompositeOperation = COMPOSITE;
+            ctx.globalAlpha = BRUSH_OPACITY;
+
+            const gradient = ctx.createRadialGradient(
+              mouseX, mouseY, 0,
+              mouseX, mouseY, BRUSH_RADIUS
+            );
+            gradient.addColorStop(0, COLOR_INNER);
+            gradient.addColorStop(0.5, COLOR_OUTER);
+            gradient.addColorStop(1, 'rgba(230, 43, 127, 0)');
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(mouseX, mouseY, BRUSH_RADIUS, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          raf = requestAnimationFrame(draw);
+        };
+
+        const onMove = (e: MouseEvent) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          lastMoveTime = performance.now();
+        };
+
+        const onResize = () => {
+          setupCanvas();
+        };
+
+        const onVisibility = () => {
+          if (document.hidden) {
+            if (raf) {
+              cancelAnimationFrame(raf);
+              raf = 0;
+            }
+          } else if (raf === 0) {
+            raf = requestAnimationFrame(draw);
+          }
+        };
+
+        setupCanvas();
+        window.addEventListener('mousemove', onMove, { passive: true });
+        window.addEventListener('resize', onResize, { passive: true });
+        document.addEventListener('visibilitychange', onVisibility);
+        raf = requestAnimationFrame(draw);
+      }
     }
   }
 </script>
