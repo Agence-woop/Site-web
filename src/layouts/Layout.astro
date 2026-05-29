@@ -13,13 +13,11 @@ interface Props {
 
 const { title, description, ogImage } = Astro.props;
 
-// Canonical domain — anticipates the future agence-woop.ca branching.
-// Used for og:url and og:image absolute URLs across all pages.
+// Canonical domain — used for og:url and og:image absolute URLs across all pages.
 const SITE_CANONICAL_BASE = 'https://agence-woop.ca';
 const OG_IMAGE_ALT = 'WOOP — Agence marketing santé et recrutement à Montréal';
 
-// Strip the Astro base path (e.g. /Site-web/) from the URL pathname
-// so canonical URLs reflect the future domain root.
+// Strip any Astro base path from the URL pathname so canonical URLs reflect the domain root.
 const baseUrl = import.meta.env.BASE_URL;
 const normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 const stripBase = (path: string): string => {
