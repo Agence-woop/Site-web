@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import AuroraBackground from '../components/AuroraBackground.astro';
+import CursorAurora from '../components/CursorAurora.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -49,6 +50,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
 </head>
 <body>
   <AuroraBackground />
+  <CursorAurora />
   <Header />
   <main class="main" id="main">
     <slot />

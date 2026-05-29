@@ -1,0 +1,80 @@
+---
+---
+<div class="cursor-aurora" aria-hidden="true"></div>
+
+<style>
+  .cursor-aurora {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--cursor-aurora-size, 900px);
+    height: var(--cursor-aurora-size, 900px);
+    background: radial-gradient(
+      circle,
+      #FA6244 0%,
+      #E62B7F 40%,
+      transparent 70%
+    );
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform, opacity;
+    transform: translate3d(50vw, 50vh, 0) translate(-50%, -50%);
+    transition: opacity 200ms ease;
+  }
+
+  .cursor-aurora--active {
+    opacity: var(--cursor-aurora-opacity, 0.12);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor-aurora {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const aurora = document.querySelector<HTMLDivElement>('.cursor-aurora');
+  if (!aurora) {
+    // no-op
+  } else {
+    const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const isDesktop = window.matchMedia('(min-width: 1024px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (supportsHover.matches && isDesktop.matches && !reducedMotion.matches) {
+      let targetX = window.innerWidth / 2;
+      let targetY = window.innerHeight / 2;
+      let currentX = targetX;
+      let currentY = targetY;
+      const ease = 0.12;
+      let raf = 0;
+      let active = false;
+
+      const onMove = (e: MouseEvent) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        if (!active) {
+          active = true;
+          aurora.classList.add('cursor-aurora--active');
+        }
+      };
+
+      const tick = () => {
+        currentX += (targetX - currentX) * ease;
+        currentY += (targetY - currentY) * ease;
+        aurora.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+        raf = requestAnimationFrame(tick);
+      };
+
+      window.addEventListener('mousemove', onMove, { passive: true });
+      raf = requestAnimationFrame(tick);
+
+      window.addEventListener('beforeunload', () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener('mousemove', onMove);
+      });
+    }
+  }
+</script>
