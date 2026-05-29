@@ -39,7 +39,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </div>
     <div class="footer__bottom">
-      <span>&copy; 2026 Agence WOOP</span>
+      <span>&copy; 2026 Agence WOOP &middot; <a href={`${base}/confidentialite-et-conditions`} class="footer__bottom-link">Politique de confidentialit&eacute;</a></span>
     </div>
   </div>
 </footer>
@@ -153,5 +153,15 @@ const base = import.meta.env.BASE_URL;
     font-size: 12px;
     letter-spacing: 0.1em;
     color: var(--text-muted);
+  }
+
+  .footer__bottom-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .footer__bottom-link:hover {
+    color: var(--text-primary);
   }
 </style>
