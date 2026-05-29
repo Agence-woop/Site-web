@@ -1,30 +1,54 @@
 ---
+// Pool size for trail particles. To tune, change this number AND ensure
+// throttle × pool_size ≥ duration (currently 40ms × 25 = 1000ms = fade duration).
+const POOL_SIZE = 25;
 ---
-<div class="cursor-aurora" aria-hidden="true"></div>
+<div class="cursor-aurora" aria-hidden="true">
+  {Array.from({ length: POOL_SIZE }).map(() => (
+    <div class="cursor-aurora__particle"></div>
+  ))}
+</div>
 
 <style>
   .cursor-aurora {
     position: fixed;
     top: 0;
     left: 0;
-    width: var(--cursor-aurora-size, 900px);
-    height: var(--cursor-aurora-size, 900px);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .cursor-aurora__particle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--cursor-trail-particle-size, 100px);
+    height: var(--cursor-trail-particle-size, 100px);
+    border-radius: 50%;
     background: radial-gradient(
       circle,
       #FA6244 0%,
-      #E62B7F 40%,
+      #E62B7F 50%,
       transparent 70%
     );
     opacity: 0;
     pointer-events: none;
-    z-index: 0;
     will-change: transform, opacity;
-    transform: translate3d(50vw, 50vh, 0) translate(-50%, -50%);
-    transition: opacity 200ms ease;
+    transform: translate3d(var(--p-x, -9999px), var(--p-y, -9999px), 0) translate(-50%, -50%) scale(1);
   }
 
-  .cursor-aurora--active {
-    opacity: var(--cursor-aurora-opacity, 0.12);
+  @keyframes cursor-particle-fade {
+    0% {
+      opacity: var(--cursor-trail-opacity, 0.18);
+      transform: translate3d(var(--p-x, 0px), var(--p-y, 0px), 0) translate(-50%, -50%) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(var(--p-x, 0px), var(--p-y, 0px), 0) translate(-50%, -50%) scale(0.6);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -35,44 +59,42 @@
 </style>
 
 <script>
-  const aurora = document.querySelector<HTMLDivElement>('.cursor-aurora');
-  if (!aurora) {
-    // no-op
-  } else {
+  const container = document.querySelector<HTMLDivElement>('.cursor-aurora');
+  if (container) {
     const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)');
     const isDesktop = window.matchMedia('(min-width: 1024px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     if (supportsHover.matches && isDesktop.matches && !reducedMotion.matches) {
-      let targetX = window.innerWidth / 2;
-      let targetY = window.innerHeight / 2;
-      let currentX = targetX;
-      let currentY = targetY;
-      const ease = 0.12;
-      let raf = 0;
-      let active = false;
+      const particles = Array.from(
+        container.querySelectorAll<HTMLDivElement>('.cursor-aurora__particle')
+      );
+      const POOL_SIZE = particles.length;
+      const THROTTLE_MS = 40;
+      let poolIndex = 0;
+      let lastBirth = 0;
 
-      const onMove = (e: MouseEvent) => {
-        targetX = e.clientX;
-        targetY = e.clientY;
-        if (!active) {
-          active = true;
-          aurora.classList.add('cursor-aurora--active');
-        }
+      const birthParticle = (x: number, y: number) => {
+        const p = particles[poolIndex];
+        poolIndex = (poolIndex + 1) % POOL_SIZE;
+        p.style.setProperty('--p-x', x + 'px');
+        p.style.setProperty('--p-y', y + 'px');
+        p.style.animation = 'none';
+        // Force reflow to restart the animation
+        void p.offsetWidth;
+        p.style.animation = 'cursor-particle-fade var(--cursor-trail-duration, 1000ms) linear forwards';
       };
 
-      const tick = () => {
-        currentX += (targetX - currentX) * ease;
-        currentY += (targetY - currentY) * ease;
-        aurora.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
-        raf = requestAnimationFrame(tick);
+      const onMove = (e: MouseEvent) => {
+        const now = performance.now();
+        if (now - lastBirth < THROTTLE_MS) return;
+        lastBirth = now;
+        birthParticle(e.clientX, e.clientY);
       };
 
       window.addEventListener('mousemove', onMove, { passive: true });
-      raf = requestAnimationFrame(tick);
 
       window.addEventListener('beforeunload', () => {
-        cancelAnimationFrame(raf);
         window.removeEventListener('mousemove', onMove);
       });
     }
