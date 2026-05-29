@@ -111,6 +111,10 @@ const { variant, size = 'default', class: className } = Astro.props;
     margin-top: 12px;
   }
 
+  @media (min-width: 1024px) {
+    .bento :global(.bento__text) { font-size: 16px; }
+  }
+
   .bento--outline :global(.bento__text) {
     color: var(--text-secondary);
     opacity: 1;

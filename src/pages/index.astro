@@ -290,6 +290,10 @@ const base = import.meta.env.BASE_URL;
     .hero__subtitle { font-size: 18px; }
   }
 
+  @media (min-width: 1024px) {
+    .hero__subtitle { font-size: 20px; }
+  }
+
   .hero__ctas {
     display: flex;
     flex-wrap: wrap;
@@ -447,10 +451,15 @@ const base = import.meta.env.BASE_URL;
     .persona-card__image { height: 240px; }
   }
 
+  @media (min-width: 1024px) {
+    .persona-card__image { height: 320px; }
+  }
+
   .persona-card__image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center top;
     display: block;
   }
 
@@ -487,6 +496,10 @@ const base = import.meta.env.BASE_URL;
     color: var(--text-secondary);
     flex: 1;
     margin-bottom: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    .persona-card__desc { font-size: 16px; }
   }
 
   .persona-card__actions {
@@ -562,6 +575,10 @@ const base = import.meta.env.BASE_URL;
     margin-top: 8px;
   }
 
+  @media (min-width: 1024px) {
+    .proof__cumul { font-size: 14px; }
+  }
+
   .proof__breakdown {
     font-size: 18px;
     line-height: 1.5;
@@ -577,6 +594,10 @@ const base = import.meta.env.BASE_URL;
     font-size: 15px;
     line-height: 1.6;
     color: var(--text-secondary);
+  }
+
+  @media (min-width: 1024px) {
+    .proof__text { font-size: 17px; }
   }
 
   /* ===== TEAM STRIP ===== */
@@ -611,6 +632,10 @@ const base = import.meta.env.BASE_URL;
     margin-bottom: 20px;
     max-width: 500px;
     line-height: 1.6;
+  }
+
+  @media (min-width: 1024px) {
+    .team-strip__text { font-size: 17px; }
   }
 
   .team-strip__cards {
@@ -667,6 +692,10 @@ const base = import.meta.env.BASE_URL;
     color: var(--text-muted);
   }
 
+  @media (min-width: 1024px) {
+    .team-card__role { font-size: 14px; }
+  }
+
   /* ===== TESTIMONIALS ===== */
   .testimonials__heading {
     font-family: var(--font-display);
@@ -703,6 +732,10 @@ const base = import.meta.env.BASE_URL;
   .testimonial__author span {
     font-size: 12px;
     color: var(--text-muted);
+  }
+
+  @media (min-width: 1024px) {
+    .testimonial__author span { font-size: 14px; }
   }
 
   /* ===== CTA FINAL ===== */
