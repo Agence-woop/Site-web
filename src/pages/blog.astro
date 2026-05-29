@@ -54,7 +54,7 @@ const base = import.meta.env.BASE_URL;
         <!-- BENTO 3 — Stratégie & Marque (signature gradient) -->
         <div class="blog-card blog-card--signature">
           <div class="blog-card__icon">
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M5.6 18.4l2.1-2.1M12 18v3M16.3 16.3l2.1 2.1M18 12h3M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+            <img src={`${base}/images/icons/icon-branding-clinique.svg`} alt="" class="blog-card__icon-img" />
           </div>
           <h3 class="blog-card__title">Strat&eacute;gie & Marque</h3>
           <p class="blog-card__text">Branding, positionnement, design system, identit&eacute; visuelle. Tout ce qui construit une marque qui attire, dans n'importe quel secteur.</p>
@@ -208,9 +208,16 @@ const base = import.meta.env.BASE_URL;
     flex-shrink: 0;
   }
 
+  .blog-card__icon-img {
+    width: 56px;
+    height: 56px;
+    display: block;
+  }
+
   @media (max-width: 599px) {
     .blog-card__icon { width: 64px; height: 64px; }
     .blog-card__icon svg { width: 45px; height: 45px; }
+    .blog-card__icon-img { width: 45px; height: 45px; }
   }
 
   .blog-card--signature .blog-card__icon {
