@@ -1,16 +1,30 @@
 ---
 ---
-<canvas class="cursor-aurora" aria-hidden="true"></canvas>
+<div class="cursor-aurora" aria-hidden="true"></div>
 
 <style>
   .cursor-aurora {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: var(--cursor-aurora-size, 900px);
+    height: var(--cursor-aurora-size, 900px);
+    background: radial-gradient(
+      circle,
+      #FA6244 0%,
+      #E62B7F 40%,
+      transparent 70%
+    );
+    opacity: 0;
     pointer-events: none;
     z-index: 0;
+    will-change: transform, opacity;
+    transform: translate3d(50vw, 50vh, 0) translate(-50%, -50%);
+    transition: opacity 200ms ease;
+  }
+
+  .cursor-aurora--active {
+    opacity: var(--cursor-aurora-opacity, 0.12);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -21,99 +35,46 @@
 </style>
 
 <script>
-  // ===== Tuning constants (modify here for post-merge adjustments) =====
-  const BRUSH_RADIUS = 90;        // brush size in CSS px
-  const BRUSH_OPACITY = 0.35;     // alpha of each brush stroke
-  const FADE_AMOUNT = 0.09;       // alpha of fade per frame (higher = shorter trail)
-  const COLOR_INNER = '#FA6244';  // WOOP orange (brush center)
-  const COLOR_OUTER = '#E62B7F';  // WOOP rose (brush mid)
-  const COMPOSITE: GlobalCompositeOperation = 'lighter';
-  const TRAIL_IDLE_MS = 600;      // stop drawing brush after this much idle time
-  // =====================================================================
-
-  const canvas = document.querySelector<HTMLCanvasElement>('.cursor-aurora');
-  if (canvas) {
+  const aurora = document.querySelector<HTMLDivElement>('.cursor-aurora');
+  if (!aurora) {
+    // no-op
+  } else {
     const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)');
     const isDesktop = window.matchMedia('(min-width: 1024px)');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     if (supportsHover.matches && isDesktop.matches && !reducedMotion.matches) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        let mouseX = -9999;
-        let mouseY = -9999;
-        let lastMoveTime = 0;
-        let raf = 0;
+      let targetX = window.innerWidth / 2;
+      let targetY = window.innerHeight / 2;
+      let currentX = targetX;
+      let currentY = targetY;
+      const ease = 0.12;
+      let raf = 0;
+      let active = false;
 
-        const setupCanvas = () => {
-          const dpr = window.devicePixelRatio || 1;
-          canvas.width = Math.floor(window.innerWidth * dpr);
-          canvas.height = Math.floor(window.innerHeight * dpr);
-          // Reset + scale in one operation, CSS pixel coordinate system from now on
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        };
+      const onMove = (e: MouseEvent) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        if (!active) {
+          active = true;
+          aurora.classList.add('cursor-aurora--active');
+        }
+      };
 
-        const draw = () => {
-          const w = window.innerWidth;
-          const h = window.innerHeight;
+      const tick = () => {
+        currentX += (targetX - currentX) * ease;
+        currentY += (targetY - currentY) * ease;
+        aurora.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+        raf = requestAnimationFrame(tick);
+      };
 
-          // Fade: destination-out + any color × FADE_AMOUNT alpha removes
-          // that fraction of existing pixels. Keeps canvas transparent at rest.
-          ctx.globalCompositeOperation = 'destination-out';
-          ctx.globalAlpha = 1;
-          ctx.fillStyle = `rgba(0,0,0,${FADE_AMOUNT})`;
-          ctx.fillRect(0, 0, w, h);
+      window.addEventListener('mousemove', onMove, { passive: true });
+      raf = requestAnimationFrame(tick);
 
-          // Brush: only when mouse moved recently
-          const now = performance.now();
-          if (now - lastMoveTime < TRAIL_IDLE_MS) {
-            ctx.globalCompositeOperation = COMPOSITE;
-            ctx.globalAlpha = BRUSH_OPACITY;
-
-            const gradient = ctx.createRadialGradient(
-              mouseX, mouseY, 0,
-              mouseX, mouseY, BRUSH_RADIUS
-            );
-            gradient.addColorStop(0, COLOR_INNER);
-            gradient.addColorStop(0.5, COLOR_OUTER);
-            gradient.addColorStop(1, 'rgba(230, 43, 127, 0)');
-
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(mouseX, mouseY, BRUSH_RADIUS, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          raf = requestAnimationFrame(draw);
-        };
-
-        const onMove = (e: MouseEvent) => {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
-          lastMoveTime = performance.now();
-        };
-
-        const onResize = () => {
-          setupCanvas();
-        };
-
-        const onVisibility = () => {
-          if (document.hidden) {
-            if (raf) {
-              cancelAnimationFrame(raf);
-              raf = 0;
-            }
-          } else if (raf === 0) {
-            raf = requestAnimationFrame(draw);
-          }
-        };
-
-        setupCanvas();
-        window.addEventListener('mousemove', onMove, { passive: true });
-        window.addEventListener('resize', onResize, { passive: true });
-        document.addEventListener('visibilitychange', onVisibility);
-        raf = requestAnimationFrame(draw);
-      }
+      window.addEventListener('beforeunload', () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener('mousemove', onMove);
+      });
     }
   }
 </script>
