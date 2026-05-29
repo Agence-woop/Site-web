@@ -93,7 +93,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <p class="persona-card__desc">Pharmaciens propri&eacute;taires &middot; Directeurs de clinique &middot; Cabinets dentaires &middot; Cliniques m&eacute;dico-esth&eacute;tiques &middot; Centres de bien-&ecirc;tre</p>
             <div class="persona-card__actions">
               <Button variant="primary" href={`${base}/services-medical`}>D&eacute;couvrir nos services sant&eacute;</Button>
-              <Button variant="secondary" href="mailto:g.figueres@agence-woop.ca">Parler &agrave; Gauthier</Button>
+              <Button variant="secondary" href={`${base}/contact?personne=gauthier`}>Parler &agrave; Gauthier</Button>
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
             <p class="persona-card__desc">Cabinets de recrutement sp&eacute;cialis&eacute;s &middot; Firmes de recrutement &middot; Consultants RH ind&eacute;pendants &middot; DRH d'entreprise</p>
             <div class="persona-card__actions">
               <Button variant="primary" href={`${base}/services-recrutement`}>D&eacute;couvrir nos services recrutement</Button>
-              <Button variant="secondary" href="mailto:k.zounias@agence-woop.ca">Parler &agrave; Kevin</Button>
+              <Button variant="secondary" href={`${base}/contact?personne=kevin`}>Parler &agrave; Kevin</Button>
             </div>
           </div>
         </div>
