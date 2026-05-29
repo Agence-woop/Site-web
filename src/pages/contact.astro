@@ -221,6 +221,14 @@ const base = import.meta.env.BASE_URL;
     max-width: 500px;
   }
 
+  @media (min-width: 768px) {
+    .contact-promise__subtitle { font-size: 18px; }
+  }
+
+  @media (min-width: 1024px) {
+    .contact-promise__subtitle { font-size: 20px; }
+  }
+
   /* ===== ÉTAPES ===== */
   .steps {
     display: flex;
@@ -266,6 +274,10 @@ const base = import.meta.env.BASE_URL;
     font-size: 14px;
     line-height: 1.6;
     color: var(--text-secondary);
+  }
+
+  @media (min-width: 1024px) {
+    .step__text { font-size: 16px; }
   }
 
   /* ===== FORMULAIRE (droite) ===== */
@@ -474,6 +486,10 @@ const base = import.meta.env.BASE_URL;
     line-height: 1.5;
   }
 
+  @media (min-width: 1024px) {
+    .coords__intro { font-size: 17px; }
+  }
+
   .coords {
     display: flex;
     flex-direction: column;
@@ -489,6 +505,10 @@ const base = import.meta.env.BASE_URL;
     color: var(--text-secondary);
     text-decoration: none;
     transition: color 200ms ease;
+  }
+
+  @media (min-width: 1024px) {
+    .coords__item { font-size: 17px; }
   }
 
   .coords__item:hover {
