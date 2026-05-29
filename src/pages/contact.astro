@@ -74,6 +74,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
               <input type="text" id="structure" name="structure" class="contact-form__input" />
             </div>
             <div class="contact-form__field">
+              <label for="personne-souhaitee" class="contact-form__label">Vous voulez parler &agrave; ? <span class="contact-form__hint">(facultatif)</span></label>
+              <select id="personne-souhaitee" name="personne_souhaitee" class="contact-form__input contact-form__select">
+                <option value="Peu importe" selected>Peu importe</option>
+                <option value="Gauthier">Gauthier</option>
+                <option value="Kevin">Kevin</option>
+              </select>
+            </div>
+            <div class="contact-form__field">
               <label for="type" class="contact-form__label">Vous &ecirc;tes&hellip; <span class="contact-form__hint">(facultatif)</span></label>
               <select id="type" name="type_structure" class="contact-form__input contact-form__select">
                 <option value="" disabled selected>Choisir une option</option>
@@ -543,6 +551,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   const success = document.getElementById('form-success');
   const error = document.getElementById('form-error');
+
+  const personneSelect = document.getElementById('personne-souhaitee') as HTMLSelectElement | null;
+  if (personneSelect) {
+    const personne = new URLSearchParams(window.location.search).get('personne');
+    if (personne === 'gauthier' || personne === 'kevin') {
+      const targetValue = personne.charAt(0).toUpperCase() + personne.slice(1);
+      if ([...personneSelect.options].some((o) => o.value === targetValue)) {
+        personneSelect.value = targetValue;
+      }
+    }
+  }
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
