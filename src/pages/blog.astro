@@ -1,0 +1,250 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+<Layout
+  title="Blog — WOOP, bientôt en ligne"
+  description="Le blog de l'agence WOOP : des perspectives concrètes sur le marketing en santé et en recrutement, pensées par des praticiens du terrain. Bientôt en ligne."
+  ogImage="/Site-web/images/og-image.jpg"
+>
+
+  <!-- SECTION 1 — HERO -->
+  <section class="blog-hero">
+    <div class="container">
+      <div class="blog-hero__watermark" aria-hidden="true">BLOG</div>
+      <span class="blog-hero__eyebrow">Bient&ocirc;t en ligne</span>
+      <h1 class="blog-hero__title">
+        <span class="blog-hero__line">Le blog WOOP.</span>
+        <span class="gradient-accent">Bient&ocirc;t.</span>
+      </h1>
+      <p class="blog-hero__subtitle">
+        Des perspectives concr&egrave;tes sur le marketing en sant&eacute; et en recrutement, pens&eacute;es par des praticiens du terrain.
+      </p>
+      <Button variant="primary" href={`${base}/contact`}>Discutons de votre projet</Button>
+    </div>
+  </section>
+
+  <!-- SECTION 2 — AU PROGRAMME -->
+  <section class="section">
+    <div class="container">
+      <span class="kicker">01 — Au programme</span>
+      <h2 class="section-title">Ce que vous lirez ici.</h2>
+
+      <div class="blog-grid">
+        <!-- BENTO 1 — Santé & Médical -->
+        <div class="blog-card">
+          <div class="blog-card__icon">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7 7-7z"/></svg>
+          </div>
+          <h3 class="blog-card__title">Sant&eacute; & M&eacute;dical</h3>
+          <p class="blog-card__text">Acquisition de patients, branding clinique, marque personnelle pour praticiens. Des analyses pour ceux qui dirigent une clinique ou un cabinet de sant&eacute;.</p>
+        </div>
+
+        <!-- BENTO 2 — Recrutement -->
+        <div class="blog-card">
+          <div class="blog-card__icon">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <h3 class="blog-card__title">Recrutement</h3>
+          <p class="blog-card__text">Acquisition de mandats, attraction de candidats, marque cabinet et marque consultant. Pour les cabinets et consultants RH qui veulent sortir du lot.</p>
+        </div>
+
+        <!-- BENTO 3 — Stratégie & Marque (signature gradient) -->
+        <div class="blog-card blog-card--signature">
+          <div class="blog-card__icon">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M5.6 18.4l2.1-2.1M12 18v3M16.3 16.3l2.1 2.1M18 12h3M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+          </div>
+          <h3 class="blog-card__title">Strat&eacute;gie & Marque</h3>
+          <p class="blog-card__text">Branding, positionnement, design system, identit&eacute; visuelle. Tout ce qui construit une marque qui attire, dans n'importe quel secteur.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== HERO ===== */
+  .blog-hero {
+    position: relative;
+    padding: 120px 0 48px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .blog-hero { padding: 140px 0 64px; }
+  }
+
+  .blog-hero__watermark {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 40vw;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: -1;
+    letter-spacing: -0.02em;
+  }
+
+  .blog-hero__eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    background: rgba(230, 43, 127, 0.1);
+    border: 1px solid var(--border-accent);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .blog-hero__title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 28px;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    max-width: 900px;
+  }
+
+  @media (min-width: 768px) {
+    .blog-hero__title { font-size: 42px; }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-hero__title { font-size: 52px; }
+  }
+
+  .blog-hero__line {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .blog-hero__subtitle {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .blog-hero__subtitle { font-size: 18px; }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-hero__subtitle { font-size: 20px; }
+  }
+
+  /* ===== GRID ===== */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-bento);
+    margin-top: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .blog-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .blog-card--signature {
+      grid-column: 1 / 3;
+    }
+  }
+
+  /* ===== CARDS ===== */
+  .blog-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blog-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  .blog-card--signature {
+    background: linear-gradient(135deg, #FA6244 0%, #E62B7F 100%);
+    border: none;
+  }
+
+  .blog-card--signature::before {
+    display: none;
+  }
+
+  .blog-card__icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 599px) {
+    .blog-card__icon { width: 64px; height: 64px; }
+    .blog-card__icon svg { width: 45px; height: 45px; }
+  }
+
+  .blog-card--signature .blog-card__icon {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .blog-card__title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    text-transform: uppercase;
+    line-height: 1.05;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .blog-card__title { font-size: 28px; }
+  }
+
+  .blog-card--signature .blog-card__title {
+    color: #fff;
+  }
+
+  .blog-card__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  @media (min-width: 1024px) {
+    .blog-card__text { font-size: 16px; }
+  }
+
+  .blog-card--signature .blog-card__text {
+    color: #fff;
+    opacity: 0.92;
+  }
+</style>
