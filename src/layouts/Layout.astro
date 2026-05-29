@@ -12,8 +12,26 @@ interface Props {
 }
 
 const { title, description, ogImage } = Astro.props;
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
+
+// Canonical domain — anticipates the future agence-woop.ca branching.
+// Used for og:url and og:image absolute URLs across all pages.
+const SITE_CANONICAL_BASE = 'https://agence-woop.ca';
+const OG_IMAGE_ALT = 'WOOP — Agence marketing santé et recrutement à Montréal';
+
+// Strip the Astro base path (e.g. /Site-web/) from the URL pathname
+// so canonical URLs reflect the future domain root.
+const baseUrl = import.meta.env.BASE_URL;
+const normalizedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+const stripBase = (path: string): string => {
+  if (normalizedBase && path.startsWith(normalizedBase)) {
+    const stripped = path.slice(normalizedBase.length);
+    return stripped || '/';
+  }
+  return path || '/';
+};
+
+const canonicalUrl = `${SITE_CANONICAL_BASE}${stripBase(Astro.url.pathname)}`;
+const ogImageUrl = ogImage ? `${SITE_CANONICAL_BASE}${stripBase(ogImage)}` : undefined;
 ---
 <!DOCTYPE html>
 <html lang="fr">
@@ -36,13 +54,19 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:image:alt" content={OG_IMAGE_ALT} />
     </>
   )}
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+  {ogImageUrl && (
+    <>
+      <meta name="twitter:image" content={ogImageUrl} />
+      <meta name="twitter:image:alt" content={OG_IMAGE_ALT} />
+    </>
+  )}
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
