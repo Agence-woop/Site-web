@@ -43,6 +43,13 @@ const ogImageUrl = ogImage ? `${SITE_CANONICAL_BASE}${stripBase(ogImage)}` : und
   <title>{title}</title>
   <link rel="canonical" href={canonicalUrl} />
 
+  <link rel="icon" type="image/png" href="/favicon-96x96.png?v=1" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=1" />
+  <link rel="shortcut icon" href="/favicon.ico?v=1" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1" />
+  <meta name="apple-mobile-web-app-title" content="WOOP" />
+  <link rel="manifest" href="/site.webmanifest?v=1" />
+
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:title" content={title} />
