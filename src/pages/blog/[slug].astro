@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { entry, allPosts } = Astro.props;
-const { Content, headings } = await render(entry);
+const { Content } = await render(entry);
 const data = entry.data;
 const author = authors[data.auteur as AuthorKey];
 const category = data.categoriePrincipale as CategoryKey;
@@ -35,8 +35,6 @@ const related = allPosts
 
 const ogImage = data.vignettePartage ?? '/images/og-image.jpg';
 
-const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
-
 const dateFormatted = new Intl.DateTimeFormat('fr-CA', {
   year: 'numeric',
   month: 'long',
@@ -53,7 +51,7 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
 
     <!-- Bloc 2 à 6 : entête de l'article -->
     <header class="article-header">
-      <div class="container article-header__inner">
+      <div class="article-section">
 
         <!-- Bloc 2 : fil d'Ariane -->
         <nav class="breadcrumb" aria-label="Fil d'Ariane">
@@ -96,33 +94,15 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
       </div>
     </header>
 
-    <!-- Bloc 7 : corps -->
+    <!-- Bloc 7 : corps + barre de partage -->
     <div class="article-body-wrap">
-      <div class="container">
+      <div class="article-section">
         <div class="article-body-grid">
 
-          <!-- Table des matières collante (gauche, desktop) -->
-          {tocHeadings.length > 0 && (
-            <aside class="article-toc" aria-label="Table des matières">
-              <details class="article-toc__details" open>
-                <summary class="article-toc__summary">Sur cette page</summary>
-                <ol class="article-toc__list">
-                  {tocHeadings.map((h) => (
-                    <li class={`article-toc__item article-toc__item--h${h.depth}`}>
-                      <a href={`#${h.slug}`}>{h.text}</a>
-                    </li>
-                  ))}
-                </ol>
-              </details>
-            </aside>
-          )}
-
-          <!-- Corps Markdown -->
           <div class="article-body">
             <Content />
           </div>
 
-          <!-- Barre de partage collante (droite, desktop) -->
           <aside class="article-share" aria-label="Partager cet article">
             <span class="article-share__label">Partager</span>
             <button type="button" class="article-share__btn" data-share-copy aria-label="Copier le lien">
@@ -152,25 +132,9 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
       </div>
     </div>
 
-    <!-- Bloc 8 : appel à l'action contextuel -->
-    <section class="article-cta-section">
-      <div class="container">
-        <div class="article-cta-card">
-          <div class="article-cta-card__copy">
-            <span class="article-cta-card__eyebrow">Une question sur cet article ?</span>
-            <p class="article-cta-card__text">Réservez un appel découverte de 30 minutes, sans engagement.</p>
-          </div>
-          <a class="btn btn--cta-card" href={cta.href}>
-            {cta.label}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Bloc 9 : bloc auteur -->
+    <!-- Bloc 9 : bloc auteur (placé avant l'appel à l'action) -->
     <section class="article-author-section">
-      <div class="container">
+      <div class="article-section">
         <div class="author-block">
           <img src={author.photo} alt={author.nom} class="author-block__photo" width="120" height="120" loading="lazy" />
           <div class="author-block__body">
@@ -187,13 +151,29 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
       </div>
     </section>
 
+    <!-- Bloc 8 : appel à l'action contextuel (placé après le bloc auteur) -->
+    <section class="article-cta-section">
+      <div class="article-section">
+        <div class="article-cta-card">
+          <div class="article-cta-card__copy">
+            <span class="article-cta-card__eyebrow">Une question sur cet article ?</span>
+            <p class="article-cta-card__text">Réservez un appel découverte de 30 minutes, sans engagement.</p>
+          </div>
+          <a class="btn btn--cta-card" href={cta.href}>
+            {cta.label}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- Bloc 10 : capture d'infolettre (placeholder, à venir dans une PR ultérieure) -->
     <!-- TODO infolettre : un composant de capture d'inscription viendra ici dans une PR ultérieure. -->
 
     <!-- Bloc 11 : articles reliés -->
     {related.length > 0 && (
       <section class="article-related-section">
-        <div class="container">
+        <div class="article-section">
           <h2 class="article-related__title">Articles reliés</h2>
           <div class="article-related__grid">
             {related.map((r) => (
@@ -238,6 +218,30 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     z-index: 1;
   }
 
+  /* ===== Conteneur unique pour toutes les sections de l'article ===== */
+  .article-section {
+    width: 100%;
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .article-section {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .article-section {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+  }
+
   /* ===== Bloc 2 à 6 : entête ===== */
   .article-header {
     padding: 24px 0 32px;
@@ -245,10 +249,6 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
 
   @media (min-width: 768px) {
     .article-header { padding: 40px 0 48px; }
-  }
-
-  .article-header__inner {
-    max-width: 880px;
   }
 
   .breadcrumb {
@@ -316,13 +316,17 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     border-radius: 100px;
   }
 
+  /* Titre H1 : police Inter conservée, dégradé identique aux H2 du corps */
   .article-title {
     font-family: var(--font-body);
-    font-weight: 600;
+    font-weight: 700;
     font-size: 32px;
     line-height: 1.15;
-    color: var(--text-primary);
     margin-bottom: 24px;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   @media (min-width: 768px) {
@@ -394,7 +398,7 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
   }
 
   .article-hero {
-    margin: 0 0 0;
+    margin: 0;
     border-radius: var(--radius-bento);
     overflow: hidden;
   }
@@ -406,7 +410,7 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     object-fit: cover;
   }
 
-  /* ===== Bloc 7 : corps + TOC + partage ===== */
+  /* ===== Bloc 7 : corps + barre de partage ===== */
   .article-body-wrap {
     padding: 48px 0 64px;
   }
@@ -419,94 +423,15 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
 
   @media (min-width: 1024px) {
     .article-body-grid {
-      grid-template-columns: 220px minmax(0, 720px) 80px;
+      grid-template-columns: minmax(0, 1fr) 80px;
       gap: 48px;
-      max-width: 1140px;
-      margin: 0 auto;
       align-items: start;
     }
   }
 
-  /* Table des matières */
-  .article-toc {
-    order: 1;
-  }
-
-  @media (min-width: 1024px) {
-    .article-toc {
-      order: 0;
-      position: sticky;
-      top: 100px;
-      align-self: start;
-    }
-  }
-
-  .article-toc__details {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    padding: 16px 18px;
-  }
-
-  @media (min-width: 1024px) {
-    .article-toc__details {
-      background: transparent;
-      border: none;
-      padding: 0;
-    }
-  }
-
-  .article-toc__summary {
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--woop-pink);
-    font-weight: 700;
-    cursor: pointer;
-    list-style: none;
-    margin-bottom: 12px;
-  }
-
-  .article-toc__summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .article-toc__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .article-toc__item a {
-    display: block;
-    font-size: 13px;
-    line-height: 1.45;
-    color: var(--text-secondary);
-    text-decoration: none;
-    padding: 4px 0;
-    transition: color 200ms ease;
-  }
-
-  .article-toc__item a:hover {
-    color: var(--text-primary);
-  }
-
-  .article-toc__item--h3 {
-    padding-left: 16px;
-    font-size: 12px;
-  }
-
-  /* Corps Markdown */
   .article-body {
-    order: 0;
     color: var(--text-secondary);
-  }
-
-  @media (min-width: 1024px) {
-    .article-body { order: 1; }
+    min-width: 0;
   }
 
   .article-body :global(h2) {
@@ -634,7 +559,6 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
 
   /* Barre de partage */
   .article-share {
-    order: 2;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -733,80 +657,9 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     white-space: nowrap;
   }
 
-  /* ===== Bloc 8 : CTA contextuel ===== */
-  .article-cta-section {
-    padding: 16px 0 48px;
-  }
-
-  .article-cta-card {
-    background: var(--woop-gradient);
-    border-radius: var(--radius-bento);
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    color: #fff;
-  }
-
-  @media (min-width: 768px) {
-    .article-cta-card {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      padding: 28px 32px;
-      gap: 32px;
-    }
-  }
-
-  .article-cta-card__copy {
-    flex: 1;
-  }
-
-  .article-cta-card__eyebrow {
-    display: block;
-    font-family: var(--font-display);
-    text-transform: uppercase;
-    font-size: 18px;
-    line-height: 1;
-    margin-bottom: 6px;
-    color: #fff;
-  }
-
-  @media (min-width: 768px) {
-    .article-cta-card__eyebrow { font-size: 22px; }
-  }
-
-  .article-cta-card__text {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .btn--cta-card {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #fff;
-    color: var(--woop-pink);
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 14px;
-    padding: 14px 24px;
-    border-radius: 100px;
-    text-decoration: none;
-    transition: transform 200ms ease, box-shadow 200ms ease;
-    flex-shrink: 0;
-  }
-
-  .btn--cta-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  }
-
   /* ===== Bloc 9 : bloc auteur ===== */
   .article-author-section {
-    padding: 16px 0 48px;
+    padding: 16px 0 32px;
   }
 
   .author-block {
@@ -915,6 +768,77 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
   .author-block__linkedin:hover {
     color: var(--woop-orange);
     transform: translateX(2px);
+  }
+
+  /* ===== Bloc 8 : CTA contextuel ===== */
+  .article-cta-section {
+    padding: 16px 0 48px;
+  }
+
+  .article-cta-card {
+    background: var(--woop-gradient);
+    border-radius: var(--radius-bento);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .article-cta-card {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 32px;
+      gap: 32px;
+    }
+  }
+
+  .article-cta-card__copy {
+    flex: 1;
+  }
+
+  .article-cta-card__eyebrow {
+    display: block;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 18px;
+    line-height: 1;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .article-cta-card__eyebrow { font-size: 22px; }
+  }
+
+  .article-cta-card__text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .btn--cta-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--woop-pink);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 14px 24px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    flex-shrink: 0;
+  }
+
+  .btn--cta-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
 
   /* ===== Bloc 11 : articles reliés ===== */

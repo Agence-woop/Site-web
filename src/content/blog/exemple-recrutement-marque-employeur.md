@@ -38,7 +38,7 @@ Plus vous êtes spécialisés, plus votre marque travaille pour vous. Un cabinet
 
 ### Le ton de voix
 
-Sur LinkedIn comme sur votre site, votre ton dit quel genre de partenaire vous êtes. Trop corporate, vous attirez des relations froides. Trop décontracté, vous perdez en crédibilité auprès de comités de direction. Le bon équilibre se cherche.
+Sur LinkedIn comme sur votre site, votre ton dit quel genre de partenaire vous êtes. Trop institutionnel, vous attirez des relations froides. Trop décontracté, vous perdez en crédibilité auprès de comités de direction. Le bon équilibre se cherche.
 
 ## Les canaux d'acquisition qui fonctionnent
 
