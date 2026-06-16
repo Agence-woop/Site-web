@@ -3,12 +3,31 @@ import Button from './Button.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const navItems = [
+interface NavChild {
+  label: string;
+  href: string;
+}
+
+interface NavItem {
+  label: string;
+  href: string;
+  children?: NavChild[];
+}
+
+const navItems: NavItem[] = [
   { label: 'Santé & Médical', href: `${base}/services-medical` },
   { label: 'RH & Recrutement', href: `${base}/services-recrutement` },
   { label: 'Équipe', href: `${base}/equipe` },
   { label: 'Contact', href: `${base}/contact` },
-  { label: 'Blog', href: `${base}/blog`, badge: 'À venir' },
+  {
+    label: 'Blog',
+    href: `${base}/blog`,
+    children: [
+      { label: 'Santé & Médical', href: `${base}/blog/sante` },
+      { label: 'Recrutement & RH', href: `${base}/blog/recrutement` },
+      { label: 'Stratégie & Marque', href: `${base}/blog/strategie-marque` },
+    ],
+  },
 ];
 ---
 <header class="header" id="header">
@@ -31,15 +50,24 @@ const navItems = [
     <div class="header__menu" id="nav-menu" role="dialog" aria-label="Menu de navigation">
       <ul class="header__links">
         {navItems.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              class:list={['header__link', { 'header__link--disabled': item.disabled }]}
-              aria-disabled={item.disabled ? 'true' : undefined}
-            >
+          <li class:list={['header__item', item.children && 'header__item--has-children']}>
+            <a href={item.href} class="header__link">
               {item.label}
-              {item.badge && <span class="header__badge">{item.badge}</span>}
+              {item.children && (
+                <svg class="header__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              )}
             </a>
+            {item.children && (
+              <ul class="header__submenu">
+                {item.children.map((child) => (
+                  <li>
+                    <a href={child.href} class="header__sublink">{child.label}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>
@@ -138,13 +166,21 @@ const navItems = [
     gap: 32px;
     align-items: flex-start;
     z-index: 99;
+    overflow-y: auto;
   }
 
   .header__links {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
     width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .header__item {
+    list-style: none;
   }
 
   .header__link {
@@ -152,10 +188,11 @@ const navItems = [
     font-weight: 500;
     color: var(--text-secondary);
     transition: color 200ms ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 4px 0;
+    text-decoration: none;
   }
 
   .header__link:hover,
@@ -163,21 +200,40 @@ const navItems = [
     color: var(--text-primary);
   }
 
-  .header__link--disabled {
-    opacity: 0.5;
-    pointer-events: none;
+  .header__chevron {
+    transition: transform 200ms ease;
+    flex-shrink: 0;
   }
 
-  .header__badge {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #fff;
-    background: #22c55e;
-    border-radius: 100px;
-    padding: 2px 8px;
-    line-height: 1.4;
+  /* Sous-menu : sur mobile, liste inline indentée sous le lien parent */
+  .header__submenu {
+    list-style: none;
+    padding: 12px 0 0 16px;
+    margin: 8px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-left: 1px solid var(--border-subtle);
+  }
+
+  .header__submenu li {
+    list-style: none;
+  }
+
+  .header__sublink {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 0;
+    transition: color 200ms ease;
+  }
+
+  .header__sublink:hover,
+  .header__sublink:focus-visible {
+    color: var(--text-primary);
   }
 
   .header__actions {
@@ -219,20 +275,74 @@ const navItems = [
 
     .header__links {
       flex-direction: row;
+      align-items: center;
       gap: 28px;
       width: auto;
     }
 
+    .header__item {
+      position: relative;
+    }
+
     .header__link {
       font-size: 13px;
-      padding: 0;
+      padding: 8px 0;
+    }
+
+    /* Sous-menu desktop : panneau flottant révélé au survol et au focus */
+    .header__submenu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: -16px;
+      background: rgba(10, 10, 15, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 0;
+      gap: 4px;
+      min-width: 240px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 200ms ease, visibility 200ms ease, transform 200ms ease;
+      z-index: 102;
+    }
+
+    .header__item--has-children:hover .header__submenu,
+    .header__item--has-children:focus-within .header__submenu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .header__item--has-children:hover .header__chevron,
+    .header__item--has-children:focus-within .header__chevron {
+      transform: rotate(180deg);
+    }
+
+    .header__sublink {
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      width: 100%;
+      transition: color 200ms ease, background 200ms ease;
+    }
+
+    .header__sublink:hover,
+    .header__sublink:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .header,
     .header__burger-line,
-    .header__linkedin {
+    .header__linkedin,
+    .header__chevron,
+    .header__submenu {
       transition: none;
     }
   }
@@ -240,8 +350,8 @@ const navItems = [
 
 <script>
   const header = document.getElementById('header');
-  const burger = header?.querySelector('.header__burger');
-  const menu = header?.querySelector('.header__menu');
+  const burger = header?.querySelector('.header__burger') as HTMLButtonElement | null;
+  const menu = header?.querySelector('.header__menu') as HTMLElement | null;
 
   function toggleMenu() {
     const expanded = burger?.getAttribute('aria-expanded') === 'true';
@@ -268,9 +378,7 @@ const navItems = [
     });
   });
 
-  let lastScroll = 0;
   window.addEventListener('scroll', () => {
     header?.classList.toggle('header--scrolled', window.scrollY > 40);
-    lastScroll = window.scrollY;
   }, { passive: true });
 </script>

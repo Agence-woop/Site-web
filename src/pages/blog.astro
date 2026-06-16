@@ -1,98 +1,114 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import Button from '../components/Button.astro';
+import ArticleCard from '../components/blog/ArticleCard.astro';
+import { categoryLabels, categoryDescriptions, type CategoryKey } from '../data/categories';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const allPosts = await getCollection('blog', ({ data }) =>
+  import.meta.env.PROD ? !data.brouillon : true,
+);
+
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.datePublication.getTime() - a.data.datePublication.getTime(),
+);
+
+const featured = sortedPosts[0];
+const others = sortedPosts.slice(1);
+
+const categoryEntries: { key: CategoryKey; label: string; description: string; href: string }[] = [
+  { key: 'sante', label: categoryLabels.sante, description: categoryDescriptions.sante, href: `${base}/blog/sante` },
+  { key: 'recrutement', label: categoryLabels.recrutement, description: categoryDescriptions.recrutement, href: `${base}/blog/recrutement` },
+  { key: 'strategie-marque', label: categoryLabels['strategie-marque'], description: categoryDescriptions['strategie-marque'], href: `${base}/blog/strategie-marque` },
+];
 ---
 <Layout
-  title="WOOP — Le blog"
+  title="WOOP, le blog | Marketing santé et recrutement"
   description="Des perspectives concrètes sur le marketing en santé et en recrutement, pensées par des praticiens du terrain. Découvrez le blog WOOP."
   ogImage="/images/og-image.jpg"
 >
 
-  <!-- SECTION 1 — HERO -->
-  <section class="blog-hero">
+  <!-- Bloc 1 : intro -->
+  <section class="blog-intro">
     <div class="container">
-      <div class="blog-hero__watermark" aria-hidden="true">BLOG</div>
-      <span class="blog-hero__eyebrow">Bient&ocirc;t en ligne</span>
-      <h1 class="blog-hero__title">
-        <span class="blog-hero__line">Le blog WOOP.</span>
-        <span class="gradient-accent">Bient&ocirc;t.</span>
-      </h1>
-      <p class="blog-hero__subtitle">
+      <span class="blog-intro__kicker">Le blog WOOP</span>
+      <h1 class="blog-intro__title">Des analyses du terrain.</h1>
+      <p class="blog-intro__tagline">
         Des perspectives concr&egrave;tes sur le marketing en sant&eacute; et en recrutement, pens&eacute;es par des praticiens du terrain.
       </p>
-      <Button variant="primary" href={`${base}/contact`}>Discutons de votre projet</Button>
     </div>
   </section>
 
-  <!-- SECTION 2 — AU PROGRAMME -->
-  <section class="section">
+  <!-- Bloc 2 : les trois cartes de catégorie, cliquables vers leur pôle -->
+  <section class="blog-categories">
     <div class="container">
-      <span class="kicker">01 — Au programme</span>
-      <h2 class="section-title">Ce que vous lirez ici.</h2>
-
-      <div class="blog-grid">
-        <!-- BENTO 1 — Santé & Médical -->
-        <div class="blog-card">
-          <div class="blog-card__icon">
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7 7-7z"/></svg>
-          </div>
-          <h3 class="blog-card__title">Sant&eacute; & M&eacute;dical</h3>
-          <p class="blog-card__text">Acquisition de patients, branding clinique, marque personnelle pour praticiens. Des analyses pour ceux qui dirigent une clinique ou un cabinet de sant&eacute;.</p>
-        </div>
-
-        <!-- BENTO 2 — Recrutement -->
-        <div class="blog-card">
-          <div class="blog-card__icon">
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-          </div>
-          <h3 class="blog-card__title">Recrutement</h3>
-          <p class="blog-card__text">Acquisition de mandats, attraction de candidats, marque cabinet et marque consultant. Pour les cabinets et consultants RH qui veulent sortir du lot.</p>
-        </div>
-
-        <!-- BENTO 3 — Stratégie & Marque (signature gradient) -->
-        <div class="blog-card blog-card--signature">
-          <div class="blog-card__icon">
-            <img src={`${base}/images/icons/icon-branding-clinique.svg`} alt="" class="blog-card__icon-img" />
-          </div>
-          <h3 class="blog-card__title">Strat&eacute;gie & Marque</h3>
-          <p class="blog-card__text">Branding, positionnement, design system, identit&eacute; visuelle. Tout ce qui construit une marque qui attire, dans n'importe quel secteur.</p>
-        </div>
+      <span class="kicker">Explorer par pôle</span>
+      <div class="blog-categories__grid">
+        {categoryEntries.map((entry) => (
+          <a href={entry.href} class:list={['blog-category-card', `blog-category-card--${entry.key}`]}>
+            <span class={`blog-category-card__badge blog-category-card__badge--${entry.key}`}>{entry.label}</span>
+            <h2 class="blog-category-card__title">{entry.label}</h2>
+            <p class="blog-category-card__text">{entry.description}</p>
+            <span class="blog-category-card__link">
+              Découvrir les articles
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+            </span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
 
+  <!-- Bloc 3 : article vedette (article le plus récent, en grande carte) -->
+  {featured && (
+    <section class="blog-featured">
+      <div class="container">
+        <span class="kicker">À la une</span>
+        <ArticleCard post={featured} variant="featured" showCategory={true} />
+      </div>
+    </section>
+  )}
+
+  <!-- Bloc 4 : derniers articles (le reste, en grille). Masqué si vide. -->
+  {others.length > 0 && (
+    <section class="blog-latest">
+      <div class="container">
+        <span class="kicker">Derniers articles</span>
+        <div class="blog-latest__grid">
+          {others.map((post) => (
+            <ArticleCard post={post} showCategory={true} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Si aucun article : message dédié -->
+  {!featured && (
+    <section class="blog-empty-section">
+      <div class="container">
+        <p class="blog-empty">Les premiers articles arrivent bientôt. Revenez nous voir.</p>
+      </div>
+    </section>
+  )}
+
+  <!-- Bloc 5 : capture d'infolettre (placeholder, à venir dans la PR suivante) -->
+  <!-- TODO infolettre : un composant de capture d'inscription viendra ici dans une PR ultérieure. -->
+
 </Layout>
 
 <style>
-  /* ===== HERO ===== */
-  .blog-hero {
-    position: relative;
-    padding: 120px 0 48px;
-    overflow: hidden;
+  /* ===== Intro ===== */
+  .blog-intro {
+    padding: 96px 0 32px;
   }
 
   @media (min-width: 768px) {
-    .blog-hero { padding: 140px 0 64px; }
+    .blog-intro { padding: 120px 0 48px; }
   }
 
-  .blog-hero__watermark {
-    position: absolute;
-    font-family: var(--font-display);
-    font-size: 40vw;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.12);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: -1;
-    letter-spacing: -0.02em;
-  }
-
-  .blog-hero__eyebrow {
+  .blog-intro__kicker {
     display: inline-block;
     font-size: 11px;
     letter-spacing: 0.2em;
@@ -103,81 +119,85 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     border-radius: 100px;
     padding: 8px 18px;
     font-weight: 700;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
-  .blog-hero__title {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 28px;
-    line-height: 1.05;
-    margin-bottom: 24px;
+  .blog-intro__title {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 16px;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     max-width: 900px;
   }
 
   @media (min-width: 768px) {
-    .blog-hero__title { font-size: 42px; }
+    .blog-intro__title { font-size: 64px; }
   }
 
   @media (min-width: 1024px) {
-    .blog-hero__title { font-size: 52px; }
+    .blog-intro__title { font-size: 84px; }
   }
 
-  .blog-hero__line {
-    font-family: var(--font-display);
-    text-transform: uppercase;
-    color: var(--text-primary);
-  }
-
-  .blog-hero__subtitle {
+  .blog-intro__tagline {
     font-size: 16px;
-    line-height: 1.65;
+    line-height: 1.6;
     color: var(--text-secondary);
-    max-width: 640px;
-    margin-bottom: 32px;
+    max-width: 720px;
+    margin: 0;
   }
 
   @media (min-width: 768px) {
-    .blog-hero__subtitle { font-size: 18px; }
+    .blog-intro__tagline { font-size: 18px; }
   }
 
   @media (min-width: 1024px) {
-    .blog-hero__subtitle { font-size: 20px; }
+    .blog-intro__tagline { font-size: 20px; }
   }
 
-  /* ===== GRID ===== */
-  .blog-grid {
+  /* ===== Categories ===== */
+  .blog-categories {
+    padding: 32px 0 48px;
+  }
+
+  @media (min-width: 768px) {
+    .blog-categories { padding: 48px 0 64px; }
+  }
+
+  .blog-categories__grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-    margin-top: 32px;
+    gap: 16px;
+    margin-top: 24px;
   }
 
   @media (min-width: 768px) {
-    .blog-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .blog-card--signature {
-      grid-column: 1 / 3;
+    .blog-categories__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
   }
 
-  /* ===== CARDS ===== */
-  .blog-card {
+  .blog-category-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
     background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-bento);
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    padding: 28px 24px;
+    text-decoration: none;
+    color: inherit;
     position: relative;
     overflow: hidden;
+    transition: border-color 200ms ease, transform 200ms ease;
   }
 
-  .blog-card::before {
+  .blog-category-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -187,71 +207,134 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     background: var(--woop-gradient);
   }
 
-  .blog-card--signature {
-    background: linear-gradient(135deg, #FA6244 0%, #E62B7F 100%);
-    border: none;
+  .blog-category-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
   }
 
-  .blog-card--signature::before {
-    display: none;
-  }
-
-  .blog-card__icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: var(--woop-gradient);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    flex-shrink: 0;
-  }
-
-  .blog-card__icon-img {
-    width: 56px;
-    height: 56px;
-    display: block;
-  }
-
-  @media (max-width: 599px) {
-    .blog-card__icon { width: 64px; height: 64px; }
-    .blog-card__icon svg { width: 45px; height: 45px; }
-    .blog-card__icon-img { width: 45px; height: 45px; }
-  }
-
-  .blog-card--signature .blog-card__icon {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .blog-card__title {
-    font-family: var(--font-display);
-    font-size: 24px;
+  .blog-category-card__badge {
+    display: inline-flex;
+    align-self: flex-start;
+    font-size: 11px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 100px;
+    color: #fff;
+  }
+
+  .blog-category-card__badge--sante { background: var(--woop-pink); }
+  .blog-category-card__badge--recrutement { background: var(--woop-orange); }
+  .blog-category-card__badge--strategie-marque { background: var(--woop-gradient); }
+
+  .blog-category-card__title {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 24px;
     line-height: 1.05;
     color: var(--text-primary);
+    margin: 0;
   }
 
   @media (min-width: 768px) {
-    .blog-card__title { font-size: 28px; }
+    .blog-category-card__title { font-size: 26px; }
   }
 
-  .blog-card--signature .blog-card__title {
-    color: #fff;
-  }
-
-  .blog-card__text {
+  .blog-category-card__text {
     font-size: 14px;
     line-height: 1.6;
     color: var(--text-secondary);
+    margin: 0;
+    flex: 1;
   }
 
   @media (min-width: 1024px) {
-    .blog-card__text { font-size: 16px; }
+    .blog-category-card__text { font-size: 15px; }
   }
 
-  .blog-card--signature .blog-card__text {
-    color: #fff;
-    opacity: 0.92;
+  .blog-category-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--woop-pink);
+    margin-top: 8px;
+    transition: color 200ms ease, transform 200ms ease;
+  }
+
+  .blog-category-card:hover .blog-category-card__link {
+    color: var(--woop-orange);
+    transform: translateX(2px);
+  }
+
+  /* ===== Article vedette ===== */
+  .blog-featured {
+    padding: 16px 0 48px;
+  }
+
+  @media (min-width: 768px) {
+    .blog-featured { padding: 32px 0 64px; }
+  }
+
+  /* ===== Derniers articles ===== */
+  .blog-latest {
+    padding: 16px 0 80px;
+  }
+
+  @media (min-width: 768px) {
+    .blog-latest { padding: 32px 0 96px; }
+  }
+
+  .blog-latest__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  @media (min-width: 640px) {
+    .blog-latest__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-latest__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* ===== État vide ===== */
+  .blog-empty-section {
+    padding: 32px 0 96px;
+  }
+
+  .blog-empty {
+    font-size: 16px;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 40px 24px;
+    text-align: center;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blog-category-card,
+    .blog-category-card__link {
+      transition: none;
+    }
+
+    .blog-category-card:hover {
+      transform: none;
+    }
+
+    .blog-category-card:hover .blog-category-card__link {
+      transform: none;
+    }
   }
 </style>
