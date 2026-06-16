@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { authors, type AuthorKey } from '../../data/authors';
-import { categoryLabels, getCtaForCategory, type CategoryKey } from '../../data/categories';
+import { categoryLabels, getCtaForArticle, type CategoryKey } from '../../data/categories';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -22,7 +22,7 @@ const data = entry.data;
 const author = authors[data.auteur as AuthorKey];
 const category = data.categoriePrincipale as CategoryKey;
 const categoryLabel = categoryLabels[category];
-const cta = getCtaForCategory(category, base);
+const cta = getCtaForArticle(category, data.auteur as AuthorKey, base);
 
 const rawBody = entry.body ?? '';
 const wordCount = rawBody.trim().split(/\s+/).filter(Boolean).length;
