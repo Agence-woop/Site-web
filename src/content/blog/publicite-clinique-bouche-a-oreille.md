@@ -5,7 +5,7 @@ categoriePrincipale: "sante"
 thematiques: ["Acquisition de patients", "Publicité en ligne"]
 auteur: "emma"
 datePublication: 2026-06-16
-imageEntete: "/images/blog/a-venir.webp"
+imageEntete: "/images/blog/publicite-clinique-bouche-a-oreille.webp"
 imageEnteteAlt: "Une personne cherche une clinique sur son téléphone tard le soir, le visage éclairé par l'écran."
 brouillon: false
 ---
