@@ -49,18 +49,26 @@ const navItems: NavItem[] = [
 
     <div class="header__menu" id="nav-menu" role="dialog" aria-label="Menu de navigation">
       <ul class="header__links">
-        {navItems.map((item) => (
+        {navItems.map((item, idx) => (
           <li class:list={['header__item', item.children && 'header__item--has-children']}>
-            <a href={item.href} class="header__link">
-              {item.label}
+            <div class="header__item-head">
+              <a href={item.href} class="header__link">{item.label}</a>
               {item.children && (
-                <svg class="header__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
+                <button
+                  type="button"
+                  class="header__toggle"
+                  aria-expanded="false"
+                  aria-controls={`header-submenu-${idx}`}
+                  aria-label={`Dérouler le sous-menu ${item.label}`}
+                >
+                  <svg class="header__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
               )}
-            </a>
+            </div>
             {item.children && (
-              <ul class="header__submenu">
+              <ul class="header__submenu" id={`header-submenu-${idx}`}>
                 {item.children.map((child) => (
                   <li>
                     <a href={child.href} class="header__sublink">{child.label}</a>
@@ -183,6 +191,12 @@ const navItems: NavItem[] = [
     list-style: none;
   }
 
+  .header__item-head {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
   .header__link {
     font-size: 18px;
     font-weight: 500;
@@ -200,20 +214,57 @@ const navItems: NavItem[] = [
     color: var(--text-primary);
   }
 
+  /* Bouton de bascule du sous-menu (mobile : clic ; desktop : indicateur visuel + clavier) */
+  .header__toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    margin: -4px 0 -4px 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color 200ms ease, background 200ms ease;
+  }
+
+  .header__toggle:hover,
+  .header__toggle:focus-visible {
+    color: var(--text-primary);
+  }
+
+  .header__toggle:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 2px;
+  }
+
   .header__chevron {
     transition: transform 200ms ease;
     flex-shrink: 0;
   }
 
-  /* Sous-menu : sur mobile, liste inline indentée sous le lien parent */
+  /* Chevron en position fermée par défaut, ouvert quand le bouton est expanded */
+  .header__toggle[aria-expanded="true"] .header__chevron {
+    transform: rotate(180deg);
+  }
+
+  /*
+   * Sous-menu mobile : replié par défaut, déroulé quand l'item parent
+   * porte la classe .header__item--open (gérée par le script de bascule).
+   */
   .header__submenu {
     list-style: none;
     padding: 12px 0 0 16px;
     margin: 8px 0 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 14px;
     border-left: 1px solid var(--border-subtle);
+  }
+
+  .header__item--open > .header__submenu {
+    display: flex;
   }
 
   .header__submenu li {
@@ -289,10 +340,15 @@ const navItems: NavItem[] = [
       padding: 8px 0;
     }
 
-    /* Sous-menu desktop : panneau flottant révélé au survol et au focus */
+    /*
+     * Sous-menu desktop : panneau flottant révélé au survol et au focus.
+     * top: calc(100% + 24px) pour laisser un écart net avec la barre de
+     * navigation (et le bouton « Réserver un appel découverte » qui est
+     * plus haut que le texte des liens).
+     */
     .header__submenu {
       position: absolute;
-      top: calc(100% + 6px);
+      top: calc(100% + 24px);
       left: -16px;
       background: rgba(10, 10, 15, 0.97);
       backdrop-filter: blur(20px);
@@ -308,8 +364,11 @@ const navItems: NavItem[] = [
       transform: translateY(8px);
       transition: opacity 200ms ease, visibility 200ms ease, transform 200ms ease;
       z-index: 102;
+      /* Sur desktop on garde display: flex pour que le hover puisse animer */
+      display: flex;
     }
 
+    /* Sur desktop on n'utilise pas .header__item--open ; le hover/focus suffit. */
     .header__item--has-children:hover .header__submenu,
     .header__item--has-children:focus-within .header__submenu {
       opacity: 1;
@@ -330,10 +389,11 @@ const navItems: NavItem[] = [
       transition: color 200ms ease, background 200ms ease;
     }
 
+    /* Au survol et au focus, fond en dégradé WOOP + texte blanc */
     .header__sublink:hover,
     .header__sublink:focus-visible {
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-primary);
+      background: var(--woop-gradient);
+      color: #fff;
     }
   }
 
@@ -375,6 +435,19 @@ const navItems: NavItem[] = [
       if (burger?.getAttribute('aria-expanded') === 'true') {
         toggleMenu();
       }
+    });
+  });
+
+  // Bouton chevron : bascule l'état déroulé/replié du sous-menu (mobile).
+  // Sur desktop, le sous-menu est piloté par hover/focus-within (CSS pur)
+  // et cette bascule reste sans effet visible.
+  menu?.querySelectorAll<HTMLButtonElement>('.header__toggle').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.setAttribute('aria-label', expanded ? `Dérouler le sous-menu ${btn.textContent?.trim() ?? ''}` : `Replier le sous-menu`);
+      btn.closest('.header__item')?.classList.toggle('header__item--open', !expanded);
     });
   });
 
