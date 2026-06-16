@@ -1,0 +1,1030 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { authors, type AuthorKey } from '../../data/authors';
+import { categoryLabels, getCtaForCategory, type CategoryKey } from '../../data/categories';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) =>
+    import.meta.env.PROD ? !data.brouillon : true,
+  );
+  return posts.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry, allPosts: posts },
+  }));
+}
+
+const { entry, allPosts } = Astro.props;
+const { Content, headings } = await render(entry);
+const data = entry.data;
+const author = authors[data.auteur as AuthorKey];
+const category = data.categoriePrincipale as CategoryKey;
+const categoryLabel = categoryLabels[category];
+const cta = getCtaForCategory(category, base);
+
+const rawBody = entry.body ?? '';
+const wordCount = rawBody.trim().split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.ceil(wordCount / 220));
+
+const related = allPosts
+  .filter((e) => e.id !== entry.id && e.data.categoriePrincipale === data.categoriePrincipale)
+  .sort((a, b) => b.data.datePublication.getTime() - a.data.datePublication.getTime())
+  .slice(0, 3);
+
+const ogImage = data.vignettePartage ?? '/images/og-image.jpg';
+
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+const dateFormatted = new Intl.DateTimeFormat('fr-CA', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(data.datePublication);
+
+const articleUrl = new URL(`${base}/blog/${entry.id}/`, Astro.site).href;
+const pageTitle = `${data.titre} | Blog WOOP`;
+const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`;
+const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${encodeURIComponent(`${data.resume}\n\n${articleUrl}`)}`;
+---
+<Layout title={pageTitle} description={data.resume} ogImage={ogImage}>
+  <article class="article">
+
+    <!-- Bloc 2 à 6 : entête de l'article -->
+    <header class="article-header">
+      <div class="container article-header__inner">
+
+        <!-- Bloc 2 : fil d'Ariane -->
+        <nav class="breadcrumb" aria-label="Fil d'Ariane">
+          <a href={`${base}/blog`} class="breadcrumb__link">Blog</a>
+          <span class="breadcrumb__sep" aria-hidden="true">/</span>
+          <span class="breadcrumb__current">{categoryLabel}</span>
+        </nav>
+
+        <!-- Bloc 3 : étiquette de catégorie et thématiques -->
+        <div class="article-tags">
+          <span class={`article-category article-category--${category}`}>{categoryLabel}</span>
+          {data.thematiques && data.thematiques.map((t) => (
+            <span class="article-pill">{t}</span>
+          ))}
+        </div>
+
+        <!-- Bloc 4 : titre H1 -->
+        <h1 class="article-title">{data.titre}</h1>
+
+        <!-- Bloc 5 : signature, date, temps de lecture -->
+        <div class="article-meta">
+          <a href={author.linkedin} target="_blank" rel="noopener noreferrer" class="article-meta__author">
+            <img src={author.photo} alt="" class="article-meta__avatar" width="40" height="40" loading="eager" />
+            <span class="article-meta__author-text">
+              <span class="article-meta__name">{author.nom}</span>
+              <span class="article-meta__role">{author.role}</span>
+            </span>
+          </a>
+          <div class="article-meta__details">
+            <time datetime={data.datePublication.toISOString()}>{dateFormatted}</time>
+            <span class="article-meta__dot" aria-hidden="true">·</span>
+            <span>{readingTime} min de lecture</span>
+          </div>
+        </div>
+
+        <!-- Bloc 6 : image d'entête -->
+        <figure class="article-hero">
+          <img src={data.imageEntete} alt={data.imageEnteteAlt} width="1200" height="675" loading="eager" />
+        </figure>
+      </div>
+    </header>
+
+    <!-- Bloc 7 : corps -->
+    <div class="article-body-wrap">
+      <div class="container">
+        <div class="article-body-grid">
+
+          <!-- Table des matières collante (gauche, desktop) -->
+          {tocHeadings.length > 0 && (
+            <aside class="article-toc" aria-label="Table des matières">
+              <details class="article-toc__details" open>
+                <summary class="article-toc__summary">Sur cette page</summary>
+                <ol class="article-toc__list">
+                  {tocHeadings.map((h) => (
+                    <li class={`article-toc__item article-toc__item--h${h.depth}`}>
+                      <a href={`#${h.slug}`}>{h.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            </aside>
+          )}
+
+          <!-- Corps Markdown -->
+          <div class="article-body">
+            <Content />
+          </div>
+
+          <!-- Barre de partage collante (droite, desktop) -->
+          <aside class="article-share" aria-label="Partager cet article">
+            <span class="article-share__label">Partager</span>
+            <button type="button" class="article-share__btn" data-share-copy aria-label="Copier le lien">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+              </svg>
+              <span class="article-share__btn-label">Copier</span>
+              <span class="article-share__feedback" data-share-feedback hidden>Lien copié</span>
+            </button>
+            <a href={linkedinShareUrl} target="_blank" rel="noopener noreferrer" class="article-share__btn" aria-label="Partager sur LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg>
+              <span class="article-share__btn-label">LinkedIn</span>
+            </a>
+            <a href={mailtoUrl} class="article-share__btn" aria-label="Partager par courriel">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="M22 7l-10 7L2 7" />
+              </svg>
+              <span class="article-share__btn-label">Courriel</span>
+            </a>
+          </aside>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloc 8 : appel à l'action contextuel -->
+    <section class="article-cta-section">
+      <div class="container">
+        <div class="article-cta-card">
+          <div class="article-cta-card__copy">
+            <span class="article-cta-card__eyebrow">Une question sur cet article ?</span>
+            <p class="article-cta-card__text">Réservez un appel découverte de 30 minutes, sans engagement.</p>
+          </div>
+          <a class="btn btn--cta-card" href={cta.href}>
+            {cta.label}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bloc 9 : bloc auteur -->
+    <section class="article-author-section">
+      <div class="container">
+        <div class="author-block">
+          <img src={author.photo} alt={author.nom} class="author-block__photo" width="120" height="120" loading="lazy" />
+          <div class="author-block__body">
+            <span class="author-block__eyebrow">À propos de l'auteur</span>
+            <h2 class="author-block__name">{author.nom}</h2>
+            <p class="author-block__role">{author.role}</p>
+            <p class="author-block__bio">{author.bio}</p>
+            <a href={author.linkedin} target="_blank" rel="noopener noreferrer" class="author-block__linkedin">
+              Voir le profil LinkedIn
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bloc 10 : capture d'infolettre (placeholder, à venir dans une PR ultérieure) -->
+    <!-- TODO infolettre : un composant de capture d'inscription viendra ici dans une PR ultérieure. -->
+
+    <!-- Bloc 11 : articles reliés -->
+    {related.length > 0 && (
+      <section class="article-related-section">
+        <div class="container">
+          <h2 class="article-related__title">Articles reliés</h2>
+          <div class="article-related__grid">
+            {related.map((r) => (
+              <a href={`${base}/blog/${r.id}/`} class="related-card">
+                <div class="related-card__media">
+                  <img src={r.data.imageEntete} alt={r.data.imageEnteteAlt} loading="lazy" />
+                </div>
+                <span class="related-card__category">{categoryLabels[r.data.categoriePrincipale as CategoryKey]}</span>
+                <h3 class="related-card__title">{r.data.titre}</h3>
+                <p class="related-card__resume">{r.data.resume}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+  </article>
+</Layout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-share-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        const feedback = btn.querySelector<HTMLElement>('[data-share-feedback]');
+        if (feedback) {
+          feedback.removeAttribute('hidden');
+          window.setTimeout(() => feedback.setAttribute('hidden', ''), 2000);
+        }
+      } catch (err) {
+        // Clipboard refusé : l'utilisateur peut copier l'URL manuellement.
+      }
+    });
+  });
+</script>
+
+<style>
+  /* ===== Wrapper article ===== */
+  .article {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== Bloc 2 à 6 : entête ===== */
+  .article-header {
+    padding: 24px 0 32px;
+  }
+
+  @media (min-width: 768px) {
+    .article-header { padding: 40px 0 48px; }
+  }
+
+  .article-header__inner {
+    max-width: 880px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .breadcrumb__link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .breadcrumb__link:hover {
+    color: var(--text-primary);
+  }
+
+  .breadcrumb__sep {
+    opacity: 0.5;
+  }
+
+  .breadcrumb__current {
+    color: var(--woop-pink);
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .article-category {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 100px;
+    color: #fff;
+  }
+
+  .article-category--sante { background: var(--woop-pink); }
+  .article-category--recrutement { background: var(--woop-orange); }
+  .article-category--strategie-marque { background: var(--woop-gradient); }
+
+  .article-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    padding: 7px 14px;
+    border-radius: 100px;
+  }
+
+  .article-title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .article-title { font-size: 44px; }
+  }
+
+  @media (min-width: 1024px) {
+    .article-title { font-size: 52px; }
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .article-meta__author {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 200ms ease;
+  }
+
+  .article-meta__author:hover {
+    opacity: 0.85;
+  }
+
+  .article-meta__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border-subtle);
+  }
+
+  .article-meta__author-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+  }
+
+  .article-meta__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .article-meta__role {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .article-meta__details {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .article-meta__dot {
+    opacity: 0.6;
+  }
+
+  .article-hero {
+    margin: 0 0 0;
+    border-radius: var(--radius-bento);
+    overflow: hidden;
+  }
+
+  .article-hero img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  /* ===== Bloc 7 : corps + TOC + partage ===== */
+  .article-body-wrap {
+    padding: 48px 0 64px;
+  }
+
+  .article-body-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 1024px) {
+    .article-body-grid {
+      grid-template-columns: 220px minmax(0, 720px) 80px;
+      gap: 48px;
+      max-width: 1140px;
+      margin: 0 auto;
+      align-items: start;
+    }
+  }
+
+  /* Table des matières */
+  .article-toc {
+    order: 1;
+  }
+
+  @media (min-width: 1024px) {
+    .article-toc {
+      order: 0;
+      position: sticky;
+      top: 100px;
+      align-self: start;
+    }
+  }
+
+  .article-toc__details {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+
+  @media (min-width: 1024px) {
+    .article-toc__details {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  .article-toc__summary {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    margin-bottom: 12px;
+  }
+
+  .article-toc__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .article-toc__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .article-toc__item a {
+    display: block;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 4px 0;
+    transition: color 200ms ease;
+  }
+
+  .article-toc__item a:hover {
+    color: var(--text-primary);
+  }
+
+  .article-toc__item--h3 {
+    padding-left: 16px;
+    font-size: 12px;
+  }
+
+  /* Corps Markdown */
+  .article-body {
+    order: 0;
+    color: var(--text-secondary);
+  }
+
+  @media (min-width: 1024px) {
+    .article-body { order: 1; }
+  }
+
+  .article-body :global(h2) {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 26px;
+    line-height: 1.1;
+    margin: 48px 0 16px;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    scroll-margin-top: 100px;
+  }
+
+  @media (min-width: 768px) {
+    .article-body :global(h2) { font-size: 32px; margin-top: 64px; }
+  }
+
+  .article-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .article-body :global(h3) {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 20px;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin: 32px 0 12px;
+    scroll-margin-top: 100px;
+  }
+
+  @media (min-width: 768px) {
+    .article-body :global(h3) { font-size: 22px; }
+  }
+
+  .article-body :global(p) {
+    font-size: 16px;
+    line-height: 1.75;
+    margin: 0 0 18px;
+  }
+
+  @media (min-width: 1024px) {
+    .article-body :global(p) { font-size: 18px; }
+  }
+
+  .article-body :global(p strong) {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .article-body :global(a) {
+    color: var(--woop-pink);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(230, 43, 127, 0.32);
+    transition: border-color 200ms ease, color 200ms ease;
+  }
+
+  .article-body :global(a:hover) {
+    color: var(--woop-orange);
+    border-bottom-color: var(--woop-orange);
+  }
+
+  .article-body :global(ul),
+  .article-body :global(ol) {
+    margin: 0 0 20px;
+    padding-left: 24px;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 1024px) {
+    .article-body :global(ul),
+    .article-body :global(ol) { font-size: 18px; }
+  }
+
+  .article-body :global(ul) { list-style: disc; }
+  .article-body :global(ol) { list-style: decimal; }
+
+  .article-body :global(li) {
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+
+  .article-body :global(li::marker) {
+    color: var(--woop-pink);
+  }
+
+  .article-body :global(blockquote) {
+    margin: 24px 0;
+    padding: 12px 0 12px 20px;
+    border-left: 3px solid var(--woop-pink);
+    color: var(--text-primary);
+    font-style: italic;
+  }
+
+  .article-body :global(code) {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+    font-size: 0.92em;
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .article-body :global(pre) {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+
+  .article-body :global(pre code) {
+    background: transparent;
+    padding: 0;
+  }
+
+  .article-body :global(img) {
+    border-radius: 12px;
+    margin: 24px 0;
+  }
+
+  /* Barre de partage */
+  .article-share {
+    order: 2;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  @media (min-width: 1024px) {
+    .article-share {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      padding: 0;
+      border: none;
+      position: sticky;
+      top: 100px;
+      align-self: start;
+    }
+  }
+
+  .article-share__label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    flex-basis: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .article-share__label {
+      flex-basis: auto;
+      margin-bottom: 4px;
+    }
+  }
+
+  .article-share__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 10px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
+    position: relative;
+    font-family: var(--font-body);
+  }
+
+  .article-share__btn:hover {
+    color: var(--text-primary);
+    border-color: var(--woop-pink);
+  }
+
+  @media (min-width: 1024px) {
+    .article-share__btn {
+      width: 56px;
+      height: 56px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    .article-share__btn-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  .article-share__feedback {
+    position: absolute;
+    top: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text-primary);
+    color: var(--bg-deep);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  /* ===== Bloc 8 : CTA contextuel ===== */
+  .article-cta-section {
+    padding: 16px 0 48px;
+  }
+
+  .article-cta-card {
+    background: var(--woop-gradient);
+    border-radius: var(--radius-bento);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .article-cta-card {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 32px;
+      gap: 32px;
+    }
+  }
+
+  .article-cta-card__copy {
+    flex: 1;
+  }
+
+  .article-cta-card__eyebrow {
+    display: block;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 18px;
+    line-height: 1;
+    margin-bottom: 6px;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .article-cta-card__eyebrow { font-size: 22px; }
+  }
+
+  .article-cta-card__text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .btn--cta-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--woop-pink);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 14px 24px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+    flex-shrink: 0;
+  }
+
+  .btn--cta-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ===== Bloc 9 : bloc auteur ===== */
+  .article-author-section {
+    padding: 16px 0 48px;
+  }
+
+  .author-block {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .author-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  @media (min-width: 640px) {
+    .author-block {
+      flex-direction: row;
+      align-items: center;
+      gap: 28px;
+      padding: 28px 32px;
+    }
+  }
+
+  .author-block__photo {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-subtle);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 640px) {
+    .author-block__photo {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+  .author-block__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .author-block__eyebrow {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--woop-pink);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .author-block__name {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 22px;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+  }
+
+  @media (min-width: 768px) {
+    .author-block__name { font-size: 26px; }
+  }
+
+  .author-block__role {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 10px;
+  }
+
+  .author-block__bio {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin: 0 0 14px;
+  }
+
+  @media (min-width: 1024px) {
+    .author-block__bio { font-size: 15px; }
+  }
+
+  .author-block__linkedin {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--woop-pink);
+    text-decoration: none;
+    transition: color 200ms ease, transform 200ms ease;
+  }
+
+  .author-block__linkedin:hover {
+    color: var(--woop-orange);
+    transform: translateX(2px);
+  }
+
+  /* ===== Bloc 11 : articles reliés ===== */
+  .article-related-section {
+    padding: 16px 0 80px;
+  }
+
+  .article-related__title {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 24px;
+    line-height: 1.1;
+    color: var(--text-primary);
+    margin: 0 0 24px;
+  }
+
+  @media (min-width: 768px) {
+    .article-related__title { font-size: 30px; margin-bottom: 32px; }
+  }
+
+  .article-related__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .article-related__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .article-related__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+
+  .related-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .related-card__media {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  .related-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .related-card__category {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--woop-pink);
+  }
+
+  .related-card__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .related-card__resume {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn--cta-card,
+    .related-card,
+    .author-block__linkedin,
+    .article-share__btn,
+    .breadcrumb__link {
+      transition: none;
+    }
+
+    .btn--cta-card:hover,
+    .related-card:hover,
+    .author-block__linkedin:hover {
+      transform: none;
+    }
+  }
+</style>
