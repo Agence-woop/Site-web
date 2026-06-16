@@ -47,7 +47,6 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
       <div class="blog-categories__grid">
         {categoryEntries.map((entry) => (
           <a href={entry.href} class:list={['blog-category-card', `blog-category-card--${entry.key}`]}>
-            <span class={`blog-category-card__badge blog-category-card__badge--${entry.key}`}>{entry.label}</span>
             <h2 class="blog-category-card__title">{entry.label}</h2>
             <p class="blog-category-card__text">{entry.description}</p>
             <span class="blog-category-card__link">
@@ -211,22 +210,6 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     border-color: var(--border-accent);
     transform: translateY(-2px);
   }
-
-  .blog-category-card__badge {
-    display: inline-flex;
-    align-self: flex-start;
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    font-weight: 700;
-    padding: 6px 14px;
-    border-radius: 100px;
-    color: #fff;
-  }
-
-  .blog-category-card__badge--sante { background: var(--woop-pink); }
-  .blog-category-card__badge--recrutement { background: var(--woop-orange); }
-  .blog-category-card__badge--strategie-marque { background: var(--woop-gradient); }
 
   .blog-category-card__title {
     font-family: var(--font-display);
