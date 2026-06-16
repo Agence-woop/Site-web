@@ -1,3 +1,5 @@
+import type { AuthorKey } from './authors';
+
 export type CategoryKey = 'sante' | 'recrutement' | 'strategie-marque';
 
 export const categoryLabels: Record<CategoryKey, string> = {
@@ -25,6 +27,10 @@ export interface CtaConfig {
   href: string;
 }
 
+/**
+ * CTA contextuel par catégorie. Utilisé par les pages de pôle
+ * (src/components/blog/CategoryHub.astro).
+ */
 export function getCtaForCategory(category: CategoryKey, base: string): CtaConfig {
   switch (category) {
     case 'sante':
@@ -32,6 +38,23 @@ export function getCtaForCategory(category: CategoryKey, base: string): CtaConfi
     case 'recrutement':
       return { label: 'Parler à Kevin', href: `${base}/contact?personne=kevin` };
     case 'strategie-marque':
-      return { label: 'Parler à Kevin', href: `${base}/contact?personne=kevin` };
+      return { label: 'Parler à Gauthier ou Kevin', href: `${base}/contact` };
   }
+}
+
+/**
+ * CTA pour une page d'article. Si l'auteur est Emma, on surcharge le CTA
+ * par catégorie pour rediriger vers son entrée, peu importe la catégorie.
+ * Sinon on retombe sur le CTA par catégorie. À n'utiliser que sur
+ * src/pages/blog/[slug].astro (les pages de pôle gardent le CTA catégorie).
+ */
+export function getCtaForArticle(
+  category: CategoryKey,
+  author: AuthorKey,
+  base: string,
+): CtaConfig {
+  if (author === 'emma') {
+    return { label: 'Parler à Emma', href: `${base}/contact?personne=emma` };
+  }
+  return getCtaForCategory(category, base);
 }

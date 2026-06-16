@@ -79,6 +79,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
                 <option value="Peu importe" selected>Peu importe</option>
                 <option value="Gauthier">Gauthier</option>
                 <option value="Kevin">Kevin</option>
+                <option value="Emma">Emma</option>
               </select>
             </div>
             <div class="contact-form__field">
@@ -555,7 +556,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   const personneSelect = document.getElementById('personne-souhaitee') as HTMLSelectElement | null;
   if (personneSelect) {
     const personne = new URLSearchParams(window.location.search).get('personne');
-    if (personne === 'gauthier' || personne === 'kevin') {
+    if (personne === 'gauthier' || personne === 'kevin' || personne === 'emma') {
       const targetValue = personne.charAt(0).toUpperCase() + personne.slice(1);
       if ([...personneSelect.options].some((o) => o.value === targetValue)) {
         personneSelect.value = targetValue;
