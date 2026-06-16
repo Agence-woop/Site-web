@@ -5,8 +5,8 @@ categoriePrincipale: "sante"
 thematiques: ["Acquisition de patients", "Visibilité en ligne"]
 auteur: "gauthier"
 datePublication: 2026-06-16
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Une personne cherche une clinique sur son téléphone, le soir, à la lumière de l'écran."
+imageEntete: "/images/blog/clinique-introuvable-en-ligne.webp"
+imageEnteteAlt: "Une rangée de cliniques aux devantures éclairées dans un dégradé rose et orange, dont une seule reste éteinte et invisible parmi les autres."
 brouillon: false
 ---
 

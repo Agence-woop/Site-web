@@ -5,8 +5,8 @@ categoriePrincipale: "recrutement"
 thematiques: ["Image de marque", "Acquisition de mandats"]
 auteur: "kevin"
 datePublication: 2026-06-17
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Plusieurs cartes professionnelles de cabinets de recrutement presque identiques, posées côte à côte."
+imageEntete: "/images/blog/marque-employeur-cabinet-recrutement.webp"
+imageEnteteAlt: "Un recruteur remet un emblème de marque lumineux à des professionnels, alors que sa propre poitrine reste sombre et sans emblème."
 brouillon: false
 ---
 
