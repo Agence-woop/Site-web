@@ -1,9 +1,9 @@
 export type CategoryKey = 'sante' | 'recrutement' | 'strategie-marque';
 
 export const categoryLabels: Record<CategoryKey, string> = {
-  sante: 'Santé',
-  recrutement: 'Recrutement',
-  'strategie-marque': 'Stratégie de marque',
+  sante: 'Santé & Médical',
+  recrutement: 'Recrutement & RH',
+  'strategie-marque': 'Stratégie & Marque',
 };
 
 export interface CtaConfig {
