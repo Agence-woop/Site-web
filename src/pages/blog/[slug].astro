@@ -921,8 +921,11 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     font-weight: 600;
     font-size: 17px;
     line-height: 1.3;
-    color: var(--text-primary);
     margin: 0;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .related-card__resume {

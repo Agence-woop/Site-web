@@ -103,13 +103,22 @@ const dateFormatted = new Intl.DateTimeFormat('fr-CA', {
   .article-card__category--recrutement { background: var(--woop-orange); }
   .article-card__category--strategie-marque { background: var(--woop-gradient); }
 
+  /*
+   * Titre de carte : même dégradé orange -> rose que le H1 d'une page
+   * d'article (background sur le texte + background-clip: text +
+   * -webkit-text-fill-color: transparent). Police, taille et graisse
+   * inchangées ; on remplace uniquement la couleur unie par le dégradé.
+   */
   .article-card__title {
     font-family: var(--font-body);
     font-weight: 600;
     font-size: 17px;
     line-height: 1.3;
-    color: var(--text-primary);
     margin: 0;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .article-card__resume {
