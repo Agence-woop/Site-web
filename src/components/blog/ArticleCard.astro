@@ -1,0 +1,213 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { authors, type AuthorKey } from '../../data/authors';
+import { categoryLabels, type CategoryKey } from '../../data/categories';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  variant?: 'default' | 'featured';
+  showCategory?: boolean;
+}
+
+const { post, variant = 'default', showCategory = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const author = authors[post.data.auteur as AuthorKey];
+const category = post.data.categoriePrincipale as CategoryKey;
+const categoryLabel = categoryLabels[category];
+const thematiques = post.data.thematiques ?? [];
+const thematiquesAttr = thematiques.join('|');
+
+const dateFormatted = new Intl.DateTimeFormat('fr-CA', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(post.data.datePublication);
+---
+<a
+  href={`${base}/blog/${post.id}/`}
+  class:list={['article-card', `article-card--${variant}`]}
+  data-article-thematiques={thematiquesAttr}
+>
+  <div class="article-card__media">
+    <img src={post.data.imageEntete} alt={post.data.imageEnteteAlt} loading="lazy" />
+  </div>
+  <div class="article-card__body">
+    {showCategory && <span class={`article-card__category article-card__category--${category}`}>{categoryLabel}</span>}
+    <h3 class="article-card__title">{post.data.titre}</h3>
+    <p class="article-card__resume">{post.data.resume}</p>
+    <div class="article-card__meta">
+      <img src={author.photo} alt="" class="article-card__avatar" width="32" height="32" loading="lazy" />
+      <span class="article-card__byline">
+        <span class="article-card__author">{author.nom}</span>
+        <span class="article-card__sep" aria-hidden="true">·</span>
+        <time datetime={post.data.datePublication.toISOString()}>{dateFormatted}</time>
+      </span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 200ms ease, transform 200ms ease;
+    min-width: 0;
+  }
+
+  .article-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .article-card__media {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--bg-elevated);
+  }
+
+  .article-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .article-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .article-card__category {
+    display: inline-flex;
+    align-self: flex-start;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    color: #fff;
+  }
+
+  .article-card__category--sante { background: var(--woop-pink); }
+  .article-card__category--recrutement { background: var(--woop-orange); }
+  .article-card__category--strategie-marque { background: var(--woop-gradient); }
+
+  .article-card__title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.3;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .article-card__resume {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .article-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .article-card__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .article-card__byline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    line-height: 1.3;
+  }
+
+  .article-card__author {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .article-card__sep {
+    opacity: 0.6;
+  }
+
+  /* ===== Variant : featured (grande carte pleine largeur) ===== */
+  .article-card--featured {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .article-card--featured {
+      flex-direction: row;
+      align-items: stretch;
+      padding: 28px;
+      gap: 32px;
+    }
+
+    .article-card--featured .article-card__media {
+      flex: 1;
+      aspect-ratio: 4 / 3;
+      max-width: 55%;
+    }
+
+    .article-card--featured .article-card__body {
+      flex: 1;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .article-card--featured .article-card__title {
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .article-card--featured .article-card__resume {
+      font-size: 15px;
+      -webkit-line-clamp: 4;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .article-card--featured .article-card__title {
+      font-size: 30px;
+    }
+
+    .article-card--featured .article-card__resume {
+      font-size: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-card { transition: none; }
+    .article-card:hover { transform: none; }
+  }
+</style>
