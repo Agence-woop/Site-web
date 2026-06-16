@@ -49,9 +49,9 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
 <Layout title={pageTitle} description={data.resume} ogImage={ogImage}>
   <article class="article">
 
-    <!-- Bloc 2 à 6 : entête de l'article (pleine largeur du conteneur) -->
+    <!-- Bloc 2 à 6 : entête de l'article -->
     <header class="article-header">
-      <div class="container">
+      <div class="article-section">
 
         <!-- Bloc 2 : fil d'Ariane -->
         <nav class="breadcrumb" aria-label="Fil d'Ariane">
@@ -87,16 +87,16 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
           </div>
         </div>
 
-        <!-- Bloc 6 : image d'entête (pleine largeur du conteneur) -->
+        <!-- Bloc 6 : image d'entête -->
         <figure class="article-hero">
           <img src={data.imageEntete} alt={data.imageEnteteAlt} width="1200" height="675" loading="eager" />
         </figure>
       </div>
     </header>
 
-    <!-- Bloc 7 : corps (largeur de lecture, à gauche) + barre de partage (à droite) -->
+    <!-- Bloc 7 : corps + barre de partage -->
     <div class="article-body-wrap">
-      <div class="container">
+      <div class="article-section">
         <div class="article-body-grid">
 
           <div class="article-body">
@@ -132,9 +132,9 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
       </div>
     </div>
 
-    <!-- Bloc 9 : bloc auteur (pleine largeur du conteneur) -->
+    <!-- Bloc 9 : bloc auteur (placé avant l'appel à l'action) -->
     <section class="article-author-section">
-      <div class="container">
+      <div class="article-section">
         <div class="author-block">
           <img src={author.photo} alt={author.nom} class="author-block__photo" width="120" height="120" loading="lazy" />
           <div class="author-block__body">
@@ -151,9 +151,9 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
       </div>
     </section>
 
-    <!-- Bloc 8 : appel à l'action contextuel (pleine largeur du conteneur) -->
+    <!-- Bloc 8 : appel à l'action contextuel (placé après le bloc auteur) -->
     <section class="article-cta-section">
-      <div class="container">
+      <div class="article-section">
         <div class="article-cta-card">
           <div class="article-cta-card__copy">
             <span class="article-cta-card__eyebrow">Une question sur cet article ?</span>
@@ -170,10 +170,10 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     <!-- Bloc 10 : capture d'infolettre (placeholder, à venir dans une PR ultérieure) -->
     <!-- TODO infolettre : un composant de capture d'inscription viendra ici dans une PR ultérieure. -->
 
-    <!-- Bloc 11 : articles reliés (pleine largeur du conteneur) -->
+    <!-- Bloc 11 : articles reliés -->
     {related.length > 0 && (
       <section class="article-related-section">
-        <div class="container">
+        <div class="article-section">
           <h2 class="article-related__title">Articles reliés</h2>
           <div class="article-related__grid">
             {related.map((r) => (
@@ -218,14 +218,29 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     z-index: 1;
   }
 
-  /*
-   * Chaque section de l'article est enveloppée dans <div class="container">
-   * (la classe globale du site). L'entête, l'image hero, le bloc auteur,
-   * le CTA et les articles reliés occupent toute la largeur du conteneur
-   * standard (mêmes marges gauche ET droite que l'accueil).
-   * Le corps est borné à 720px (largeur de lecture) et la barre de partage
-   * est poussée au bord droit du conteneur via justify-content space-between.
-   */
+  /* ===== Conteneur unique pour toutes les sections de l'article ===== */
+  .article-section {
+    width: 100%;
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .article-section {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .article-section {
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+  }
 
   /* ===== Bloc 2 à 6 : entête ===== */
   .article-header {
@@ -382,7 +397,6 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     opacity: 0.6;
   }
 
-  /* Image hero en pleine largeur du conteneur standard */
   .article-hero {
     margin: 0;
     border-radius: var(--radius-bento);
@@ -401,13 +415,6 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
     padding: 48px 0 64px;
   }
 
-  /*
-   * Mobile : 1 seule colonne, le corps puis la barre de partage empilés.
-   * Desktop : 2 colonnes — corps borné à 720px à gauche, barre de
-   * partage à droite. justify-content: space-between pousse la barre
-   * jusqu'au bord droit du conteneur, l'espace vide se loge entre les
-   * deux pour équilibrer.
-   */
   .article-body-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -416,9 +423,8 @@ const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${enco
 
   @media (min-width: 1024px) {
     .article-body-grid {
-      grid-template-columns: minmax(0, 720px) 80px;
-      justify-content: space-between;
-      column-gap: 0;
+      grid-template-columns: minmax(0, 1fr) 80px;
+      gap: 48px;
       align-items: start;
     }
   }
