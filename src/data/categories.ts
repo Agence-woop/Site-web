@@ -30,7 +30,7 @@ export function getCtaForCategory(category: CategoryKey, base: string): CtaConfi
     case 'sante':
       return { label: 'Parler à Gauthier', href: `${base}/contact?personne=gauthier` };
     case 'recrutement':
-      return { label: 'Discutons recrutement', href: `${base}/contact` };
+      return { label: 'Parler à Kevin', href: `${base}/contact?personne=kevin` };
     case 'strategie-marque':
       return { label: 'Parler à Kevin', href: `${base}/contact?personne=kevin` };
   }
