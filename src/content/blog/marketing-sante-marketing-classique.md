@@ -22,7 +22,7 @@ Le marketing classique est, au fond, une machine à créer de l'envie. Il vous f
 
 En santé, ce levier n'existe pas. Personne ne se réveille avec l'envie d'une coloscopie, d'un traitement de canal ou d'une thérapie. On ne crée pas le besoin d'une chirurgie de la hanche : il est dicté par le corps, par l'âge, par un diagnostic, jamais par une campagne. La demande, en santé, est largement fixée d'avance.
 
-Ça change la nature même du travail. Votre marketing n'a pas à inventer une envie. Il doit s'assurer que, le jour où un vrai besoin apparaît, vous êtes présent, clair et digne de confiance. Vous ne créez pas la demande. Vous faites en sorte d'être le bon choix, au bon moment.
+Ça change la nature même du travail. Votre marketing n'a pas à inventer une envie. Il doit s'assurer que, [le jour où un vrai besoin apparaît](/blog/publicite-clinique-bouche-a-oreille), vous êtes présent, clair et digne de confiance. Vous ne créez pas la demande. Vous faites en sorte d'être le bon choix, au bon moment.
 
 ## L'urgence est réelle, ou elle est malhonnête.
 
@@ -44,7 +44,7 @@ Dans le marketing classique, la règle est simple : plus de conversions, mieux c
 
 En santé, cette logique se retourne contre vous. Un patient que vous avez convaincu de venir alors qu'il n'aurait pas dû, ou à qui on a survendu un service, ne devient pas une vente de plus. Il devient un regret, un mauvais avis, parfois une plainte, et dans les cas graves, un préjudice. Le coût d'une mauvaise adéquation est sans commune mesure avec celui d'un mauvais achat de souliers.
 
-C'est pourquoi, en santé, la qualité de l'adéquation l'emporte toujours sur le volume. Le bon objectif n'est pas d'attirer le plus de monde possible, mais d'attirer les bonnes personnes, celles que vous pouvez réellement aider, et de réorienter honnêtement les autres. Un marketing qui filtre est, dans ce secteur, un marketing qui protège votre réputation.
+C'est pourquoi, en santé, la qualité de l'adéquation l'emporte toujours sur le volume. Le bon objectif n'est pas d'attirer le plus de monde possible, mais d'attirer les bonnes personnes, celles que vous pouvez réellement aider, et de réorienter honnêtement les autres. Un marketing qui filtre est, dans ce secteur, [un marketing qui protège votre réputation](/blog/marque-personnelle-sante-credibilite).
 
 ## Un autre jeu, une autre victoire
 

@@ -22,7 +22,7 @@ Le geste le plus rentable en acquisition de patients est gratuit, et la plupart 
 
 Quand quelqu'un cherche un service de santé près de chez lui, c'est votre fiche d'établissement Google qu'il voit en premier, avant même votre site. D'après les données de Google, environ trois personnes sur quatre qui font une recherche « à proximité » passent à l'action dans la journée, et près de la moitié des recherches portent une intention locale. Ce sont les patients les plus prêts à agir qui existent, et les capter ne coûte rien.
 
-Avant de penser publicité, réclamez votre fiche et soignez-la : heures exactes, adresse, services, photos récentes, et surtout, répondez à vos avis. Une fiche bien tenue vous rapporte des patients que vous auriez payés cher à aller chercher en publicité. C'est votre premier chantier, et il est gratuit.
+Avant de penser publicité, réclamez votre fiche et soignez-la : heures exactes, adresse, services, photos récentes, et surtout, répondez à vos avis. Une fiche bien tenue vous rapporte [des patients que vous auriez payés cher](/blog/clinique-introuvable-en-ligne) à aller chercher en publicité. C'est votre premier chantier, et il est gratuit.
 
 ## Ensuite, réparez la destination
 

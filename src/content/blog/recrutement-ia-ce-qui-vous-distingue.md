@@ -20,7 +20,7 @@ Mais il y a un détail que cet enthousiasme oublie. Si tout le monde adopte les 
 
 Pendant des années, un recruteur se distinguait par sa vitesse, sa portée, son carnet d'adresses, sa capacité à dénicher un profil que les autres ne voyaient pas. C'étaient des avantages réels, durement acquis.
 
-L'IA est en train de les mettre à la portée de tous, pour le prix d'un abonnement. L'usage de l'IA dans les tâches de ressources humaines est passé de 26 % en 2024 à 43 % en 2026. Le tri des candidatures, le repérage de profils, la rédaction d'annonces : ce qui demandait du métier devient un bouton. Or un avantage que tout le monde possède n'est plus un avantage. C'est devenu le minimum vital.
+L'IA est en train de les mettre à la portée de tous, pour le prix d'un abonnement. L'usage de l'IA dans les tâches de ressources humaines est passé de 26 % en 2024 à 43 % en 2026. Le tri des candidatures, le repérage de profils, [la rédaction d'annonces](/blog/offre-emploi-publicite-candidat) : ce qui demandait du métier devient un bouton. Or un avantage que tout le monde possède n'est plus un avantage. C'est devenu le minimum vital.
 
 ## La conséquence que personne ne nomme : tout se ressemble
 
@@ -38,7 +38,7 @@ Le jugement, d'abord : lire une personne au-delà de ses mots-clés, sentir si e
 
 La conclusion n'est pas de bouder l'IA, ce serait absurde. C'est de l'utiliser pour ce qu'elle fait bien, la mécanique, afin de réinvestir le temps gagné là où se joue désormais la différence : la relation, le jugement, et une identité qu'on reconnaît entre mille.
 
-Car tout ce qui reste quand l'IA a tout banalisé, la confiance, la voix, la réputation, porte un nom : c'est votre image de marque. Et celle-là, aucun abonnement ne l'installe à votre place. C'est le seul terrain où la concurrence ne peut pas vous copier d'un clic, et c'est précisément pour ça qu'il mérite votre attention pendant que les autres se contentent d'automatiser.
+Car tout ce qui reste quand l'IA a tout banalisé, la confiance, la voix, la réputation, porte un nom : [c'est votre image de marque](/blog/marque-employeur-cabinet-recrutement). Et celle-là, aucun abonnement ne l'installe à votre place. C'est le seul terrain où la concurrence ne peut pas vous copier d'un clic, et c'est précisément pour ça qu'il mérite votre attention pendant que les autres se contentent d'automatiser.
 
 ## La vraie question de 2026
 

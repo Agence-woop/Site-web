@@ -28,7 +28,7 @@ Or une authenticité jouée est une contradiction dans les termes. Dès l'instan
 
 Nous vivons un moment particulier. Les contenus générés par l'intelligence artificielle saturent les écrans, les hypertrucages brouillent le vrai et le faux, et le public développe une méfiance de réflexe. Les gens ne regardent plus passivement : ils cherchent activement des preuves d'humanité, ce qui revient à traquer en permanence ce qui sonne faux.
 
-Dans ce contexte, une authenticité de façade est le mensonge le plus facile à repérer. Pire encore : une raison d'être qui ne correspond pas aux actes détruit la confiance plus vite que son absence. La marque qui prône l'écoresponsabilité mais produit du jetable, [le cabinet qui parle d'humain](/blog/marque-employeur-cabinet-recrutement) mais ne répond jamais à un candidat, la clinique qui se dit à l'écoute mais qu'on n'arrive jamais à joindre : l'écart entre le discours et la réalité ne passe plus inaperçu. Il devient l'histoire que les gens retiennent.
+Dans ce contexte, une authenticité de façade est le mensonge le plus facile à repérer. Pire encore : une raison d'être qui ne correspond pas aux actes détruit la confiance plus vite que son absence. La marque qui prône l'écoresponsabilité mais produit du jetable, [le cabinet qui parle d'humain](/blog/marque-employeur-cabinet-recrutement) mais ne répond jamais à un candidat, [la clinique qui se dit à l'écoute mais qu'on n'arrive jamais à joindre](/blog/clinique-introuvable-en-ligne) : l'écart entre le discours et la réalité ne passe plus inaperçu. Il devient l'histoire que les gens retiennent.
 
 ## L'authenticité n'est pas un ton, c'est l'absence d'écart
 
