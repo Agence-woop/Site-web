@@ -5,8 +5,8 @@ categoriePrincipale: "sante"
 thematiques: ["Publicité en ligne", "Acquisition de patients"]
 auteur: "emma"
 datePublication: 2026-06-16
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Une gestionnaire de clinique planifie son budget de publicité devant un ordinateur portable."
+imageEntete: "/images/blog/publicite-numerique-clinique-petit-budget.webp"
+imageEnteteAlt: "Une silhouette gravit un escalier dont les premières marches sont colorées dans un dégradé rose et orange, dans l'ordre, les marches suivantes restant sombres."
 brouillon: false
 ---
 

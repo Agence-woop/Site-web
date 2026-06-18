@@ -5,8 +5,8 @@ categoriePrincipale: "strategie-marque"
 thematiques: ["Santé & Médical", "Acquisition de patients"]
 auteur: "kevin"
 datePublication: 2026-06-12
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Une personne soucieuse consulte le site d'une clinique sur son téléphone, l'air hésitant."
+imageEntete: "/images/blog/marketing-sante-marketing-classique.webp"
+imageEnteteAlt: "Une silhouette voûtée reste dans l'ombre tandis qu'une autre s'avance vers une vaste étendue apaisante en dégradé rose et orange."
 brouillon: false
 ---
 

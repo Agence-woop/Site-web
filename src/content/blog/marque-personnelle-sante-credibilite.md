@@ -5,8 +5,8 @@ categoriePrincipale: "strategie-marque"
 thematiques: ["Marque personnelle", "Santé & Médical"]
 auteur: "kevin"
 datePublication: 2026-06-16
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Une professionnelle de la santé en sarrau rédige posément une publication sur un ordinateur portable."
+imageEntete: "/images/blog/marque-personnelle-sante-credibilite.webp"
+imageEnteteAlt: "Un professionnel de la santé en sarrau ouvert se tient calmement, posé et confiant, le vêtement sous le sarrau dans un dégradé rose et orange."
 brouillon: false
 ---
 
