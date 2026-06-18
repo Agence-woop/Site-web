@@ -42,11 +42,68 @@ const dateFormatted = new Intl.DateTimeFormat('fr-CA', {
 }).format(data.datePublication);
 
 const articleUrl = new URL(`${base}/blog/${entry.id}/`, Astro.site).href;
-const pageTitle = `${data.titre} | Blog WOOP`;
+// titreSEO / metaDescription surchargent le titre éditorial et le résumé
+// quand ils sont définis dans le frontmatter, sinon on garde le comportement
+// existant : « {titre} | Blog WOOP » et le champ resume.
+const pageTitle = data.titreSEO ?? `${data.titre} | Blog WOOP`;
+const pageDescription = data.metaDescription ?? data.resume;
+
 const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`;
 const mailtoUrl = `mailto:?subject=${encodeURIComponent(data.titre)}&body=${encodeURIComponent(`${data.resume}\n\n${articleUrl}`)}`;
+
+// URLs absolues pour les données structurées et les balises article:*.
+const heroImageAbsolute = new URL(`${base}${data.imageEntete}`, Astro.site).href;
+const publisherLogoAbsolute = new URL(`${base}/images/logo-woop.png`, Astro.site).href;
+const homeUrl = new URL(`${base}/`, Astro.site).href;
+const blogUrl = new URL(`${base}/blog/`, Astro.site).href;
+const hubUrl = new URL(`${base}/blog/${category}/`, Astro.site).href;
+
+const blogPostingLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: data.titre,
+  description: pageDescription,
+  image: heroImageAbsolute,
+  datePublished: data.datePublication.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: author.nom,
+    url: author.linkedin,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Agence WOOP',
+    logo: {
+      '@type': 'ImageObject',
+      url: publisherLogoAbsolute,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': articleUrl,
+  },
+};
+
+const breadcrumbLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: homeUrl },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: blogUrl },
+    { '@type': 'ListItem', position: 3, name: categoryLabel, item: hubUrl },
+    { '@type': 'ListItem', position: 4, name: data.titre, item: articleUrl },
+  ],
+};
 ---
-<Layout title={pageTitle} description={data.resume} ogImage={ogImage}>
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  ogImage={ogImage}
+  ogType="article"
+  articlePublishedTime={data.datePublication.toISOString()}
+  articleAuthor={author.nom}
+  jsonLd={[blogPostingLd, breadcrumbLd]}
+>
   <article class="article">
 
     <!-- Bloc 2 à 6 : entête de l'article -->

@@ -9,9 +9,21 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  ogType?: 'website' | 'article';
+  articlePublishedTime?: string;
+  articleAuthor?: string;
+  jsonLd?: Record<string, unknown>[];
 }
 
-const { title, description, ogImage } = Astro.props;
+const {
+  title,
+  description,
+  ogImage,
+  ogType = 'website',
+  articlePublishedTime,
+  articleAuthor,
+  jsonLd,
+} = Astro.props;
 
 // Canonical domain — used for og:url and og:image absolute URLs across all pages.
 const SITE_CANONICAL_BASE = 'https://agence-woop.ca';
@@ -50,12 +62,18 @@ const ogImageUrl = ogImage ? `${SITE_CANONICAL_BASE}${stripBase(ogImage)}` : und
   <meta name="apple-mobile-web-app-title" content="WOOP" />
   <link rel="manifest" href="/site.webmanifest?v=1" />
 
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:locale" content="fr_CA" />
   <meta property="og:site_name" content="Agence WOOP" />
+  {ogType === 'article' && articlePublishedTime && (
+    <meta property="article:published_time" content={articlePublishedTime} />
+  )}
+  {ogType === 'article' && articleAuthor && (
+    <meta property="article:author" content={articleAuthor} />
+  )}
   {ogImageUrl && (
     <>
       <meta property="og:image" content={ogImageUrl} />
@@ -79,6 +97,10 @@ const ogImageUrl = ogImage ? `${SITE_CANONICAL_BASE}${stripBase(ogImage)}` : und
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  {jsonLd && jsonLd.map((obj) => (
+    <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+  ))}
 </head>
 <body>
   <AuroraBackground />
