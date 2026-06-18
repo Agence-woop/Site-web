@@ -1,6 +1,8 @@
 ---
 titre: "Clinique en croissance, budget serré : par où commencer en publicité numérique"
+titreSEO: "Publicité numérique pour une clinique à petit budget | WOOP"
 resume: "Avec un petit budget, l'ordre des opérations compte plus que le montant. L'échelle de priorités d'une clinique en croissance, du gratuit au payant, pour ne pas gaspiller un dollar."
+metaDescription: "Avec un petit budget, l'ordre des opérations compte plus que le montant. Par où commencer en publicité numérique, du gratuit au payant."
 categoriePrincipale: "sante"
 thematiques: ["Publicité en ligne", "Acquisition de patients"]
 auteur: "emma"

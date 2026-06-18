@@ -1,6 +1,8 @@
 ---
 titre: "En santé, la meilleure marque personnelle est celle qui n'en a pas l'air."
+titreSEO: "Marque personnelle en santé : la crédibilité d'abord | WOOP"
 resume: "La plupart des conseils de marque personnelle sont dangereux pour un professionnel de la santé. Voici comment se rendre visible sans dépenser la crédibilité qui fait toute votre valeur."
+metaDescription: "La plupart des conseils de marque personnelle nuisent à un professionnel de la santé. Comment se rendre visible sans dépenser sa crédibilité."
 categoriePrincipale: "strategie-marque"
 thematiques: ["Marque personnelle", "Santé & Médical"]
 auteur: "kevin"

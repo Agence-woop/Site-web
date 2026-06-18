@@ -1,6 +1,8 @@
 ---
 titre: "En santé, le marketing ne crée pas le désir. Il enlève la peur."
+titreSEO: "Marketing en santé : enlever la peur, pas le désir | WOOP"
 resume: "Le marketing classique fabrique le désir et l'urgence. En santé, le désir ne se fabrique pas et le client a peur. Pourquoi ce secteur exige presque le métier inverse."
+metaDescription: "Le marketing classique fabrique le désir. En santé, il doit faire l'inverse : enlever la peur. Pourquoi ce secteur exige presque le métier opposé."
 categoriePrincipale: "strategie-marque"
 thematiques: ["Santé & Médical", "Acquisition de patients"]
 auteur: "kevin"

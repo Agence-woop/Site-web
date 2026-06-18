@@ -1,6 +1,8 @@
 ---
 titre: "Personne ne postule ? Votre offre est écrite pour vous, pas pour le candidat."
+titreSEO: "Rédiger une offre d'emploi qui attire les candidats | WOOP"
 resume: "Vous publiez vos offres et les bons candidats ne viennent pas. Le problème n'est pas le marché : votre offre est écrite comme un document interne, pas comme une publicité destinée au candidat."
+metaDescription: "Vos offres ne ramènent pas les bons candidats ? Le problème n'est pas le marché : votre offre est écrite pour vous, pas pour le candidat."
 categoriePrincipale: "recrutement"
 thematiques: ["Publicité candidat", "Rédaction RH"]
 auteur: "kevin"

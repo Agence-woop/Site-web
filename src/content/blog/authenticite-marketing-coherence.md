@@ -1,6 +1,6 @@
 ---
 titre: "L'authenticité est devenue le mot le plus faux du marketing."
-titreSEO: "Authenticité de marque : la cohérence d'abord | Blog WOOP"
+titreSEO: "Authenticité de marque : la cohérence d'abord | WOOP"
 resume: "Toutes les marques prêchent l'authenticité, donc toutes la jouent. Et une authenticité que l'on joue est fausse. Pourquoi la vraie réponse n'est pas un ton, mais la cohérence."
 metaDescription: "Toutes les marques prêchent l'authenticité, au point qu'elle sonne faux. Pourquoi elle ne se joue pas, et comment la cohérence de marque la crée."
 categoriePrincipale: "strategie-marque"

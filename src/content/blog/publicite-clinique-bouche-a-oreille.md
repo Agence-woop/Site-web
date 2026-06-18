@@ -1,6 +1,8 @@
 ---
 titre: "Le bouche-à-oreille ne travaille pas à 21 h. C'est là que la publicité en ligne devient indispensable."
+titreSEO: "Publicité en ligne pour une clinique privée | WOOP"
 resume: "Le bouche-à-oreille a un angle mort : le moment précis où un inconnu décide. Voici les quatre moments où la publicité en ligne devient indispensable pour une clinique privée."
+metaDescription: "Le bouche-à-oreille a un angle mort : le moment où un inconnu décide. Les quatre moments où la publicité en ligne devient indispensable pour une clinique."
 categoriePrincipale: "sante"
 thematiques: ["Acquisition de patients", "Publicité en ligne"]
 auteur: "emma"

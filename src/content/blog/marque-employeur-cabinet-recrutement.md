@@ -1,6 +1,8 @@
 ---
 titre: "Vous vendez la marque employeur à vos clients. Et la vôtre ?"
+titreSEO: "Marque employeur : et celle de votre cabinet ? | WOOP"
 resume: "Les cabinets de recrutement vendent la marque employeur à leurs clients, mais négligent la leur. Pourquoi le mandat va au cabinet le plus mémorable, et comment cesser d'être interchangeable."
+metaDescription: "Les cabinets de recrutement vendent la marque employeur à leurs clients et négligent la leur. Pourquoi le mandat va au plus mémorable."
 categoriePrincipale: "recrutement"
 thematiques: ["Image de marque", "Acquisition de mandats"]
 auteur: "kevin"
