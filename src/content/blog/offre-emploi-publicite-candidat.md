@@ -7,8 +7,8 @@ categoriePrincipale: "recrutement"
 thematiques: ["Publicité candidat", "Rédaction RH"]
 auteur: "kevin"
 datePublication: 2026-06-18
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Un candidat survole une offre d'emploi sur son téléphone, puis passe à la suivante."
+imageEntete: "/images/blog/offre-emploi-publicite-candidat.webp"
+imageEnteteAlt: "Illustration minimaliste : un employeur tient devant lui un grand miroir où se reflète sa propre silhouette en dégradé rose et orange, pendant qu'au loin un candidat avec sa mallette s'éloigne dans le noir, sans avoir été adressé."
 brouillon: false
 ---
 

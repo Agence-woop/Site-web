@@ -7,8 +7,8 @@ categoriePrincipale: "strategie-marque"
 thematiques: ["Image de marque", "Stratégie de marque"]
 auteur: "kevin"
 datePublication: 2026-06-18
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Un masque lisse et souriant posé devant la vitrine d'une marque, image d'une authenticité de façade."
+imageEntete: "/images/blog/authenticite-marketing-coherence.webp"
+imageEnteteAlt: "Illustration minimaliste : une personne abaisse un masque souriant couleur crème et laisse voir son vrai visage, une surface en dégradé rose et orange, révélant l'écart entre l'image projetée et l'identité réelle."
 brouillon: false
 ---
 
