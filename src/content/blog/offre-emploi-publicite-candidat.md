@@ -18,7 +18,7 @@ Vous avez publié le poste. Vous avez attendu. Et les bons candidats ne sont pas
 
 On traite encore l'offre d'emploi comme un document administratif. C'est pourtant la publicité la plus lue que votre organisation produira cette année.
 
-Rappelez-vous qui vous voulez attirer : pas la personne sans emploi qui postule à tout, mais celle qui a déjà un poste, qui n'est pas pressée, et qui a le choix. Cette personne ne lit pas votre offre, elle la survole, entre deux réunions, sur son téléphone. Vous disposez de quelques secondes pour lui donner une raison de continuer. C'est exactement la situation d'une publicité : capter l'attention de quelqu'un qui ne cherchait rien. Que vous l'assumiez ou non, votre offre d'emploi est une annonce. La seule question est de savoir si c'est une bonne.
+Rappelez-vous qui vous voulez attirer : pas la personne sans emploi qui postule à tout, mais celle qui a déjà un poste, qui n'est pas pressée, et qui a le choix. Cette personne ne lit pas votre offre, elle la survole, entre deux réunions, sur son téléphone. Vous disposez de quelques secondes pour lui donner une raison de continuer. C'est exactement la situation d'une publicité : capter l'attention de quelqu'un qui ne cherchait rien. Que vous l'assumiez ou non, [votre offre d'emploi est une annonce](/blog/marque-employeur-cabinet-recrutement). La seule question est de savoir si c'est une bonne.
 
 ## Pourquoi votre offre est écrite pour vous
 

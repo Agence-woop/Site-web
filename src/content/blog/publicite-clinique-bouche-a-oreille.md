@@ -52,7 +52,7 @@ Beaucoup de cliniques tiennent sur une poignée de médecins référents ou sur 
 
 ## Une précision honnête
 
-La publicité ne règle pas tout, et il m'arrive de déconseiller d'en faire. Si vous êtes déjà à pleine capacité, acheter de la demande que vous ne pouvez pas servir ne fait que créer des patients frustrés. Et si votre site affiche de mauvaises heures ou ne permet pas de prendre rendez-vous en ligne, payer pour y envoyer des gens revient à verser de l'eau dans un seau percé. On répare les fondations avant d'acheter du trafic. Mais aucun de ces deux cas n'annule les moments où la publicité devient indispensable : ils déterminent seulement le bon moment pour s'y mettre.
+La publicité ne règle pas tout, et il m'arrive de déconseiller d'en faire. Si vous êtes déjà à pleine capacité, acheter de la demande que vous ne pouvez pas servir ne fait que créer des patients frustrés. Et si votre site affiche de mauvaises heures ou ne permet pas de prendre rendez-vous en ligne, payer pour y envoyer des gens revient à verser de l'eau dans un seau percé. On [répare les fondations](/blog/publicite-numerique-clinique-petit-budget) avant d'acheter du trafic. Mais aucun de ces deux cas n'annule les moments où la publicité devient indispensable : ils déterminent seulement le bon moment pour s'y mettre.
 
 ## Au Québec, une couche que les autres oublient
 

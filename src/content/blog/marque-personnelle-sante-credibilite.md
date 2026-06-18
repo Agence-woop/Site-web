@@ -14,7 +14,7 @@ brouillon: false
 
 La marque personnelle est partout. Publiez chaque jour, affirmez-vous, racontez votre histoire, bâtissez une communauté. Ces conseils ne sont pas mauvais. Ils sont simplement faits pour des métiers où l'audace et la visibilité paient : le consultant, l'entraîneur, le créateur de contenu.
 
-Appliqués à un médecin, une infirmière ou un pharmacien, ils deviennent souvent le chemin le plus rapide pour perdre la seule chose qui compte vraiment dans votre métier : la crédibilité. Je passe mes journées à bâtir des images de marque, et c'est précisément pour ça que je vais vous dire de vous méfier de la plupart des conseils de marque personnelle. En santé, une marque ne se construit pas comme ailleurs, parce que la confiance n'a pas le même prix.
+Appliqués à un médecin, une infirmière ou un pharmacien, ils deviennent souvent le chemin le plus rapide pour perdre la seule chose qui compte vraiment dans votre métier : la crédibilité. Je passe mes journées à bâtir des images de marque, et c'est précisément pour ça que je vais vous dire de vous méfier de la plupart des conseils de marque personnelle. En santé, [une marque ne se construit pas comme ailleurs](/blog/marketing-sante-marketing-classique), parce que la confiance n'a pas le même prix.
 
 ## En santé, votre crédibilité est votre marque
 
@@ -42,7 +42,7 @@ Soyez utile avant d'être visible. Expliquez clairement ce que les gens comprenn
 
 Faites de la nuance votre signature. Dire « ça dépend », montrer les limites de ce qu'on sait, c'est précisément ce qui sépare un professionnel crédible d'un argumentaire de vente. La retenue, en santé, se lit comme de l'expertise.
 
-Tenez une ligne cohérente dans le temps. Une marque crédible se construit lentement : une même voix, les mêmes valeurs, répétées. La cohérence est ce qui transforme des publications éparses en une réputation reconnaissable.
+Tenez [une ligne cohérente dans le temps](/blog/authenticite-marketing-coherence). Une marque crédible se construit lentement : une même voix, les mêmes valeurs, répétées. La cohérence est ce qui transforme des publications éparses en une réputation reconnaissable.
 
 Laissez la preuve parler à votre place. Tout le monde peut écrire « expert » sur son profil. Très peu peuvent le démontrer. Un cas bien expliqué, une démarche claire, une reconnaissance par vos pairs valent infiniment plus que n'importe quelle description que vous feriez de vous-même.
 

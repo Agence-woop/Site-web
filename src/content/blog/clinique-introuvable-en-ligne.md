@@ -28,7 +28,7 @@ C'est ce qui rend ce coût si dangereux. Plus votre agenda est plein, plus vous 
 
 ## Ce qu'un patient fait vraiment avant de vous choisir
 
-Avant, un patient demandait à son entourage. Aujourd'hui, il ouvre son téléphone. Il cherche, il compare, il lit, et il décide. Souvent avant même le premier contact avec vous.
+Avant, un patient [demandait à son entourage](/blog/publicite-clinique-bouche-a-oreille). Aujourd'hui, il ouvre son téléphone. Il cherche, il compare, il lit, et il décide. Souvent avant même le premier contact avec vous.
 
 Les chiffres sont parlants. Selon une enquête américaine de 2025 menée auprès de plus de mille patients, 84 % consultent les avis en ligne avant de choisir un nouveau professionnel de santé. Plus frappant encore : 61 % se fient davantage à ces avis qu'aux recommandations de leurs proches. La décision se prend donc en grande partie avant que votre équipe ne décroche le téléphone.
 
@@ -38,7 +38,7 @@ Et elle se prend souvent le soir, quand votre ligne est fermée. Plus de quatre 
 
 Dans la pratique, ce sont presque toujours les mêmes trois fuites.
 
-La première, c'est la fiche d'établissement Google négligée. Pour la majorité des patients, le premier contact avec votre clinique n'est pas votre accueil : c'est votre fiche Google. Heures dépassées, adresse de l'ancien local, aucune photo, aucune mention de vos services. Le patient ne se dit pas que votre fiche est mal tenue. Il se dit que votre clinique l'est.
+La première, c'est la [fiche d'établissement Google négligée](/blog/publicite-numerique-clinique-petit-budget). Pour la majorité des patients, le premier contact avec votre clinique n'est pas votre accueil : c'est votre fiche Google. Heures dépassées, adresse de l'ancien local, aucune photo, aucune mention de vos services. Le patient ne se dit pas que votre fiche est mal tenue. Il se dit que votre clinique l'est.
 
 La deuxième, c'est l'avis sans réponse. Un avis négatif laissé sans réponse, c'est une histoire racontée à sens unique devant tous vos futurs patients. Or 40 % des patients déclarent avoir annulé un rendez-vous ou renoncé à en prendre un à cause d'avis négatifs. Répondre, calmement et professionnellement, n'efface pas l'avis, mais montre comment vous traitez les gens. Ça pèse autant que la note elle-même.
 
