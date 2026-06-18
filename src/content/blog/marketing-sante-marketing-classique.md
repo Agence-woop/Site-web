@@ -4,7 +4,7 @@ resume: "Le marketing classique fabrique le désir et l'urgence. En santé, le d
 categoriePrincipale: "strategie-marque"
 thematiques: ["Santé & Médical", "Acquisition de patients"]
 auteur: "kevin"
-datePublication: 2026-06-16
+datePublication: 2026-06-12
 imageEntete: "/images/blog/a-venir.webp"
 imageEnteteAlt: "Une personne soucieuse consulte le site d'une clinique sur son téléphone, l'air hésitant."
 brouillon: false
