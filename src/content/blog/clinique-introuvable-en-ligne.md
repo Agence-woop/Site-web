@@ -1,6 +1,8 @@
 ---
 titre: "Introuvable en ligne : ce que ça coûte vraiment à votre clinique"
+titreSEO: "Visibilité en ligne d'une clinique : le vrai coût | WOOP"
 resume: "Une clinique pleine peut perdre des patients sans jamais le savoir. Voici ce qu'une mauvaise visibilité en ligne coûte vraiment, et comment le mesurer cette semaine."
+metaDescription: "Une clinique pleine peut perdre des patients sans le savoir. Ce qu'une mauvaise visibilité en ligne coûte vraiment, et comment le mesurer."
 categoriePrincipale: "sante"
 thematiques: ["Acquisition de patients", "Visibilité en ligne"]
 auteur: "gauthier"

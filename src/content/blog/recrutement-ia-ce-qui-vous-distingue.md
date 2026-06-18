@@ -1,6 +1,8 @@
 ---
 titre: "Quand tous les recruteurs utilisent la même IA, qu'est-ce qui vous distingue encore ?"
+titreSEO: "IA en recrutement : qu'est-ce qui vous distingue ? | WOOP"
 resume: "Quand tous les recruteurs adoptent la même IA, l'avantage qu'elle promet s'annule. Ce qui vous distingue encore se trouve exactement là où aucun outil ne peut vous copier."
+metaDescription: "Quand tous les recruteurs adoptent la même IA, son avantage s'annule. Ce qui vous distingue se trouve là où aucun outil ne peut vous copier."
 categoriePrincipale: "recrutement"
 thematiques: ["Image de marque", "Intelligence artificielle"]
 auteur: "kevin"
