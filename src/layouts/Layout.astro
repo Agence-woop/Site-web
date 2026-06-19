@@ -48,9 +48,35 @@ const ogImageUrl = ogImage ? `${SITE_CANONICAL_BASE}${stripBase(ogImage)}` : und
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Consent Mode v2 : refus par défaut, à placer avant CookieYes et avant gtag -->
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag("consent", "default", {
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      analytics_storage: "denied",
+      functionality_storage: "denied",
+      personalization_storage: "denied",
+      security_storage: "granted",
+      wait_for_update: 2000
+    });
+    gtag("set", "ads_data_redaction", true);
+    gtag("set", "url_passthrough", true);
+  </script>
   <!-- Start cookieyes banner -->
   <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/27ced4974c9e6000d869b57d/script.js" is:inline></script>
   <!-- End cookieyes banner -->
+  <!-- Google tag (gtag.js) : GA4 + Google Ads -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-3ZL6X395CS"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-3ZL6X395CS');
+    gtag('config', 'AW-18125380928');
+  </script>
   <meta name="description" content={description} />
   <title>{title}</title>
   <link rel="canonical" href={canonicalUrl} />
