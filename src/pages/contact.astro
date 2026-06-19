@@ -580,6 +580,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       if (res.ok) {
         form.style.display = 'none';
         success?.removeAttribute('hidden');
+        if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+          window.gtag('event', 'generate_lead', {
+            form_id: 'contact',
+            form_destination: 'formspree'
+          });
+        }
       } else {
         error?.removeAttribute('hidden');
       }
