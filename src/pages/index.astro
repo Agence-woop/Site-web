@@ -5,38 +5,62 @@ import BentoCard from '../components/BentoCard.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const testimonials: { quote: string; name: string; role?: string }[] = [
+const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   {
-    quote: "« Kévin a su comprendre dès le début les subtilités de ma vision marketing. Son audace, son agilité et sa passion pour l'image de marque m'ont convaincu dès les premiers instants. Je recommande les services de l'Agence WOOP. »",
+    paragraphs: [
+      "« Kévin a su comprendre dès le début les subtilités de ma vision marketing. Son audace, son agilité et sa passion pour l'image de marque m'ont convaincu dès les premiers instants. Je recommande les services de l'Agence WOOP. »",
+    ],
     name: 'David Caron',
     role: 'PDG, Expoze Recrutement',
   },
   {
-    quote: "« Kevin et l'agence marketing WOOP ont su capter l'essence de mon projet et la traduire en un visuel à la fois clair et impactant. Son approche méticuleuse et sa recherche approfondie permettent d'obtenir un résultat à la hauteur des attentes. »",
+    paragraphs: [
+      "« Kevin et l'agence marketing WOOP ont su capter l'essence de mon projet et la traduire en un visuel à la fois clair et impactant. Son approche méticuleuse et sa recherche approfondie permettent d'obtenir un résultat à la hauteur des attentes. »",
+    ],
     name: 'Marie-Josée Bélanger',
     role: 'PDG, ZoneRH',
   },
   {
-    quote: "« Nous travaillons avec WOOP depuis décembre 2025. Dès le début de la relation d'affaires, j'ai senti que je travaillais avec des professionnels compétents et très attentifs aux détails. Ça m'a plu immédiatement et surtout, je me suis senti en confiance. Leur démarche est très structurée et professionnelle. Ils ont rapidement mis en place les bases d'une campagne efficace de reconnaissance de notre marque sur LinkedIn. Nous allons passer à la prochaine étape avec eux : convertir en opportunités d'affaires. »",
+    paragraphs: [
+      "« Nous travaillons avec WOOP depuis décembre 2025. Dès le début de la relation d'affaires, j'ai senti que je travaillais avec des professionnels compétents et très attentifs aux détails.",
+      "Ça m'a plu immédiatement et surtout, je me suis senti en confiance. Leur démarche est très structurée et professionnelle. Ils ont rapidement mis en place les bases d'une campagne efficace de reconnaissance de notre marque sur LinkedIn.",
+      "Nous allons passer à la prochaine étape avec eux : convertir en opportunités d'affaires. »",
+    ],
     name: 'Luc Lacroix',
     role: 'PDG, Santé au travail Konsil Inc.',
   },
   {
-    quote: "« C'est un réel plaisir de collaborer avec WOOP depuis plusieurs mois déjà. Leur équipe nous accompagne au quotidien avec professionnalisme, créativité et réactivité. Leur compréhension de nos besoins, la pertinence de leurs conseils et la qualité de leur travail contribuent directement à l'atteinte de nos objectifs. L'équipe est toujours disponible, à l'écoute et proactive dans la recherche de solutions adaptées à nos besoins, tout en tenant compte de nos contraintes et de notre réalité. Nous apprécions particulièrement leur approche humaine, leur transparence ainsi que leur capacité à livrer des résultats concrets, et ce, toujours dans les délais convenus. WOOP est un partenaire de confiance que nous recommandons sans hésitation à toute entreprise à la recherche d'une agence marketing compétente, engagée et axée sur les résultats. »",
+    paragraphs: [
+      "« C'est un réel plaisir de collaborer avec WOOP depuis plusieurs mois déjà. Leur équipe nous accompagne au quotidien avec professionnalisme, créativité et réactivité.",
+      "Leur compréhension de nos besoins, la pertinence de leurs conseils et la qualité de leur travail contribuent directement à l'atteinte de nos objectifs.",
+      "L'équipe est toujours disponible, à l'écoute et proactive dans la recherche de solutions adaptées à nos besoins, tout en tenant compte de nos contraintes et de notre réalité. Nous apprécions particulièrement leur approche humaine, leur transparence ainsi que leur capacité à livrer des résultats concrets, et ce, toujours dans les délais convenus.",
+      "WOOP est un partenaire de confiance que nous recommandons sans hésitation à toute entreprise à la recherche d'une agence marketing compétente, engagée et axée sur les résultats. »",
+    ],
     name: 'AlliancePharma',
   },
   {
-    quote: "« Notre expérience avec Agence WOOP est tout simplement sublime. Nous utilisons leur service depuis maintenant 1 an et que dire du service personnalisé, de la qualité du travail et de la collaboration qui se fait dans une parfaite harmonie, et ce depuis le tout début. 5 étoiles pour leur service est le moins qu'on puisse donner ! Quelle belle expérience que de travailler avec eux au quotidien. Je réfère cette agence à tous ceux qui souhaitent augmenter leur notoriété, leur visibilité ou gérer leurs médias sociaux. »",
+    paragraphs: [
+      "« Notre expérience avec Agence WOOP est tout simplement sublime. Nous utilisons leur service depuis maintenant 1 an et que dire du service personnalisé, de la qualité du travail et de la collaboration qui se fait dans une parfaite harmonie, et ce depuis le tout début.",
+      "5 étoiles pour leur service est le moins qu'on puisse donner !",
+      "Quelle belle expérience que de travailler avec eux au quotidien. Je réfère cette agence à tous ceux qui souhaitent augmenter leur notoriété, leur visibilité ou gérer leurs médias sociaux. »",
+    ],
     name: 'Clémence Rachiele',
     role: 'Fondatrice, PurRH',
   },
   {
-    quote: "« Une agence exceptionnelle ! Un merci tout particulier à Kevin pour son écoute et sa grande capacité d'analyse. Il a su comprendre notre secteur d'activité en un temps record et traduire notre vision en publications LinkedIn percutantes et professionnelles. Je recommande à 100 % ! »",
+    paragraphs: [
+      "« Une agence exceptionnelle ! Un merci tout particulier à Kevin pour son écoute et sa grande capacité d'analyse. Il a su comprendre notre secteur d'activité en un temps record et traduire notre vision en publications LinkedIn percutantes et professionnelles.",
+      "Je recommande à 100 % ! »",
+    ],
     name: 'André Garceau',
     role: 'Santé au travail Konsil Inc.',
   },
   {
-    quote: "« Service exceptionnel ! Une équipe à l'écoute, efficace et attentive à nos besoins. L'approche est personnalisée et les résultats sont concrets. Je recommande fortement leurs services à toute entreprise qui souhaite faire évoluer son marketing. »",
+    paragraphs: [
+      "« Service exceptionnel ! Une équipe à l'écoute, efficace et attentive à nos besoins.",
+      "L'approche est personnalisée et les résultats sont concrets.",
+      "Je recommande fortement leurs services à toute entreprise qui souhaite faire évoluer son marketing. »",
+    ],
     name: 'Geneviève Decelles',
     role: 'Directrice des opérations, EXPOZE Recrutement',
   },
@@ -232,7 +256,20 @@ const testimonials: { quote: string; name: string; role?: string }[] = [
           <ul class="testimonials-carousel__track" data-testimonials-track>
             {testimonials.map((t, i) => (
               <li class:list={['testimonial-card', i % 2 === 0 ? 'testimonial-card--outline' : 'testimonial-card--gradient']}>
-                <p class="testimonial-card__text">{t.quote}</p>
+                <div class="testimonial-card__body">
+                  <div class="testimonial-card__paragraphs" data-testimonial-paragraphs>
+                    {t.paragraphs.map((p) => (
+                      <p class="testimonial-card__paragraph">{p}</p>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    class="testimonial-card__toggle"
+                    aria-expanded="false"
+                    data-testimonial-toggle
+                    hidden
+                  >Voir plus</button>
+                </div>
                 <div class="testimonial-card__author">
                   <strong class="testimonial-card__name">{t.name}</strong>
                   {t.role && <span class="testimonial-card__role">{t.role}</span>}
@@ -863,23 +900,98 @@ const testimonials: { quote: string; name: string; role?: string }[] = [
     border: 1px solid transparent;
   }
 
-  .testimonial-card__text {
+  /* Body wraps the paragraphs container + the « Voir plus » toggle, so the
+     author block can stay anchored at the bottom via space-between on the card. */
+  .testimonial-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+  }
+
+  /* Paragraphs container : truncated at a fixed max-height computed in JS
+     (calé sur la 2e plus grande carte mesurée). Expansion lifts the cap. */
+  .testimonial-card__paragraphs {
+    width: 100%;
+    overflow: hidden;
+    transition: max-height 250ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-card__paragraphs {
+      transition: none;
+    }
+  }
+
+  .testimonial-card__paragraph {
     font-size: 14px;
     line-height: 1.6;
     color: inherit;
-    margin: 0 0 20px;
+    margin: 0 0 12px;
+  }
+
+  .testimonial-card__paragraph:last-child {
+    margin-bottom: 0;
   }
 
   @media (min-width: 1024px) {
-    .testimonial-card__text { font-size: 15px; }
+    .testimonial-card__paragraph { font-size: 15px; }
   }
 
-  .testimonial-card--outline .testimonial-card__text {
+  .testimonial-card--outline .testimonial-card__paragraph {
     color: var(--text-secondary);
   }
 
-  .testimonial-card--gradient .testimonial-card__text {
+  .testimonial-card--gradient .testimonial-card__paragraph {
     color: #fff;
+  }
+
+  /* Toggle button : discret, lisible sur les deux variants. */
+  .testimonial-card__toggle {
+    margin-top: 12px;
+    padding: 6px 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--woop-pink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    align-self: flex-start;
+    transition: color 200ms ease;
+  }
+
+  .testimonial-card__toggle:hover,
+  .testimonial-card__toggle:focus-visible {
+    color: var(--woop-orange);
+  }
+
+  .testimonial-card__toggle:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .testimonial-card--gradient .testimonial-card__toggle {
+    color: #fff;
+    opacity: 0.92;
+  }
+
+  .testimonial-card--gradient .testimonial-card__toggle:hover,
+  .testimonial-card--gradient .testimonial-card__toggle:focus-visible {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .testimonial-card--gradient .testimonial-card__toggle:focus-visible {
+    outline-color: #fff;
+  }
+
+  /* Spacing above author block, kept consistent with the previous design. */
+  .testimonial-card__author {
+    margin-top: 20px;
   }
 
   .testimonial-card__author {
@@ -1001,11 +1113,17 @@ const testimonials: { quote: string; name: string; role?: string }[] = [
 </script>
 
 <script>
-  // Carrousel des avis clients : auto-défilement, flèches, pause au survol,
-  // hauteur fixe (calée sur la carte la plus grande, align-items: stretch),
-  // respect de prefers-reduced-motion. Boucle continue : on clone les N
-  // premières cartes (N = visible count) à la fin du track et on snappe
-  // silencieusement à 0 quand on atteint la zone de clones.
+  // Carrousel des avis clients :
+  // - Navigation BORNÉE (positions 0..(N-V), pas de clonage). Depuis la
+  //   dernière position, next() revient à 0 avec une transition douce ; idem
+  //   prev() depuis 0 vers la dernière position. Avec V cartes visibles et
+  //   N=7 au total, chaque vue contient toujours des avis aux index croissants
+  //   contigus, donc l'alternance translucide/dégradé est garantie à toutes
+  //   les vues, sans collage 7↔1.
+  // - Auto-défilement 6 s, pause au survol et au focus, respect de
+  //   prefers-reduced-motion (pas d'auto, pas de transition, flèches OK).
+  // - Hauteur fixe calée sur la 2e plus grande carte mesurée. Cartes plus
+  //   longues : bouton « Voir plus / Voir moins », sinon le bouton reste caché.
   (function () {
     const carousel = document.querySelector<HTMLElement>('[data-testimonials-carousel]');
     if (!carousel) return;
@@ -1019,7 +1137,6 @@ const testimonials: { quote: string; name: string; role?: string }[] = [
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let currentIndex = 0;
-    let originalCount = 0;
     let isHover = false;
     let timerId: number | null = null;
 
@@ -1030,61 +1147,40 @@ const testimonials: { quote: string; name: string; role?: string }[] = [
       return 1;
     }
 
-    function ensureClones() {
-      if (!track) return;
-      // Strip any previous clones
-      track.querySelectorAll('[data-testimonials-clone]').forEach((c) => c.remove());
-      const originals = Array.from(track.children) as HTMLElement[];
-      originalCount = originals.length;
-      const visibleCount = Math.min(getVisibleCount(), originalCount);
-      for (let i = 0; i < visibleCount; i++) {
-        const clone = originals[i].cloneNode(true) as HTMLElement;
-        clone.setAttribute('data-testimonials-clone', '');
-        clone.setAttribute('aria-hidden', 'true');
-        track.appendChild(clone);
-      }
+    function getSlides(): HTMLElement[] {
+      return Array.from(track!.children) as HTMLElement[];
+    }
+
+    function getMaxIndex(): number {
+      // Plus grand index de départ : N - V (positions bornées).
+      const n = getSlides().length;
+      const v = getVisibleCount();
+      return Math.max(0, n - v);
     }
 
     function getStep(): number {
-      if (!track || !track.children[0]) return 0;
-      const slide = track.children[0] as HTMLElement;
-      const styles = window.getComputedStyle(track);
+      const slide = track!.children[0] as HTMLElement | undefined;
+      if (!slide) return 0;
+      const styles = window.getComputedStyle(track!);
       const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
       return slide.offsetWidth + gap;
     }
 
     function applyTransform(animate: boolean) {
-      if (!track) return;
-      track.style.transition = animate && !reducedMotion ? `transform ${TRANSITION_MS}ms ease` : 'none';
-      track.style.transform = `translateX(${-getStep() * currentIndex}px)`;
+      track!.style.transition = animate && !reducedMotion ? `transform ${TRANSITION_MS}ms ease` : 'none';
+      track!.style.transform = `translateX(${-getStep() * currentIndex}px)`;
     }
 
     function next() {
-      currentIndex++;
+      const max = getMaxIndex();
+      currentIndex = currentIndex < max ? currentIndex + 1 : 0;
       applyTransform(true);
-      if (currentIndex >= originalCount) {
-        // Animate to clones, then snap silently to the equivalent real index
-        window.setTimeout(() => {
-          currentIndex = currentIndex - originalCount;
-          applyTransform(false);
-        }, TRANSITION_MS + 30);
-      }
     }
 
     function prev() {
-      if (currentIndex === 0) {
-        // Jump silently to position N (clones, visually identical to 0..),
-        // then animate one card back so the previous card slides in.
-        currentIndex = originalCount;
-        applyTransform(false);
-        // Force a reflow so the next style change starts a fresh transition.
-        void track!.offsetWidth;
-        currentIndex = originalCount - 1;
-        applyTransform(true);
-      } else {
-        currentIndex--;
-        applyTransform(true);
-      }
+      const max = getMaxIndex();
+      currentIndex = currentIndex > 0 ? currentIndex - 1 : max;
+      applyTransform(true);
     }
 
     function startAuto() {
@@ -1102,6 +1198,67 @@ const testimonials: { quote: string; name: string; role?: string }[] = [
       }
     }
 
+    // === Hauteur fixe + bouton « Voir plus / Voir moins » par carte =========
+    // On mesure la hauteur naturelle de chaque conteneur de paragraphes, on
+    // prend la 2e plus grande, on la pose comme max-height sur tous. Seules
+    // les cartes qui débordent (typiquement AlliancePharma) reçoivent un
+    // bouton actif.
+    function setupTruncation() {
+      const containers = Array.from(carousel!.querySelectorAll<HTMLElement>('[data-testimonial-paragraphs]'));
+      if (containers.length === 0) return;
+      // Laisser les conteneurs s'étendre librement pour mesurer.
+      containers.forEach((c) => { c.style.maxHeight = 'none'; });
+      // Forcer un reflow.
+      containers.forEach((c) => void c.offsetHeight);
+      const heights = containers.map((c) => c.scrollHeight);
+      const sortedDesc = [...heights].sort((a, b) => b - a);
+      // 2e plus grand (si 7 cartes), sinon le plus grand.
+      const target = sortedDesc.length >= 2 ? sortedDesc[1] : sortedDesc[0];
+      containers.forEach((c, i) => {
+        c.dataset.maxHeight = String(target);
+        const card = c.closest('.testimonial-card');
+        const toggle = card?.querySelector<HTMLButtonElement>('[data-testimonial-toggle]') ?? null;
+        const overflows = heights[i] > target + 2; // tolérance
+        const isExpanded = toggle?.getAttribute('aria-expanded') === 'true';
+        if (overflows) {
+          if (toggle) {
+            toggle.hidden = false;
+          }
+          if (!isExpanded) c.style.maxHeight = target + 'px';
+        } else {
+          if (toggle) {
+            toggle.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.textContent = 'Voir plus';
+          }
+          c.style.maxHeight = target + 'px';
+        }
+      });
+    }
+
+    function bindToggles() {
+      carousel!.querySelectorAll<HTMLButtonElement>('[data-testimonial-toggle]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.testimonial-card');
+          const container = card?.querySelector<HTMLElement>('[data-testimonial-paragraphs]');
+          if (!container) return;
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          if (expanded) {
+            // Recapper à la hauteur cible.
+            container.style.maxHeight = (container.dataset.maxHeight ?? '0') + 'px';
+            btn.setAttribute('aria-expanded', 'false');
+            btn.textContent = 'Voir plus';
+          } else {
+            // Lever le cap.
+            container.style.maxHeight = container.scrollHeight + 'px';
+            btn.setAttribute('aria-expanded', 'true');
+            btn.textContent = 'Voir moins';
+          }
+        });
+      });
+    }
+    // ========================================================================
+
     prevBtn.addEventListener('click', () => { prev(); startAuto(); });
     nextBtn.addEventListener('click', () => { next(); startAuto(); });
     carousel.addEventListener('mouseenter', () => { isHover = true; });
@@ -1113,13 +1270,16 @@ const testimonials: { quote: string; name: string; role?: string }[] = [
     window.addEventListener('resize', () => {
       if (resizeTimer !== null) window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
-        ensureClones();
-        currentIndex = 0;
+        // Recalculer max-height (la largeur des cartes a pu changer) et borner l'index.
+        setupTruncation();
+        const max = getMaxIndex();
+        if (currentIndex > max) currentIndex = max;
         applyTransform(false);
       }, 150);
     });
 
-    ensureClones();
+    bindToggles();
+    setupTruncation();
     applyTransform(false);
     startAuto();
   })();
