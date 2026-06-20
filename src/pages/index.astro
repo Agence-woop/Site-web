@@ -4,6 +4,43 @@ import Button from '../components/Button.astro';
 import BentoCard from '../components/BentoCard.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const testimonials: { quote: string; name: string; role?: string }[] = [
+  {
+    quote: "« Kévin a su comprendre dès le début les subtilités de ma vision marketing. Son audace, son agilité et sa passion pour l'image de marque m'ont convaincu dès les premiers instants. Je recommande les services de l'Agence WOOP. »",
+    name: 'David Caron',
+    role: 'PDG, Expoze Recrutement',
+  },
+  {
+    quote: "« Kevin et l'agence marketing WOOP ont su capter l'essence de mon projet et la traduire en un visuel à la fois clair et impactant. Son approche méticuleuse et sa recherche approfondie permettent d'obtenir un résultat à la hauteur des attentes. »",
+    name: 'Marie-Josée Bélanger',
+    role: 'PDG, ZoneRH',
+  },
+  {
+    quote: "« Nous travaillons avec WOOP depuis décembre 2025. Dès le début de la relation d'affaires, j'ai senti que je travaillais avec des professionnels compétents et très attentifs aux détails. Ça m'a plu immédiatement et surtout, je me suis senti en confiance. Leur démarche est très structurée et professionnelle. Ils ont rapidement mis en place les bases d'une campagne efficace de reconnaissance de notre marque sur LinkedIn. Nous allons passer à la prochaine étape avec eux : convertir en opportunités d'affaires. »",
+    name: 'Luc Lacroix',
+    role: 'PDG, Santé au travail Konsil Inc.',
+  },
+  {
+    quote: "« C'est un réel plaisir de collaborer avec WOOP depuis plusieurs mois déjà. Leur équipe nous accompagne au quotidien avec professionnalisme, créativité et réactivité. Leur compréhension de nos besoins, la pertinence de leurs conseils et la qualité de leur travail contribuent directement à l'atteinte de nos objectifs. L'équipe est toujours disponible, à l'écoute et proactive dans la recherche de solutions adaptées à nos besoins, tout en tenant compte de nos contraintes et de notre réalité. Nous apprécions particulièrement leur approche humaine, leur transparence ainsi que leur capacité à livrer des résultats concrets, et ce, toujours dans les délais convenus. WOOP est un partenaire de confiance que nous recommandons sans hésitation à toute entreprise à la recherche d'une agence marketing compétente, engagée et axée sur les résultats. »",
+    name: 'AlliancePharma',
+  },
+  {
+    quote: "« Notre expérience avec Agence WOOP est tout simplement sublime. Nous utilisons leur service depuis maintenant 1 an et que dire du service personnalisé, de la qualité du travail et de la collaboration qui se fait dans une parfaite harmonie, et ce depuis le tout début. 5 étoiles pour leur service est le moins qu'on puisse donner ! Quelle belle expérience que de travailler avec eux au quotidien. Je réfère cette agence à tous ceux qui souhaitent augmenter leur notoriété, leur visibilité ou gérer leurs médias sociaux. »",
+    name: 'Clémence Rachiele',
+    role: 'Fondatrice, PurRH',
+  },
+  {
+    quote: "« Une agence exceptionnelle ! Un merci tout particulier à Kevin pour son écoute et sa grande capacité d'analyse. Il a su comprendre notre secteur d'activité en un temps record et traduire notre vision en publications LinkedIn percutantes et professionnelles. Je recommande à 100 % ! »",
+    name: 'André Garceau',
+    role: 'Santé au travail Konsil Inc.',
+  },
+  {
+    quote: "« Service exceptionnel ! Une équipe à l'écoute, efficace et attentive à nos besoins. L'approche est personnalisée et les résultats sont concrets. Je recommande fortement leurs services à toute entreprise qui souhaite faire évoluer son marketing. »",
+    name: 'Geneviève Decelles',
+    role: 'Directrice des opérations, EXPOZE Recrutement',
+  },
+];
 ---
 <Layout
   title="WOOP — Agence marketing santé & recrutement | Montréal"
@@ -175,34 +212,45 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </div>
 
       <h3 class="testimonials__heading">Ce qu'en disent nos clients</h3>
-      <div class="testimonials">
-        <BentoCard variant="outline">
-          <div>
-            <p class="bento__text">&laquo;&nbsp;K&eacute;vin a su comprendre d&egrave;s le d&eacute;but les subtilit&eacute;s de ma vision marketing. Son audace, son agilit&eacute; et sa passion pour l'image de marque m'ont convaincu d&egrave;s les premiers instants. Je recommande les services de l'Agence WOOP.&nbsp;&raquo;</p>
-          </div>
-          <div class="testimonial__author">
-            <strong>David Caron</strong>
-            <span>PDG, Expoze Recrutement</span>
-          </div>
-        </BentoCard>
-        <BentoCard variant="outline">
-          <div>
-            <p class="bento__text">&laquo;&nbsp;Je recommande fortement les services de l'agence marketing WOOP et Kevin & Gauthier pour leurs services de conseils en strat&eacute;gie de communication. Il a &eacute;t&eacute; patient et &agrave; l'&eacute;coute tout au long du processus, tout en proposant des id&eacute;es innovantes.&nbsp;&raquo;</p>
-          </div>
-          <div class="testimonial__author">
-            <strong>Joachim Donnet</strong>
-            <span>PDG, Plomberie Joachim Donnet Inc.</span>
-          </div>
-        </BentoCard>
-        <BentoCard variant="outline">
-          <div>
-            <p class="bento__text">&laquo;&nbsp;Kevin et l'agence marketing WOOP ont su capter l'essence de mon projet et la traduire en un visuel &agrave; la fois clair et impactant. Son approche m&eacute;ticuleuse et sa recherche approfondie permettent d'obtenir un r&eacute;sultat &agrave; la hauteur des attentes.&nbsp;&raquo;</p>
-          </div>
-          <div class="testimonial__author">
-            <strong>Marie-Jos&eacute;e B&eacute;langer</strong>
-            <span>PDG, ZoneRH</span>
-          </div>
-        </BentoCard>
+      <div
+        class="testimonials-carousel"
+        role="region"
+        aria-label="Avis de nos clients"
+        data-testimonials-carousel
+      >
+        <button
+          type="button"
+          class="testimonials-carousel__nav testimonials-carousel__nav--prev"
+          aria-label="Avis précédent"
+          data-testimonials-prev
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <div class="testimonials-carousel__viewport">
+          <ul class="testimonials-carousel__track" data-testimonials-track>
+            {testimonials.map((t, i) => (
+              <li class:list={['testimonial-card', i % 2 === 0 ? 'testimonial-card--outline' : 'testimonial-card--gradient']}>
+                <p class="testimonial-card__text">{t.quote}</p>
+                <div class="testimonial-card__author">
+                  <strong class="testimonial-card__name">{t.name}</strong>
+                  {t.role && <span class="testimonial-card__role">{t.role}</span>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <button
+          type="button"
+          class="testimonials-carousel__nav testimonials-carousel__nav--next"
+          aria-label="Avis suivant"
+          data-testimonials-next
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
       </div>
     </div>
   </section>
@@ -705,37 +753,173 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-bottom: 24px;
   }
 
-  .testimonials {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
+  /* Carousel layout */
+  .testimonials-carousel {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 24px;
   }
 
-  @media (min-width: 768px) {
-    .testimonials {
-      grid-template-columns: 1fr 1fr 1fr;
+  .testimonials-carousel__viewport {
+    flex: 1 1 auto;
+    overflow: hidden;
+    /* No height constraint : the track stretches to the tallest card,
+       and align-items: stretch on the track gives every card the same
+       height. The section stays stable while sliding. */
+  }
+
+  .testimonials-carousel__track {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    transform: translateX(0);
+    transition: transform 500ms ease;
+    will-change: transform;
+  }
+
+  /* Nav arrows */
+  .testimonials-carousel__nav {
+    flex: 0 0 44px;
+    align-self: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 250ms ease, border-color 250ms ease, color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+    padding: 0;
+  }
+
+  .testimonials-carousel__nav:hover,
+  .testimonials-carousel__nav:focus-visible {
+    background: var(--woop-gradient);
+    border-color: transparent;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(230, 43, 127, 0.3);
+  }
+
+  .testimonials-carousel__nav:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  /* Cards : 1 visible on mobile, 2 on tablet, 3 on desktop. */
+  .testimonial-card {
+    flex: 0 0 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+    border-radius: var(--radius-bento);
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media (min-width: 640px) {
+    .testimonial-card {
+      flex-basis: calc((100% - 12px) / 2);
+      padding: 28px;
     }
   }
 
-  .testimonial__author {
-    margin-top: 20px;
+  @media (min-width: 1024px) {
+    .testimonial-card {
+      flex-basis: calc((100% - 24px) / 3);
+    }
+  }
+
+  /* Outline variant : translucide, accent rose-orange en haut. */
+  .testimonial-card--outline {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+
+  .testimonial-card--outline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  /* Gradient variant : la carte EST le dégradé. Pas de filet en haut. */
+  .testimonial-card--gradient {
+    background: linear-gradient(135deg, #E62B7F 0%, #FA6244 100%);
+    color: #fff;
+    border: 1px solid transparent;
+  }
+
+  .testimonial-card__text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: inherit;
+    margin: 0 0 20px;
+  }
+
+  @media (min-width: 1024px) {
+    .testimonial-card__text { font-size: 15px; }
+  }
+
+  .testimonial-card--outline .testimonial-card__text {
+    color: var(--text-secondary);
+  }
+
+  .testimonial-card--gradient .testimonial-card__text {
+    color: #fff;
+  }
+
+  .testimonial-card__author {
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
-  .testimonial__author strong {
+  .testimonial-card__name {
     font-size: 14px;
+    font-weight: 700;
     color: var(--text-primary);
   }
 
-  .testimonial__author span {
+  .testimonial-card--gradient .testimonial-card__name {
+    color: #fff;
+  }
+
+  .testimonial-card__role {
     font-size: 12px;
     color: var(--text-muted);
   }
 
   @media (min-width: 1024px) {
-    .testimonial__author span { font-size: 14px; }
+    .testimonial-card__role { font-size: 14px; }
+  }
+
+  .testimonial-card--gradient .testimonial-card__role {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials-carousel__track,
+    .testimonials-carousel__nav {
+      transition: none;
+    }
+    .testimonials-carousel__nav:hover,
+    .testimonials-carousel__nav:focus-visible {
+      transform: none;
+    }
   }
 
   /* ===== CTA FINAL ===== */
@@ -814,4 +998,129 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     animatedElements.forEach((el) => observer.observe(el));
   }
+</script>
+
+<script>
+  // Carrousel des avis clients : auto-défilement, flèches, pause au survol,
+  // hauteur fixe (calée sur la carte la plus grande, align-items: stretch),
+  // respect de prefers-reduced-motion. Boucle continue : on clone les N
+  // premières cartes (N = visible count) à la fin du track et on snappe
+  // silencieusement à 0 quand on atteint la zone de clones.
+  (function () {
+    const carousel = document.querySelector<HTMLElement>('[data-testimonials-carousel]');
+    if (!carousel) return;
+    const track = carousel.querySelector<HTMLElement>('[data-testimonials-track]');
+    const prevBtn = carousel.querySelector<HTMLButtonElement>('[data-testimonials-prev]');
+    const nextBtn = carousel.querySelector<HTMLButtonElement>('[data-testimonials-next]');
+    if (!track || !prevBtn || !nextBtn) return;
+
+    const TRANSITION_MS = 500;
+    const AUTO_MS = 6000;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let currentIndex = 0;
+    let originalCount = 0;
+    let isHover = false;
+    let timerId: number | null = null;
+
+    function getVisibleCount(): number {
+      const w = window.innerWidth;
+      if (w >= 1024) return 3;
+      if (w >= 640) return 2;
+      return 1;
+    }
+
+    function ensureClones() {
+      if (!track) return;
+      // Strip any previous clones
+      track.querySelectorAll('[data-testimonials-clone]').forEach((c) => c.remove());
+      const originals = Array.from(track.children) as HTMLElement[];
+      originalCount = originals.length;
+      const visibleCount = Math.min(getVisibleCount(), originalCount);
+      for (let i = 0; i < visibleCount; i++) {
+        const clone = originals[i].cloneNode(true) as HTMLElement;
+        clone.setAttribute('data-testimonials-clone', '');
+        clone.setAttribute('aria-hidden', 'true');
+        track.appendChild(clone);
+      }
+    }
+
+    function getStep(): number {
+      if (!track || !track.children[0]) return 0;
+      const slide = track.children[0] as HTMLElement;
+      const styles = window.getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+      return slide.offsetWidth + gap;
+    }
+
+    function applyTransform(animate: boolean) {
+      if (!track) return;
+      track.style.transition = animate && !reducedMotion ? `transform ${TRANSITION_MS}ms ease` : 'none';
+      track.style.transform = `translateX(${-getStep() * currentIndex}px)`;
+    }
+
+    function next() {
+      currentIndex++;
+      applyTransform(true);
+      if (currentIndex >= originalCount) {
+        // Animate to clones, then snap silently to the equivalent real index
+        window.setTimeout(() => {
+          currentIndex = currentIndex - originalCount;
+          applyTransform(false);
+        }, TRANSITION_MS + 30);
+      }
+    }
+
+    function prev() {
+      if (currentIndex === 0) {
+        // Jump silently to position N (clones, visually identical to 0..),
+        // then animate one card back so the previous card slides in.
+        currentIndex = originalCount;
+        applyTransform(false);
+        // Force a reflow so the next style change starts a fresh transition.
+        void track!.offsetWidth;
+        currentIndex = originalCount - 1;
+        applyTransform(true);
+      } else {
+        currentIndex--;
+        applyTransform(true);
+      }
+    }
+
+    function startAuto() {
+      stopAuto();
+      if (reducedMotion) return;
+      timerId = window.setInterval(() => {
+        if (!isHover) next();
+      }, AUTO_MS);
+    }
+
+    function stopAuto() {
+      if (timerId !== null) {
+        window.clearInterval(timerId);
+        timerId = null;
+      }
+    }
+
+    prevBtn.addEventListener('click', () => { prev(); startAuto(); });
+    nextBtn.addEventListener('click', () => { next(); startAuto(); });
+    carousel.addEventListener('mouseenter', () => { isHover = true; });
+    carousel.addEventListener('mouseleave', () => { isHover = false; });
+    carousel.addEventListener('focusin', () => { isHover = true; });
+    carousel.addEventListener('focusout', () => { isHover = false; });
+
+    let resizeTimer: number | null = null;
+    window.addEventListener('resize', () => {
+      if (resizeTimer !== null) window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        ensureClones();
+        currentIndex = 0;
+        applyTransform(false);
+      }, 150);
+    });
+
+    ensureClones();
+    applyTransform(false);
+    startAuto();
+  })();
 </script>
