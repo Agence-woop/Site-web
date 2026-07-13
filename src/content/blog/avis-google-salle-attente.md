@@ -9,6 +9,7 @@ auteur: "gauthier"
 datePublication: 2026-07-09
 imageEntete: "/images/blog/avis-google-salle-attente.webp"
 imageEnteteAlt: "Un patient consulte les avis Google d'une clinique sur son téléphone, comme une salle d'attente numérique."
+vignettePartage: "/images/blog/og-avis-google-salle-attente.jpg"
 brouillon: false
 ---
 
