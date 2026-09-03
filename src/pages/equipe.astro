@@ -38,6 +38,17 @@ const team = [
       'Chez WOOP, elle pilote la performance publicitaire sur Google Ads et Meta Ads, et conçoit les landing pages de conversion.',
     ],
   },
+  {
+    name: 'Ludo Santos',
+    badge: 'Développement',
+    role: 'Développeur web',
+    photo: `${base}/images/ludo.webp`,
+    linkedin: 'https://www.linkedin.com/in/ludo-snts',
+    bio: [
+      'Développeur web de formation, Ludo a construit son expertise au sein d\'agences de communication. Sensible aux questions d\'écoconception et de sobriété numérique, il développe des sites légers, rapides et respectueux des données.',
+      'Chez WOOP, il prend en charge le développement et l\'intégration, et fait le pont entre la création et la performance.',
+    ],
+  },
 ];
 
 const methods = [
@@ -60,8 +71,8 @@ const methods = [
 ];
 ---
 <Layout
-  title="WOOP — L'équipe | Trois experts du terrain"
-  description="Un clinicien stratège, un créatif designer, une experte en acquisition. Trois expertises sous un même toit, sans sous-traitance. Découvrez l'équipe WOOP."
+  title="WOOP — L'équipe | Les experts du terrain"
+  description="Un clinicien stratège, un créatif designer, une experte en acquisition, un développeur web. Découvrez les expertises complémentaires de l'équipe WOOP."
   ogImage="/images/og-image.jpg"
 >
 
@@ -69,14 +80,13 @@ const methods = [
   <section class="equipe-hero">
     <div class="container">
       <div class="equipe-hero__watermark" aria-hidden="true">&Eacute;QUIPE</div>
-      <span class="equipe-hero__eyebrow">Le trio WOOP</span>
+      <span class="equipe-hero__eyebrow">L'&eacute;quipe WOOP</span>
       <h1 class="equipe-hero__title">
-        Trois experts.<br>
-        <span class="gradient-accent">Aucune sous-traitance.</span><br>
+        Des experts du terrain.<br>
         Vous savez qui fait quoi sur votre projet.
       </h1>
       <p class="equipe-hero__subtitle">
-        Un trio compl&eacute;mentaire et nomm&eacute;. Vous parlez aux fondateurs directement, du premier appel jusqu'&agrave; la livraison de votre projet.
+        Une &eacute;quipe compl&eacute;mentaire et nomm&eacute;e. Vous parlez directement aux gens qui font le travail, du premier appel jusqu'&agrave; la livraison, et un fondateur reste toujours dans la boucle.
       </p>
     </div>
   </section>
@@ -85,8 +95,8 @@ const methods = [
   <section class="section">
     <div class="container">
       <div class="trio-anchor">
-        <h3 class="trio-anchor__title gradient-text">Le trio</h3>
-        <p class="trio-anchor__tagline">Trois experts. Pas de sous-traitance.</p>
+        <h3 class="trio-anchor__title gradient-text">L'&eacute;quipe</h3>
+        <p class="trio-anchor__tagline">Des expertises compl&eacute;mentaires.</p>
       </div>
 
       <div class="trio-cards">
@@ -251,7 +261,7 @@ const methods = [
 
   @media (min-width: 768px) {
     .trio-cards {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
     }
   }
 
