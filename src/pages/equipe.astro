@@ -261,7 +261,27 @@ const methods = [
 
   @media (min-width: 768px) {
     .trio-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .trio-card {
+      flex-direction: row;
+    }
+
+    .trio-card__photo-wrap {
+      flex: 0 0 220px;
+      aspect-ratio: auto;
+      align-self: stretch;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .trio-cards {
       grid-template-columns: 1fr 1fr;
+    }
+
+    .trio-card__photo-wrap {
+      flex: 0 0 200px;
     }
   }
 
