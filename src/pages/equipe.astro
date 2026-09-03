@@ -263,25 +263,11 @@ const methods = [
     .trio-cards {
       grid-template-columns: 1fr;
     }
-
-    .trio-card {
-      flex-direction: row;
-    }
-
-    .trio-card__photo-wrap {
-      flex: 0 0 220px;
-      aspect-ratio: auto;
-      align-self: stretch;
-    }
   }
 
   @media (min-width: 1024px) {
     .trio-cards {
       grid-template-columns: 1fr 1fr;
-    }
-
-    .trio-card__photo-wrap {
-      flex: 0 0 200px;
     }
   }
 
@@ -574,6 +560,25 @@ const methods = [
   @media (prefers-reduced-motion: reduce) {
     .trio-card__linkedin {
       transition: none;
+    }
+  }
+
+  /* Cartes équipe en format horizontal — placé en fin de feuille et avec une spécificité supérieure pour l'emporter définitivement sur les règles de base verticales */
+  @media (min-width: 768px) {
+    .trio-cards .trio-card {
+      flex-direction: row;
+    }
+
+    .trio-cards .trio-card__photo-wrap {
+      flex: 0 0 220px;
+      aspect-ratio: auto;
+      align-self: stretch;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .trio-cards .trio-card__photo-wrap {
+      flex: 0 0 200px;
     }
   }
 </style>
