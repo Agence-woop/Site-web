@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acquisition | Woop, agence marketing santé et recrutement</title>
+<meta name="description" content="Faites le test de visibilité Woop en 2 minutes : score sur 100 et 3 actions prioritaires pour attirer plus de clients.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Megrim&display=swap">
+<style>
+:root{
+  --bg:#120A10; --ink:#F7F2F4; --muted:#CBB9C4; --dim:#A9949F;
+  --orange:#EE5A35; --pink:#E8338A; --pink-soft:#FF8FB8;
+  --grad:linear-gradient(90deg,#F04A2E,#E8288A);
+  --card:rgba(10,4,8,.55); --line:rgba(247,242,244,.12);
+  /* Remplacer Megrim par Ganky (police de la charte Woop) quand le fichier est disponible */
+  --display:'Megrim', 'Inter', sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--pink-soft)}
+.page{min-height:100vh;background:radial-gradient(ellipse at 85% 0%,#5E1534 0%,#2A0E1D 35%,#120A10 70%)}
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+.kw{font-family:var(--display);text-transform:uppercase;background:linear-gradient(90deg,var(--orange),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:2px transparent;letter-spacing:1px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;background:var(--grad);color:#fff;font:700 17px Inter,sans-serif;padding:18px 34px;border-radius:999px;transition:box-shadow .2s}
+.btn:hover{color:#fff;box-shadow:0 10px 40px rgba(232,51,138,.55)}
+.btn-lg{font-size:20px;padding:22px 40px}
+.pill{display:inline-block;border:1.5px solid rgba(247,242,244,.35);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:700}
+.pill.pink{border-color:var(--pink);color:var(--pink-soft)}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:3px;color:var(--muted)}
+
+/* Header */
+.header{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:28px 32px}
+.header img{height:40px;display:block}
+.nav{display:flex;gap:28px;font-size:15px;font-weight:600}
+.nav .active{color:var(--pink-soft)}
+
+/* Quiz */
+.quiz{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;background:var(--card);padding:48px 56px 44px;min-height:560px}
+.quiz .watermark{position:absolute;right:310px;bottom:-80px;font-family:var(--display);font-size:420px;line-height:1;font-weight:700;color:transparent;-webkit-text-stroke:2px rgba(232,51,138,.16);pointer-events:none;user-select:none}
+.segs{display:flex;gap:6px;margin-bottom:36px}
+.seg{flex:1;height:5px;border-radius:3px;background:rgba(247,242,244,.12);transition:background .3s}
+.seg.done{background:linear-gradient(90deg,var(--orange),var(--pink))}
+.seg.now{background:var(--pink);box-shadow:0 0 12px rgba(232,51,138,.9)}
+.qbody{position:relative;display:flex;gap:48px}
+.qmain{flex:1;min-width:0;display:flex;flex-direction:column;gap:20px}
+.qhead{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tag{border:1.5px solid var(--pink);color:var(--pink-soft);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:800;letter-spacing:1.5px}
+.qtitle{margin:0;font-size:44px;line-height:1.1;font-weight:800;letter-spacing:-.5px}
+.grid{display:grid;gap:16px;margin-top:6px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{display:flex;flex-direction:column;gap:16px;align-items:flex-start;text-align:left;font-family:Inter,sans-serif;color:var(--ink);cursor:pointer;border-radius:22px;padding:24px;min-height:164px;background:rgba(10,4,8,.6);border:2px solid rgba(247,242,244,.25);transition:transform .2s,box-shadow .2s,border-color .2s,background .2s}
+.card:hover{transform:translateY(-3px);border-color:rgba(247,242,244,.6)}
+.card.on{background:linear-gradient(160deg,rgba(238,90,53,.22),rgba(232,51,138,.22));border-color:var(--pink);box-shadow:0 0 40px rgba(232,51,138,.5);transform:translateY(-4px)}
+.card:focus-visible{outline:3px solid var(--pink-soft);outline-offset:3px}
+.ic{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,rgba(238,90,53,.3),rgba(232,51,138,.3));box-shadow:inset 0 0 0 1px rgba(232,51,138,.5),0 8px 24px rgba(232,51,138,.18);display:flex;align-items:center;justify-content:center}
+.ic svg{width:32px;height:32px}
+.lab{font-size:18px;font-weight:700;line-height:1.25}
+.big{font-size:44px;font-weight:800;line-height:1;background:linear-gradient(90deg,#F7F2F4,#FFB3CF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stars{font-size:20px;letter-spacing:2px;color:var(--pink-soft)}
+.stars i{font-style:normal;color:#5A4650}
+.serp{width:100%;background:#F7F2F4;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;position:relative}
+.serp b{display:block;height:10px;border-radius:5px;background:#DCCFD5}
+.serp b.me{height:16px;background:var(--pink)}
+.qfoot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.back{background:none;border:0;color:var(--ink);font:800 13px Inter,sans-serif;letter-spacing:3px;cursor:pointer;padding:12px 0}
+.back[disabled]{visibility:hidden}
+.hint{font-size:13px;color:var(--dim)}
+.aside{width:250px;flex:none;align-self:flex-start;border:1px solid var(--line);border-radius:24px;background:rgba(10,4,8,.55);padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.ring{position:relative;width:160px;height:160px}
+.ring span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:800;filter:blur(6px)}
+.field{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+.field input{background:none;border:0;border-bottom:2px solid rgba(247,242,244,.6);color:var(--ink);font:24px Inter,sans-serif;padding:10px 0}
+.field input:focus{outline:none;border-bottom-color:var(--pink)}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--muted);grid-column:1/-1}
+.consent input{accent-color:var(--pink);width:18px;height:18px;margin-top:2px}
+.err{color:var(--pink-soft);font-size:14px;min-height:20px;grid-column:1/-1}
+
+/* Intro et résultat */
+.intro{display:flex;gap:56px;align-items:center;justify-content:space-between}
+.intro h1{margin:0;font-size:68px;line-height:1.05;font-weight:800;letter-spacing:-1px}
+.result{display:flex;gap:56px;align-items:center}
+.result .score{position:relative;width:300px;height:300px;flex:none}
+.result .score div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.result .score strong{font-size:84px;line-height:1}
+.action{display:flex;gap:16px;align-items:center;background:rgba(247,242,244,.06);border:1px solid rgba(247,242,244,.1);border-radius:14px;padding:14px 20px;font-size:17px;font-weight:600}
+.action span{width:34px;height:34px;flex:none;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--pink));display:flex;align-items:center;justify-content:center;font-weight:800}
+
+/* Services */
+.h2{margin:0;font-size:56px;line-height:1.05;font-weight:800}
+.bento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.tile{position:relative;overflow:hidden;border:1px solid rgba(247,242,244,.1);border-radius:28px;background:#1A0D15;padding:32px;min-height:340px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;transition:transform .25s,border-color .25s}
+.tile:hover{transform:translateY(-4px);border-color:rgba(232,51,138,.6)}
+.tile.span2{grid-column:span 2;min-height:420px;background:linear-gradient(140deg,#3A1026,#14090F)}
+.tile h3{margin:6px 0 0;font-size:32px;line-height:1.08;font-weight:800}
+.tile .lbl{font-size:13px;font-weight:800;letter-spacing:3px;color:var(--pink-soft)}
+.phone{position:absolute;right:56px;top:40px;width:240px;height:440px;border-radius:40px;background:#0B0609;border:2px solid #3A2430;padding:12px;transform:rotate(6deg);box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 80px rgba(232,51,138,.3)}
+.phone div{height:100%;border-radius:30px;background:linear-gradient(170deg,#E8338A,#7A1842 60%,#2A0D1C);display:flex;flex-direction:column;justify-content:flex-end;padding:18px;gap:10px}
+.kpi{display:flex;justify-content:space-between;align-items:center;background:rgba(247,242,244,.07);border-radius:12px;padding:14px 16px;font-weight:700}
+.kpi.no{background:none;border:1.5px dashed rgba(247,242,244,.25);color:#8E7584}
+.kpi.no em{text-decoration:line-through;font-style:normal}
+.steps3{display:flex;align-items:center;gap:16px}
+.step3{flex:1;display:flex;align-items:center;gap:16px;border:1px solid rgba(247,242,244,.1);border-radius:20px;padding:22px 24px;background:var(--card);font-size:20px;font-weight:800}
+.step3 .kw{font-size:44px;line-height:1}
+.step3.hot{background:linear-gradient(110deg,#C8452F,#B01E62);border:0}
+.cta-band{display:flex;gap:32px;align-items:center;justify-content:space-between;border-radius:28px;padding:48px 56px;background:linear-gradient(110deg,#C8452F,#B01E62)}
+.footer{display:flex;justify-content:center;gap:28px;color:var(--dim);font-size:15px;flex-wrap:wrap;padding:24px 32px 48px}
+
+@media (max-width:980px){
+  .nav{display:none}
+  .quiz{padding:32px 22px}
+  .qbody,.intro,.result{flex-direction:column;align-items:flex-start}
+  .aside,.quiz .watermark{display:none}
+  .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .intro h1{font-size:42px}.qtitle{font-size:30px}.h2{font-size:38px}
+  .bento{grid-template-columns:minmax(0,1fr)}.tile.span2{grid-column:auto}
+  .phone{position:relative;right:auto;top:auto;margin:10px auto 0}
+  .steps3,.cta-band{flex-direction:column;align-items:stretch}
+  .steps3 > .arrow{display:none}
+}
+@media (max-width:560px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}.card{min-height:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="header wrap">
+  <a href="/" aria-label="Accueil Woop"><img src="assets/woop-logo.png" alt="Woop"></a>
+  <nav class="nav" aria-label="Navigation principale">
+    <a href="/sante">Santé &amp; Médical</a>
+    <a href="/rh">RH &amp; Recrutement</a>
+    <a href="#score" class="active" aria-current="page">Acquisition</a>
+    <a href="/equipe">Équipe</a>
+    <a href="/contact">Contact</a>
+  </nav>
+  <a class="btn" href="#rdv">Réserver un appel découverte ›</a>
+</header>
+
+<main>
+<section id="score" class="wrap" style="padding:40px 32px 96px">
+  <div class="quiz" id="quiz" aria-live="polite"></div>
+</section>
+
+<section class="wrap" style="padding:24px 32px 32px">
+  <h2 class="h2">Des <span class="kw">clients</span>, pas des clics.</h2>
+</section>
+
+<section class="wrap" style="padding:16px 32px 48px">
+  <div class="bento">
+    <article class="tile span2">
+      <div style="position:relative;z-index:1;max-width:340px"><span class="lbl">GOOGLE ET META ADS</span><h3 style="font-size:38px">Être trouvé en premier.</h3></div>
+      <div class="phone" aria-hidden="true"><div><span style="font-size:12px;font-weight:700;opacity:.85">Sponsorisé · à 400 m</span><span style="font-size:22px;font-weight:800;line-height:1.1">Des places cette semaine, réservez en ligne</span><span style="align-self:flex-start;background:#fff;color:#2A0F1E;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:800">Réserver</span></div></div>
+      <div style="display:flex;gap:10px;position:relative;z-index:1;flex-wrap:wrap"><span class="pill" style="border:0;background:rgba(247,242,244,.1)">Google</span><span class="pill" style="border:0;background:rgba(247,242,244,.1)">Facebook</span><span class="pill" style="border:0;background:rgba(247,242,244,.1)">Instagram</span></div>
+    </article>
+    <article class="tile">
+      <div><span class="lbl">ÉTUDE DE VOS KPI</span><h3>Aucun budget dilué.</h3></div>
+      <div style="display:flex;flex-direction:column;gap:10px"><div class="kpi">Coût par client <span style="color:var(--pink-soft)">✓</span></div><div class="kpi">Canaux qui rapportent <span style="color:var(--pink-soft)">✓</span></div><div class="kpi no"><em>Budget gaspillé</em> ✕</div></div>
+    </article>
+    <article class="tile">
+      <div><span class="lbl">STRATÉGIE ADAPTÉE</span><h3>Pour scaler rapidement.</h3></div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:110px" aria-hidden="true">
+        <span style="flex:1;height:40%;display:flex;align-items:flex-end;justify-content:center;background:rgba(247,242,244,.08);border-radius:14px;padding-bottom:10px;font-size:14px;font-weight:700">Tester</span>
+        <span style="flex:1;height:65%;display:flex;align-items:flex-end;justify-content:center;background:rgba(247,242,244,.14);border-radius:14px;padding-bottom:10px;font-size:14px;font-weight:700">Garder</span>
+        <span style="flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center;background:linear-gradient(180deg,#E8338A,#EE5A35);border-radius:14px;padding-bottom:10px;font-size:14px;font-weight:800">Scaler</span>
+      </div>
+    </article>
+    <article class="tile">
+      <div><span class="lbl">RAPPORTS</span><h3>Hebdo et mensuels.</h3></div>
+      <svg viewBox="0 0 320 120" width="100%" height="110" aria-hidden="true"><defs><linearGradient id="bg2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#EE5A35"/><stop offset="1" stop-color="#E8338A"/></linearGradient></defs><rect x="0" y="80" width="44" height="40" rx="8" fill="rgba(247,242,244,.12)"/><rect x="69" y="62" width="44" height="58" rx="8" fill="rgba(247,242,244,.12)"/><rect x="138" y="48" width="44" height="72" rx="8" fill="rgba(247,242,244,.18)"/><rect x="207" y="28" width="44" height="92" rx="8" fill="rgba(247,242,244,.24)"/><rect x="276" y="4" width="44" height="116" rx="8" fill="url(#bg2)"/></svg>
+      <div style="display:flex;gap:8px"><span class="pill" style="border:0;background:var(--grad)">Hebdo</span><span class="pill">Mensuel</span></div>
+    </article>
+    <article class="tile">
+      <div><span class="lbl">MISE EN PLACE</span><h3>En ligne, rapidement.</h3></div>
+      <div style="display:flex;align-items:center;gap:16px"><span style="width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,#EE5A35,#E8338A);display:flex;align-items:center;justify-content:center"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><span style="font-size:16px;font-weight:700;color:var(--muted)">Audit, plan, lancement.<br>Sans attendre des mois.</span></div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap" style="padding:24px 32px 48px">
+  <div class="steps3">
+    <div class="step3"><span class="kw">01</span>Audit 15 min</div><span class="arrow" style="color:var(--pink);font-size:28px;font-weight:800">›</span>
+    <div class="step3"><span class="kw">02</span>Plan sur mesure</div><span class="arrow" style="color:var(--pink);font-size:28px;font-weight:800">›</span>
+    <div class="step3 hot"><span style="font-size:44px;line-height:1">03</span>Lancement</div>
+  </div>
+</section>
+
+<section id="rdv" class="wrap" style="padding:24px 32px 96px">
+  <div class="cta-band">
+    <h2 class="h2" style="font-size:44px;line-height:1.1">Prêt à récupérer vos clients ?</h2>
+    <!-- Remplacer par le lien de réservation (Calendly, Zoho Bookings…) -->
+    <a href="#rdv" class="btn" style="background:#120A10;flex:none">Réserver mon audit ›</a>
+  </div>
+</section>
+</main>
+
+<footer class="footer wrap"><span>agence-woop.ca</span><span style="color:var(--pink)">●</span><span>contact@agence-woop.ca</span></footer>
+</div>
+
+<script>
+(function(){
+  var I = function(d){ return '<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#FF8FB8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg></span>'; };
+  var bars = function(n){ var h=[6,14,22,30,38,44], s=''; for(var i=0;i<5;i++){ var on=i<n; s+='<rect x="'+(i*22)+'" y="'+(on?44-h[i+1]:38)+'" width="16" height="'+(on?h[i+1]:6)+'" rx="3" fill="'+(on?'#FF8FB8':'#4A2A3B')+'"/>'; } return '<svg width="120" height="44" viewBox="0 0 120 44" aria-hidden="true">'+s+'</svg>'; };
+  var stars = function(n){ return '<span class="stars">'+'★'.repeat(n)+'<i>'+'★'.repeat(5-n)+'</i></span>'; };
+  var serp = function(pos){ var s=''; for(var i=0;i<4;i++){ s+='<b class="'+(i===pos?'me':'')+'"></b>'; } return '<span class="serp" aria-hidden="true">'+s+'</span>'; };
+
+  /* pts : points de chaque réponse pour le score sur 100 (null = question non notée) */
+  var Q = [
+    { tag:'VOTRE MÉTIER', title:"Votre activité, c'est plutôt…", cols:3, pts:null, opts:[
+      [I('<path d="M7 3c-2.5 0-4 2-4 4.5 0 3 1.5 4 2 7 .5 3 1 6.5 2.5 6.5S9 17 12 17s3 4 4.5 4 2-3.5 2.5-6.5c.5-3 2-4 2-7C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/>'),'Clinique médicale ou dentaire'],
+      [I('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'),'Esthétique, spa, massage'],
+      [I('<path d="M12 2v20"/><path d="M8 5h8M7 9h10M8 13h8M7 17h10"/>'),'Physio, ostéo, chiro'],
+      [I('<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6M5 10l7 3 7-3M8 21l4-8 4 8"/>'),'Pilates, yoga, fitness'],
+      [I('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'),'Cabinet de recrutement'],
+      [I('<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'),'Autre']]},
+    { tag:'TAILLE', title:"Votre chiffre d'affaires mensuel ?", cols:3, pts:null, opts:[
+      [bars(0),'En lancement'],[bars(1),'Moins de 20 k$ / mois'],[bars(2),'20 à 50 k$ / mois'],[bars(3),'50 à 100 k$ / mois'],[bars(4),'100 à 250 k$ / mois'],[bars(5),'Plus de 250 k$ / mois']]},
+    { tag:'PUBLICITÉ', title:'Vous diffusez déjà des publicités ?', cols:4, pts:[0,8,14,10], opts:[
+      [I('<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>'),'Pas encore'],
+      [I('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>'),'Oui, en interne'],
+      [I('<path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/>'),'Oui, avec une agence'],
+      [I('<rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 19h20"/>'),'Oui, avec un pigiste']]},
+    { tag:'BUDGET MÉDIA', title:'Votre budget publicitaire mensuel ?', cols:3, pts:[0,4,10,14,15], opts:[
+      ['<span class="big">0 $</span>',"Rien pour l'instant"],['<span class="big">&lt; 500 $</span>','Moins de 500 $ / mois'],['<span class="big">500 $+</span>','500 à 2 000 $ / mois'],['<span class="big">2 k$+</span>','2 000 à 5 000 $ / mois'],['<span class="big">5 k$+</span>','Plus de 5 000 $ / mois']]},
+    { tag:'VISIBILITÉ GOOGLE', title:'Sur Google, avec votre service et votre quartier, vous êtes…', cols:4, pts:[30,12,6,0], opts:[
+      [serp(0),'Dans les 3 premiers'],[serp(3),'Plus bas'],['<span class="serp" style="height:82px;align-items:center;justify-content:center;font-size:44px;font-weight:800;color:#E8338A">?</span>','Je ne sais pas'],[serp(-1),'Introuvable']]},
+    { tag:'RÉPUTATION', title:"Combien d'avis Google ?", cols:4, pts:[4,12,18,25], opts:[
+      ['<span class="big">&lt; 20</span>'+stars(1),'Moins de 20'],['<span class="big">20+</span>'+stars(2),'20 à 100'],['<span class="big">100+</span>'+stars(4),'100 à 300'],['<span class="big">300+</span>'+stars(5),'Plus de 300']]},
+    { tag:'OBJECTIF', title:'Votre objectif principal ?', cols:4, pts:null, opts:[
+      [I('<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M19 8v6M16 11h6"/>'),'Plus de nouveaux clients'],
+      [I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><rect x="7" y="13" width="4" height="4" rx="1" fill="#FF8FB8"/>'),'Remplir les créneaux creux'],
+      [I('<path d="M14 4c3 0 6 3 6 6l-7 7-6-6 7-7z"/><path d="M7 11l-3 1 2 2M13 17l-1 3-2-2"/>'),'Lancer un service'],
+      [I('<path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/>'),'Bâtir la marque tout en performant']]},
+    { tag:'CRÉATIF', title:'Où en êtes vous côté créatif ?', cols:3, pts:[4,10,16], opts:[
+      ['<span style="width:100%;height:90px;border-radius:12px;border:2px dashed rgba(247,242,244,.35);display:flex;align-items:center;justify-content:center;color:#8E7584;font-size:34px">+</span>','Rien, tout est à produire'],
+      ['<span style="width:100%;height:90px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px"><i style="border-radius:10px;background:linear-gradient(135deg,#EE5A35,#E8338A)"></i><i style="border-radius:10px;background:rgba(247,242,244,.15)"></i><i style="border-radius:10px;border:2px dashed rgba(247,242,244,.3)"></i></span>','Quelques photos et vidéos'],
+      ['<span style="width:100%;height:90px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:6px"><i style="border-radius:8px;background:linear-gradient(135deg,#EE5A35,#E8338A)"></i><i style="border-radius:8px;background:#B01E62"></i><i style="border-radius:8px;background:rgba(247,242,244,.25)"></i><i style="border-radius:8px;background:rgba(247,242,244,.25)"></i><i style="border-radius:8px;background:linear-gradient(135deg,#EE5A35,#E8338A)"></i><i style="border-radius:8px;background:#B01E62"></i></span>',"Banque d'images prête"]]},
+    { tag:'TIMING', title:'Quand souhaitez vous démarrer ?', cols:4, pts:null, opts:[
+      [I('<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'),'Dès que possible'],
+      [I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'),'Dans le mois'],
+      [I('<circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/>'),'Ce trimestre'],
+      [I('<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>'),"J'explore pour l'instant"]]}
+  ];
+  var TOTAL = Q.length + 1; /* + coordonnées */
+  var state = { step:0, answers:{}, contact:{} };
+  var el = document.getElementById('quiz');
+  var C = 2*Math.PI*120;
+
+  function score(){ var s=0; Q.forEach(function(q,i){ if(q.pts && state.answers[i]!=null) s+=q.pts[state.answers[i]]; }); return s; }
+  function actions(){
+    var a=state.answers, v=function(i){ return (a[i]==null||!Q[i].pts)?0:Q[i].pts[a[i]]; }, out=[];
+    if(v(4)<30) out.push('Monter dans le top 3 local sur Google');
+    if(v(5)<18) out.push('Collecter des avis après chaque visite');
+    if(v(2)<14) out.push('Lancer Google et Meta Ads, pilotés par vos KPI');
+    if(v(3)<10) out.push('Fixer un budget test et le concentrer');
+    if(v(7)<10) out.push('Produire des créas qui convertissent');
+    out.push('Créer une page dédiée à votre offre');
+    return out.slice(0,3);
+  }
+  function segs(step){ var s='<div class="segs" aria-hidden="true">'; for(var i=1;i<=TOTAL;i++){ s+='<div class="seg '+(i<step?'done':i===step?'now':'')+'"></div>'; } return s+'</div>'; }
+  function aside(step){
+    return '<aside class="aside"><span class="eyebrow" style="font-size:12px;letter-spacing:2px">VOTRE SCORE SE CONSTRUIT</span><div class="ring"><svg width="160" height="160" viewBox="0 0 300 300" aria-hidden="true"><defs><linearGradient id="eg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EE5A35"/><stop offset="1" stop-color="#E8338A"/></linearGradient></defs><circle cx="150" cy="150" r="120" fill="none" stroke="rgba(247,242,244,.08)" stroke-width="26"/><circle cx="150" cy="150" r="120" fill="none" stroke="url(#eg)" stroke-width="26" stroke-linecap="round" stroke-dasharray="'+(C*(step-1)/TOTAL).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 150 150)" style="transition:stroke-dasharray .4s"/></svg><span>??</span></div><span style="font-size:14px;color:var(--muted)">Révélé à la fin, avec vos 3 actions prioritaires</span></aside>';
+  }
+  function frame(step, inner){
+    return '<span class="watermark" aria-hidden="true">'+(step<10?'0':'')+step+'</span>'+segs(step)+'<div class="qbody"><div class="qmain">'+inner+'</div>'+aside(step)+'</div>';
+  }
+
+  function render(){
+    var st = state.step;
+    if(st===0){
+      el.innerHTML = '<div class="intro"><div style="display:flex;flex-direction:column;gap:28px;flex:1;min-width:0"><h1>Quel est votre score de <span class="kw">visibilité</span> ?</h1><div style="display:flex;gap:10px;flex-wrap:wrap"><span class="pill">2 minutes</span><span class="pill">10 étapes</span><span class="pill pink">Gratuit</span></div><button class="btn btn-lg" type="button" data-start style="align-self:flex-start">Voir mon score ›</button></div><div class="result" style="flex:none"><div class="score" style="width:320px;height:320px"><svg width="320" height="320" viewBox="0 0 300 300" aria-hidden="true"><defs><linearGradient id="ig" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EE5A35"/><stop offset="1" stop-color="#E8338A"/></linearGradient></defs><circle cx="150" cy="150" r="126" fill="none" stroke="rgba(247,242,244,.08)" stroke-width="20"/><circle cx="150" cy="150" r="126" fill="none" stroke="url(#ig)" stroke-width="20" stroke-linecap="round" stroke-dasharray="520 792" transform="rotate(-90 150 150)"/></svg><div><strong style="filter:blur(7px)">72</strong><span style="color:var(--muted)">sur 100</span></div></div></div></div>';
+      el.querySelector('[data-start]').onclick=function(){ go(1); };
+      return;
+    }
+    if(st<=Q.length){
+      var qi=st-1, q=Q[qi], cards='';
+      q.opts.forEach(function(o,oi){ cards+='<button type="button" class="card'+(state.answers[qi]===oi?' on':'')+'" data-o="'+oi+'" aria-pressed="'+(state.answers[qi]===oi)+'">'+o[0]+'<span class="lab">'+o[1]+'</span></button>'; });
+      el.innerHTML = frame(st,
+        '<div class="qhead"><span class="eyebrow">ÉTAPE '+st+' / '+TOTAL+'</span><span class="tag">'+q.tag+'</span></div>'+
+        '<h2 class="qtitle">'+q.title+'</h2><div class="grid g'+q.cols+'">'+cards+'</div>'+
+        '<div class="qfoot"><button type="button" class="back" data-back>← RETOUR</button><span class="hint">Un clic suffit, on passe à la suite</span></div>');
+      Array.prototype.forEach.call(el.querySelectorAll('.card'), function(b){ b.onclick=function(){ state.answers[qi]=+b.getAttribute('data-o'); render(); setTimeout(function(){ go(st+1); },230); }; });
+      el.querySelector('[data-back]').onclick=function(){ go(st-1); };
+      return;
+    }
+    if(st===TOTAL){
+      var c=state.contact;
+      el.innerHTML = frame(st,
+        '<div class="qhead"><span class="eyebrow">ÉTAPE '+st+' / '+TOTAL+'</span><span class="tag">DERNIÈRE ÉTAPE</span></div>'+
+        '<h2 class="qtitle">Votre score est prêt. Où l\'envoyer ?</h2>'+
+        '<form id="contactForm" novalidate style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 32px;max-width:760px">'+
+        '<label class="field">Prénom<input name="prenom" autocomplete="given-name" required value="'+(c.prenom||'')+'"></label>'+
+        '<label class="field">Nom de l\'entreprise<input name="entreprise" autocomplete="organization" placeholder="Clinique, studio…" value="'+(c.entreprise||'')+'"></label>'+
+        '<label class="field">Courriel<input name="courriel" type="email" autocomplete="email" required placeholder="vous@clinique.ca" value="'+(c.courriel||'')+'"></label>'+
+        '<label class="field">Téléphone<input name="tel" type="tel" autocomplete="tel" placeholder="514 000 0000" value="'+(c.tel||'')+'"></label>'+
+        '<label class="consent"><input type="checkbox" name="consent" required>J\'accepte que Woop me contacte au sujet de mon score. Désabonnement en un clic.</label>'+
+        '<p class="err" id="err"></p>'+
+        '<button type="submit" class="btn btn-lg" style="justify-self:start">Débloquer mon score ›</button></form>'+
+        '<div class="qfoot"><button type="button" class="back" data-back>← RETOUR</button><span class="hint">Vos données restent chez Woop.</span></div>');
+      el.querySelector('[data-back]').onclick=function(){ go(st-1); };
+      el.querySelector('#contactForm').onsubmit=function(e){
+        e.preventDefault(); var f=e.target, err=el.querySelector('#err');
+        if(!f.prenom.value.trim()){ err.textContent='Votre prénom, s\'il vous plaît.'; return; }
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.courriel.value)){ err.textContent='Un courriel valide, s\'il vous plaît.'; return; }
+        if(!f.consent.checked){ err.textContent='Cochez la case pour recevoir votre rapport.'; return; }
+        state.contact={prenom:f.prenom.value.trim(),entreprise:f.entreprise.value.trim(),courriel:f.courriel.value.trim(),tel:f.tel.value.trim()};
+        send(); go(TOTAL+1);
+      };
+      return;
+    }
+    var s=score(), verdict = s<40 ? 'Presque invisible. Vos voisins captent vos clients.' : s<70 ? 'On vous trouve, mais vos voisins passent devant.' : 'Belle base. On peut accélérer.';
+    var acts=''; actions().forEach(function(t,i){ acts+='<div class="action"><span>'+(i+1)+'</span>'+t+'</div>'; });
+    el.innerHTML = '<div class="result"><div class="score"><svg width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Score de '+s+' sur 100"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EE5A35"/><stop offset="1" stop-color="#E8338A"/></linearGradient></defs><circle cx="150" cy="150" r="126" fill="none" stroke="rgba(247,242,244,.1)" stroke-width="18"/><circle cx="150" cy="150" r="126" fill="none" stroke="url(#sg)" stroke-width="18" stroke-linecap="round" stroke-dasharray="'+(2*Math.PI*126*s/100).toFixed(1)+' '+(2*Math.PI*126).toFixed(1)+'" transform="rotate(-90 150 150)"/></svg><div><strong>'+s+'</strong><span style="color:var(--muted)">sur 100</span></div></div>'+
+      '<div style="display:flex;flex-direction:column;gap:16px;flex:1;min-width:0"><span class="eyebrow" style="color:var(--pink-soft)">'+(state.contact.prenom?state.contact.prenom.toUpperCase()+', ':'')+'VOTRE SCORE VISIBILITÉ WOOP</span><h2 class="qtitle" style="font-size:40px">'+verdict+'</h2>'+acts+
+      '<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:8px"><a class="btn" href="#rdv">Réserver mon audit de 15 min ›</a><button type="button" class="back" data-restart style="letter-spacing:0;font-weight:500;text-decoration:underline;color:var(--muted)">Refaire le test</button></div></div></div>';
+    el.querySelector('[data-restart]').onclick=function(){ state={step:0,answers:{},contact:{}}; render(); };
+  }
+  function go(n){ state.step=Math.max(0,n); render(); el.scrollIntoView({behavior:'smooth',block:'start'}); }
+
+  /* À BRANCHER : envoi des réponses vers le CRM (Zoho), un webhook ou un formulaire.
+     Remplacer l'URL ci-dessous, ou laisser vide pour désactiver l'envoi. */
+  var ENDPOINT = '';
+  function send(){
+    if(!ENDPOINT) return;
+    var payload = { contact: state.contact, score: score(), reponses: Q.map(function(q,i){ return { question:q.title, reponse: state.answers[i]!=null ? q.opts[state.answers[i]][1] : null }; }) };
+    try{ fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); }catch(e){}
+  }
+  render();
+})();
+</script>
+</body>
+</html>
