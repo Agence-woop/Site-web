@@ -94,7 +94,7 @@ const jsonLd = [
               <span class="pill pill--pink">Gratuit</span>
             </div>
             <button type="button" class="acq-btn acq-btn--lg intro__start" data-start>
-              Voir mon score <ChevronRight size={16} />
+              Calculer mon score de visibilité <ChevronRight size={16} />
             </button>
           </div>
           <div class="intro__visual" aria-hidden="true">
@@ -142,9 +142,46 @@ const jsonLd = [
           </div>
           <div class="phone" aria-hidden="true">
             <div class="phone__screen">
-              <span class="phone__meta">Sponsorisé · à 400 m</span>
-              <span class="phone__headline">Des places cette semaine, réservez en ligne</span>
-              <span class="phone__cta">Réserver</span>
+              <svg class="phone__map" viewBox="0 0 180 112" preserveAspectRatio="xMidYMid slice" focusable="false">
+                <defs>
+                  <linearGradient id="acq-pin-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" class="stop-orange" />
+                    <stop offset="1" class="stop-pink" />
+                  </linearGradient>
+                </defs>
+                <rect width="180" height="112" class="map-bg" />
+                <rect x="112" y="34" width="44" height="30" rx="6" class="map-block" />
+                <rect x="14" y="78" width="34" height="24" rx="6" class="map-block" />
+                <path class="map-street map-street--main" d="M-6 74 C 40 62, 96 84, 186 56" />
+                <path class="map-street" d="M-6 26 L 186 18" />
+                <path class="map-street" d="M44 -6 L 62 118" />
+                <path class="map-street" d="M104 -6 L 96 118" />
+                <path class="map-street" d="M150 -6 L 164 118" />
+                <g class="map-pin" transform="translate(30 50)"><path d="M0 0c-4-5-7-8-7-12a7 7 0 0 1 14 0c0 4-3 7-7 12z" /><circle cy="-12" r="2.6" class="map-pin__dot" /></g>
+                <g class="map-pin" transform="translate(134 98)"><path d="M0 0c-4-5-7-8-7-12a7 7 0 0 1 14 0c0 4-3 7-7 12z" /><circle cy="-12" r="2.6" class="map-pin__dot" /></g>
+                <circle cx="80" cy="54" r="15" class="map-halo" />
+                <g transform="translate(80 64) scale(1.35)"><path d="M0 0c-4-5-7-8-7-12a7 7 0 0 1 14 0c0 4-3 7-7 12z" fill="url(#acq-pin-grad)" /><circle cy="-12" r="2.6" class="map-pin__dot--on" /></g>
+              </svg>
+              <div class="phone__results">
+                <div class="res res--on">
+                  <span class="res__meta">Sponsorisé</span>
+                  <span class="res__name">Votre clinique</span>
+                  <span class="res__row">
+                    <span class="res__stars">★★★★★</span>
+                    <span class="res__cta">Réserver</span>
+                  </span>
+                </div>
+                <div class="res">
+                  <span class="res__bar res__bar--name"></span>
+                  <span class="res__bar res__bar--line"></span>
+                  <span class="res__stars res__stars--dim">★★★★<i>★</i></span>
+                </div>
+                <div class="res">
+                  <span class="res__bar res__bar--name res__bar--short"></span>
+                  <span class="res__bar res__bar--line"></span>
+                  <span class="res__stars res__stars--dim">★★★<i>★★</i></span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="tile__pills tile__head--front">
@@ -166,7 +203,7 @@ const jsonLd = [
           </div>
         </article>
 
-        <article class="tile">
+        <article class="tile tile--pink">
           <div class="tile__head">
             <span class="tile__lbl">STRATÉGIE ADAPTÉE</span>
             <h3 class="tile__title">Pour accélérer sans gaspiller.</h3>
@@ -182,27 +219,37 @@ const jsonLd = [
           <div class="tile__head">
             <span class="tile__lbl">RAPPORTS</span>
             <h3 class="tile__title">Hebdo et mensuels.</h3>
+            <div class="tile__pills tile__pills--under">
+              <span class="pill pill--grad">Hebdo</span>
+              <span class="pill">Mensuel</span>
+            </div>
           </div>
-          <svg class="report-chart" viewBox="0 0 320 120" width="100%" height="110" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="acq-report-grad" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" class="stop-orange" />
-                <stop offset="1" class="stop-pink" />
-              </linearGradient>
-            </defs>
-            <rect x="0" y="80" width="44" height="40" rx="8" class="report-bar report-bar--1" />
-            <rect x="69" y="62" width="44" height="58" rx="8" class="report-bar report-bar--1" />
-            <rect x="138" y="48" width="44" height="72" rx="8" class="report-bar report-bar--2" />
-            <rect x="207" y="28" width="44" height="92" rx="8" class="report-bar report-bar--3" />
-            <rect x="276" y="4" width="44" height="116" rx="8" fill="url(#acq-report-grad)" />
-          </svg>
-          <div class="tile__pills">
-            <span class="pill pill--grad">Hebdo</span>
-            <span class="pill">Mensuel</span>
+          <div class="dash" aria-hidden="true">
+            <svg class="dash__chart" viewBox="0 0 300 104" focusable="false">
+              <defs>
+                <linearGradient id="acq-dash-line" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" class="stop-orange" />
+                  <stop offset="1" class="stop-pink" />
+                </linearGradient>
+                <linearGradient id="acq-dash-area" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" class="stop-pink-fade" />
+                  <stop offset="1" class="stop-pink-clear" />
+                </linearGradient>
+              </defs>
+              <path class="dash__grid" d="M0 26H300M0 56H300M0 86H300" />
+              <path d="M8 88 C 40 86, 60 70, 92 72 S 142 56, 172 52 S 232 32, 282 18 L 282 104 L 8 104 Z" fill="url(#acq-dash-area)" />
+              <path class="dash__line" d="M8 88 C 40 86, 60 70, 92 72 S 142 56, 172 52 S 232 32, 282 18" stroke="url(#acq-dash-line)" />
+              <circle cx="282" cy="18" r="13" class="dash__halo" />
+              <circle cx="282" cy="18" r="6" class="dash__point" />
+            </svg>
+            <div class="dash__kpis">
+              <span class="dash__kpi">Coût par patient <b>↓</b></span>
+              <span class="dash__kpi">Demandes <b>↑</b></span>
+            </div>
           </div>
         </article>
 
-        <article class="tile">
+        <article class="tile tile--orange">
           <div class="tile__head">
             <span class="tile__lbl">MISE EN PLACE</span>
             <h3 class="tile__title">En ligne, rapidement.</h3>
@@ -236,11 +283,13 @@ const jsonLd = [
     <div class="container seo-grid">
       <section class="seo-block">
         <h2 class="seo-block__title">Marketing pour cliniques : être trouvé avant vos concurrents</h2>
-        <p class="seo-block__text">Quand un patient cherche un soin près de chez lui, il choisit parmi les premiers résultats de Google, en se fiant à la note et aux avis. Une clinique bien classée, bien notée et présente sur les réseaux sociaux capte cette demande. Les autres la laissent filer vers la concurrence, souvent sans le savoir.</p>
+        <p class="seo-block__text">Quand un patient cherche un soin près de chez lui, il choisit parmi les premiers résultats de Google, en se fiant à la note et aux avis.</p>
+        <p class="seo-block__text">Une clinique bien classée, bien notée et présente sur les réseaux sociaux capte cette demande. Les autres la laissent filer vers la concurrence, souvent sans le savoir.</p>
       </section>
       <section class="seo-block">
         <h2 class="seo-block__title">Publicité Google et Meta, pilotée par vos indicateurs</h2>
-        <p class="seo-block__text">Nous concevons et gérons vos campagnes sur Google, Facebook et Instagram, avec un objectif clair : des rendez-vous, pas des clics. Chaque dollar est suivi, du coût par nouveau patient aux canaux qui rapportent vraiment, et le budget se concentre sur ce qui fonctionne.</p>
+        <p class="seo-block__text">Nous concevons et gérons vos campagnes sur Google, Facebook et Instagram, avec un objectif clair : des rendez-vous, pas des clics.</p>
+        <p class="seo-block__text">Chaque dollar est suivi, du coût par nouveau patient aux canaux qui rapportent vraiment, et le budget se concentre sur ce qui fonctionne.</p>
       </section>
     </div>
   </div>
@@ -250,14 +299,18 @@ const jsonLd = [
     <div class="container">
       <h2 class="acq-h2 acq-h2--faq">Questions fréquentes</h2>
       <div class="faq">
-        {faq.map((item) => (
-          <details class="faq__item">
-            <summary class="faq__question">
-              <span>{item.q}</span>
-              <span class="faq__icon" aria-hidden="true"></span>
-            </summary>
-            <p class="faq__answer">{item.a}</p>
-          </details>
+        {[faq.slice(0, 3), faq.slice(3)].map((column) => (
+          <div class="faq__col">
+            {column.map((item) => (
+              <details class="faq__item">
+                <summary class="faq__question">
+                  <span>{item.q}</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </summary>
+                <p class="faq__answer">{item.a}</p>
+              </details>
+            ))}
+          </div>
         ))}
       </div>
     </div>
@@ -459,7 +512,8 @@ const jsonLd = [
     font-size: 17px;
     line-height: 1.6;
     color: var(--text-secondary);
-    max-width: 620px;
+    max-width: 780px;
+    text-wrap: pretty;
   }
 
   @media (min-width: 1024px) {
@@ -531,7 +585,7 @@ const jsonLd = [
     .quiz :global(.score-ring__label strong) { font-size: 84px; }
   }
 
-  .quiz :global(.score-ring__blur) { filter: blur(7px); }
+  .quiz :global(.score-ring__blur) { filter: blur(11px); }
 
   /* ----- Étapes du quiz (générées en JavaScript) ----- */
   .quiz :global(.quiz__watermark) {
@@ -1125,7 +1179,7 @@ const jsonLd = [
   @media (min-width: 1024px) {
     .tile--span2 {
       grid-column: span 2;
-      min-height: 420px;
+      min-height: 470px;
     }
   }
 
@@ -1133,6 +1187,10 @@ const jsonLd = [
     position: relative;
     z-index: 1;
     max-width: 340px;
+  }
+
+  @media (min-width: 1024px) {
+    .tile--span2 .tile__head--front { max-width: min(340px, calc(100% - 320px)); }
   }
 
   .tile__lbl {
@@ -1162,15 +1220,19 @@ const jsonLd = [
     flex-wrap: wrap;
   }
 
+  .tile__pills--under { margin-top: 16px; }
+
+  /* ----- Téléphone : résultats de recherche locale ----- */
   .phone {
     position: relative;
-    margin: 10px auto 0;
-    width: 240px;
-    height: 440px;
-    border-radius: 40px;
+    margin: 8px auto 4px;
+    width: 210px;
+    height: 390px;
+    flex: none;
+    border-radius: 36px;
     background: var(--bg-deep);
     border: 2px solid rgba(230, 43, 127, 0.25);
-    padding: 12px;
+    padding: 10px;
     transform: rotate(6deg);
     box-shadow: 0 30px 70px rgba(10, 10, 15, 0.55), 0 0 80px rgba(230, 43, 127, 0.3);
   }
@@ -1179,38 +1241,128 @@ const jsonLd = [
     .phone {
       position: absolute;
       right: 56px;
-      top: 40px;
+      top: 50%;
       margin: 0;
+      transform: translateY(-50%) rotate(6deg);
     }
   }
 
   .phone__screen {
     height: 100%;
-    border-radius: 30px;
-    background:
-      linear-gradient(170deg, var(--woop-pink) 0%, rgba(230, 43, 127, 0.45) 60%, rgba(230, 43, 127, 0.08) 100%),
-      var(--bg-deep);
+    border-radius: 27px;
+    overflow: hidden;
+    background: var(--bg-elevated);
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 18px;
-    gap: 10px;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .phone__map {
+    display: block;
+    width: 100%;
+    height: 118px;
+    flex: none;
+    border-radius: 20px;
+  }
+
+  .map-bg { fill: color-mix(in srgb, var(--text-primary) 6%, var(--bg-deep)); }
+  .map-block { fill: rgba(230, 43, 127, 0.12); }
+
+  .map-street {
+    fill: none;
+    stroke: color-mix(in srgb, var(--text-primary) 16%, transparent);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .map-street--main {
+    stroke: color-mix(in srgb, var(--text-primary) 26%, transparent);
+    stroke-width: 6;
+  }
+
+  .map-pin path { fill: color-mix(in srgb, var(--text-primary) 38%, var(--bg-deep)); }
+  .map-pin__dot { fill: var(--bg-deep); }
+  .map-pin__dot--on { fill: #fff; }
+  .map-halo { fill: rgba(230, 43, 127, 0.22); }
+
+  .phone__results {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .res {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 14px;
+    padding: 10px 12px;
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  }
+
+  .res--on {
+    gap: 3px;
+    background: var(--woop-gradient);
     color: #fff;
+    box-shadow: 0 8px 24px rgba(230, 43, 127, 0.35);
   }
 
-  .phone__meta { font-size: 12px; font-weight: 700; opacity: 0.85; }
-  .phone__headline { font-size: 22px; font-weight: 800; line-height: 1.1; }
+  .res__meta {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
 
-  .phone__cta {
-    align-self: flex-start;
-    background: #fff;
-    color: var(--bg-deep);
-    border-radius: var(--radius-button);
-    padding: 8px 16px;
-    font-size: 13px;
+  .res__name {
+    font-size: 15px;
     font-weight: 800;
+    line-height: 1.15;
   }
 
+  .res__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 3px;
+  }
+
+  .res__stars {
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .res__stars--dim { color: color-mix(in srgb, var(--text-primary) 42%, transparent); }
+
+  .res__stars i {
+    font-style: normal;
+    color: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  }
+
+  .res__cta {
+    background: #fff;
+    color: var(--woop-pink);
+    border-radius: var(--radius-button);
+    padding: 5px 11px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .res__bar {
+    display: block;
+    height: 8px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--text-primary) 20%, transparent);
+  }
+
+  .res__bar--name { width: 72%; height: 10px; }
+  .res__bar--short { width: 58%; }
+  .res__bar--line { width: 46%; background: color-mix(in srgb, var(--text-primary) 11%, transparent); }
+
+  /* ----- Indicateurs ----- */
   .kpis {
     display: flex;
     flex-direction: column;
@@ -1222,18 +1374,25 @@ const jsonLd = [
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    background: var(--acq-fill);
+    background: var(--woop-gradient);
     border-radius: 12px;
-    padding: 14px 16px;
+    padding: 13px 16px;
+    font-size: 19px;
     font-weight: 700;
-    color: var(--text-primary);
+    line-height: 1.2;
+    color: #fff;
   }
 
-  .kpi__mark { color: var(--acq-pink-soft); }
+  .kpi__mark {
+    color: #fff;
+    font-weight: 800;
+    font-size: 20px;
+  }
 
   .kpi--no {
     background: none;
     border: 1.5px dashed var(--acq-line-strong);
+    font-size: 16px;
     color: var(--text-muted);
   }
 
@@ -1241,6 +1400,17 @@ const jsonLd = [
     text-decoration: line-through;
     font-style: normal;
   }
+
+  /* ----- Stratégie adaptée (fond rose plein) ----- */
+  .tile--pink {
+    background: var(--woop-pink);
+    border-color: transparent;
+  }
+
+  .tile--pink:hover { border-color: rgba(255, 255, 255, 0.5); }
+
+  .tile--pink .tile__lbl,
+  .tile--pink .tile__title { color: #fff; }
 
   .growth {
     display: flex;
@@ -1257,24 +1427,96 @@ const jsonLd = [
     border-radius: 14px;
     padding: 0 4px 10px;
     font-size: 14px;
-    font-weight: 700;
-    color: var(--text-primary);
+    font-weight: 800;
+    color: #fff;
     min-width: 0;
   }
 
-  .growth__bar--1 { height: 40%; background: color-mix(in srgb, var(--text-primary) 8%, transparent); }
-  .growth__bar--2 { height: 65%; background: color-mix(in srgb, var(--text-primary) 14%, transparent); }
+  .growth__bar--1 { height: 40%; background: rgba(255, 255, 255, 0.16); }
+  .growth__bar--2 { height: 65%; background: rgba(255, 255, 255, 0.26); }
 
   .growth__bar--3 {
     height: 100%;
-    background: linear-gradient(180deg, var(--woop-pink), var(--woop-orange));
-    color: #fff;
-    font-weight: 800;
+    background: #fff;
+    color: var(--woop-pink);
   }
 
-  .report-bar--1 { fill: color-mix(in srgb, var(--text-primary) 12%, transparent); }
-  .report-bar--2 { fill: color-mix(in srgb, var(--text-primary) 18%, transparent); }
-  .report-bar--3 { fill: color-mix(in srgb, var(--text-primary) 24%, transparent); }
+  /* ----- Rapports : mini tableau de bord ----- */
+  .dash {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid var(--acq-line);
+    border-radius: 16px;
+    background: var(--acq-surface);
+    padding: 14px;
+  }
+
+  .dash__chart {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .stop-pink-fade { stop-color: var(--woop-pink); stop-opacity: 0.35; }
+  .stop-pink-clear { stop-color: var(--woop-pink); stop-opacity: 0; }
+
+  .dash__grid {
+    fill: none;
+    stroke: color-mix(in srgb, var(--text-primary) 8%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 4 6;
+  }
+
+  .dash__line {
+    fill: none;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .dash__halo { fill: rgba(230, 43, 127, 0.25); }
+
+  .dash__point {
+    fill: #fff;
+    stroke: var(--woop-pink);
+    stroke-width: 3;
+  }
+
+  .dash__kpis {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .dash__kpi {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: var(--radius-button);
+    padding: 6px 12px;
+    background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .dash__kpi b { color: var(--acq-pink-soft); }
+
+  /* ----- Mise en place (dégradé orange) ----- */
+  .tile--orange {
+    background: linear-gradient(160deg,
+      color-mix(in srgb, var(--woop-orange) 78%, var(--bg-deep)),
+      color-mix(in srgb, var(--woop-orange) 60%, var(--bg-deep)));
+    border-color: transparent;
+  }
+
+  .tile--orange:hover { border-color: rgba(255, 255, 255, 0.5); }
+
+  .tile--orange .tile__lbl,
+  .tile--orange .tile__title,
+  .tile--orange .launch__text { color: #fff; }
 
   .launch {
     display: flex;
@@ -1292,6 +1534,11 @@ const jsonLd = [
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .tile--orange .launch__icon {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
   }
 
   .launch__text {
@@ -1418,16 +1665,31 @@ const jsonLd = [
     .seo-block__text { font-size: 17px; }
   }
 
+  .seo-block__text + .seo-block__text { margin-top: 16px; }
+
   /* ===== FAQ ===== */
   .acq-faq { padding: 24px 0 48px; }
 
   .acq-h2--faq { margin-bottom: 32px; }
 
   .faq {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  @media (min-width: 1024px) {
+    .faq {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 16px;
+    }
+  }
+
+  .faq__col {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    max-width: 920px;
   }
 
   .faq__item {
