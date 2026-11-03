@@ -1,0 +1,1991 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ChevronRight from '../components/ChevronRight.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SITE_URL = 'https://agence-woop.ca';
+const PAGE_URL = `${SITE_URL}/acquisition-client/`;
+
+const faq = [
+  {
+    q: 'Le test de visibilité est-il vraiment gratuit ?',
+    a: 'Oui. Il prend environ deux minutes et ne vous engage à rien. Vous recevez votre score sur 100 et trois actions prioritaires adaptées à votre situation.',
+  },
+  {
+    q: 'Comment est calculé le score ?',
+    a: "Il combine cinq critères : votre position sur Google, le nombre d'avis, vos publicités actuelles, votre budget média et vos contenus visuels. Votre type d'activité, votre objectif et votre calendrier servent à personnaliser les recommandations.",
+  },
+  {
+    q: "La publicité d'une clinique est-elle encadrée au Québec ?",
+    a: 'Oui. Les ordres professionnels encadrent la publicité de leurs membres, et Meta limite certaines options de ciblage liées à la santé. Nous concevons des campagnes qui respectent ces règles, avec un regard clinique sur chaque message.',
+  },
+  {
+    q: 'Combien de temps avant de voir des résultats ?',
+    a: "La publicité peut générer des demandes dès les premières semaines. La visibilité naturelle sur Google et la réputation, elles, se construisent sur plusieurs mois. C'est la combinaison des deux qui fait baisser durablement le coût d'un nouveau patient.",
+  },
+  {
+    q: 'Travaillez-vous seulement avec des cliniques ?',
+    a: 'Nous accompagnons les cliniques médicales et dentaires, les professionnels de la santé et du bien-être, ainsi que les cabinets de recrutement spécialisés, partout au Québec.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Acquisition client', item: PAGE_URL },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Marketing pour cliniques',
+    url: PAGE_URL,
+    provider: {
+      '@type': 'Organization',
+      name: 'Agence WOOP',
+      url: `${SITE_URL}/`,
+    },
+    areaServed: 'Québec',
+  },
+];
+---
+<Layout
+  title="Marketing clinique : test de visibilité gratuit | WOOP"
+  description="Faites le test de visibilité WOOP en 2 minutes : un score sur 100 et 3 actions prioritaires pour attirer plus de patients sur Google et Meta."
+  ogImage="/images/og-image.jpg"
+  jsonLd={jsonLd}
+>
+
+  <!-- 1. QUIZ : écran d'accueil statique (lu par Google), puis relais JavaScript -->
+  <section class="acq acq-quiz" id="score">
+    <div class="container">
+      <div
+        class="quiz"
+        data-quiz
+        data-base={base}
+        data-privacy={`${base}/confidentialite-et-conditions`}
+        aria-live="polite"
+      >
+        <div class="quiz__intro" data-intro>
+          <div class="intro__text">
+            <span class="kicker">Acquisition client · Cliniques et cabinets</span>
+            <h1 class="intro__title" tabindex="-1" data-intro-title>
+              Quel est le score de <span class="gradient-accent intro__kw">visibilité</span> de votre clinique ?
+            </h1>
+            <p class="intro__subtitle">
+              Un test gratuit de 2 minutes pour mesurer votre présence sur Google et Meta, et recevoir 3 actions prioritaires pour attirer plus de patients.
+            </p>
+            <div class="intro__pills">
+              <span class="pill">2 minutes</span>
+              <span class="pill">10 étapes</span>
+              <span class="pill pill--pink">Gratuit</span>
+            </div>
+            <button type="button" class="acq-btn acq-btn--lg intro__start" data-start>
+              Voir mon score <ChevronRight size={16} />
+            </button>
+          </div>
+          <div class="intro__visual" aria-hidden="true">
+            <div class="score-ring score-ring--intro">
+              <svg viewBox="0 0 300 300" focusable="false">
+                <defs>
+                  <linearGradient id="acq-ring-intro" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" class="stop-orange" />
+                    <stop offset="1" class="stop-pink" />
+                  </linearGradient>
+                </defs>
+                <circle cx="150" cy="150" r="126" class="ring-track" stroke-width="20" />
+                <circle
+                  cx="150" cy="150" r="126"
+                  class="ring-value"
+                  stroke="url(#acq-ring-intro)"
+                  stroke-width="20"
+                  stroke-dasharray="520 792"
+                  transform="rotate(-90 150 150)"
+                />
+              </svg>
+              <div class="score-ring__label">
+                <strong class="score-ring__blur">72</strong>
+                <span>sur 100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz__stage" data-stage hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. DES CLIENTS, PAS DES CLICS + SERVICES -->
+  <section class="acq acq-services">
+    <div class="container">
+      <h2 class="acq-h2">Des <span class="gradient-accent acq-kw">clients</span>, pas des clics.</h2>
+
+      <div class="bento">
+        <article class="tile tile--span2">
+          <div class="tile__head tile__head--front">
+            <span class="tile__lbl">PUBLICITÉ GOOGLE ET META</span>
+            <h3 class="tile__title tile__title--lg">Être trouvé en premier.</h3>
+          </div>
+          <div class="phone" aria-hidden="true">
+            <div class="phone__screen">
+              <span class="phone__meta">Sponsorisé · à 400 m</span>
+              <span class="phone__headline">Des places cette semaine, réservez en ligne</span>
+              <span class="phone__cta">Réserver</span>
+            </div>
+          </div>
+          <div class="tile__pills tile__head--front">
+            <span class="pill pill--soft">Google</span>
+            <span class="pill pill--soft">Facebook</span>
+            <span class="pill pill--soft">Instagram</span>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile__head">
+            <span class="tile__lbl">ÉTUDE DE VOS INDICATEURS</span>
+            <h3 class="tile__title">Aucun budget dilué.</h3>
+          </div>
+          <div class="kpis">
+            <div class="kpi">Coût par client <span class="kpi__mark" aria-hidden="true">✓</span></div>
+            <div class="kpi">Canaux qui rapportent <span class="kpi__mark" aria-hidden="true">✓</span></div>
+            <div class="kpi kpi--no"><em>Budget gaspillé</em> <span aria-hidden="true">✕</span></div>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile__head">
+            <span class="tile__lbl">STRATÉGIE ADAPTÉE</span>
+            <h3 class="tile__title">Pour accélérer sans gaspiller.</h3>
+          </div>
+          <div class="growth" aria-hidden="true">
+            <span class="growth__bar growth__bar--1">Tester</span>
+            <span class="growth__bar growth__bar--2">Garder</span>
+            <span class="growth__bar growth__bar--3">Accélérer</span>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile__head">
+            <span class="tile__lbl">RAPPORTS</span>
+            <h3 class="tile__title">Hebdo et mensuels.</h3>
+          </div>
+          <svg class="report-chart" viewBox="0 0 320 120" width="100%" height="110" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="acq-report-grad" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" class="stop-orange" />
+                <stop offset="1" class="stop-pink" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="80" width="44" height="40" rx="8" class="report-bar report-bar--1" />
+            <rect x="69" y="62" width="44" height="58" rx="8" class="report-bar report-bar--1" />
+            <rect x="138" y="48" width="44" height="72" rx="8" class="report-bar report-bar--2" />
+            <rect x="207" y="28" width="44" height="92" rx="8" class="report-bar report-bar--3" />
+            <rect x="276" y="4" width="44" height="116" rx="8" fill="url(#acq-report-grad)" />
+          </svg>
+          <div class="tile__pills">
+            <span class="pill pill--grad">Hebdo</span>
+            <span class="pill">Mensuel</span>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile__head">
+            <span class="tile__lbl">MISE EN PLACE</span>
+            <h3 class="tile__title">En ligne, rapidement.</h3>
+          </div>
+          <div class="launch">
+            <span class="launch__icon" aria-hidden="true">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg>
+            </span>
+            <span class="launch__text">Audit, plan, lancement.<br />Sans attendre des mois.</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. LES 3 ÉTAPES -->
+  <section class="acq acq-steps">
+    <div class="container">
+      <ol class="steps3">
+        <li class="step3"><span class="gradient-accent step3__num">01</span>Audit 30 min</li>
+        <li class="steps3__arrow" aria-hidden="true">›</li>
+        <li class="step3"><span class="gradient-accent step3__num">02</span>Plan sur mesure</li>
+        <li class="steps3__arrow" aria-hidden="true">›</li>
+        <li class="step3 step3--hot"><span class="step3__num step3__num--plain">03</span>Lancement</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. CONTENU DE RÉFÉRENCEMENT -->
+  <div class="acq acq-seo">
+    <div class="container seo-grid">
+      <section class="seo-block">
+        <h2 class="seo-block__title">Marketing pour cliniques : être trouvé avant vos concurrents</h2>
+        <p class="seo-block__text">Quand un patient cherche un soin près de chez lui, il choisit parmi les premiers résultats de Google, en se fiant à la note et aux avis. Une clinique bien classée, bien notée et présente sur les réseaux sociaux capte cette demande. Les autres la laissent filer vers la concurrence, souvent sans le savoir.</p>
+      </section>
+      <section class="seo-block">
+        <h2 class="seo-block__title">Publicité Google et Meta, pilotée par vos indicateurs</h2>
+        <p class="seo-block__text">Nous concevons et gérons vos campagnes sur Google, Facebook et Instagram, avec un objectif clair : des rendez-vous, pas des clics. Chaque dollar est suivi, du coût par nouveau patient aux canaux qui rapportent vraiment, et le budget se concentre sur ce qui fonctionne.</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- 5. FAQ -->
+  <section class="acq acq-faq">
+    <div class="container">
+      <h2 class="acq-h2 acq-h2--faq">Questions fréquentes</h2>
+      <div class="faq">
+        {faq.map((item) => (
+          <details class="faq__item">
+            <summary class="faq__question">
+              <span>{item.q}</span>
+              <span class="faq__icon" aria-hidden="true"></span>
+            </summary>
+            <p class="faq__answer">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. BANDEAU FINAL -->
+  <section class="acq acq-band" id="rdv">
+    <div class="container">
+      <div class="cta-band">
+        <h2 class="cta-band__title">Prêt à récupérer vos clients ?</h2>
+        <a href={`${base}/contact`} class="cta-band__btn" data-audit="bandeau_final" data-audit-band>
+          Réserver mon audit <ChevronRight size={16} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== JETONS LOCAUX (dérivés de la charte) ===== */
+  .acq {
+    --acq-pink-soft: color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    --acq-line: color-mix(in srgb, var(--text-primary) 12%, transparent);
+    --acq-line-strong: color-mix(in srgb, var(--text-primary) 25%, transparent);
+    --acq-fill: color-mix(in srgb, var(--text-primary) 7%, transparent);
+    --acq-surface: color-mix(in srgb, var(--bg-deep) 60%, transparent);
+    --acq-gradient-diag: linear-gradient(135deg, var(--woop-orange), var(--woop-pink));
+    --acq-gradient-deep: linear-gradient(110deg,
+      color-mix(in srgb, var(--woop-orange) 78%, var(--bg-deep)),
+      color-mix(in srgb, var(--woop-pink) 72%, var(--bg-deep)));
+  }
+
+  [hidden] { display: none !important; }
+
+  /* ===== BOUTONS ===== */
+  .quiz :global(.acq-btn) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    cursor: pointer;
+    background: var(--woop-gradient);
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.2;
+    padding: 16px 28px;
+    border-radius: var(--radius-button);
+    text-decoration: none;
+    transition: box-shadow 200ms ease, transform 200ms ease, opacity 200ms ease;
+  }
+
+  .quiz :global(.acq-btn:hover) {
+    color: #fff;
+    box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .quiz :global(.acq-btn:focus-visible) {
+    outline: 2px solid var(--acq-pink-soft);
+    outline-offset: 3px;
+  }
+
+  .quiz :global(.acq-btn[disabled]) {
+    cursor: progress;
+    opacity: 0.75;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .quiz :global(.acq-btn--lg) {
+    font-size: 17px;
+    padding: 18px 32px;
+  }
+
+  @media (min-width: 768px) {
+    .quiz :global(.acq-btn) { font-size: 17px; padding: 18px 34px; }
+    .quiz :global(.acq-btn--lg) { font-size: 20px; padding: 22px 40px; }
+  }
+
+  /* ===== PASTILLES ===== */
+  .acq :global(.pill) {
+    display: inline-block;
+    border: 1.5px solid color-mix(in srgb, var(--text-primary) 35%, transparent);
+    border-radius: var(--radius-button);
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  .acq :global(.pill--pink) {
+    border-color: var(--woop-pink);
+    color: var(--acq-pink-soft);
+  }
+
+  .pill--soft {
+    border: 0;
+    background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  }
+
+  .pill--grad {
+    border: 0;
+    background: var(--woop-gradient);
+    color: #fff;
+  }
+
+  /* ===== CARTE DU QUIZ ===== */
+  .acq-quiz {
+    padding: 32px 0 64px;
+  }
+
+  @media (min-width: 1024px) {
+    .acq-quiz { padding: 40px 0 96px; }
+  }
+
+  .quiz {
+    position: relative;
+    overflow: hidden;
+    scroll-margin-top: 100px;
+    border: 1px solid var(--acq-line);
+    border-radius: 28px;
+    background:
+      linear-gradient(160deg, rgba(230, 43, 127, 0.07), rgba(250, 98, 68, 0.02)),
+      var(--acq-surface);
+    padding: 32px 22px;
+  }
+
+  @media (min-width: 768px) {
+    .quiz { padding: 40px 36px; }
+  }
+
+  @media (min-width: 1024px) {
+    .quiz {
+      padding: 48px 56px 44px;
+      min-height: 560px;
+    }
+  }
+
+  .quiz :global([tabindex="-1"]:focus) { outline: none; }
+  .quiz :global([tabindex="-1"]:focus-visible) {
+    outline: 2px solid var(--acq-pink-soft);
+    outline-offset: 6px;
+    border-radius: 6px;
+  }
+
+  /* ----- Écran d'accueil (statique) ----- */
+  .quiz__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  @media (min-width: 1024px) {
+    .quiz__intro {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 56px;
+    }
+  }
+
+  .intro__text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .intro__text .kicker { margin-bottom: 0; }
+
+  .intro__title {
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: 34px;
+    line-height: 1.08;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .intro__title { font-size: 44px; }
+  }
+
+  @media (min-width: 1024px) {
+    .intro__title { font-size: 56px; letter-spacing: -1px; }
+  }
+
+  .intro__kw,
+  .acq-kw {
+    letter-spacing: 1px;
+  }
+
+  .intro__subtitle {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 620px;
+  }
+
+  @media (min-width: 1024px) {
+    .intro__subtitle { font-size: 19px; }
+  }
+
+  .intro__pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .intro__start { align-self: flex-start; }
+
+  .intro__visual { flex: none; width: min(320px, 100%); }
+
+  @media (max-width: 1023px) {
+    .intro__visual { width: min(260px, 100%); }
+  }
+
+  /* ----- Anneaux de score (accueil, progression, résultat) ----- */
+  .quiz :global(.stop-orange),
+  .acq-services :global(.stop-orange) { stop-color: var(--woop-orange); }
+  .quiz :global(.stop-pink),
+  .acq-services :global(.stop-pink) { stop-color: var(--woop-pink); }
+
+  .quiz :global(.ring-track) {
+    fill: none;
+    stroke: color-mix(in srgb, var(--text-primary) 9%, transparent);
+  }
+
+  .quiz :global(.ring-value) {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dasharray 400ms ease;
+  }
+
+  .quiz :global(.score-ring) {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  .quiz :global(.score-ring svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .quiz :global(.score-ring__label) {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 15px;
+  }
+
+  .quiz :global(.score-ring__label strong) {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .quiz :global(.score-ring__label strong) { font-size: 84px; }
+  }
+
+  .quiz :global(.score-ring__blur) { filter: blur(7px); }
+
+  /* ----- Étapes du quiz (générées en JavaScript) ----- */
+  .quiz :global(.quiz__watermark) {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .quiz :global(.quiz__watermark) {
+      display: block;
+      position: absolute;
+      right: 310px;
+      bottom: -80px;
+      font-family: var(--font-display);
+      font-size: 420px;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(230, 43, 127, 0.16);
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+
+  .quiz :global(.segs) {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 36px;
+  }
+
+  .quiz :global(.seg) {
+    flex: 1;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--acq-line);
+    transition: background 300ms ease;
+  }
+
+  .quiz :global(.seg.done) { background: var(--woop-gradient); }
+
+  .quiz :global(.seg.now) {
+    background: var(--woop-pink);
+    box-shadow: 0 0 12px rgba(230, 43, 127, 0.9);
+  }
+
+  .quiz :global(.qbody) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  @media (min-width: 1024px) {
+    .quiz :global(.qbody) { flex-direction: row; }
+  }
+
+  .quiz :global(.qmain) {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .quiz :global(.qhead) {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .quiz :global(.eyebrow) {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--text-secondary);
+  }
+
+  .quiz :global(.tag) {
+    border: 1.5px solid var(--woop-pink);
+    color: var(--acq-pink-soft);
+    border-radius: var(--radius-button);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+  }
+
+  .quiz :global(.qtitle) {
+    font-family: var(--font-body);
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .quiz :global(.qtitle) { font-size: 36px; }
+  }
+
+  @media (min-width: 1024px) {
+    .quiz :global(.qtitle) { font-size: 44px; }
+  }
+
+  .quiz :global(.grid) {
+    display: grid;
+    gap: 16px;
+    margin-top: 6px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 600px) {
+    .quiz :global(.grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1024px) {
+    .quiz :global(.g3) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1200px) {
+    .quiz :global(.g4) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  .quiz :global(.card) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+    text-align: left;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: 22px;
+    padding: 24px;
+    background: var(--bg-elevated);
+    border: 2px solid var(--acq-line-strong);
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease, background 200ms ease;
+  }
+
+  @media (min-width: 600px) {
+    .quiz :global(.card) { min-height: 164px; }
+  }
+
+  .quiz :global(.card:hover) {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--text-primary) 60%, transparent);
+  }
+
+  .quiz :global(.card.on) {
+    background: linear-gradient(160deg, rgba(250, 98, 68, 0.22), rgba(230, 43, 127, 0.22)), var(--bg-elevated);
+    border-color: var(--woop-pink);
+    box-shadow: 0 0 40px rgba(230, 43, 127, 0.5);
+    transform: translateY(-4px);
+  }
+
+  .quiz :global(.card:focus-visible) {
+    outline: 3px solid var(--acq-pink-soft);
+    outline-offset: 3px;
+  }
+
+  .quiz :global(.card__visual) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .quiz :global(.ic) {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(250, 98, 68, 0.3), rgba(230, 43, 127, 0.3));
+    box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.5), 0 8px 24px rgba(230, 43, 127, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--acq-pink-soft);
+  }
+
+  .quiz :global(.ic svg) { width: 32px; height: 32px; }
+
+  .quiz :global(.lab) {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .quiz :global(.big) {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(90deg, var(--text-primary), var(--acq-pink-soft));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .quiz :global(.stars) {
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--acq-pink-soft);
+  }
+
+  .quiz :global(.stars i) {
+    font-style: normal;
+    color: color-mix(in srgb, var(--text-primary) 20%, transparent);
+  }
+
+  .quiz :global(.bar-on) { fill: var(--acq-pink-soft); }
+  .quiz :global(.bar-off) { fill: rgba(230, 43, 127, 0.22); }
+
+  .quiz :global(.serp) {
+    width: 100%;
+    background: var(--text-primary);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .quiz :global(.serp b) {
+    display: block;
+    height: 10px;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--bg-deep) 15%, transparent);
+  }
+
+  .quiz :global(.serp b.me) {
+    height: 16px;
+    background: var(--woop-pink);
+  }
+
+  .quiz :global(.serp--unknown) {
+    height: 82px;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    font-weight: 800;
+    color: var(--woop-pink);
+  }
+
+  .quiz :global(.crea) {
+    width: 100%;
+    height: 90px;
+  }
+
+  .quiz :global(.crea--empty) {
+    border-radius: 12px;
+    border: 2px dashed var(--acq-line-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 34px;
+  }
+
+  .quiz :global(.crea--few),
+  .quiz :global(.crea--full) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .quiz :global(.crea--full) { grid-template-rows: repeat(2, 1fr); }
+
+  .quiz :global(.crea i) { border-radius: 10px; }
+  .quiz :global(.crea--full i) { border-radius: 8px; }
+  .quiz :global(.crea .c-grad) { background: var(--acq-gradient-diag); }
+  .quiz :global(.crea .c-pink) { background: rgba(230, 43, 127, 0.6); }
+  .quiz :global(.crea .c-soft) { background: color-mix(in srgb, var(--text-primary) 15%, transparent); }
+  .quiz :global(.crea .c-mid) { background: color-mix(in srgb, var(--text-primary) 25%, transparent); }
+  .quiz :global(.crea .c-dash) { border: 2px dashed color-mix(in srgb, var(--text-primary) 30%, transparent); }
+
+  .quiz :global(.qfoot) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .quiz :global(.back) {
+    background: none;
+    border: 0;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    padding: 12px 0;
+  }
+
+  .quiz :global(.back:hover) { color: var(--acq-pink-soft); }
+
+  .quiz :global(.back:focus-visible),
+  .quiz :global(.restart:focus-visible) {
+    outline: 2px solid var(--acq-pink-soft);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .quiz :global(.back[disabled]) { visibility: hidden; }
+
+  .quiz :global(.hint) {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .quiz :global(.aside) { display: none; }
+
+  @media (min-width: 1024px) {
+    .quiz :global(.aside) {
+      width: 250px;
+      flex: none;
+      align-self: flex-start;
+      border: 1px solid var(--acq-line);
+      border-radius: 24px;
+      background: var(--acq-surface);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+  }
+
+  .quiz :global(.aside__eyebrow) {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+  }
+
+  .quiz :global(.aside .score-ring) { width: 160px; }
+
+  .quiz :global(.aside .score-ring__label strong) {
+    font-size: 48px;
+    filter: blur(6px);
+  }
+
+  .quiz :global(.aside__note) {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* ----- Formulaire de la dernière étape ----- */
+  .quiz :global(.contact-form) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px 32px;
+    max-width: 760px;
+  }
+
+  @media (min-width: 600px) {
+    .quiz :global(.contact-form) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .quiz :global(.field) {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .quiz :global(.field input) {
+    background: none;
+    border: 0;
+    border-bottom: 2px solid color-mix(in srgb, var(--text-primary) 60%, transparent);
+    border-radius: 0;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 20px;
+    padding: 10px 0;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .quiz :global(.field input) { font-size: 24px; }
+  }
+
+  .quiz :global(.field input::placeholder) { color: var(--text-muted); }
+
+  .quiz :global(.field input:focus) {
+    outline: none;
+    border-bottom-color: var(--woop-pink);
+  }
+
+  .quiz :global(.field input[aria-invalid="true"]) { border-bottom-color: var(--woop-orange); }
+
+  .quiz :global(.consent) {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    grid-column: 1 / -1;
+  }
+
+  .quiz :global(.consent input) {
+    accent-color: var(--woop-pink);
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex: none;
+  }
+
+  .quiz :global(.consent input:focus-visible) {
+    outline: 2px solid var(--acq-pink-soft);
+    outline-offset: 2px;
+  }
+
+  .quiz :global(.consent a) {
+    color: var(--acq-pink-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .quiz :global(.consent a:focus-visible) {
+    outline: 2px solid var(--acq-pink-soft);
+    outline-offset: 2px;
+  }
+
+  .quiz :global(.err) {
+    color: var(--acq-pink-soft);
+    font-size: 14px;
+    min-height: 20px;
+    grid-column: 1 / -1;
+  }
+
+  .quiz :global(.contact-form .acq-btn) { justify-self: start; }
+
+  /* ----- Résultat ----- */
+  .quiz :global(.result) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  @media (min-width: 1024px) {
+    .quiz :global(.result) {
+      flex-direction: row;
+      align-items: center;
+      gap: 56px;
+    }
+  }
+
+  .quiz :global(.result__ring) {
+    width: min(300px, 100%);
+    flex: none;
+  }
+
+  .quiz :global(.result__body) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .quiz :global(.result__eyebrow) { color: var(--acq-pink-soft); }
+
+  .quiz :global(.result__verdict) { font-size: 30px; }
+
+  @media (min-width: 1024px) {
+    .quiz :global(.result__verdict) { font-size: 40px; }
+  }
+
+  .quiz :global(.action) {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--text-primary) 10%, transparent);
+    border-radius: 14px;
+    padding: 14px 20px;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .quiz :global(.action span) {
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--acq-gradient-diag);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+  }
+
+  .quiz :global(.result__cta) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .quiz :global(.result__cta-note) {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .quiz :global(.restart) {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 6px 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .quiz :global(.restart:hover) { color: var(--acq-pink-soft); }
+
+  /* ===== TITRES DE SECTION ===== */
+  .acq-h2 {
+    font-family: var(--font-body);
+    font-size: 34px;
+    line-height: 1.05;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .acq-h2 { font-size: 44px; }
+  }
+
+  @media (min-width: 1024px) {
+    .acq-h2 { font-size: 56px; }
+  }
+
+  /* ===== SERVICES ===== */
+  .acq-services { padding: 24px 0 48px; }
+
+  .acq-services .acq-h2 { margin-bottom: 40px; }
+
+  .bento {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 1024px) {
+    .bento { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .tile {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--text-primary) 10%, transparent);
+    border-radius: 28px;
+    background: var(--bg-elevated);
+    padding: 28px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    transition: transform 250ms ease, border-color 250ms ease;
+  }
+
+  @media (min-width: 768px) {
+    .tile { padding: 32px; min-height: 340px; }
+  }
+
+  .tile:hover {
+    transform: translateY(-4px);
+    border-color: rgba(230, 43, 127, 0.6);
+  }
+
+  .tile--span2 {
+    background:
+      linear-gradient(140deg, rgba(230, 43, 127, 0.24), rgba(250, 98, 68, 0.03) 70%),
+      var(--bg-elevated);
+  }
+
+  @media (min-width: 1024px) {
+    .tile--span2 {
+      grid-column: span 2;
+      min-height: 420px;
+    }
+  }
+
+  .tile__head--front {
+    position: relative;
+    z-index: 1;
+    max-width: 340px;
+  }
+
+  .tile__lbl {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--acq-pink-soft);
+  }
+
+  .tile__title {
+    margin-top: 6px;
+    font-family: var(--font-body);
+    font-size: 28px;
+    line-height: 1.08;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .tile__title { font-size: 32px; }
+    .tile__title--lg { font-size: 38px; }
+  }
+
+  .tile__pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .phone {
+    position: relative;
+    margin: 10px auto 0;
+    width: 240px;
+    height: 440px;
+    border-radius: 40px;
+    background: var(--bg-deep);
+    border: 2px solid rgba(230, 43, 127, 0.25);
+    padding: 12px;
+    transform: rotate(6deg);
+    box-shadow: 0 30px 70px rgba(10, 10, 15, 0.55), 0 0 80px rgba(230, 43, 127, 0.3);
+  }
+
+  @media (min-width: 1024px) {
+    .phone {
+      position: absolute;
+      right: 56px;
+      top: 40px;
+      margin: 0;
+    }
+  }
+
+  .phone__screen {
+    height: 100%;
+    border-radius: 30px;
+    background:
+      linear-gradient(170deg, var(--woop-pink) 0%, rgba(230, 43, 127, 0.45) 60%, rgba(230, 43, 127, 0.08) 100%),
+      var(--bg-deep);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 18px;
+    gap: 10px;
+    color: #fff;
+  }
+
+  .phone__meta { font-size: 12px; font-weight: 700; opacity: 0.85; }
+  .phone__headline { font-size: 22px; font-weight: 800; line-height: 1.1; }
+
+  .phone__cta {
+    align-self: flex-start;
+    background: #fff;
+    color: var(--bg-deep);
+    border-radius: var(--radius-button);
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .kpis {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .kpi {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: var(--acq-fill);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .kpi__mark { color: var(--acq-pink-soft); }
+
+  .kpi--no {
+    background: none;
+    border: 1.5px dashed var(--acq-line-strong);
+    color: var(--text-muted);
+  }
+
+  .kpi--no em {
+    text-decoration: line-through;
+    font-style: normal;
+  }
+
+  .growth {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 110px;
+  }
+
+  .growth__bar {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-radius: 14px;
+    padding: 0 4px 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    min-width: 0;
+  }
+
+  .growth__bar--1 { height: 40%; background: color-mix(in srgb, var(--text-primary) 8%, transparent); }
+  .growth__bar--2 { height: 65%; background: color-mix(in srgb, var(--text-primary) 14%, transparent); }
+
+  .growth__bar--3 {
+    height: 100%;
+    background: linear-gradient(180deg, var(--woop-pink), var(--woop-orange));
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .report-bar--1 { fill: color-mix(in srgb, var(--text-primary) 12%, transparent); }
+  .report-bar--2 { fill: color-mix(in srgb, var(--text-primary) 18%, transparent); }
+  .report-bar--3 { fill: color-mix(in srgb, var(--text-primary) 24%, transparent); }
+
+  .launch {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .launch__icon {
+    width: 72px;
+    height: 72px;
+    flex: none;
+    border-radius: 20px;
+    background: var(--acq-gradient-diag);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .launch__text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  /* ===== 3 ÉTAPES ===== */
+  .acq-steps { padding: 24px 0 48px; }
+
+  .steps3 {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  @media (min-width: 1024px) {
+    .steps3 {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .step3 {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid color-mix(in srgb, var(--text-primary) 10%, transparent);
+    border-radius: 20px;
+    padding: 22px 24px;
+    background: var(--acq-surface);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .step3__num {
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+
+  .step3__num--plain {
+    font-family: var(--font-body);
+    letter-spacing: 0;
+  }
+
+  .step3--hot {
+    background: var(--acq-gradient-deep);
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .steps3__arrow {
+    display: none;
+    color: var(--woop-pink);
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  @media (min-width: 1024px) {
+    .steps3__arrow { display: block; }
+  }
+
+  /* ===== CONTENU DE RÉFÉRENCEMENT ===== */
+  .acq-seo { padding: 24px 0 48px; }
+
+  .seo-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 1024px) {
+    .seo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .seo-block {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    background: var(--bg-card);
+    padding: 28px;
+  }
+
+  @media (min-width: 768px) {
+    .seo-block { padding: 36px; }
+  }
+
+  .seo-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  .seo-block__title {
+    font-family: var(--font-body);
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .seo-block__title { font-size: 28px; }
+  }
+
+  .seo-block__text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  @media (min-width: 1024px) {
+    .seo-block__text { font-size: 17px; }
+  }
+
+  /* ===== FAQ ===== */
+  .acq-faq { padding: 24px 0 48px; }
+
+  .acq-h2--faq { margin-bottom: 32px; }
+
+  .faq {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 920px;
+  }
+
+  .faq__item {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-bento);
+    background: var(--bg-card);
+    transition: border-color 200ms ease, background 200ms ease;
+  }
+
+  .faq__item[open] {
+    border-color: var(--border-accent);
+    background: linear-gradient(160deg, rgba(250, 98, 68, 0.06), rgba(230, 43, 127, 0.06)), var(--bg-card);
+  }
+
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text-primary);
+    border-radius: var(--radius-bento);
+  }
+
+  .faq__question::-webkit-details-marker { display: none; }
+  .faq__question::marker { content: ''; }
+
+  .faq__question:hover { color: var(--acq-pink-soft); }
+
+  .faq__question:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .faq__icon {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    flex: none;
+    border-radius: 50%;
+    background: rgba(230, 43, 127, 0.14);
+  }
+
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--woop-pink);
+    transform: translate(-50%, -50%);
+    transition: transform 200ms ease;
+  }
+
+  .faq__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+  .faq__item[open] .faq__icon::after { transform: translate(-50%, -50%) rotate(0deg); }
+
+  .faq__answer {
+    padding: 0 24px 22px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  /* ===== BANDEAU FINAL ===== */
+  .acq-band { padding: 24px 0 96px; }
+
+  .cta-band {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+    border-radius: 28px;
+    padding: 32px 24px;
+    background: var(--acq-gradient-deep);
+  }
+
+  @media (min-width: 768px) {
+    .cta-band { padding: 40px 40px; }
+  }
+
+  @media (min-width: 1024px) {
+    .cta-band {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      padding: 48px 56px;
+    }
+  }
+
+  .cta-band__title {
+    font-family: var(--font-body);
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  @media (min-width: 768px) {
+    .cta-band__title { font-size: 44px; }
+  }
+
+  .cta-band__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: none;
+    align-self: flex-start;
+    background: var(--bg-deep);
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 17px;
+    padding: 18px 34px;
+    border-radius: var(--radius-button);
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+
+  @media (min-width: 1024px) {
+    .cta-band__btn { align-self: center; }
+  }
+
+  .cta-band__btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(10, 10, 15, 0.45);
+  }
+
+  .cta-band__btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  /* ===== MOUVEMENT RÉDUIT ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .quiz :global(*),
+    .tile,
+    .faq__item,
+    .faq__icon::before,
+    .faq__icon::after,
+    .cta-band__btn {
+      transition: none !important;
+    }
+
+    .quiz :global(.card:hover),
+    .quiz :global(.card.on),
+    .quiz :global(.acq-btn:hover),
+    .tile:hover,
+    .cta-band__btn:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  type Option = [string, string];
+  interface Question {
+    key: string;
+    tag: string;
+    title: string;
+    cols: 2 | 3 | 4;
+    pts: number[] | null;
+    opts: Option[];
+  }
+  interface Contact {
+    prenom: string;
+    entreprise: string;
+    courriel: string;
+    tel: string;
+  }
+
+  const ENDPOINT = 'https://formspree.io/f/xdeeyevl';
+  const TIMEOUT_MS = 5000;
+
+  const w = window as unknown as {
+    gtag?: (...args: unknown[]) => void;
+    woopMetaTrack?: (eventName: string, params?: Record<string, unknown>) => void;
+  };
+
+  /* Mesure : aucune donnée personnelle ni réponse du quiz n'est transmise. */
+  function trackGoogle(eventName: string, params: Record<string, unknown>) {
+    if (typeof w.gtag === 'function') w.gtag('event', eventName, params);
+  }
+  function trackMeta(eventName: string, params: Record<string, unknown>) {
+    if (typeof w.woopMetaTrack === 'function') w.woopMetaTrack(eventName, params);
+  }
+
+  const escapeHtml = (value: string) =>
+    value.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+
+  const CHEVRON =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"/></svg>';
+
+  /* ----- Illustrations des cartes ----- */
+  const I = (d: string) =>
+    '<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + d + '</svg></span>';
+  const bars = (n: number) => {
+    const h = [6, 14, 22, 30, 38, 44];
+    let s = '';
+    for (let i = 0; i < 5; i++) {
+      const on = i < n;
+      s += '<rect x="' + i * 22 + '" y="' + (on ? 44 - h[i + 1] : 38) + '" width="16" height="' + (on ? h[i + 1] : 6) + '" rx="3" class="' + (on ? 'bar-on' : 'bar-off') + '"/>';
+    }
+    return '<svg width="120" height="44" viewBox="0 0 120 44" aria-hidden="true" focusable="false">' + s + '</svg>';
+  };
+  const stars = (n: number) => '<span class="stars">' + '★'.repeat(n) + '<i>' + '★'.repeat(5 - n) + '</i></span>';
+  const serp = (pos: number) => {
+    let s = '';
+    for (let i = 0; i < 4; i++) s += '<b class="' + (i === pos ? 'me' : '') + '"></b>';
+    return '<span class="serp">' + s + '</span>';
+  };
+  const big = (t: string) => '<span class="big">' + t + '</span>';
+
+  /* pts : points de chaque réponse pour le score sur 100 (null = question non notée) */
+  const Q: Question[] = [
+    { key: 'activite', tag: 'VOTRE MÉTIER', title: "Votre activité, c'est plutôt…", cols: 3, pts: null, opts: [
+      [I('<path d="M7 3c-2.5 0-4 2-4 4.5 0 3 1.5 4 2 7 .5 3 1 6.5 2.5 6.5S9 17 12 17s3 4 4.5 4 2-3.5 2.5-6.5c.5-3 2-4 2-7C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/>'), 'Clinique médicale ou dentaire'],
+      [I('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'), 'Esthétique, spa, massage'],
+      [I('<path d="M12 2v20"/><path d="M8 5h8M7 9h10M8 13h8M7 17h10"/>'), 'Physio, ostéo, chiro'],
+      [I('<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6M5 10l7 3 7-3M8 21l4-8 4 8"/>'), 'Pilates, yoga, fitness'],
+      [I('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'), 'Cabinet de recrutement'],
+      [I('<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>'), 'Autre']] },
+    { key: 'chiffre_affaires', tag: 'TAILLE', title: "Votre chiffre d'affaires mensuel ?", cols: 3, pts: null, opts: [
+      [bars(0), 'En lancement'], [bars(1), 'Moins de 20 k$ / mois'], [bars(2), '20 à 50 k$ / mois'],
+      [bars(3), '50 à 100 k$ / mois'], [bars(4), '100 à 250 k$ / mois'], [bars(5), 'Plus de 250 k$ / mois']] },
+    { key: 'publicite', tag: 'PUBLICITÉ', title: 'Vous diffusez déjà des publicités ?', cols: 4, pts: [0, 8, 14, 10], opts: [
+      [I('<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>'), 'Pas encore'],
+      [I('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>'), 'Oui, en interne'],
+      [I('<path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/>'), 'Oui, avec une agence'],
+      [I('<rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 19h20"/>'), 'Oui, avec un pigiste']] },
+    { key: 'budget_media', tag: 'BUDGET MÉDIA', title: 'Votre budget publicitaire mensuel ?', cols: 3, pts: [0, 4, 10, 14, 15], opts: [
+      [big('0 $'), "Rien pour l'instant"], [big('&lt; 500 $'), 'Moins de 500 $ / mois'], [big('500 $+'), '500 à 2 000 $ / mois'],
+      [big('2 k$+'), '2 000 à 5 000 $ / mois'], [big('5 k$+'), 'Plus de 5 000 $ / mois']] },
+    { key: 'visibilite_google', tag: 'VISIBILITÉ GOOGLE', title: 'Sur Google, avec votre service et votre quartier, vous êtes…', cols: 4, pts: [30, 12, 6, 0], opts: [
+      [serp(0), 'Dans les 3 premiers'], [serp(3), 'Plus bas'], ['<span class="serp serp--unknown">?</span>', 'Je ne sais pas'], [serp(-1), 'Introuvable']] },
+    { key: 'avis_google', tag: 'RÉPUTATION', title: "Combien d'avis Google ?", cols: 4, pts: [4, 12, 18, 25], opts: [
+      [big('&lt; 20') + stars(1), 'Moins de 20'], [big('20+') + stars(2), '20 à 100'], [big('100+') + stars(4), '100 à 300'], [big('300+') + stars(5), 'Plus de 300']] },
+    { key: 'objectif', tag: 'OBJECTIF', title: 'Votre objectif principal ?', cols: 4, pts: null, opts: [
+      [I('<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M19 8v6M16 11h6"/>'), 'Plus de nouveaux clients'],
+      [I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><rect x="7" y="13" width="4" height="4" rx="1" fill="currentColor"/>'), 'Remplir les créneaux creux'],
+      [I('<path d="M14 4c3 0 6 3 6 6l-7 7-6-6 7-7z"/><path d="M7 11l-3 1 2 2M13 17l-1 3-2-2"/>'), 'Lancer un service'],
+      [I('<path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/>'), 'Bâtir la marque tout en performant']] },
+    { key: 'creatif', tag: 'CRÉATIF', title: 'Où en êtes-vous côté créatif ?', cols: 3, pts: [4, 10, 16], opts: [
+      ['<span class="crea crea--empty">+</span>', 'Rien, tout est à produire'],
+      ['<span class="crea crea--few"><i class="c-grad"></i><i class="c-soft"></i><i class="c-dash"></i></span>', 'Quelques photos et vidéos'],
+      ['<span class="crea crea--full"><i class="c-grad"></i><i class="c-pink"></i><i class="c-mid"></i><i class="c-mid"></i><i class="c-grad"></i><i class="c-pink"></i></span>', "Banque d'images prête"]] },
+    { key: 'demarrage', tag: 'TIMING', title: 'Quand souhaitez-vous démarrer ?', cols: 4, pts: null, opts: [
+      [I('<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'), 'Dès que possible'],
+      [I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'), 'Dans le mois'],
+      [I('<circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/>'), 'Ce trimestre'],
+      [I('<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>'), "J'explore pour l'instant"]] },
+  ];
+  const TOTAL = Q.length + 1; /* + coordonnées */
+  const C_ASIDE = 2 * Math.PI * 120;
+  const C_RESULT = 2 * Math.PI * 126;
+
+  const root = document.querySelector<HTMLElement>('[data-quiz]');
+  const intro = root?.querySelector<HTMLElement>('[data-intro]');
+  const stage = root?.querySelector<HTMLElement>('[data-stage]');
+
+  if (root && intro && stage) {
+    const base = root.dataset.base ?? '';
+    const privacyUrl = root.dataset.privacy ?? `${base}/confidentialite-et-conditions`;
+    const auditUrl = (s: number) => `${base}/contact?source=quiz&score=${s}`;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let state: { step: number; answers: Record<number, number>; contact: Partial<Contact> } = { step: 0, answers: {}, contact: {} };
+    let advancing = false;
+    let submitting = false;
+
+    const score = () => {
+      let s = 0;
+      Q.forEach((q, i) => {
+        const a = state.answers[i];
+        if (q.pts && a != null) s += q.pts[a];
+      });
+      return s;
+    };
+
+    const actions = () => {
+      const v = (i: number) => {
+        const a = state.answers[i];
+        const pts = Q[i].pts;
+        return a == null || !pts ? 0 : pts[a];
+      };
+      const out: string[] = [];
+      if (v(4) < 30) out.push('Monter dans le top 3 local sur Google');
+      if (v(5) < 18) out.push('Collecter des avis après chaque visite');
+      if (v(2) < 14) out.push('Lancer des campagnes Google et Meta, pilotées par vos indicateurs');
+      if (v(3) < 10) out.push('Fixer un budget test et le concentrer');
+      if (v(7) < 10) out.push('Produire des visuels qui convertissent');
+      out.push('Créer une page dédiée à votre offre');
+      return out.slice(0, 3);
+    };
+
+    const verdict = (s: number) =>
+      s < 40
+        ? 'Presque invisible. Vos concurrents captent vos clients.'
+        : s < 70
+          ? 'On vous trouve, mais vos concurrents passent devant.'
+          : 'Belle base. On peut accélérer.';
+
+    const segs = (step: number) => {
+      let s = '<div class="segs" aria-hidden="true">';
+      for (let i = 1; i <= TOTAL; i++) s += '<div class="seg ' + (i < step ? 'done' : i === step ? 'now' : '') + '"></div>';
+      return s + '</div>';
+    };
+
+    const aside = (step: number) =>
+      '<aside class="aside" aria-hidden="true"><span class="aside__eyebrow">VOTRE SCORE SE CONSTRUIT</span>' +
+      '<div class="score-ring"><svg viewBox="0 0 300 300" focusable="false"><defs><linearGradient id="acq-ring-aside" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="stop-orange"/><stop offset="1" class="stop-pink"/></linearGradient></defs>' +
+      '<circle cx="150" cy="150" r="120" class="ring-track" stroke-width="26"/>' +
+      '<circle cx="150" cy="150" r="120" class="ring-value" stroke="url(#acq-ring-aside)" stroke-width="26" stroke-dasharray="' + ((C_ASIDE * (step - 1)) / TOTAL).toFixed(1) + ' ' + C_ASIDE.toFixed(1) + '" transform="rotate(-90 150 150)"/></svg>' +
+      '<div class="score-ring__label"><strong>??</strong></div></div>' +
+      '<span class="aside__note">Révélé à la fin, avec vos 3 actions prioritaires</span></aside>';
+
+    const frame = (step: number, inner: string) =>
+      '<span class="quiz__watermark" aria-hidden="true">' + (step < 10 ? '0' : '') + step + '</span>' +
+      segs(step) + '<div class="qbody"><div class="qmain">' + inner + '</div>' + aside(step) + '</div>';
+
+    const head = (step: number, tag: string, title: string) =>
+      '<div class="qhead"><span class="eyebrow">ÉTAPE ' + step + ' / ' + TOTAL + '</span><span class="tag">' + tag + '</span></div>' +
+      '<h2 class="qtitle" tabindex="-1" data-focus>' + title + '</h2>';
+
+    const updateBand = (s: number) => {
+      const band = document.querySelector<HTMLAnchorElement>('[data-audit-band]');
+      if (band) band.href = auditUrl(s);
+    };
+
+    function go(n: number) {
+      state.step = Math.max(0, n);
+      advancing = false;
+      render();
+      const target =
+        state.step === 0
+          ? intro!.querySelector<HTMLElement>('[data-intro-title]')
+          : stage!.querySelector<HTMLElement>('[data-focus]');
+      target?.focus({ preventScroll: true });
+      root!.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    function renderQuestion(st: number) {
+      const qi = st - 1;
+      const q = Q[qi];
+      let cards = '';
+      q.opts.forEach((o, oi) => {
+        const on = state.answers[qi] === oi;
+        cards +=
+          '<button type="button" class="card' + (on ? ' on' : '') + '" data-o="' + oi + '" aria-pressed="' + on + '">' +
+          '<span class="card__visual" aria-hidden="true">' + o[0] + '</span><span class="lab">' + o[1] + '</span></button>';
+      });
+      stage!.innerHTML = frame(st,
+        head(st, q.tag, q.title) +
+        '<div class="grid g' + q.cols + '">' + cards + '</div>' +
+        '<div class="qfoot"><button type="button" class="back" data-back>← RETOUR</button><span class="hint">Un clic suffit, on passe à la suite</span></div>');
+
+      stage!.querySelectorAll<HTMLButtonElement>('.card').forEach((b) => {
+        b.addEventListener('click', () => {
+          if (advancing) return;
+          advancing = true;
+          state.answers[qi] = Number(b.dataset.o);
+          stage!.querySelectorAll<HTMLButtonElement>('.card').forEach((other) => {
+            const on = other === b;
+            other.classList.toggle('on', on);
+            other.setAttribute('aria-pressed', String(on));
+          });
+          window.setTimeout(() => go(st + 1), 230);
+        });
+      });
+      stage!.querySelector('[data-back]')?.addEventListener('click', () => go(st - 1));
+    }
+
+    function renderContact(st: number) {
+      const c = state.contact;
+      const val = (v?: string) => escapeHtml(v ?? '');
+      stage!.innerHTML = frame(st,
+        head(st, 'DERNIÈRE ÉTAPE', 'Votre score est prêt. Débloquez-le.') +
+        '<form class="contact-form" novalidate>' +
+        '<label class="field">Prénom<input name="prenom" autocomplete="given-name" required value="' + val(c.prenom) + '"></label>' +
+        '<label class="field">Nom de l\'entreprise<input name="entreprise" autocomplete="organization" placeholder="Clinique, studio…" value="' + val(c.entreprise) + '"></label>' +
+        '<label class="field">Courriel<input name="courriel" type="email" autocomplete="email" required placeholder="vous@clinique.ca" value="' + val(c.courriel) + '"></label>' +
+        '<label class="field">Téléphone<input name="tel" type="tel" autocomplete="tel" placeholder="514 000 0000" value="' + val(c.tel) + '"></label>' +
+        '<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none" />' +
+        '<label class="consent"><input type="checkbox" name="consent" required><span>J\'accepte que WOOP me contacte au sujet de mon score. Vos données sont traitées conformément à notre <a href="' + escapeHtml(privacyUrl) + '">politique de confidentialité</a>.</span></label>' +
+        '<p class="err" data-err></p>' +
+        '<button type="submit" class="acq-btn acq-btn--lg" data-submit>Débloquer mon score ' + CHEVRON + '</button></form>' +
+        '<div class="qfoot"><button type="button" class="back" data-back>← RETOUR</button><span class="hint">Votre score s\'affiche immédiatement.</span></div>');
+
+      const form = stage!.querySelector<HTMLFormElement>('form')!;
+      const err = stage!.querySelector<HTMLElement>('[data-err]')!;
+      const back = stage!.querySelector<HTMLButtonElement>('[data-back]')!;
+      const submit = stage!.querySelector<HTMLButtonElement>('[data-submit]')!;
+      const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+
+      back.addEventListener('click', () => {
+        if (!submitting) go(st - 1);
+      });
+
+      const fail = (input: HTMLInputElement, message: string) => {
+        err.textContent = message;
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+      };
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (submitting) return;
+        ['prenom', 'courriel', 'consent'].forEach((n) => field(n).removeAttribute('aria-invalid'));
+        err.textContent = '';
+
+        const prenom = field('prenom').value.trim();
+        const entreprise = field('entreprise').value.trim();
+        const courriel = field('courriel').value.trim();
+        const tel = field('tel').value.trim();
+
+        if (!prenom) return fail(field('prenom'), "Votre prénom, s'il vous plaît.");
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(courriel)) return fail(field('courriel'), "Un courriel valide, s'il vous plaît.");
+        if (!field('consent').checked) return fail(field('consent'), 'Cochez la case pour débloquer votre score.');
+
+        state.contact = { prenom, entreprise, courriel, tel };
+        try {
+          window.sessionStorage.setItem('woopQuizContact', JSON.stringify({ prenom, entreprise, courriel, tel }));
+        } catch {
+          // stockage indisponible : la page contact ne sera simplement pas préremplie
+        }
+
+        submitting = true;
+        submit.disabled = true;
+        back.disabled = true;
+        submit.textContent = 'Calcul de votre score…';
+
+        const s = score();
+        const ok = await send({ prenom, entreprise, courriel, tel }, s, field('_gotcha').value);
+        if (ok) {
+          trackGoogle('generate_lead', {
+            form_id: 'quiz_visibilite',
+            form_destination: 'formspree',
+            lead_source: 'quiz-acquisition',
+            score: s,
+          });
+          trackMeta('Lead', { content_name: 'quiz_visibilite' });
+        }
+
+        submitting = false;
+        updateBand(s);
+        go(TOTAL + 1);
+      });
+    }
+
+    function renderResult() {
+      const s = score();
+      const prenom = state.contact.prenom;
+      let acts = '';
+      actions().forEach((t, i) => {
+        acts += '<div class="action"><span aria-hidden="true">' + (i + 1) + '</span>' + t + '</div>';
+      });
+      stage!.innerHTML =
+        '<div class="result">' +
+        '<div class="score-ring result__ring"><svg viewBox="0 0 300 300" role="img" aria-label="Score de ' + s + ' sur 100" focusable="false"><defs><linearGradient id="acq-ring-result" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="stop-orange"/><stop offset="1" class="stop-pink"/></linearGradient></defs>' +
+        '<circle cx="150" cy="150" r="126" class="ring-track" stroke-width="18"/>' +
+        '<circle cx="150" cy="150" r="126" class="ring-value" stroke="url(#acq-ring-result)" stroke-width="18" stroke-dasharray="' + ((C_RESULT * s) / 100).toFixed(1) + ' ' + C_RESULT.toFixed(1) + '" transform="rotate(-90 150 150)"/></svg>' +
+        '<div class="score-ring__label" aria-hidden="true"><strong>' + s + '</strong><span>sur 100</span></div></div>' +
+        '<div class="result__body">' +
+        '<span class="eyebrow result__eyebrow">' + (prenom ? escapeHtml(prenom.toLocaleUpperCase('fr-CA')) + ', ' : '') + 'VOTRE SCORE VISIBILITÉ WOOP</span>' +
+        '<h2 class="qtitle result__verdict" tabindex="-1" data-focus>' + verdict(s) + '</h2>' + acts +
+        '<div class="result__cta">' +
+        '<a class="acq-btn" href="' + escapeHtml(auditUrl(s)) + '" data-audit="resultat_quiz">Réserver mon audit de 30 minutes ' + CHEVRON + '</a>' +
+        '<p class="result__cta-note">30 minutes pour passer vos résultats en revue et bâtir votre plan.</p>' +
+        '<button type="button" class="restart" data-restart>Refaire le test</button>' +
+        '</div></div></div>';
+
+      stage!.querySelector('[data-restart]')?.addEventListener('click', () => {
+        state = { step: 0, answers: {}, contact: {} };
+        go(0);
+      });
+    }
+
+    function render() {
+      const st = state.step;
+      if (st === 0) {
+        stage!.hidden = true;
+        stage!.innerHTML = '';
+        intro!.hidden = false;
+        return;
+      }
+      intro!.hidden = true;
+      stage!.hidden = false;
+      if (st <= Q.length) renderQuestion(st);
+      else if (st === TOTAL) renderContact(st);
+      else renderResult();
+    }
+
+    /* Envoi à Formspree : au plus 5 secondes d'attente, jamais bloquant. */
+    async function send(contact: Contact, s: number, gotcha: string): Promise<boolean> {
+      const payload: Record<string, string> = {
+        prenom: contact.prenom,
+        entreprise: contact.entreprise,
+        courriel: contact.courriel,
+        telephone: contact.tel,
+        score: `${s}/100`,
+      };
+      Q.forEach((q, i) => {
+        const a = state.answers[i];
+        payload[q.key] = a != null ? q.opts[a][1] : '';
+      });
+      payload.actions_prioritaires = actions().join(' | ');
+      payload.source = 'quiz-acquisition';
+      payload._subject = `Quiz visibilité : ${contact.entreprise || contact.prenom} (${s}/100)`;
+      payload._replyto = contact.courriel;
+      payload._gotcha = gotcha;
+
+      const controller = typeof AbortController === 'function' ? new AbortController() : null;
+      let timer = 0;
+      const timeout = new Promise<boolean>((resolve) => {
+        timer = window.setTimeout(() => {
+          controller?.abort();
+          resolve(false);
+        }, TIMEOUT_MS);
+      });
+      const request = fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller?.signal,
+      })
+        .then((res) => res.ok)
+        .catch(() => false);
+
+      try {
+        return await Promise.race([request, timeout]);
+      } finally {
+        window.clearTimeout(timer);
+      }
+    }
+
+    intro.querySelector('[data-start]')?.addEventListener('click', () => {
+      trackGoogle('quiz_start', { quiz_id: 'visibilite' });
+      go(1);
+    });
+  }
+
+  /* Clics vers l'audit (écran de résultat et bandeau final) */
+  document.addEventListener('click', (e) => {
+    const link = (e.target as Element | null)?.closest<HTMLElement>('[data-audit]');
+    if (!link) return;
+    const location = link.dataset.audit;
+    if (location === 'resultat_quiz' || location === 'bandeau_final') {
+      trackGoogle('audit_cta_click', { location });
+    }
+  });
+</script>
