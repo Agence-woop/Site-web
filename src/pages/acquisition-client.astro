@@ -91,10 +91,10 @@ const jsonLd = [
             <div class="intro__pills">
               <span class="pill">2 minutes</span>
               <span class="pill">10 étapes</span>
-              <span class="pill pill--pink">Gratuit</span>
+              <span class="pill pill--pink">Sans engagement</span>
             </div>
-            <button type="button" class="acq-btn acq-btn--lg intro__start" data-start>
-              Calculer mon score de visibilité <ChevronRight size={16} />
+            <button type="button" class="acq-btn acq-btn--lg acq-btn--cta intro__start" data-start>
+              <span class="label-full">Calculer mon score de visibilité</span><span class="label-short">Calculer mon score</span> <ChevronRight size={16} />
             </button>
           </div>
           <div class="intro__visual" aria-hidden="true">
@@ -218,7 +218,7 @@ const jsonLd = [
         <article class="tile">
           <div class="tile__head">
             <span class="tile__lbl">RAPPORTS</span>
-            <h3 class="tile__title">Hebdo et mensuels.</h3>
+            <h3 class="tile__title">Vous voyez tout.</h3>
             <div class="tile__pills tile__pills--under">
               <span class="pill pill--grad">Hebdo</span>
               <span class="pill">Mensuel</span>
@@ -254,11 +254,17 @@ const jsonLd = [
             <span class="tile__lbl">MISE EN PLACE</span>
             <h3 class="tile__title">En ligne, rapidement.</h3>
           </div>
-          <div class="launch">
-            <span class="launch__icon" aria-hidden="true">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg>
-            </span>
-            <span class="launch__text">Audit, plan, lancement.<br />Sans attendre des mois.</span>
+          <div class="setup" aria-hidden="true">
+            <ul class="setup__list">
+              <li class="setup__item"><span class="setup__check">✓</span>Suivi des conversions</li>
+              <li class="setup__item"><span class="setup__check">✓</span>Pages de conversion</li>
+              <li class="setup__item"><span class="setup__check">✓</span>Campagnes prêtes</li>
+            </ul>
+            <div class="setup__progress">
+              <svg class="setup__bolt" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M13 2L4 14h7l-1 8 9-12h-7z" /></svg>
+              <span class="setup__track"><span class="setup__fill"></span></span>
+              <span class="setup__label">Prêt à diffuser</span>
+            </div>
           </div>
         </article>
       </div>
@@ -277,6 +283,15 @@ const jsonLd = [
       </ol>
     </div>
   </section>
+
+  <!-- BOUTON DU MILIEU DE PAGE : remonte au quiz -->
+  <div class="acq acq-midcta">
+    <div class="container">
+      <button type="button" class="acq-btn acq-btn--lg acq-btn--cta acq-btn--block" data-quiz-cta>
+        <span class="label-full">Calculer mon score de visibilité</span><span class="label-short">Calculer mon score</span> <ChevronRight size={16} />
+      </button>
+    </div>
+  </div>
 
   <!-- 4. CONTENU DE RÉFÉRENCEMENT -->
   <div class="acq acq-seo">
@@ -339,15 +354,12 @@ const jsonLd = [
     --acq-fill: color-mix(in srgb, var(--text-primary) 7%, transparent);
     --acq-surface: color-mix(in srgb, var(--bg-deep) 60%, transparent);
     --acq-gradient-diag: linear-gradient(135deg, var(--woop-orange), var(--woop-pink));
-    --acq-gradient-deep: linear-gradient(110deg,
-      color-mix(in srgb, var(--woop-orange) 78%, var(--bg-deep)),
-      color-mix(in srgb, var(--woop-pink) 72%, var(--bg-deep)));
   }
 
   [hidden] { display: none !important; }
 
   /* ===== BOUTONS ===== */
-  .quiz :global(.acq-btn) {
+  .acq :global(.acq-btn) {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -365,13 +377,13 @@ const jsonLd = [
     transition: box-shadow 200ms ease, transform 200ms ease, opacity 200ms ease;
   }
 
-  .quiz :global(.acq-btn:hover) {
+  .acq :global(.acq-btn:hover) {
     color: #fff;
     box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
     transform: translateY(-2px);
   }
 
-  .quiz :global(.acq-btn:focus-visible) {
+  .acq :global(.acq-btn:focus-visible) {
     outline: 2px solid var(--acq-pink-soft);
     outline-offset: 3px;
   }
@@ -383,14 +395,36 @@ const jsonLd = [
     box-shadow: none;
   }
 
-  .quiz :global(.acq-btn--lg) {
+  .acq :global(.acq-btn--lg) {
     font-size: 17px;
     padding: 18px 32px;
   }
 
   @media (min-width: 768px) {
-    .quiz :global(.acq-btn) { font-size: 17px; padding: 18px 34px; }
-    .quiz :global(.acq-btn--lg) { font-size: 20px; padding: 22px 40px; }
+    .acq :global(.acq-btn) { font-size: 17px; padding: 18px 34px; }
+    .acq :global(.acq-btn--lg) { font-size: 20px; padding: 22px 40px; }
+  }
+
+  /* Boutons « Calculer mon score » (hero et milieu de page) */
+  .label-short { display: none; }
+
+  @media (max-width: 599px) {
+    .acq .acq-btn--cta {
+      font-size: 15px;
+      padding: 16px 22px;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 399px) {
+    .acq-btn--cta .label-full { display: none; }
+    .acq-btn--cta .label-short { display: inline; }
+  }
+
+  .acq-btn--block {
+    display: flex;
+    width: 100%;
+    justify-content: center;
   }
 
   /* ===== PASTILLES ===== */
@@ -450,6 +484,12 @@ const jsonLd = [
     .quiz {
       padding: 48px 56px 44px;
       min-height: 560px;
+    }
+
+    /* Écran d'accueil : la carte s'ajuste à son contenu (les étapes gardent 560 px) */
+    .quiz:has(> .quiz__intro:not([hidden])) {
+      min-height: 0;
+      padding-bottom: 48px;
     }
   }
 
@@ -1190,7 +1230,7 @@ const jsonLd = [
   }
 
   @media (min-width: 1024px) {
-    .tile--span2 .tile__head--front { max-width: min(340px, calc(100% - 320px)); }
+    .tile--span2 .tile__head--front { max-width: calc(100% - 330px); }
   }
 
   .tile__lbl {
@@ -1209,9 +1249,19 @@ const jsonLd = [
     color: var(--text-primary);
   }
 
+  .tile__title--lg {
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+
   @media (min-width: 768px) {
     .tile__title { font-size: 32px; }
-    .tile__title--lg { font-size: 38px; }
+    .tile__title--lg { font-size: 54px; }
+  }
+
+  @media (min-width: 1024px) {
+    .tile__title--lg { font-size: clamp(42px, 4.3vw, 62px); }
   }
 
   .tile__pills {
@@ -1409,8 +1459,8 @@ const jsonLd = [
 
   .tile--pink:hover { border-color: rgba(255, 255, 255, 0.5); }
 
-  .tile--pink .tile__lbl,
   .tile--pink .tile__title { color: #fff; }
+  .tile--pink .tile__lbl { color: var(--bg-deep); }
 
   .growth {
     display: flex;
@@ -1504,51 +1554,88 @@ const jsonLd = [
 
   .dash__kpi b { color: var(--acq-pink-soft); }
 
-  /* ----- Mise en place (dégradé orange) ----- */
+  /* ----- Mise en place (orange plein) ----- */
   .tile--orange {
-    background: linear-gradient(160deg,
-      color-mix(in srgb, var(--woop-orange) 78%, var(--bg-deep)),
-      color-mix(in srgb, var(--woop-orange) 60%, var(--bg-deep)));
+    background: var(--woop-orange);
     border-color: transparent;
   }
 
   .tile--orange:hover { border-color: rgba(255, 255, 255, 0.5); }
 
-  .tile--orange .tile__lbl,
-  .tile--orange .tile__title,
-  .tile--orange .launch__text { color: #fff; }
+  .tile--orange .tile__title { color: #fff; }
+  .tile--orange .tile__lbl { color: var(--bg-deep); }
 
-  .launch {
+  .setup {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .setup__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .setup__item {
     display: flex;
     align-items: center;
-    gap: 16px;
-  }
-
-  .launch__icon {
-    width: 72px;
-    height: 72px;
-    flex: none;
-    border-radius: 20px;
-    background: var(--acq-gradient-diag);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .tile--orange .launch__icon {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
-  }
-
-  .launch__text {
-    font-size: 16px;
+    gap: 10px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 11px 14px;
+    font-size: 15px;
     font-weight: 700;
-    color: var(--text-secondary);
+    line-height: 1.2;
+    color: var(--bg-deep);
+  }
+
+  .setup__check {
+    flex: none;
+    width: 18px;
+    text-align: center;
+    color: var(--woop-orange);
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .setup__progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--bg-deep);
+  }
+
+  .setup__bolt { flex: none; }
+
+  .setup__track {
+    position: relative;
+    flex: 1;
+    height: 10px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.35);
+    overflow: hidden;
+  }
+
+  .setup__fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    background: #fff;
+  }
+
+  .setup__label {
+    flex: none;
+    font-size: 14px;
+    font-weight: 800;
+    white-space: nowrap;
   }
 
   /* ===== 3 ÉTAPES ===== */
   .acq-steps { padding: 24px 0 48px; }
+
+  .acq-midcta { padding: 0 0 48px; margin-top: -16px; }
 
   .steps3 {
     display: flex;
@@ -1590,7 +1677,7 @@ const jsonLd = [
   }
 
   .step3--hot {
-    background: var(--acq-gradient-deep);
+    background: var(--woop-gradient);
     border-color: transparent;
     color: #fff;
   }
@@ -1773,7 +1860,7 @@ const jsonLd = [
     gap: 28px;
     border-radius: 28px;
     padding: 32px 24px;
-    background: var(--acq-gradient-deep);
+    background: var(--woop-gradient);
   }
 
   @media (min-width: 768px) {
@@ -1836,6 +1923,7 @@ const jsonLd = [
   /* ===== MOUVEMENT RÉDUIT ===== */
   @media (prefers-reduced-motion: reduce) {
     .quiz :global(*),
+    .acq-midcta :global(.acq-btn),
     .tile,
     .faq__item,
     .faq__icon::before,
@@ -1846,7 +1934,7 @@ const jsonLd = [
 
     .quiz :global(.card:hover),
     .quiz :global(.card.on),
-    .quiz :global(.acq-btn:hover),
+    .acq :global(.acq-btn:hover),
     .tile:hover,
     .cta-band__btn:hover {
       transform: none;
@@ -2240,6 +2328,20 @@ const jsonLd = [
       go(1);
     });
   }
+
+  /* Bouton du milieu de page : remonte à la carte du quiz, sans la réinitialiser */
+  document.querySelector('[data-quiz-cta]')?.addEventListener('click', () => {
+    trackGoogle('quiz_cta_click', { location: 'milieu_page' });
+    const quiz = document.querySelector<HTMLElement>('[data-quiz]');
+    if (!quiz) return;
+    const introEl = quiz.querySelector<HTMLElement>('[data-intro]');
+    const target = introEl && !introEl.hidden
+      ? introEl.querySelector<HTMLElement>('[data-intro-title]')
+      : quiz.querySelector<HTMLElement>('[data-stage] [data-focus]');
+    target?.focus({ preventScroll: true });
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    quiz.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+  });
 
   /* Clics vers l'audit (écran de résultat et bandeau final) */
   document.addEventListener('click', (e) => {
