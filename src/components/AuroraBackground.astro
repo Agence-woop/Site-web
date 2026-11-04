@@ -9,17 +9,6 @@
   <div class="aurora__orb aurora__orb--orange-3"></div>
 </div>
 
-<div class="sideline" aria-hidden="true">
-  <svg class="sideline__svg" viewBox="0 0 2 1000" preserveAspectRatio="none">
-    <line x1="1" y1="0" x2="1" y2="1000" stroke="rgba(230,43,127,0.18)" stroke-width="1" />
-  </svg>
-  <div class="sideline__dot sideline__dot--1"></div>
-  <div class="sideline__dot sideline__dot--2"></div>
-  <div class="sideline__dot sideline__dot--3"></div>
-  <div class="sideline__dot sideline__dot--4"></div>
-  <div class="sideline__dot sideline__dot--5"></div>
-</div>
-
 <style>
   .aurora {
     position: fixed;
@@ -126,53 +115,6 @@
     100% { transform: translate(60px, 20px) scale(0.95); }
   }
 
-  /* ===== SIDELINE ===== */
-  .sideline {
-    position: fixed;
-    left: 32px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    z-index: 1;
-    pointer-events: none;
-    display: none;
-  }
-
-  @media (min-width: 1100px) {
-    .sideline {
-      display: block;
-    }
-  }
-
-  .sideline__svg {
-    position: absolute;
-    inset: 0;
-    width: 2px;
-    height: 100%;
-  }
-
-  .sideline__dot {
-    position: absolute;
-    left: -3px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--woop-pink);
-    box-shadow: 0 0 12px rgba(230, 43, 127, 0.5);
-    animation: dot-pulse 4s ease-in-out infinite;
-  }
-
-  .sideline__dot--1 { top: 12%; animation-delay: 0s; }
-  .sideline__dot--2 { top: 30%; animation-delay: 0.8s; }
-  .sideline__dot--3 { top: 50%; animation-delay: 1.6s; }
-  .sideline__dot--4 { top: 70%; animation-delay: 2.4s; }
-  .sideline__dot--5 { top: 88%; animation-delay: 3.2s; }
-
-  @keyframes dot-pulse {
-    0%, 100% { opacity: 0.3; transform: scale(0.8); }
-    50% { opacity: 1; transform: scale(1.2); }
-  }
-
   @media (max-width: 899px) {
     .aurora__orb {
       filter: blur(50px);
@@ -191,10 +133,6 @@
   @media (prefers-reduced-motion: reduce) {
     .aurora__orb {
       animation: none;
-    }
-    .sideline__dot {
-      animation: none;
-      opacity: 0.6;
     }
   }
 </style>

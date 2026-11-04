@@ -31,7 +31,7 @@ const navItems: NavItem[] = [
     href: `${base}/blog`,
     children: [
       { label: 'Santé & Médical', href: `${base}/blog/sante` },
-      { label: 'Recrutement & RH', href: `${base}/blog/recrutement` },
+      { label: 'RH & Recrutement', href: `${base}/blog/recrutement` },
       { label: 'Stratégie & Marque', href: `${base}/blog/strategie-marque` },
     ],
   },
@@ -355,7 +355,8 @@ const navItems: NavItem[] = [
     box-shadow: 0 4px 16px rgba(230, 43, 127, 0.35);
   }
 
-  @media (min-width: 1100px) {
+  /* Menu complet à partir de 1170 px (en dessous, menu burger) : aucun libellé sur deux lignes */
+  @media (min-width: 1170px) {
     .header__burger {
       display: none;
     }
@@ -402,7 +403,8 @@ const navItems: NavItem[] = [
       padding: 12px;
       margin: 0;
       gap: 4px;
-      min-width: 240px;
+      /* Le panneau s'ajuste à son plus long libellé */
+      width: max-content;
       opacity: 0;
       visibility: hidden;
       transform: translateY(8px);
@@ -453,7 +455,8 @@ const navItems: NavItem[] = [
 
     .header__sublink {
       font-size: 14px;
-      padding: 10px 14px;
+      padding: 10px 16px;
+      white-space: nowrap;
       border-radius: 8px;
       width: 100%;
       transition: color 200ms ease, background 200ms ease;
@@ -524,7 +527,7 @@ const navItems: NavItem[] = [
   // « Secteurs d'activité » : bouton sans lien qui ouvre son sous-menu.
   // Ordinateur : survol (souris), clic et clavier (Entrée / Espace ouvrent, Échap ferme).
   // Menu mobile : accordéon (même classe .header__item--open que le sous-menu Blog).
-  const canHover = window.matchMedia('(hover: hover) and (min-width: 1100px)');
+  const canHover = window.matchMedia('(hover: hover) and (min-width: 1170px)');
   menu?.querySelectorAll<HTMLElement>('.header__item--trigger').forEach((item) => {
     const trigger = item.querySelector<HTMLButtonElement>('.header__trigger');
     if (!trigger) return;
@@ -572,10 +575,10 @@ const navItems: NavItem[] = [
     // Sur ordinateur, le panneau se referme quand le focus ou un clic sort de l'entrée.
     item.addEventListener('focusout', (event) => {
       const next = event.relatedTarget as Node | null;
-      if (window.innerWidth >= 1100 && (!next || !item.contains(next))) setOpen(false);
+      if (window.innerWidth >= 1170 && (!next || !item.contains(next))) setOpen(false);
     });
     document.addEventListener('click', (event) => {
-      if (window.innerWidth >= 1100 && isOpen() && !item.contains(event.target as Node)) setOpen(false);
+      if (window.innerWidth >= 1170 && isOpen() && !item.contains(event.target as Node)) setOpen(false);
     });
   });
 
