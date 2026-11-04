@@ -33,8 +33,10 @@
     --reveal-easing: cubic-bezier(0.22, 1, 0.36, 1);
     /* Décalage entre deux éléments d'une même rangée (data-reveal-step) */
     --reveal-stagger: 150ms;
-    /* Téléphone (moins de 600 px) : simple fondu avec glissement vers le haut */
-    --reveal-duration-mobile: 800ms;
+    /* Téléphone (moins de 600 px) : déclenchement plus tôt, simple fondu avec glissement vers le haut */
+    --reveal-root-margin-mobile: 0px 0px -5% 0px;
+    --reveal-threshold-mobile: 0.05;
+    --reveal-duration-mobile: 700ms;
     --reveal-distance-mobile: 30px;
   }
 
@@ -111,8 +113,14 @@
     if (Number.isNaN(n)) return fallback;
     return /ms$/.test(value) ? n : /s$/.test(value) ? n * 1000 : n;
   };
-  const threshold = Number(setting('--reveal-threshold')) || 0.2;
-  const rootMargin = setting('--reveal-root-margin') || '0px 0px -20% 0px';
+  // Zone de déclenchement choisie à la création de l'observateur : téléphone (moins de 600 px) ou non.
+  const isMobile = window.matchMedia('(max-width: 599px)').matches;
+  const threshold = isMobile
+    ? Number(setting('--reveal-threshold-mobile')) || 0.05
+    : Number(setting('--reveal-threshold')) || 0.2;
+  const rootMargin = isMobile
+    ? setting('--reveal-root-margin-mobile') || '0px 0px -5% 0px'
+    : setting('--reveal-root-margin') || '0px 0px -20% 0px';
   const stagger = toMs(setting('--reveal-stagger'), 150);
 
   const pending = new Set<HTMLElement>(document.querySelectorAll<HTMLElement>('[data-reveal]'));
