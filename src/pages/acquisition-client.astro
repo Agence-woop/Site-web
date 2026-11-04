@@ -805,37 +805,15 @@ const jsonLd = [
     color: var(--woop-pink);
   }
 
-  /* Étape 6 : étoile de réputation */
-  .quiz :global(.card--center) {
-    align-items: center;
-    text-align: center;
+  .quiz :global(.stars) {
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--acq-pink-soft);
   }
 
-  .quiz :global(.card--center .card__visual) { align-items: center; }
-
-  .quiz :global(.rep-star) {
-    display: block;
-    width: 120px;
-    height: auto;
-    overflow: visible;
-  }
-
-  .quiz :global(.rep-star__outline) {
-    fill: none;
-    stroke: var(--woop-pink);
-    stroke-width: 3.5;
-    stroke-linejoin: round;
-  }
-
-  .quiz :global(.rep-star__value) {
-    fill: #fff;
-    font-family: var(--font-body);
-    font-size: 19px;
-    font-weight: 800;
-    paint-order: stroke;
-    stroke: rgba(10, 10, 15, 0.45);
-    stroke-width: 3px;
-    stroke-linejoin: round;
+  .quiz :global(.stars i) {
+    font-style: normal;
+    color: color-mix(in srgb, var(--text-primary) 20%, transparent);
   }
 
   .quiz :global(.bar-on) { fill: var(--acq-pink-soft); }
@@ -1993,7 +1971,6 @@ const jsonLd = [
     tag: string;
     title: string;
     cols: 2 | 3 | 4;
-    center?: boolean;
     pts: number[] | null;
     opts: Option[];
   }
@@ -2044,23 +2021,13 @@ const jsonLd = [
     return '<span class="serp">' + s + '</span>';
   };
   const big = (t: string) => '<span class="big">' + t + '</span>';
-  /* Étoile de réputation : remplie par le bas selon fill (0 à 1), valeur écrite au centre */
-  const STAR = 'M50 3L64.1 30.6L94.7 35.5L72.8 57.4L77.6 88L50 74L22.4 88L27.2 57.4L5.3 35.5L35.9 30.6Z';
-  const repStar = (i: number, value: string, fill: number) => {
-    const h = 85 * fill;
-    return '<svg class="rep-star" viewBox="0 0 100 92" focusable="false"><defs>' +
-      '<linearGradient id="acq-star-grad-' + i + '" x1="0" y1="1" x2="1" y2="0"><stop offset="0" class="stop-orange"/><stop offset="1" class="stop-pink"/></linearGradient>' +
-      '<clipPath id="acq-star-clip-' + i + '"><path d="' + STAR + '"/></clipPath></defs>' +
-      (fill > 0 ? '<rect x="0" y="' + (88 - h).toFixed(1) + '" width="100" height="' + (h + 4).toFixed(1) + '" fill="url(#acq-star-grad-' + i + ')" clip-path="url(#acq-star-clip-' + i + ')"/>' : '') +
-      '<path d="' + STAR + '" class="rep-star__outline"/>' +
-      '<text x="50" y="57" text-anchor="middle" class="rep-star__value">' + value + '</text></svg>';
-  };
+  const stars = (n: number) => '<span class="stars">' + '★'.repeat(n) + '<i>' + '★'.repeat(5 - n) + '</i></span>';
 
   /* pts : points de chaque réponse pour le score sur 100 (null = question non notée) */
   const Q: Question[] = [
     { key: 'activite', tag: 'VOTRE MÉTIER', title: "Votre activité, c'est plutôt…", cols: 3, pts: null, opts: [
       [I('<path d="M9.5 3h5a1 1 0 0 1 1 1v4.5H20a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-4.5V20a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-4.5H4a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h4.5V4a1 1 0 0 1 1-1z"/>'), 'Clinique de santé, médicale ou dentaire'],
-      [I('<circle cx="10" cy="4.9" r="2.6"/><ellipse cx="10" cy="14" rx="5.5" ry="6.4"/><path d="M4.6 12.4c2.1-.2 4.1-1.6 5.4-3.9 1.3 2.3 3.3 3.7 5.4 3.9"/><path d="M6.9 14.6c.5.6 1.4.6 1.9 0M11.2 14.6c.5.6 1.4.6 1.9 0"/><path d="M8.9 17.6c.7.4 1.5.4 2.2 0"/><path d="M19.6 5.2l.7 1.7 1.7.7-1.7.7-.7 1.7-.7-1.7-1.7-.7 1.7-.7z"/><path d="M20.2 12.6l.45 1.05 1.05.45-1.05.45-.45 1.05-.45-1.05-1.05-.45 1.05-.45z"/>'), 'Esthétique, spa, massage'],
+      [I('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/>'), 'Esthétique, spa, massage'],
       [I('<path transform="rotate(-45 12 12)" d="M7.79 10.6H16.21A2.3 2.3 0 1 1 19.34 12A2.3 2.3 0 1 1 16.21 13.4H7.79A2.3 2.3 0 1 1 4.66 12A2.3 2.3 0 1 1 7.79 10.6Z"/>'), 'Physio, ostéo, chiro'],
       [I('<path d="M7.5 12h9"/><rect x="4.5" y="7" width="3" height="10" rx="1"/><rect x="16.5" y="7" width="3" height="10" rx="1"/><rect x="2" y="9" width="2.5" height="6" rx=".8"/><rect x="19.5" y="9" width="2.5" height="6" rx=".8"/>'), 'Pilates, yoga, gym'],
       [I('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'), 'Cabinet de recrutement'],
@@ -2078,8 +2045,8 @@ const jsonLd = [
       [big('2 k$+'), '2 000 à 5 000 $ / mois'], [big('5 k$+'), 'Plus de 5 000 $ / mois']] },
     { key: 'visibilite_google', tag: 'VISIBILITÉ GOOGLE', title: 'Sur Google, avec votre service et votre quartier, vous êtes…', cols: 4, pts: [30, 12, 6, 0], opts: [
       [serp(0), 'Dans les 3 premiers'], [serp(3), 'Plus bas'], ['<span class="serp serp--unknown">?</span>', 'Je ne sais pas'], [serp(-1).replace('class="serp"', 'class="serp serp--none"'), 'Introuvable']] },
-    { key: 'avis_google', tag: 'RÉPUTATION', title: "Combien d'avis Google ?", cols: 4, center: true, pts: [4, 12, 18, 25], opts: [
-      [repStar(0, '&lt; 20', 0), 'Moins de 20'], [repStar(1, '20+', 1 / 3), '20 à 100'], [repStar(2, '100+', 2 / 3), '100 à 300'], [repStar(3, '300+', 1), 'Plus de 300']] },
+    { key: 'avis_google', tag: 'RÉPUTATION', title: "Combien d'avis Google ?", cols: 4, pts: [4, 12, 18, 25], opts: [
+      [big('&lt; 20') + stars(1), 'Moins de 20'], [big('20+') + stars(2), '20 à 100'], [big('100+') + stars(4), '100 à 300'], [big('300+') + stars(5), 'Plus de 300']] },
     { key: 'objectif', tag: 'OBJECTIF', title: 'Votre objectif principal ?', cols: 4, pts: null, opts: [
       [I('<circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M19 8v6M16 11h6"/>'), 'Plus de nouveaux clients'],
       [I('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><rect x="7" y="13" width="4" height="4" rx="1" fill="currentColor"/>'), 'Remplir les créneaux creux'],
@@ -2245,7 +2212,7 @@ const jsonLd = [
       q.opts.forEach((o, oi) => {
         const on = state.answers[qi] === oi;
         cards +=
-          '<button type="button" class="card' + (q.center ? ' card--center' : '') + (on ? ' on' : '') + '" data-o="' + oi + '" aria-pressed="' + on + '">' +
+          '<button type="button" class="card' + (on ? ' on' : '') + '" data-o="' + oi + '" aria-pressed="' + on + '">' +
           '<span class="card__visual" aria-hidden="true">' + o[0] + '</span><span class="lab">' + o[1] + '</span></button>';
       });
       stage!.innerHTML = frame(st,
