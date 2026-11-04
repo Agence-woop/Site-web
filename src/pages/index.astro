@@ -728,9 +728,10 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-acts--center { justify-content: center; }
 
+  /* Boutons : même comportement que ceux de /acquisition-client
+     (repos sans ombre, survol = soulèvement de 2 px + halo, transition 200 ms,
+     pas d'état :active particulier, contour au focus clavier). */
   .cta {
-    position: relative;
-    overflow: hidden;
     display: inline-flex;
     align-items: center;
     gap: 14px;
@@ -744,32 +745,27 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     font-size: 15px;
     line-height: 1.2;
     text-decoration: none;
-    transition: transform 250ms ease, box-shadow 250ms ease;
-  }
-
-  .cta::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -60%;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--text-primary) 35%, transparent), transparent);
-    transform: skewX(-20deg);
-    transition: left 600ms ease;
-    pointer-events: none;
+    transition: box-shadow 200ms ease, transform 200ms ease;
   }
 
   .cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
+    box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
   }
 
-  .cta:hover::after { left: 130%; }
-
   .cta:focus-visible {
-    outline: 2px solid var(--woop-pink);
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
     outline-offset: 3px;
+  }
+
+  /* Boutons posés sur un fond dégradé : halo et contour de focus du bandeau final de /acquisition-client */
+  .cta--light:hover {
+    box-shadow: 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
+  }
+
+  .cta--light:focus-visible,
+  .cta--on-grad:focus-visible {
+    outline-color: var(--text-primary);
   }
 
   .cta__ico {
@@ -807,7 +803,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .cta--line:hover {
-    box-shadow: inset 0 0 0 1.5px var(--woop-pink), 0 12px 36px rgba(230, 43, 127, 0.25);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line), 0 10px 40px rgba(230, 43, 127, 0.45);
   }
 
   .cta--on-grad {
@@ -816,7 +812,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .cta--on-grad:hover {
-    box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 12px 36px var(--hp-shadow);
+    box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
   }
 
   .cta--on-grad .cta__ico {
@@ -2666,7 +2662,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-mq { -webkit-mask: none; mask: none; }
 
     .cta,
-    .cta::after,
     .hp-tile,
     .hp-ico,
     .hp-s,
@@ -2687,8 +2682,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-tcar__nav:hover,
     .hp-tcar__nav:focus-visible,
     .hp-tile--link:hover .hp-ico { transform: none; }
-
-    .cta:hover::after { left: -60%; }
   }
 </style>
 
