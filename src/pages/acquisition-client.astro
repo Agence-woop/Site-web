@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ChevronRight from '../components/ChevronRight.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -69,6 +70,9 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
 
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Hero et quiz : jamais animés. -->
+  <ScrollReveal />
+
   <!-- 1. QUIZ : écran d'accueil statique (lu par Google), puis relais JavaScript -->
   <section class="acq acq-quiz" id="score">
     <div class="container">
@@ -130,12 +134,12 @@ const jsonLd = [
   </section>
 
   <!-- 2. DES CLIENTS, PAS DES CLICS + SERVICES -->
-  <section class="acq acq-services">
+  <section class="acq acq-services" data-reveal-clip>
     <div class="container">
-      <h2 class="acq-h2">Des <span class="gradient-accent acq-kw">clients</span>, pas des clics.</h2>
+      <h2 class="acq-h2" data-reveal="left">Des <span class="gradient-accent acq-kw">clients</span>, pas des clics.</h2>
 
       <div class="bento">
-        <article class="tile tile--span2">
+        <article class="tile tile--span2" data-reveal="left">
           <div class="tile__head tile__head--front">
             <span class="tile__lbl">PUBLICITÉ GOOGLE ET META</span>
             <h3 class="tile__title tile__title--lg">Être trouvé en premier.</h3>
@@ -191,7 +195,7 @@ const jsonLd = [
           </div>
         </article>
 
-        <article class="tile">
+        <article class="tile" data-reveal="right">
           <div class="tile__head">
             <span class="tile__lbl">ÉTUDE DE VOS INDICATEURS</span>
             <h3 class="tile__title">Aucun budget dilué.</h3>
@@ -203,7 +207,7 @@ const jsonLd = [
           </div>
         </article>
 
-        <article class="tile tile--pink">
+        <article class="tile tile--pink" data-reveal="left">
           <div class="tile__head">
             <span class="tile__lbl">STRATÉGIE ADAPTÉE</span>
             <h3 class="tile__title">Pour accélérer sans gaspiller.</h3>
@@ -215,7 +219,7 @@ const jsonLd = [
           </div>
         </article>
 
-        <article class="tile">
+        <article class="tile" data-reveal="up" data-reveal-delay="100">
           <div class="tile__head">
             <span class="tile__lbl">RAPPORTS</span>
             <h3 class="tile__title">Vous voyez tout.</h3>
@@ -249,7 +253,7 @@ const jsonLd = [
           </div>
         </article>
 
-        <article class="tile tile--orange">
+        <article class="tile tile--orange" data-reveal="right" data-reveal-delay="200">
           <div class="tile__head">
             <span class="tile__lbl">MISE EN PLACE</span>
             <h3 class="tile__title">En ligne, rapidement.</h3>
@@ -272,19 +276,19 @@ const jsonLd = [
   </section>
 
   <!-- 3. LES 3 ÉTAPES ET LE BOUTON DU MILIEU DE PAGE (un seul bloc) -->
-  <section class="acq acq-steps">
+  <section class="acq acq-steps" data-reveal-clip>
     <div class="container">
-      <h2 class="acq-h2">De votre score à vos premiers <span class="gradient-accent acq-kw">patients</span>.</h2>
+      <h2 class="acq-h2" data-reveal="left">De votre score à vos premiers <span class="gradient-accent acq-kw">patients</span>.</h2>
       <ol class="steps3">
-        <li class="step3"><span class="gradient-accent step3__num">01</span>Audit 30 min</li>
-        <li class="steps3__arrow" aria-hidden="true">›</li>
-        <li class="step3"><span class="gradient-accent step3__num">02</span>Plan sur mesure</li>
-        <li class="steps3__arrow" aria-hidden="true">›</li>
-        <li class="step3 step3--hot"><span class="step3__num step3__num--plain">03</span>Lancement</li>
+        <li class="step3" data-reveal="left"><span class="gradient-accent step3__num">01</span>Audit 30 min</li>
+        <li class="steps3__arrow" aria-hidden="true" data-reveal="left" data-reveal-delay="50">›</li>
+        <li class="step3" data-reveal="left" data-reveal-delay="100"><span class="gradient-accent step3__num">02</span>Plan sur mesure</li>
+        <li class="steps3__arrow" aria-hidden="true" data-reveal="left" data-reveal-delay="150">›</li>
+        <li class="step3 step3--hot" data-reveal="left" data-reveal-delay="200"><span class="step3__num step3__num--plain">03</span>Lancement</li>
       </ol>
 
       <!-- Bouton du milieu de page : remonte au quiz -->
-      <div class="acq-midcta">
+      <div class="acq-midcta" data-reveal="up" data-reveal-delay="300">
         <button type="button" class="acq-btn acq-btn--lg acq-btn--cta acq-btn--block" data-quiz-cta>
         <span class="label-full">Calculer mon score de visibilité</span><span class="label-short">Calculer mon score</span> <ChevronRight size={16} />
         </button>
@@ -293,14 +297,14 @@ const jsonLd = [
   </section>
 
   <!-- 4. CONTENU DE RÉFÉRENCEMENT -->
-  <div class="acq acq-seo">
+  <div class="acq acq-seo" data-reveal-clip>
     <div class="container seo-grid">
-      <section class="seo-block">
+      <section class="seo-block" data-reveal="left">
         <h2 class="seo-block__title">Marketing pour cliniques : être trouvé avant vos concurrents</h2>
         <p class="seo-block__text">Quand un patient cherche un soin près de chez lui, il choisit parmi les premiers résultats de Google, en se fiant à la note et aux avis.</p>
         <p class="seo-block__text">Une clinique bien classée, bien notée et présente sur les réseaux sociaux capte cette demande. Les autres la laissent filer vers la concurrence, souvent sans le savoir.</p>
       </section>
-      <section class="seo-block">
+      <section class="seo-block" data-reveal="right">
         <h2 class="seo-block__title">Publicité Google et Meta, pilotée par vos indicateurs</h2>
         <p class="seo-block__text">Nous concevons et gérons vos campagnes sur Google, Facebook et Instagram, avec un objectif clair : des rendez-vous, pas des clics.</p>
         <p class="seo-block__text">Chaque dollar est suivi, du coût par nouveau patient aux canaux qui rapportent vraiment, et le budget se concentre sur ce qui fonctionne.</p>
@@ -309,10 +313,10 @@ const jsonLd = [
   </div>
 
   <!-- 5. FAQ -->
-  <section class="acq acq-faq">
+  <section class="acq acq-faq" data-reveal-clip>
     <div class="container">
-      <h2 class="acq-h2 acq-h2--faq">Questions <span class="gradient-accent acq-kw">fréquentes</span></h2>
-      <div class="faq">
+      <h2 class="acq-h2 acq-h2--faq" data-reveal="left">Questions <span class="gradient-accent acq-kw">fréquentes</span></h2>
+      <div class="faq" data-reveal="up">
         {[faq.slice(0, 3), faq.slice(3)].map((column) => (
           <div class="faq__col">
             {column.map((item) => (
@@ -333,7 +337,7 @@ const jsonLd = [
   <!-- 6. BANDEAU FINAL -->
   <section class="acq acq-band" id="rdv">
     <div class="container">
-      <div class="cta-band">
+      <div class="cta-band" data-reveal="up">
         <h2 class="cta-band__title">Prêt à récupérer vos clients ?</h2>
         <a href={`${base}/contact`} class="cta-band__btn" data-audit="bandeau_final" data-audit-band>
           Réserver mon audit <ChevronRight size={16} />
