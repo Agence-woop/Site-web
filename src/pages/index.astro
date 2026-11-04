@@ -1,69 +1,121 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Button from '../components/Button.astro';
-import BentoCard from '../components/BentoCard.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SITE_URL = 'https://agence-woop.ca';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'Agence WOOP',
+    url: `${SITE_URL}/`,
+    logo: `${SITE_URL}/images/logo-woop.png`,
+    image: `${SITE_URL}/images/og-image.jpg`,
+    telephone: '+1-438-815-2295',
+    email: 'contact@agence-woop.ca',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Montréal',
+      addressRegion: 'QC',
+      addressCountry: 'CA',
+    },
+    areaServed: 'Québec',
+    sameAs: [
+      'https://www.linkedin.com/company/agence-woop/',
+      'https://www.facebook.com/agencewoop',
+      'https://www.instagram.com/agencewoop/',
+    ],
+  },
+];
+
+const sectors = [
+  'Cliniques',
+  'Pharmacies',
+  'Cabinets dentaires',
+  'Physiothérapie',
+  'Médico-esthétique',
+  'Bien-être',
+  'Recrutement spécialisé',
+];
+
+const agenda = [
+  { time: '9:00', title: 'Physiothérapie', note: 'Réservé en ligne' },
+  { time: '10:30', title: 'Ostéopathie', note: 'Réservé en ligne' },
+  { time: '13:00', title: 'Consultation', note: 'Réservé en ligne' },
+  { time: '15:30', title: 'Nouveau patient', note: 'Via Google', hot: true },
+  { time: '17:00', title: 'Massothérapie', note: 'Réservé en ligne' },
+];
+
+const team = [
+  { name: 'Gauthier', role: 'Co-fondateur · Stratégie · Infirmier clinicien', img: 'gauthier', fx: '48%', fy: '33%' },
+  { name: 'Kevin', role: 'Co-fondateur · Création', img: 'kevin', fx: '50%', fy: '31%' },
+  { name: 'Emma', role: 'Spécialiste Paid Media Junior', img: 'emma', fx: '55%', fy: '31%' },
+];
+
+const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 
 const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   {
     paragraphs: [
-      "« Kévin a su comprendre dès le début les subtilités de ma vision marketing.",
+      "« Kévin a su comprendre dès le début les subtilités de ma vision marketing.",
       "Son audace, son agilité et sa passion pour l'image de marque m'ont convaincu dès les premiers instants.",
-      "Je recommande les services de l'Agence WOOP. »",
+      "Je recommande les services de l'Agence WOOP. »",
     ],
     name: 'David Caron',
     role: 'PDG, Expoze Recrutement',
   },
   {
     paragraphs: [
-      "« Kevin et l'agence marketing WOOP ont su capter l'essence de mon projet et la traduire en un visuel à la fois clair et impactant.",
-      "Son approche méticuleuse et sa recherche approfondie permettent d'obtenir un résultat à la hauteur des attentes. »",
+      "« Kevin et l'agence marketing WOOP ont su capter l'essence de mon projet et la traduire en un visuel à la fois clair et impactant.",
+      "Son approche méticuleuse et sa recherche approfondie permettent d'obtenir un résultat à la hauteur des attentes. »",
     ],
     name: 'Marie-Josée Bélanger',
     role: 'PDG, ZoneRH',
   },
   {
     paragraphs: [
-      "« Nous travaillons avec WOOP depuis décembre 2025. Dès le début de la relation d'affaires, j'ai senti que je travaillais avec des professionnels compétents et très attentifs aux détails.",
+      "« Nous travaillons avec WOOP depuis décembre 2025. Dès le début de la relation d'affaires, j'ai senti que je travaillais avec des professionnels compétents et très attentifs aux détails.",
       "Ça m'a plu immédiatement et surtout, je me suis senti en confiance. Leur démarche est très structurée et professionnelle. Ils ont rapidement mis en place les bases d'une campagne efficace de reconnaissance de notre marque sur LinkedIn.",
-      "Nous allons passer à la prochaine étape avec eux : convertir en opportunités d'affaires. »",
+      "Nous allons passer à la prochaine étape avec eux : convertir en opportunités d'affaires. »",
     ],
     name: 'Luc Lacroix',
     role: 'PDG, Santé au travail Konsil Inc.',
   },
   {
     paragraphs: [
-      "« C'est un réel plaisir de collaborer avec WOOP depuis plusieurs mois déjà. Leur équipe nous accompagne au quotidien avec professionnalisme, créativité et réactivité.",
+      "« C'est un réel plaisir de collaborer avec WOOP depuis plusieurs mois déjà. Leur équipe nous accompagne au quotidien avec professionnalisme, créativité et réactivité.",
       "Leur compréhension de nos besoins, la pertinence de leurs conseils et la qualité de leur travail contribuent directement à l'atteinte de nos objectifs.",
       "L'équipe est toujours disponible, à l'écoute et proactive dans la recherche de solutions adaptées à nos besoins, tout en tenant compte de nos contraintes et de notre réalité. Nous apprécions particulièrement leur approche humaine, leur transparence ainsi que leur capacité à livrer des résultats concrets, et ce, toujours dans les délais convenus.",
-      "WOOP est un partenaire de confiance que nous recommandons sans hésitation à toute entreprise à la recherche d'une agence marketing compétente, engagée et axée sur les résultats. »",
+      "WOOP est un partenaire de confiance que nous recommandons sans hésitation à toute entreprise à la recherche d'une agence marketing compétente, engagée et axée sur les résultats. »",
     ],
     name: 'AlliancePharma',
   },
   {
     paragraphs: [
-      "« Notre expérience avec Agence WOOP est tout simplement sublime. Nous utilisons leur service depuis maintenant 1 an et que dire du service personnalisé, de la qualité du travail et de la collaboration qui se fait dans une parfaite harmonie, et ce depuis le tout début.",
+      "« Notre expérience avec Agence WOOP est tout simplement sublime. Nous utilisons leur service depuis maintenant 1 an et que dire du service personnalisé, de la qualité du travail et de la collaboration qui se fait dans une parfaite harmonie, et ce depuis le tout début.",
       "5 étoiles pour leur service est le moins qu'on puisse donner !",
-      "Quelle belle expérience que de travailler avec eux au quotidien. Je réfère cette agence à tous ceux qui souhaitent augmenter leur notoriété, leur visibilité ou gérer leurs médias sociaux. »",
+      "Quelle belle expérience que de travailler avec eux au quotidien. Je réfère cette agence à tous ceux qui souhaitent augmenter leur notoriété, leur visibilité ou gérer leurs médias sociaux. »",
     ],
     name: 'Clémence Rachiele',
     role: 'Fondatrice, PurRH',
   },
   {
     paragraphs: [
-      "« Une agence exceptionnelle ! Un merci tout particulier à Kevin pour son écoute et sa grande capacité d'analyse.",
+      "« Une agence exceptionnelle ! Un merci tout particulier à Kevin pour son écoute et sa grande capacité d'analyse.",
       "Il a su comprendre notre secteur d'activité en un temps record et traduire notre vision en publications LinkedIn percutantes et professionnelles.",
-      "Je recommande à 100 % ! »",
+      "Je recommande à 100 % ! »",
     ],
     name: 'André Garceau',
     role: 'Santé au travail Konsil Inc.',
   },
   {
     paragraphs: [
-      "« Service exceptionnel ! Une équipe à l'écoute, efficace et attentive à nos besoins.",
+      "« Service exceptionnel ! Une équipe à l'écoute, efficace et attentive à nos besoins.",
       "L'approche est personnalisée et les résultats sont concrets.",
-      "Je recommande fortement leurs services à toute entreprise qui souhaite faire évoluer son marketing. »",
+      "Je recommande fortement leurs services à toute entreprise qui souhaite faire évoluer son marketing. »",
     ],
     name: 'Geneviève Decelles',
     role: 'Directrice des opérations, EXPOZE Recrutement',
@@ -71,212 +123,477 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 ];
 ---
 <Layout
-  title="WOOP — Agence marketing santé & recrutement | Montréal"
+  title="WOOP | Agence marketing santé et recrutement à Montréal"
   description="L'agence d'acquisition et d'identité de marque dédiée à la santé, au bien-être et au recrutement spécialisé au Québec."
   ogImage="/images/og-image.jpg"
+  jsonLd={jsonLd}
 >
 
-  <!-- ===== SECTION 1 — HERO ===== -->
-  <section class="hero section">
-    <div class="container">
-      <div class="hero__watermark" aria-hidden="true">WOOP</div>
-      <span class="hero__eyebrow">Agence marketing &middot; Montr&eacute;al</span>
-      <h1 class="hero__title">
-        Une agence pens&eacute;e par un <span class="gradient-accent">CLINICIEN</span>, con&ccedil;ue par un <span class="gradient-accent">CR&Eacute;ATIF</span>, activ&eacute;e par une <span class="gradient-accent">EXPERTE</span> en acquisition.
-      </h1>
-      <p class="hero__subtitle">
-        L'agence d&eacute;di&eacute;e &agrave; la sant&eacute;, au bien-&ecirc;tre et aux cabinets de recrutement sp&eacute;cialis&eacute;s au Qu&eacute;bec. Nous b&acirc;tissons des marques qui attirent et des campagnes qui convertissent.
-      </p>
-      <div class="hero__ctas">
-        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
-        <Button variant="secondary" href="#approche">Voir nos services</Button>
-      </div>
-    </div>
-  </section>
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Le hero n'est jamais animé. -->
+  <ScrollReveal />
 
-  <!-- ===== SECTION 2 — NOTRE APPROCHE (BENTO) ===== -->
-  <section class="section" id="approche">
-    <div class="container">
-      <span class="kicker">01 — Notre approche</span>
-      <h2 class="section-title">Marque + Performance</h2>
-      <div class="bento-grid bento-grid--approche">
-        <BentoCard variant="pink" size="large" class="bento--dominant">
-          <div>
-            <span class="bento__label">Conviction n&deg;1</span>
-            <div class="bento__title-xl">Marque forte<br>= Acquisition rentable.</div>
-          </div>
-          <p class="bento__text">Une marque solide fait baisser le co&ucirc;t d'acquisition. Pas d'image de marque sans performance, pas de performance sans image de marque.</p>
-        </BentoCard>
-        <BentoCard variant="outline" class="bento--ads">
-          <span class="bento__label">Acquisition</span>
-          <div class="bento__title">Publicit&eacute; en ligne</div>
-          <p class="bento__text">Google Ads & Meta Ads. Campagnes cibl&eacute;es pour g&eacute;n&eacute;rer des demandes qualifi&eacute;es.</p>
-        </BentoCard>
-        <BentoCard variant="orange" class="bento--branding">
-          <span class="bento__label">Identit&eacute;</span>
-          <div class="bento__title bento__title--bento-lg">Image de marque</div>
-          <p class="bento__text">Logo, charte visuelle, syst&egrave;me de marque complet.</p>
-        </BentoCard>
-        <div class="bento-photo bento-photo--medical">
-          <img src={`${base}/images/clinique-medicale.webp`} alt="Clinique m&eacute;dicale" loading="lazy" width="1000" height="667" />
-        </div>
-        <BentoCard variant="gradient" class="bento--flywheel">
-          <span class="bento__label">M&eacute;thode</span>
-          <div class="bento__title bento__title--bento-lg">La spirale WOOP</div>
-          <p class="bento__text">Image de marque &rarr; Performance &rarr; Optimisation. La spirale qui fait grandir votre clinique ou votre cabinet.</p>
-        </BentoCard>
-        <div class="bento-photo bento-photo--dentaire">
-          <img src={`${base}/images/clinique-dentaire.webp`} alt="Clinique dentaire" loading="lazy" width="800" height="1200" />
-        </div>
-        <BentoCard variant="outline" class="bento--landing">
-          <span class="bento__label">Conversion</span>
-          <div class="bento__title">Site & page de conversion</div>
-          <p class="bento__text">Sites et pages de conversion con&ccedil;us pour transformer le trafic en RDV qualifi&eacute;s.</p>
-        </BentoCard>
-        <div class="bento-photo bento-photo--rh">
-          <img src={`${base}/images/recrutement-rh.webp`} alt="Recrutement RH" loading="lazy" width="1000" height="667" />
+  <!-- 1. HERO (non animé) -->
+  <section class="hp-hero" data-hp-hero>
+    <div class="container hp-hero__grid">
+      <div class="hp-hero__text">
+        <p class="kicker hp-hero__kicker">Agence marketing santé · Montréal</p>
+        <h1 class="hp-hero__title">Le marketing <span class="gradient-accent hp-kw">santé</span> qui remplit votre agenda.</h1>
+        <p class="hp-hero__sub">Une équipe marketing complète, <strong>sans avoir à en embaucher une.</strong> Un clinicien, un créatif et une experte en acquisition, dédiés aux cliniques, pharmacies, professionnels de la santé et cabinets de recrutement du Québec.</p>
+        <div class="hp-acts">
+          <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--line" href="#services">Voir nos services<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
         </div>
       </div>
-      <div class="approche-cta">
-        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
-      </div>
-    </div>
-  </section>
 
-  <!-- ===== SECTION 3 — SEGMENTATION PERSONAS ===== -->
-  <section class="section">
-    <div class="container">
-      <span class="kicker">02 — Pour qui ?</span>
-      <h2 class="section-title">Deux secteurs. Deux expertises.</h2>
-      <div class="personas">
-        <div class="persona-card">
-          <div class="persona-card__image">
-            <img src={`${base}/images/persona-sante.webp`} alt="Professionnels de la sant&eacute;" loading="lazy" />
-          </div>
-          <div class="persona-card__content">
-            <h3 class="persona-card__title">Vous dirigez une <span class="gradient-text">clinique sant&eacute; ou m&eacute;dicale</span></h3>
-            <p class="persona-card__desc">Pharmaciens propri&eacute;taires &middot; Directeurs de clinique &middot; Cabinets dentaires &middot; Cliniques m&eacute;dico-esth&eacute;tiques &middot; Centres de bien-&ecirc;tre</p>
-            <div class="persona-card__actions">
-              <Button variant="primary" href={`${base}/services-medical`}>D&eacute;couvrir nos services sant&eacute;</Button>
-              <Button variant="secondary" href={`${base}/contact?personne=gauthier`}>Parler &agrave; Gauthier</Button>
+      <div class="hp-hv" aria-hidden="true">
+        <div class="hp-hv__stage">
+          <div class="hp-hv__grid"></div>
+          <div class="hp-hv__glow"></div>
+          <svg class="hp-hv__cross" viewBox="0 0 100 100" focusable="false">
+            <defs>
+              <linearGradient id="hp-cross-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" class="stop-orange" />
+                <stop offset="1" class="stop-pink" />
+              </linearGradient>
+            </defs>
+            <path d="M42 0h16a8 8 0 018 8v26h26a8 8 0 018 8v16a8 8 0 01-8 8H66v26a8 8 0 01-8 8H42a8 8 0 01-8-8V66H8a8 8 0 01-8-8V42a8 8 0 018-8h26V8a8 8 0 018-8z" fill="url(#hp-cross-grad)" />
+            <path d="M42 0h16a8 8 0 018 8v26h26a8 8 0 018 8v4H34V8a8 8 0 018-8z" class="hp-hv__cross-shine" />
+          </svg>
+
+          <div class="hp-phone">
+            <div class="hp-phone__bar"><span class="hp-phone__isl"></span></div>
+            <div class="hp-phone__top">
+              <b>Agenda</b>
+              <em class="hp-phone__live"><i></i>Complet</em>
             </div>
+            {agenda.map((slot) => (
+              <div class:list={['hp-slot', { 'hp-slot--hot': slot.hot }]}>
+                <em>{slot.time}</em>
+                <div><b>{slot.title}</b><small>{slot.note}</small></div>
+                <i>
+                  {slot.hot
+                    ? <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 3.5v9M3.5 8h9"/></svg>
+                    : <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>}
+                </i>
+              </div>
+            ))}
           </div>
-        </div>
-        <div class="persona-card">
-          <div class="persona-card__image">
-            <img src={`${base}/images/persona-recrutement.webp`} alt="Professionnels du recrutement" loading="lazy" />
+
+          <div class="hp-float hp-float--rdv">
+            <span class="hp-float__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+            <div><b>Nouveau rendez-vous</b><small>Il y a 2 min</small></div>
           </div>
-          <div class="persona-card__content">
-            <h3 class="persona-card__title">Vous dirigez un <span class="gradient-text">cabinet de recrutement</span></h3>
-            <p class="persona-card__desc">Cabinets de recrutement sp&eacute;cialis&eacute;s &middot; Firmes de recrutement &middot; Consultants RH ind&eacute;pendants &middot; DRH d'entreprise</p>
-            <div class="persona-card__actions">
-              <Button variant="primary" href={`${base}/services-recrutement`}>D&eacute;couvrir nos services recrutement</Button>
-              <Button variant="secondary" href={`${base}/contact?personne=kevin`}>Parler &agrave; Kevin</Button>
-            </div>
+
+          <div class="hp-float hp-float--avis">
+            <span class="hp-stars"><svg viewBox="0 0 100 20"><use href="#hp-star" x="0" y="0" width="20" height="20" /><use href="#hp-star" x="20" y="0" width="20" height="20" /><use href="#hp-star" x="40" y="0" width="20" height="20" /><use href="#hp-star" x="60" y="0" width="20" height="20" /><use href="#hp-star" x="80" y="0" width="20" height="20" /></svg></span>
+            <b>« Accueil impeccable »</b>
+            <small>Nouvel avis Google</small>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Symbole étoile réutilisé (avis du hero et témoignages) -->
+    <svg class="hp-sprite" aria-hidden="true" focusable="false">
+      <symbol id="hp-star" viewBox="0 0 20 20"><path d="M10 1.8l2.5 5.2 5.7.8-4.1 4 1 5.6L10 14.7l-5.1 2.7 1-5.6-4.1-4 5.7-.8z" fill="currentColor" /></symbol>
+    </svg>
   </section>
 
-  <!-- ===== SECTION 4 — PREUVE & ÉQUIPE ===== -->
-  <section class="section">
+  <!-- 2. BANDEAU DÉFILANT -->
+  <div class="hp-mq">
+    <div class="hp-mq__track">
+      <ul class="hp-mq__list">
+        {sectors.map((s) => (
+          <li><span>{s}</span><b aria-hidden="true">✚</b></li>
+        ))}
+      </ul>
+      <ul class="hp-mq__list hp-mq__list--dup" aria-hidden="true">
+        {sectors.map((s) => (
+          <li><span>{s}</span><b>✚</b></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. NOS SERVICES -->
+  <section class="hp-sec hp-sec--services" id="services" data-reveal-clip>
     <div class="container">
-      <span class="kicker">03 — La preuve</span>
-
-      <div class="proof">
-        <div class="proof__stat">
-          <div class="proof__stat-inner">
-            <span class="proof__number">16</span>
-            <span class="proof__unit">ans</span>
-          </div>
-          <span class="proof__cumul">d'exp&eacute;rience cumul&eacute;e</span>
-        </div>
-        <div class="proof__detail">
-          <p class="proof__breakdown">
-            <strong>8 ans</strong> en milieu clinique &middot; <strong>4 ans</strong> en marketing &middot; <strong>4 ans</strong> en marketing publicitaire
-          </p>
-          <p class="proof__text">
-            Gauthier est infirmier clinicien et ancien directeur de clinique priv&eacute;e. Toute l'&eacute;quipe est internalis&eacute;e&nbsp;: vous parlez directement aux fondateurs.
-          </p>
-        </div>
+      <div class="hp-head">
+        <h2 class="section-title hp-title" data-reveal="left">Nos services</h2>
+        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Tout ce que ferait une équipe marketing interne. Sans recruter, sans former, sans gérer.</p>
       </div>
 
-      <div class="team-strip">
-        <div class="team-strip__header">
-          <h3 class="team-strip__title">L'&eacute;quipe WOOP</h3>
-          <p class="team-strip__text">Des experts du terrain. Vous savez qui fait quoi sur votre projet.</p>
-          <Button variant="tertiary" href={`${base}/equipe`}>Rencontrer l'&eacute;quipe</Button>
-        </div>
-        <div class="team-strip__cards">
-          <div class="team-card">
-            <div class="team-card__photo-wrap">
-              <img src={`${base}/images/gauthier.webp`} alt="Gauthier Figueres" class="team-card__photo" loading="lazy" width="800" height="822" />
+      <div class="hp-bento">
+        <!-- Publicité Google et Meta -->
+        <article class="hp-tile hp-tile--grad hp-tile--ads" data-reveal="left">
+          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M8 16l1.5 4.5"/><path d="M19 9.5a4 4 0 010 5"/></svg></span>
+          <div class="hp-ad" aria-hidden="true">
+            <div class="hp-ad__search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+              <i></i>
             </div>
-            <div class="team-card__info">
-              <span class="team-card__name">Gauthier</span>
-              <span class="team-card__role">Co-fondateur &middot; Strat&eacute;gie</span>
+            <div class="hp-ad__res hp-ad__res--top">
+              <span class="hp-ad__badge"></span>
+              <span class="hp-ad__line hp-ad__line--lg"></span>
+              <span class="hp-stars hp-stars--sm"><svg viewBox="0 0 100 20"><use href="#hp-star" x="0" y="0" width="20" height="20" /><use href="#hp-star" x="20" y="0" width="20" height="20" /><use href="#hp-star" x="40" y="0" width="20" height="20" /><use href="#hp-star" x="60" y="0" width="20" height="20" /><use href="#hp-star" x="80" y="0" width="20" height="20" /></svg></span>
+              <span class="hp-ad__line"></span>
             </div>
+            <div class="hp-ad__res"><span class="hp-ad__line hp-ad__line--md"></span><span class="hp-ad__line"></span></div>
+            <div class="hp-ad__res"><span class="hp-ad__line hp-ad__line--md"></span><span class="hp-ad__line"></span></div>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo-wrap">
-              <img src={`${base}/images/kevin.webp`} alt="Kevin" class="team-card__photo" loading="lazy" width="800" height="822" />
-            </div>
-            <div class="team-card__info">
-              <span class="team-card__name">Kevin</span>
-              <span class="team-card__role">Co-fondateur &middot; Cr&eacute;ation</span>
-            </div>
+          <div class="hp-tile__txt">
+            <h3>Publicité Google et Meta</h3>
+            <p>Être trouvé en premier, là où vos clients cherchent.</p>
           </div>
-          <div class="team-card">
-            <div class="team-card__photo-wrap">
-              <img src={`${base}/images/emma.webp`} alt="Emma" class="team-card__photo" loading="lazy" width="800" height="822" />
-            </div>
-            <div class="team-card__info">
-              <span class="team-card__name">Emma</span>
-              <span class="team-card__role">Paid media</span>
-            </div>
+        </article>
+
+        <!-- Conseil en expérience client -->
+        <article class="hp-tile hp-tile--blush hp-tile--cx" data-reveal="right">
+          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/><path d="M12 15.5s-3.5-2-3.5-4.3a2 2 0 013.5-1.3 2 2 0 013.5 1.3c0 2.3-3.5 4.3-3.5 4.3z"/></svg></span>
+          <div class="hp-tile__txt">
+            <h3>Conseil en expérience client</h3>
+            <p>Du premier clic au rendez-vous, on rend chaque étape plus simple pour vos patients.</p>
           </div>
-        </div>
+        </article>
+
+        <!-- Image de marque -->
+        <article class="hp-tile hp-tile--plum hp-tile--sq" data-reveal="up" data-reveal-step="1">
+          <span class="hp-ico hp-ico--grad" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg></span>
+          <div class="hp-tile__txt">
+            <h3>Image de marque</h3>
+            <p>Logo, charte, système complet.</p>
+          </div>
+        </article>
+
+        <!-- Sites web & pages de conversion -->
+        <article class="hp-tile hp-tile--orange hp-tile--sq" data-reveal="right" data-reveal-step="2">
+          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 8h18"/><path d="M12 12l6 2.5-2.6 1-1 2.6z"/></svg></span>
+          <div class="hp-tile__txt">
+            <h3>Sites web &amp; pages de conversion</h3>
+            <p>Le trafic devient rendez-vous.</p>
+          </div>
+        </article>
+
+        <!-- Gestion des réseaux sociaux -->
+        <article class="hp-tile hp-tile--rose hp-tile--social" data-reveal="up">
+          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></span>
+          <div class="hp-tile__txt">
+            <h3>Gestion des réseaux sociaux</h3>
+            <p>Instagram, Facebook, LinkedIn. On crée, on publie, on anime votre communauté.</p>
+          </div>
+          <div class="hp-posts" aria-hidden="true">
+            {[1, 2, 3].map((n) => (
+              <div class:list={['hp-post', `hp-post--${n}`]}>
+                <div class="hp-post__head"><span class="hp-post__av"></span><span class="hp-post__lines"><i></i><i></i></span></div>
+                <div class="hp-post__img">
+                  {n === 1 && (
+                    <svg viewBox="0 0 120 80"><rect width="120" height="80" class="f-blush" /><circle cx="60" cy="34" r="16" class="f-pink" /><rect x="40" y="56" width="40" height="8" rx="4" class="f-plum" /><path d="M54 34h12M60 28v12" class="s-light" stroke-width="4" stroke-linecap="round" /></svg>
+                  )}
+                  {n === 2 && (
+                    <svg viewBox="0 0 120 80"><rect width="120" height="80" class="f-plum" /><circle cx="40" cy="36" r="11" class="f-pinklight" /><path d="M22 70c2-12 10-18 18-18s16 6 18 18" class="f-pinklight" /><circle cx="80" cy="36" r="11" class="f-orange" /><path d="M62 70c2-12 10-18 18-18s16 6 18 18" class="f-orange" /></svg>
+                  )}
+                  {n === 3 && (
+                    <svg viewBox="0 0 120 80"><rect width="60" height="80" class="f-orange" /><rect x="60" width="60" height="80" class="f-pink" /><path d="M14 56l12-14 10 10 10-16" class="s-light" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" /><path d="M74 60l10-10 8 6 16-24" class="s-light" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" /><rect x="58" width="4" height="80" class="f-light" /></svg>
+                  )}
+                </div>
+                <div class="hp-post__foot">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/></svg>
+                </div>
+                <div class="hp-post__cap"><i></i><i></i></div>
+              </div>
+            ))}
+          </div>
+        </article>
       </div>
 
-      <h3 class="testimonials__heading">Ce qu'en disent nos clients</h3>
+      <div class="hp-inl" data-reveal="up">
+        <p>Vous avez besoin de tout ça ? <strong>C'est exactement ce que fait WOOP.</strong></p>
+        <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. MARQUE + PERFORMANCE -->
+  <section class="hp-sec hp-sec--tight" id="approche" data-reveal-clip>
+    <div class="container">
+      <div class="hp-head">
+        <h2 class="section-title hp-title" data-reveal="left">Marque <span class="gradient-accent">+</span> performance</h2>
+        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Une marque solide fait baisser le coût d'acquisition. L'un ne va pas sans l'autre.</p>
+      </div>
+
+      <ol class="hp-spi">
+        <li class="hp-st" data-reveal="left">
+          <span class="hp-st__idx" aria-hidden="true">01</span>
+          <h3><span class="visually-hidden">01 </span>Image de marque</h3>
+          <p>On construit une marque qui inspire confiance.</p>
+        </li>
+        <li class="hp-st hp-st--hot" data-reveal="up" data-reveal-step="1">
+          <span class="hp-st__idx" aria-hidden="true">02</span>
+          <h3><span class="visually-hidden">02 </span>Performance</h3>
+          <p>On la diffuse là où vos clients cherchent.</p>
+        </li>
+        <li class="hp-st" data-reveal="right" data-reveal-step="2">
+          <span class="hp-st__idx" aria-hidden="true">03</span>
+          <h3><span class="visually-hidden">03 </span>Optimisation</h3>
+          <p>On mesure, on ajuste, vous performez. On recommence.</p>
+        </li>
+      </ol>
+
+      <a class="hp-teaser" href={`${base}/acquisition-client`} data-reveal="up">
+        <span class="hp-teaser__dot" aria-hidden="true"></span>
+        <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
+        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 5. UNE ÉQUIPE, SANS EMBAUCHE -->
+  <section class="hp-sec hp-sec--tight" data-reveal-clip>
+    <div class="container">
+      <div class="hp-head">
+        <h2 class="section-title hp-title" data-reveal="left">Une équipe, <span class="gradient-accent">sans embauche</span></h2>
+        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Tout le savoir-faire d'un service marketing, sans les postes à pourvoir.</p>
+      </div>
+
+      <div class="hp-cmp">
+        <div class="hp-cx hp-cx--off" data-reveal="left">
+          <h3 class="hp-over">Embaucher une équipe</h3>
+          <ul class="hp-rts">
+            {roles.map((r, i) => (
+              <li class="hp-rt">
+                <span class="hp-rt__ico" aria-hidden="true">
+                  {i === 0 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>}
+                  {i === 1 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 7l3 3"/></svg>}
+                  {i === 2 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M19 9.5a4 4 0 010 5"/></svg>}
+                  {i === 3 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/></svg>}
+                </span>
+                <b>{r}</b> <em>?</em>
+              </li>
+            ))}
+          </ul>
+          <ul class="hp-chips hp-chips--off">
+            <li>Recruter</li>
+            <li>Former</li>
+            <li>Gérer</li>
+            <li>Remplacer</li>
+          </ul>
+        </div>
+
+        <p class="hp-vs" data-reveal="up" data-reveal-step="1">ou</p>
+
+        <div class="hp-cx hp-cx--on" data-reveal="right" data-reveal-step="2">
+          <h3 class="hp-over">Avec WOOP</h3>
+          <ul class="hp-rts">
+            {roles.map((r, i) => (
+              <li class="hp-rt hp-rt--on">
+                <span class="hp-rt__ico" aria-hidden="true">
+                  {i === 0 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>}
+                  {i === 1 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 7l3 3"/></svg>}
+                  {i === 2 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M19 9.5a4 4 0 010 5"/></svg>}
+                  {i === 3 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/></svg>}
+                </span>
+                <b>{r}</b> <em aria-hidden="true">✓</em>
+              </li>
+            ))}
+          </ul>
+          <ul class="hp-chips hp-chips--on">
+            <li>Une seule équipe</li>
+            <li>Un seul interlocuteur</li>
+            <li>Opérationnelle rapidement</li>
+          </ul>
+          <a class="cta cta--light" href={`${base}/contact`}>Avoir mon équipe marketing<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. DEUX SECTEURS, UNE MÉTHODE -->
+  <section class="hp-sec" data-reveal-clip>
+    <div class="container">
+      <div class="hp-head">
+        <h2 class="section-title hp-title" data-reveal="left">Deux secteurs, une méthode</h2>
+        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">On ne fait que ça. C'est pour ça qu'on le fait bien.</p>
+      </div>
+
+      <div class="hp-sect">
+        <article class="hp-s hp-s--sante" data-reveal="left">
+          <div class="hp-ill hp-ill--cal" aria-hidden="true">
+            <div class="hp-ill__head">
+              <svg class="hp-ill__clinic" viewBox="0 0 24 24" fill="none">
+                <defs>
+                  <linearGradient id="hp-clinic-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" class="stop-orange" />
+                    <stop offset="1" class="stop-pink" />
+                  </linearGradient>
+                </defs>
+                <rect x="2" y="9" width="20" height="13" rx="2.5" fill="url(#hp-clinic-grad)" />
+                <rect x="1" y="7.5" width="22" height="3" rx="1.5" class="f-plum" />
+                <rect x="8" y="1" width="8" height="8" rx="2.2" class="f-light s-pink" stroke-width="1.4" />
+                <path d="M12 3v4M10 5h4" class="s-pink" stroke-width="1.8" stroke-linecap="round" />
+                <rect x="4.5" y="13" width="3.5" height="3" rx=".8" class="f-light" />
+                <rect x="16" y="13" width="3.5" height="3" rx=".8" class="f-light" />
+                <rect x="10" y="15" width="4" height="7" rx="1" class="f-light" />
+              </svg>
+              <div><b>Votre clinique</b><small>Agenda de la semaine</small></div>
+            </div>
+            <div class="hp-ill__days"><span>L</span><span>M</span><span class="is-on">M</span><span>J</span><span>V</span></div>
+            <i class="is-ok"></i><i></i><i class="is-ok"></i><i class="is-ok"></i><i></i><i class="is-ok"></i>
+            <div class="hp-ill__cf">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>
+              4 nouveaux rendez-vous
+            </div>
+          </div>
+          <div class="hp-s__body">
+            <p class="hp-over">Santé &amp; Médical</p>
+            <h3>Cliniques, pharmacies, cabinets dentaires, médico-esthétique, professionnels de la santé, bien-être.</h3>
+          </div>
+          <div class="hp-acts hp-s__acts">
+            <a class="cta cta--light" href={`${base}/services-medical`}>Nos services santé<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+            <a class="cta cta--line cta--on-grad" href={`${base}/contact?personne=gauthier`}>Parler à Gauthier<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          </div>
+        </article>
+
+        <article class="hp-s hp-s--rh" data-reveal="right" data-reveal-step="1">
+          <div class="hp-ill hp-ill--cv" aria-hidden="true">
+            <div class="hp-cv hp-cv--3"></div>
+            <div class="hp-cv hp-cv--2"></div>
+            <div class="hp-cv hp-cv--1">
+              <div class="hp-cv__head"><span class="hp-cv__pp"></span><div><b></b><i></i></div></div>
+              <div class="hp-cv__tags"><span>Infirmière</span><span>Temps plein</span></div>
+              <span class="hp-cv__ln"></span>
+              <span class="hp-cv__ln hp-cv__ln--sh"></span>
+              <span class="hp-cv__stamp">Qualifiée</span>
+            </div>
+          </div>
+          <div class="hp-s__body">
+            <p class="hp-over">RH &amp; Recrutement</p>
+            <h3>Cabinets de recrutement spécialisés, firmes et consultants RH.</h3>
+          </div>
+          <div class="hp-acts hp-s__acts">
+            <a class="cta" href={`${base}/services-recrutement`}>Nos services recrutement<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+            <a class="cta cta--line" href={`${base}/contact?personne=kevin`}>Parler à Kevin<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. LA PREUVE -->
+  <section class="hp-proof" data-reveal-clip>
+    <div class="container">
+      <div class="hp-proof__inner">
+        <h2 class="hp-over hp-proof__title" data-reveal="left">La preuve</h2>
+        <ul class="hp-pgrid">
+          <li data-reveal="up"><strong class="hp-gt">16 <small>ans</small></strong><span>d'expérience cumulée</span></li>
+          <li data-reveal="up" data-reveal-step="1"><strong>8 <small>ans</small></strong><span>en milieu clinique</span></li>
+          <li data-reveal="up" data-reveal-step="2"><strong>2 <small>secteurs</small></strong><span>d'expertise</span></li>
+          <li data-reveal="up" data-reveal-step="3"><strong>100&nbsp;<small>%</small></strong><span>équipe dédiée</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. L'ÉQUIPE -->
+  <section class="hp-sec" id="equipe" data-reveal-clip>
+    <div class="container">
+      <div class="hp-head">
+        <h2 class="section-title hp-title" data-reveal="left">Les visages de votre équipe</h2>
+        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Des experts qui travaillent pour vous comme s'ils étaient dans vos murs.</p>
+      </div>
+
+      <ul class="hp-team">
+        {team.map((m, i) => (
+          <li
+            class="hp-m"
+            data-reveal={i === 0 ? 'left' : i === 2 ? 'right' : 'up'}
+            data-reveal-step={i === 0 ? undefined : String(i)}
+          >
+            <div class="hp-m__ph" style={`--fx: ${m.fx}; --fy: ${m.fy};`}>
+              <img src={`${base}/images/${m.img}.webp`} alt={m.name} width="671" height="822" loading="lazy" decoding="async" />
+            </div>
+            <b class="hp-m__name">{m.name}</b>
+            <span class="hp-m__role">{m.role}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="hp-inl" data-reveal="up">
+        <p>Envie de parler à l'un de nous ? <strong>On répond vite.</strong></p>
+        <div class="hp-acts">
+          <a class="cta" href={`${base}/contact`}>Parler à l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--line" href={`${base}/equipe`}>Rencontrer l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. BANDEAU INTERMÉDIAIRE -->
+  <section class="hp-sec hp-sec--tight">
+    <div class="container">
+      <div class="hp-band" data-reveal="up">
+        <div class="hp-avs" aria-hidden="true">
+          {team.map((m) => (
+            <span style={`--fx: ${m.fx}; --fy: ${m.fy};`}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+          ))}
+        </div>
+        <div class="hp-band__txt">
+          <h2>Votre équipe marketing est déjà prête.</h2>
+          <p>Un appel de 30 minutes pour la rencontrer et voir ce qu'elle peut faire pour vous.</p>
+        </div>
+        <div class="hp-acts">
+          <a class="cta cta--light" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. TÉMOIGNAGES -->
+  <section class="hp-sec hp-sec--tight" data-reveal-clip>
+    <div class="container">
+      <div class="hp-head">
+        <h2 class="section-title hp-title" data-reveal="left">Ce qu'en disent nos clients</h2>
+      </div>
+
       <div
-        class="testimonials-carousel"
+        class="hp-tcar"
         role="region"
         aria-label="Avis de nos clients"
         data-testimonials-carousel
+        data-reveal="up"
       >
         <button
           type="button"
-          class="testimonials-carousel__nav testimonials-carousel__nav--prev"
+          class="hp-tcar__nav hp-tcar__nav--prev"
           aria-label="Avis précédent"
           data-testimonials-prev
+          hidden
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
         </button>
-        <div class="testimonials-carousel__viewport">
-          <ul class="testimonials-carousel__track" data-testimonials-track>
-            {testimonials.map((t, i) => (
-              <li class:list={['testimonial-card', i % 2 === 0 ? 'testimonial-card--outline' : 'testimonial-card--gradient']}>
-                <div class="testimonial-card__body">
-                  <div class="testimonial-card__paragraphs" data-testimonial-paragraphs>
+        <div class="hp-tcar__viewport" data-testimonials-viewport>
+          <ul class="hp-tcar__track" data-testimonials-track>
+            {testimonials.map((t) => (
+              <li class="hp-tcard">
+                <div class="hp-tcard__body">
+                  <span class="hp-stars hp-tcard__stars" aria-hidden="true"><svg viewBox="0 0 100 20"><use href="#hp-star" x="0" y="0" width="20" height="20" /><use href="#hp-star" x="20" y="0" width="20" height="20" /><use href="#hp-star" x="40" y="0" width="20" height="20" /><use href="#hp-star" x="60" y="0" width="20" height="20" /><use href="#hp-star" x="80" y="0" width="20" height="20" /></svg></span>
+                  <div class="hp-tcard__paragraphs" data-testimonial-paragraphs>
                     {t.paragraphs.map((p) => (
-                      <p class="testimonial-card__paragraph">{p}</p>
+                      <p class="hp-tcard__paragraph">{p}</p>
                     ))}
                   </div>
                   <button
                     type="button"
-                    class="testimonial-card__toggle"
+                    class="hp-tcard__toggle"
                     aria-expanded="false"
                     data-testimonial-toggle
                     hidden
                   >Voir plus</button>
                 </div>
-                <div class="testimonial-card__author">
-                  <strong class="testimonial-card__name">{t.name}</strong>
-                  {t.role && <span class="testimonial-card__role">{t.role}</span>}
+                <div class="hp-tcard__author">
+                  <strong class="hp-tcard__name">{t.name}</strong>
+                  {t.role && <span class="hp-tcard__role">{t.role}</span>}
                 </div>
               </li>
             ))}
@@ -284,674 +601,1811 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
         </div>
         <button
           type="button"
-          class="testimonials-carousel__nav testimonials-carousel__nav--next"
+          class="hp-tcar__nav hp-tcar__nav--next"
           aria-label="Avis suivant"
           data-testimonials-next
+          hidden
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
         </button>
       </div>
     </div>
   </section>
 
-  <!-- ===== SECTION 5 — CTA FINAL ===== -->
-  <section class="section cta-final-section">
+  <!-- 11. BANDEAU FINAL -->
+  <section class="hp-sec hp-sec--final" data-hp-final>
     <div class="container">
-      <div class="cta-final">
-        <h2 class="cta-final__title">Parlons de votre projet.</h2>
-        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+      <div class="hp-final" data-reveal="up">
+        <h2>Votre équipe marketing commence par un appel.</h2>
+        <p>Un appel de 30 minutes pour voir où vous en êtes et ce qu'on peut faire.</p>
+        <div class="hp-acts hp-acts--center">
+          <a class="cta cta--light" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
+  <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
+    <span class="hp-avs hp-avs--sm" aria-hidden="true">
+      {team.map((m) => (
+        <span style={`--fx: ${m.fx}; --fy: ${m.fy};`}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+      ))}
+    </span>
+    <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l'embaucher</strong></span>
+    <a class="cta cta--sm" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+  </aside>
+
 </Layout>
 
 <style>
-  /* ===== HERO ===== */
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-top: 120px;
-    padding-bottom: 80px;
+  /* =====================================================================
+     PAGE D'ACCUEIL : styles locaux (scopés).
+     Couleurs : uniquement les jetons de global.css, leurs mélanges
+     (color-mix) et des rgba() dérivées de #FA6244 et #E62B7F.
+     ===================================================================== */
+
+  /* Jetons locaux, dérivés de la charte */
+  .hp-hero,
+  .hp-mq,
+  .hp-sec,
+  .hp-proof,
+  .hp-pop {
+    --hp-ink: var(--text-primary);
+    --hp-dark: var(--bg-deep);
+    --hp-light: var(--text-primary);
+    --hp-blush: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
+    --hp-pinklight: color-mix(in srgb, var(--woop-pink) 45%, var(--text-primary));
+    --hp-plum: color-mix(in srgb, var(--woop-pink) 20%, var(--bg-deep));
+    --hp-card: var(--bg-elevated);
+    --hp-line: color-mix(in srgb, var(--text-primary) 14%, transparent);
+    --hp-skel: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
+    --hp-skel-2: color-mix(in srgb, var(--text-muted) 12%, var(--text-primary));
+    --hp-shadow: color-mix(in srgb, var(--bg-deep) 55%, transparent);
+    --hp-grad-band: linear-gradient(120deg, var(--woop-orange) 25%, var(--woop-pink));
+  }
+
+  /* Remplissages et traits SVG */
+  .stop-orange { stop-color: var(--woop-orange); }
+  .stop-pink { stop-color: var(--woop-pink); }
+  .f-blush { fill: var(--hp-blush); }
+  .f-pink { fill: var(--woop-pink); }
+  .f-pinklight { fill: var(--hp-pinklight); }
+  .f-orange { fill: var(--woop-orange); }
+  .f-plum { fill: var(--hp-plum); }
+  .f-light { fill: var(--hp-light); }
+  .s-light { stroke: var(--hp-light); }
+  .s-pink { stroke: var(--woop-pink); }
+
+  .hp-sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
     overflow: hidden;
   }
 
-  .hero__watermark {
-    position: absolute;
-    font-family: var(--font-display);
-    font-size: 42vw;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.12);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: -1;
-    letter-spacing: -0.02em;
+  .hp-stars {
+    display: inline-flex;
+    color: var(--woop-orange);
   }
 
-  .hero__eyebrow {
-    display: inline-block;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--woop-pink);
-    background: rgba(230, 43, 127, 0.1);
-    border: 1px solid var(--border-accent);
-    border-radius: 100px;
-    padding: 8px 18px;
-    font-weight: 700;
-    margin-bottom: 32px;
+  .hp-stars svg {
+    width: 84px;
+    height: 17px;
+    display: block;
   }
 
-  .hero__title {
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 1.15;
-    color: var(--text-primary);
-    max-width: 900px;
-    margin-bottom: 24px;
+  .hp-stars--sm svg {
+    width: 56px;
+    height: 11px;
   }
 
-  @media (min-width: 768px) {
-    .hero__title { font-size: 42px; }
-  }
-
-  @media (min-width: 1024px) {
-    .hero__title { font-size: 56px; line-height: 1.08; }
-  }
-
-  .hero__subtitle {
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--text-secondary);
-    max-width: 640px;
-    margin-bottom: 40px;
-  }
-
-  @media (min-width: 768px) {
-    .hero__subtitle { font-size: 18px; }
-  }
-
-  @media (min-width: 1024px) {
-    .hero__subtitle { font-size: 20px; }
-  }
-
-  .hero__ctas {
+  /* ===== BOUTONS ===== */
+  .hp-acts {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  /* ===== BENTO GRID — APPROCHE ===== */
-  .bento-grid--approche {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-    margin-top: 40px;
-  }
-
-  @media (min-width: 600px) {
-    .bento-grid--approche {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  @media (min-width: 900px) {
-    .bento-grid--approche {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, minmax(0, 1fr));
-      min-height: 880px;
-    }
-
-    .bento-grid--approche > :global(.bento--dominant) {
-      grid-column: 1 / 3;
-      grid-row: 1 / 3;
-    }
-    .bento-grid--approche > :global(.bento--ads) {
-      grid-column: 3 / 4;
-      grid-row: 1 / 2;
-    }
-    .bento-grid--approche > :global(.bento--branding) {
-      grid-column: 4 / 5;
-      grid-row: 1 / 2;
-    }
-    .bento-photo--medical {
-      grid-column: 3 / 5;
-      grid-row: 2 / 3;
-    }
-    .bento-grid--approche > :global(.bento--flywheel) {
-      grid-column: 1 / 2;
-      grid-row: 3 / 5;
-    }
-    .bento-photo--dentaire {
-      grid-column: 2 / 3;
-      grid-row: 3 / 5;
-    }
-    .bento-grid--approche > :global(.bento--landing) {
-      grid-column: 3 / 5;
-      grid-row: 3 / 4;
-    }
-    .bento-photo--rh {
-      grid-column: 3 / 5;
-      grid-row: 4 / 5;
-    }
-  }
-
-  .bento__title--bento-lg {
-    font-size: 34px !important;
-  }
-
-  @media (min-width: 768px) {
-    .bento__title--bento-lg {
-      font-size: 42px !important;
-    }
-  }
-
-  .bento-photo {
-    border-radius: var(--radius-bento);
-    overflow: hidden;
-    min-height: 180px;
-    position: relative;
-  }
-
-  .bento-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    position: absolute;
-    inset: 0;
-  }
-
-  .bento-photo--dentaire {
-    aspect-ratio: 2 / 3;
-  }
-
-  @media (min-width: 900px) {
-    .bento-photo--dentaire {
-      aspect-ratio: auto;
-    }
-  }
-
-  .approche-cta {
-    margin-top: 40px;
-    text-align: center;
-  }
-
-  /* ===== PERSONAS ===== */
-  .personas {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-    margin-top: 40px;
-  }
-
-  @media (min-width: 768px) {
-    .personas {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .persona-card {
-    display: flex;
-    flex-direction: column;
-    background: transparent;
-    border: 1px solid var(--border-accent);
-    border-radius: var(--radius-bento);
-    overflow: hidden;
-    text-decoration: none;
-    transition: transform 300ms ease, border-color 300ms ease;
-    position: relative;
-    min-height: 420px;
-  }
-
-  @media (min-width: 768px) {
-    .persona-card { min-height: 500px; }
-  }
-
-  .persona-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--woop-gradient);
-    z-index: 1;
-  }
-
-  .persona-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--woop-pink);
-  }
-
-  .persona-card__image {
-    height: 200px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  @media (min-width: 768px) {
-    .persona-card__image { height: 240px; }
-  }
-
-  @media (min-width: 1024px) {
-    .persona-card__image { height: 320px; }
-  }
-
-  .persona-card__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-  }
-
-  .persona-card__image::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 60px;
-    background: linear-gradient(to top, var(--bg-deep), transparent);
-  }
-
-  .persona-card__content {
-    padding: 24px 28px 28px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .persona-card__title {
-    font-family: var(--font-display);
-    font-size: 24px;
-    text-transform: uppercase;
-    line-height: 1.05;
-    margin-bottom: 14px;
-  }
-
-  @media (min-width: 768px) {
-    .persona-card__title { font-size: 28px; }
-  }
-
-  .persona-card__desc {
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    flex: 1;
-    margin-bottom: 24px;
-  }
-
-  @media (min-width: 1024px) {
-    .persona-card__desc { font-size: 16px; }
-  }
-
-  .persona-card__actions {
-    display: flex;
-    flex-direction: column;
     gap: 12px;
-    align-items: flex-start;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .persona-card { transition: none; }
-    .persona-card:hover { transform: none; }
+  .hp-acts--center { justify-content: center; }
+
+  .cta {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 100%;
+    padding: 7px 7px 7px 24px;
+    border-radius: var(--radius-button);
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: transform 250ms ease, box-shadow 250ms ease;
   }
 
-  /* ===== PREUVE ===== */
-  .proof {
+  .cta::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--text-primary) 35%, transparent), transparent);
+    transform: skewX(-20deg);
+    transition: left 600ms ease;
+    pointer-events: none;
+  }
+
+  .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
+  }
+
+  .cta:hover::after { left: 130%; }
+
+  .cta:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .cta__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    color: var(--woop-pink);
+  }
+
+  .cta__ico svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .cta--light {
+    background: var(--hp-light);
+    color: var(--hp-dark);
+  }
+
+  .cta--light .cta__ico,
+  .cta--line .cta__ico {
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+  }
+
+  .cta--line {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+  }
+
+  .cta--line:hover {
+    box-shadow: inset 0 0 0 1.5px var(--woop-pink), 0 12px 36px rgba(230, 43, 127, 0.25);
+  }
+
+  .cta--on-grad {
+    box-shadow: inset 0 0 0 1.5px var(--hp-light);
+  }
+
+  .cta--on-grad:hover {
+    box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 12px 36px var(--hp-shadow);
+  }
+
+  .cta--on-grad .cta__ico {
+    background: var(--hp-light);
+    color: var(--woop-pink);
+  }
+
+  .cta--sm {
+    gap: 10px;
+    padding: 5px 5px 5px 18px;
+    font-size: 14px;
+  }
+
+  .cta--sm .cta__ico {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* ===== TITRES DE SECTION ===== */
+  .hp-head {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    margin-top: 32px;
-    margin-bottom: 48px;
-    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  @media (min-width: 900px) {
+    .hp-head {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 40px;
+      margin-bottom: 46px;
+    }
+  }
+
+  .hp-title {
+    margin-bottom: 0;
+    line-height: 1.02;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .hp-head__intro {
+    max-width: 440px;
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1.6;
+    flex: none;
+  }
+
+  @media (min-width: 900px) {
+    .hp-head__intro { flex: 0 1 440px; }
+  }
+
+  .hp-over {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ===== SECTIONS ===== */
+  .hp-sec { padding: 72px 0; }
+  .hp-sec--tight { padding-top: 0; }
+
+  @media (min-width: 768px) {
+    .hp-sec { padding: 104px 0; }
+    .hp-sec--tight { padding-top: 0; }
+  }
+
+  .hp-sec--services {
+    padding-top: 24px;
+    scroll-margin-top: 90px;
   }
 
   @media (min-width: 768px) {
-    .proof {
-      flex-direction: row;
-      align-items: center;
+    .hp-sec--services { padding-top: 40px; }
+  }
+
+  /* ===== 1. HERO ===== */
+  .hp-hero {
+    position: relative;
+    padding: 40px 0 48px;
+    overflow-x: clip;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero { padding: 64px 0 72px; }
+  }
+
+  .hp-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
       gap: 48px;
     }
   }
 
-  .proof__stat {
+  .hp-hero__kicker { margin-bottom: 20px; }
+
+  .hp-hero__title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 600px) {
+    .hp-hero__title { font-size: 54px; }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero__title { font-size: 62px; }
+  }
+
+  @media (min-width: 1280px) {
+    .hp-hero__title { font-size: 74px; }
+  }
+
+  .hp-kw {
+    letter-spacing: 1px;
+    padding: 0 0.04em;
+  }
+
+  .hp-hero__sub {
+    margin: 24px 0 34px;
+    max-width: 540px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .hp-hero__sub strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero__sub { font-size: 18px; }
+  }
+
+  /* Illustration : scène de 580 × 560 px mise à l'échelle selon la largeur */
+  .hp-hv {
+    --hv-scale: 0.58;
+    position: relative;
+    width: calc(580px * var(--hv-scale));
+    height: calc(560px * var(--hv-scale));
+    justify-self: center;
+  }
+
+  @media (min-width: 420px) { .hp-hv { --hv-scale: 0.64; } }
+  @media (min-width: 600px) { .hp-hv { --hv-scale: 0.9; } }
+  @media (min-width: 768px) { .hp-hv { --hv-scale: 1; } }
+  @media (min-width: 1024px) { .hp-hv { --hv-scale: 0.8; justify-self: end; } }
+  @media (min-width: 1280px) { .hp-hv { --hv-scale: 0.96; } }
+
+  .hp-hv__stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 580px;
+    height: 560px;
+    transform: scale(var(--hv-scale));
+    transform-origin: top left;
+  }
+
+  .hp-hv__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--text-primary) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--text-primary) 6%, transparent) 1px, transparent 1px);
+    background-size: 40px 40px;
+    -webkit-mask: radial-gradient(circle at 55% 50%, var(--bg-deep) 10%, transparent 65%);
+    mask: radial-gradient(circle at 55% 50%, var(--bg-deep) 10%, transparent 65%);
+  }
+
+  .hp-hv__glow {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 43, 127, 0.36), rgba(250, 98, 68, 0.12) 45%, transparent 70%);
+    filter: blur(10px);
+  }
+
+  .hp-hv__cross {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    width: 250px;
+    height: 250px;
+    filter: drop-shadow(0 30px 60px rgba(230, 43, 127, 0.45));
+  }
+
+  .hp-hv__cross-shine {
+    fill: var(--text-primary);
+    opacity: 0.12;
+  }
+
+  .hp-phone {
+    position: absolute;
+    left: 165px;
+    top: 36px;
+    z-index: 2;
+    width: 290px;
+    padding: 12px;
+    border-radius: 44px;
+    background: var(--bg-deep);
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--woop-pink) 22%, var(--bg-elevated)),
+      0 0 0 9px color-mix(in srgb, var(--text-primary) 3%, transparent),
+      0 50px 90px var(--hp-shadow),
+      0 0 90px rgba(230, 43, 127, 0.25);
+    transform: rotate(-5deg);
+  }
+
+  .hp-phone__bar {
+    display: flex;
+    justify-content: center;
+    padding: 4px 0 10px;
+  }
+
+  .hp-phone__isl {
+    width: 70px;
+    height: 20px;
+    border-radius: 12px;
+    background: var(--bg-deep);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent);
+  }
+
+  .hp-phone__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 14px;
+    border-radius: 26px 26px 10px 10px;
+    background: var(--hp-light);
+  }
+
+  .hp-phone__top b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--woop-pink);
+  }
+
+  .hp-phone__live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: var(--hp-blush);
+    color: var(--woop-pink);
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hp-phone__live i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+  }
+
+  .hp-slot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 7px;
+    padding: 11px 12px;
+    border-radius: 14px;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+  }
+
+  .hp-slot em {
+    width: 36px;
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .hp-slot div { flex: 1; min-width: 0; }
+
+  .hp-slot b {
+    display: block;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .hp-slot small {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .hp-slot i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--hp-blush);
+    color: var(--woop-pink);
+  }
+
+  .hp-slot i svg { width: 12px; height: 12px; }
+
+  .hp-slot--hot {
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 14px 34px rgba(230, 43, 127, 0.5);
+    transform: scale(1.06);
+  }
+
+  .hp-slot--hot em,
+  .hp-slot--hot small { color: color-mix(in srgb, var(--text-primary) 88%, transparent); }
+  .hp-slot--hot i { background: var(--hp-light); }
+
+  .hp-float {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: max-content;
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px var(--hp-line), 0 24px 50px var(--hp-shadow);
+  }
+
+  .hp-float b { display: block; font-size: 14px; line-height: 1.3; color: var(--text-primary); }
+  .hp-float small { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+  .hp-float__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 8px 20px rgba(230, 43, 127, 0.45);
+  }
+
+  .hp-float__ico svg { width: 20px; height: 20px; }
+
+  .hp-float--rdv { left: 0; top: 262px; }
+
+  .hp-float--avis {
+    right: 0;
+    top: 404px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  /* ===== 2. BANDEAU DÉFILANT ===== */
+  .hp-mq {
+    overflow: hidden;
+    border-top: 1px solid var(--hp-line);
+    border-bottom: 1px solid var(--hp-line);
+    padding: 20px 0;
+    -webkit-mask: linear-gradient(90deg, transparent, var(--bg-deep) 10%, var(--bg-deep) 90%, transparent);
+    mask: linear-gradient(90deg, transparent, var(--bg-deep) 10%, var(--bg-deep) 90%, transparent);
+  }
+
+  .hp-mq__track {
+    display: flex;
+    width: max-content;
+    animation: hp-mq 40s linear infinite;
+  }
+
+  .hp-mq__list {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding-right: 30px;
+    list-style: none;
+  }
+
+  .hp-mq__list li {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .hp-mq__list span {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 24px;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1.2px color-mix(in srgb, var(--text-primary) 60%, transparent);
+  }
+
+  .hp-mq__list li:nth-child(3n + 2) span {
+    -webkit-text-stroke-color: var(--woop-pink);
+  }
+
+  .hp-mq__list b {
+    color: var(--woop-pink);
+    font-size: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .hp-mq { padding: 22px 0; }
+    .hp-mq__list span { font-size: 34px; }
+    .hp-mq__list b { font-size: 18px; }
+  }
+
+  @keyframes hp-mq {
+    to { transform: translateX(-50%); }
+  }
+
+  /* ===== 3. SERVICES ===== */
+  .hp-bento {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .hp-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hp-tile--ads,
+    .hp-tile--cx,
+    .hp-tile--social { grid-column: span 2; }
+  }
+
+  @media (min-width: 1100px) {
+    .hp-bento {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .hp-tile--ads { grid-column: span 2; grid-row: span 2; }
+    .hp-tile--cx { grid-column: span 2; }
+    .hp-tile--sq { grid-column: span 1; }
+    .hp-tile--social { grid-column: span 4; }
+  }
+
+  .hp-tile {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
+    justify-content: space-between;
+    gap: 22px;
+    min-height: 260px;
+    padding: 28px 26px;
+    border-radius: 30px;
+    color: var(--hp-ink);
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
   }
 
-  .proof__stat-inner {
+  @media (min-width: 768px) {
+    .hp-tile { padding: 34px 32px; min-height: 280px; }
+  }
+
+  .hp-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px var(--hp-shadow), inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent);
+  }
+
+  .hp-tile h3 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .hp-tile h3 { font-size: 27px; }
+  }
+
+  .hp-tile p {
+    margin-top: 10px;
+    max-width: 340px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .hp-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    flex: none;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--text-primary) 18%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 35%, transparent);
+    transition: transform 350ms ease;
+  }
+
+  .hp-ico svg { width: 28px; height: 28px; }
+
+  .hp-tile:hover .hp-ico { transform: rotate(-6deg) scale(1.06); }
+
+  .hp-ico--grad {
+    background: var(--woop-gradient);
+    box-shadow: 0 8px 24px rgba(230, 43, 127, 0.35);
+  }
+
+  .hp-tile--grad { background: var(--woop-gradient); }
+
+  .hp-tile--blush {
+    background: var(--hp-blush);
+    color: var(--hp-dark);
+  }
+
+  .hp-tile--blush p { color: color-mix(in srgb, var(--woop-pink) 30%, var(--bg-deep)); }
+
+  .hp-tile--blush .hp-ico {
+    background: var(--hp-plum);
+    color: var(--hp-blush);
+    box-shadow: none;
+  }
+
+  .hp-tile--plum { background: var(--hp-plum); }
+  .hp-tile--plum p { color: var(--text-secondary); }
+
+  .hp-tile--orange { background: var(--woop-orange); }
+  .hp-tile--orange p { color: var(--hp-dark); }
+
+  .hp-tile--rose {
+    background: linear-gradient(150deg, color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary)), var(--woop-pink));
+  }
+
+  /* Fausse annonce */
+  .hp-ad {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 420px;
+    padding: 18px;
+    border-radius: 22px;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+    box-shadow: 0 24px 50px var(--hp-shadow);
+    transform: rotate(-2deg);
+    align-self: center;
   }
 
-  .proof__number {
+  .hp-ad__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: 999px;
+    border: 1.5px solid var(--hp-skel);
+    color: var(--woop-pink);
+  }
+
+  .hp-ad__search svg { width: 18px; height: 18px; flex: none; }
+
+  .hp-ad__search i {
+    display: block;
+    height: 8px;
+    width: 62%;
+    border-radius: 5px;
+    background: var(--hp-skel);
+  }
+
+  .hp-ad__res {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 13px 14px;
+    border-radius: 14px;
+    background: var(--hp-skel-2);
+  }
+
+  .hp-ad__line {
+    display: block;
+    height: 7px;
+    width: 82%;
+    border-radius: 4px;
+    background: var(--hp-skel);
+  }
+
+  .hp-ad__line--md { height: 9px; width: 52%; }
+
+  .hp-ad__res--top {
+    background: var(--woop-gradient);
+    box-shadow: 0 12px 28px rgba(230, 43, 127, 0.35);
+  }
+
+  .hp-ad__res--top .hp-ad__line { background: color-mix(in srgb, var(--text-primary) 45%, transparent); }
+  .hp-ad__res--top .hp-ad__line--lg { height: 11px; width: 58%; background: var(--hp-light); }
+  .hp-ad__res--top .hp-stars { color: var(--hp-light); }
+
+  .hp-ad__badge {
+    display: block;
+    width: 64px;
+    height: 7px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--text-primary) 70%, transparent);
+  }
+
+  /* Publications réseaux sociaux */
+  .hp-tile--social {
+    justify-content: flex-start;
+  }
+
+  .hp-posts {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: flex-end;
+    padding-top: 10px;
+  }
+
+  @media (min-width: 1100px) {
+    .hp-tile--social {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-rows: auto 1fr;
+      column-gap: 32px;
+      align-items: end;
+      min-height: 300px;
+    }
+    .hp-tile--social .hp-ico { grid-column: 1; grid-row: 1; align-self: start; }
+    .hp-tile--social .hp-tile__txt { grid-column: 1 / 3; grid-row: 2; max-width: 380px; }
+    .hp-posts { grid-column: 3; grid-row: 1 / 3; gap: 16px; padding-top: 0; }
+  }
+
+  .hp-post {
+    flex: 0 1 190px;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--hp-light);
+    color: var(--woop-pink);
+    box-shadow: 0 18px 40px var(--hp-shadow);
+  }
+
+  .hp-post--1 { transform: rotate(-4deg) translateY(6px); }
+  .hp-post--2 { transform: translateY(-14px); }
+  .hp-post--3 { transform: rotate(4deg) translateY(6px); }
+
+  .hp-post__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+  }
+
+  .hp-post__av {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    box-shadow: 0 0 0 2px var(--hp-light), 0 0 0 3.5px var(--woop-pink);
+  }
+
+  .hp-post__lines,
+  .hp-post__cap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+  }
+
+  .hp-post__lines i,
+  .hp-post__cap i {
+    display: block;
+    height: 6px;
+    width: 70%;
+    border-radius: 3px;
+    background: var(--hp-skel);
+  }
+
+  .hp-post__lines i:last-child,
+  .hp-post__cap i:last-child { width: 45%; background: var(--hp-skel-2); }
+
+  .hp-post__img svg { display: block; width: 100%; height: auto; }
+
+  .hp-post__foot {
+    display: flex;
+    gap: 8px;
+    padding: 8px 10px 4px;
+  }
+
+  .hp-post__foot svg { width: 14px; height: 14px; }
+
+  .hp-post__cap { padding: 2px 10px 12px; }
+
+  @media (max-width: 639px) {
+    .hp-post__head .hp-post__lines i:last-child,
+    .hp-post__cap i:last-child { display: none; }
+  }
+
+  /* Bandeau « Vous avez besoin de tout ça ? » */
+  .hp-inl {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    margin-top: 26px;
+    padding: 22px;
+    border-radius: 26px;
+    background: color-mix(in srgb, var(--bg-elevated) 75%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hp-line);
+  }
+
+  .hp-inl p {
+    color: var(--text-secondary);
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .hp-inl strong { color: var(--text-primary); font-weight: 600; }
+
+  @media (min-width: 980px) {
+    .hp-inl {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 14px 14px 30px;
+      border-radius: 999px;
+    }
+  }
+
+  /* ===== 4. MARQUE + PERFORMANCE ===== */
+  .hp-spi {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    list-style: none;
+    border-radius: 30px;
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+  }
+
+  @media (min-width: 900px) {
+    .hp-spi { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .hp-st {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 32px 28px;
+    border-top: 1px solid var(--hp-line);
+  }
+
+  .hp-st:first-child { border-top: 0; }
+
+  @media (min-width: 900px) {
+    .hp-st {
+      padding: 40px 36px;
+      border-top: 0;
+      border-left: 1px solid var(--hp-line);
+    }
+    .hp-st:first-child { border-left: 0; }
+  }
+
+  .hp-st__idx {
     font-family: var(--font-display);
-    font-size: 100px;
-    line-height: 0.85;
+    font-size: 34px;
+    line-height: 1;
+    color: var(--text-secondary);
+  }
+
+  .hp-st h3 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .hp-st p {
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  .hp-st--hot {
+    background: var(--woop-gradient);
+    border-color: transparent;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(230, 43, 127, 0.28);
+  }
+
+  .hp-st--hot + .hp-st { border-color: transparent; }
+  .hp-st--hot .hp-st__idx,
+  .hp-st--hot p { color: var(--hp-ink); }
+
+  .hp-teaser {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding: 14px 14px 14px 22px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hp-line);
+    font-size: 16px;
+    line-height: 1.4;
+    color: var(--text-primary);
+    transition: box-shadow 200ms ease;
+  }
+
+  .hp-teaser:hover { box-shadow: inset 0 0 0 1px var(--woop-pink); }
+
+  .hp-teaser:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .hp-teaser strong { color: var(--hp-pinklight); }
+
+  .hp-teaser__dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+    box-shadow: 0 0 12px var(--woop-pink);
+  }
+
+  .hp-go {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-left: auto;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px currentColor;
+    transition: background 200ms ease, color 200ms ease;
+  }
+
+  .hp-go svg { width: 18px; height: 18px; }
+
+  .hp-teaser:hover .hp-go {
+    background: var(--woop-gradient);
+    box-shadow: none;
+  }
+
+  /* ===== 5. UNE ÉQUIPE, SANS EMBAUCHE ===== */
+  .hp-cmp {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  @media (min-width: 980px) {
+    .hp-cmp {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 22px;
+    }
+  }
+
+  .hp-cx {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 28px 22px;
+    border-radius: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .hp-cx { padding: 36px; }
+  }
+
+  .hp-cx--off {
+    background: color-mix(in srgb, var(--bg-elevated) 75%, transparent);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+  }
+
+  .hp-cx--on {
+    background: var(--woop-gradient);
+    box-shadow: 0 30px 70px rgba(230, 43, 127, 0.3);
+  }
+
+  .hp-cx--on .hp-over { color: color-mix(in srgb, var(--text-primary) 88%, transparent); }
+  .hp-cx .cta { align-self: flex-start; }
+
+  .hp-vs {
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    font-family: var(--font-display);
     text-transform: uppercase;
+    font-size: 24px;
+    color: var(--text-primary);
+    background: var(--hp-card);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+  }
+
+  .hp-rts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    list-style: none;
+  }
+
+  @media (min-width: 480px) {
+    .hp-rts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  /* Colonnes côte à côte encore étroites : une tuile par ligne */
+  @media (min-width: 980px) and (max-width: 1279px) {
+    .hp-rts { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .hp-rt {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 74px;
+    padding: 14px 40px 14px 14px;
+    border-radius: 18px;
+    border: 1.5px dashed color-mix(in srgb, var(--text-primary) 25%, transparent);
+    color: var(--text-muted);
+  }
+
+  .hp-rt b {
+    font-size: 15px;
+    line-height: 1.25;
+    overflow-wrap: break-word;
+  }
+
+  .hp-rt em {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 700;
+    background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+  }
+
+  .hp-rt__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  }
+
+  .hp-rt__ico svg { width: 22px; height: 22px; }
+
+  .hp-rt--on {
+    border: 1.5px solid transparent;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+    box-shadow: 0 12px 28px var(--hp-shadow);
+  }
+
+  .hp-rt--on .hp-rt__ico {
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+  }
+
+  .hp-rt--on em {
+    background: var(--hp-blush);
+    color: var(--woop-pink);
+  }
+
+  .hp-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+  }
+
+  .hp-chips li {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .hp-chips--off li {
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+
+  .hp-chips--on li {
+    background: color-mix(in srgb, var(--text-primary) 20%, transparent);
+    color: var(--hp-ink);
+  }
+
+  /* ===== 6. DEUX SECTEURS ===== */
+  .hp-sect {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  @media (min-width: 980px) {
+    .hp-sect { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .hp-s {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px 24px;
+    border-radius: 30px;
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .hp-s:hover { transform: translateY(-5px); }
+
+  @media (min-width: 768px) {
+    .hp-s { padding: 44px 40px; }
+  }
+
+  .hp-s--sante { background: var(--woop-gradient); }
+  .hp-s--sante .hp-over { color: color-mix(in srgb, var(--text-primary) 85%, transparent); }
+
+  .hp-s--rh {
+    background: var(--hp-card);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+  }
+
+  .hp-s__body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .hp-s h3 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.22;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 768px) {
+    .hp-s h3 { font-size: 28px; }
+  }
+
+
+  .hp-ill {
+    position: relative;
+    flex: none;
+    align-self: flex-start;
+  }
+
+  /* Illustration agenda (santé) */
+  .hp-ill--cal {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    width: 220px;
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--hp-light);
+    box-shadow: 0 20px 40px var(--hp-shadow);
+    transform: rotate(4deg);
+    margin-left: 6px;
+  }
+
+  .hp-ill__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .hp-ill__clinic { width: 34px; height: 34px; flex: none; }
+
+  .hp-ill__head div { display: flex; flex-direction: column; }
+  .hp-ill__head b { color: var(--hp-dark); font-size: 13px; line-height: 1.2; }
+  .hp-ill__head small { color: var(--text-muted); font-size: 10px; font-weight: 600; }
+
+  .hp-ill__days {
+    display: flex;
+    gap: 5px;
+    margin: 2px 0 4px;
+  }
+
+  .hp-ill__days span {
+    flex: 1;
+    padding: 5px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--hp-skel-2);
+    color: var(--text-muted);
+  }
+
+  .hp-ill__days span.is-on {
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+  }
+
+  .hp-ill--cal > i {
+    position: relative;
+    display: block;
+    height: 20px;
+    border-radius: 8px;
+    background: var(--hp-skel-2);
+  }
+
+  .hp-ill--cal > i.is-ok { background: var(--hp-blush); }
+
+  .hp-ill--cal > i.is-ok::after {
+    content: '';
+    position: absolute;
+    right: 6px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+  }
+
+  .hp-ill__cf {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    background: var(--hp-blush);
+    color: var(--woop-pink);
+    font-size: 10.5px;
+    font-weight: 700;
+  }
+
+  .hp-ill__cf svg { width: 11px; height: 11px; flex: none; }
+
+  /* Illustration CV (recrutement) */
+  .hp-ill--cv {
+    width: 210px;
+    height: 160px;
+    margin: 6px 0 8px 6px;
+  }
+
+  .hp-cv {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+  }
+
+  .hp-cv--3 {
+    background: rgba(230, 43, 127, 0.25);
+    transform: rotate(10deg) translate(14px, 6px);
+  }
+
+  .hp-cv--2 {
+    background: rgba(250, 98, 68, 0.35);
+    transform: rotate(5deg) translate(7px, 3px);
+  }
+
+  .hp-cv--1 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+    box-shadow: 0 20px 40px var(--hp-shadow);
+    transform: rotate(-3deg);
+  }
+
+  .hp-cv__head { display: flex; gap: 10px; align-items: center; }
+
+  .hp-cv__pp {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: var(--woop-gradient);
+  }
+
+  .hp-cv__pp::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 7px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    transform: translateX(-50%);
+  }
+
+  .hp-cv__pp::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    width: 26px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    transform: translateX(-50%);
+  }
+
+  .hp-cv__head div { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .hp-cv__head b { display: block; height: 8px; width: 80%; border-radius: 4px; background: var(--hp-plum); }
+  .hp-cv__head i { display: block; height: 6px; width: 55%; border-radius: 4px; background: var(--hp-skel); }
+
+  .hp-cv__tags { display: flex; gap: 5px; flex-wrap: wrap; }
+
+  .hp-cv__tags span {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 9.5px;
+    font-weight: 700;
+    background: var(--hp-blush);
+    color: var(--woop-pink);
+  }
+
+  .hp-cv__ln { display: block; width: 100%; height: 6px; border-radius: 3px; background: var(--hp-skel-2); }
+  .hp-cv__ln--sh { width: 60%; }
+
+  .hp-cv__stamp {
+    position: absolute;
+    right: -14px;
+    bottom: -12px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transform: rotate(-8deg);
+    box-shadow: 0 10px 24px rgba(230, 43, 127, 0.45);
+  }
+
+  @media (min-width: 1180px) {
+    .hp-s {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: 1fr auto;
+      grid-template-areas:
+        'body ill'
+        'acts acts';
+      gap: 34px 28px;
+      min-height: 440px;
+    }
+    .hp-s__body { grid-area: body; align-self: end; }
+    .hp-ill { grid-area: ill; align-self: start; margin-top: -6px; margin-right: 4px; }
+    .hp-s__acts { grid-area: acts; }
+  }
+
+  /* ===== 7. LA PREUVE ===== */
+  .hp-proof__inner {
+    padding: 56px 0;
+    border-top: 1px solid var(--hp-line);
+    border-bottom: 1px solid var(--hp-line);
+  }
+
+  .hp-pgrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px 20px;
+    margin-top: 28px;
+    list-style: none;
+  }
+
+  @media (min-width: 980px) {
+    .hp-pgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
+    .hp-pgrid li { padding: 0 30px; border-left: 1px solid var(--hp-line); }
+    .hp-pgrid li:first-child { padding-left: 0; border-left: 0; }
+  }
+
+  .hp-pgrid strong {
+    display: block;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .hp-pgrid strong small {
+    font-size: 0.42em;
+    letter-spacing: 0;
+  }
+
+  @media (min-width: 768px) {
+    .hp-pgrid strong { font-size: 64px; }
+  }
+
+  .hp-gt {
     background: var(--woop-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  @media (min-width: 768px) {
-    .proof__number { font-size: 140px; }
-  }
-
-  .proof__unit {
-    font-family: var(--font-display);
-    font-size: 32px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .proof__cumul {
-    font-size: 12px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-muted);
+  .hp-pgrid span {
+    display: block;
+    margin-top: 12px;
+    color: var(--text-secondary);
     font-weight: 600;
-    margin-top: 8px;
+    line-height: 1.4;
   }
 
-  @media (min-width: 1024px) {
-    .proof__cumul { font-size: 14px; }
-  }
-
-  .proof__breakdown {
-    font-size: 18px;
-    line-height: 1.5;
-    color: var(--text-primary);
-    margin-bottom: 12px;
-  }
-
-  .proof__breakdown strong {
-    color: var(--woop-pink);
-  }
-
-  .proof__text {
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-  }
-
-  @media (min-width: 1024px) {
-    .proof__text { font-size: 17px; }
-  }
-
-  /* ===== TEAM STRIP ===== */
-  .team-strip {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    padding: 36px;
-    margin-bottom: 48px;
-  }
-
-  @media (min-width: 768px) {
-    .team-strip {
-      padding: 44px;
-    }
-  }
-
-  .team-strip__header {
-    margin-bottom: 28px;
-  }
-
-  .team-strip__title {
-    font-family: var(--font-display);
-    font-size: 26px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .team-strip__text {
-    font-size: 15px;
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-    max-width: 500px;
-    line-height: 1.6;
-  }
-
-  @media (min-width: 1024px) {
-    .team-strip__text { font-size: 17px; }
-  }
-
-  .team-strip__cards {
+  /* ===== 8. L'ÉQUIPE ===== */
+  .hp-team {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    list-style: none;
   }
 
-  @media (min-width: 768px) {
-    .team-strip__cards {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
+  @media (min-width: 640px) {
+    .hp-team { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
-  .team-card {
+  .hp-m {
     display: flex;
     flex-direction: column;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: 14px;
-    overflow: hidden;
+    align-items: center;
+    gap: 6px;
+    padding: 30px 20px 28px;
+    border-radius: 30px;
+    background: color-mix(in srgb, var(--bg-elevated) 75%, transparent);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+    text-align: center;
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  .team-card__photo-wrap {
-    width: 100%;
-    aspect-ratio: 1 / 1;
+  .hp-m:hover { transform: translateY(-5px); }
+
+  .hp-m__ph,
+  .hp-avs > span {
+    position: relative;
     overflow: hidden;
+    flex: none;
+    border-radius: 50%;
+    background: var(--woop-gradient);
   }
 
-  .team-card__photo {
+  .hp-m__ph {
+    width: 168px;
+    height: 168px;
+    margin-bottom: 14px;
+    box-shadow: 0 0 0 4px var(--bg-elevated), 0 0 0 6px rgba(230, 43, 127, 0.55), 0 24px 50px rgba(230, 43, 127, 0.22);
+  }
+
+  @media (min-width: 1024px) {
+    .hp-m__ph { width: 200px; height: 200px; }
+  }
+
+  .hp-m__ph img,
+  .hp-avs img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
+    object-position: 50% 0;
+    transform: scale(1.55);
+    transform-origin: var(--fx, 50%) var(--fy, 30%);
   }
 
-  .team-card__info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px;
-  }
-
-  .team-card__name {
-    font-family: var(--font-display);
-    font-size: 20px;
-    text-transform: uppercase;
-    line-height: 1;
+  .hp-m__name {
+    font-size: 22px;
+    font-weight: 700;
     color: var(--text-primary);
   }
 
-  .team-card__role {
-    font-size: 12px;
-    color: var(--text-muted);
+  .hp-m__role {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text-secondary);
   }
 
-  @media (min-width: 1024px) {
-    .team-card__role { font-size: 14px; }
+  /* ===== 9. BANDEAU INTERMÉDIAIRE ===== */
+  .hp-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    align-items: center;
+    padding: 34px 24px;
+    border-radius: 36px;
+    background: var(--hp-grad-band);
   }
 
-  /* ===== TESTIMONIALS ===== */
-  .testimonials__heading {
-    font-family: var(--font-display);
+  @media (min-width: 1100px) {
+    .hp-band {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 30px;
+      padding: 44px 48px;
+    }
+  }
+
+  .hp-band h2 {
     font-size: 28px;
-    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1.12;
     color: var(--text-primary);
-    margin-bottom: 24px;
+    text-wrap: balance;
   }
 
-  /* Carousel layout */
-  .testimonials-carousel {
-    position: relative;
+  @media (min-width: 768px) {
+    .hp-band h2 { font-size: 34px; }
+  }
+
+  .hp-band p {
+    margin-top: 8px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+
+  .hp-avs {
     display: flex;
-    align-items: stretch;
-    gap: 12px;
-    margin-top: 24px;
   }
 
-  .testimonials-carousel__viewport {
-    flex: 1 1 auto;
+  .hp-avs > span {
+    width: 62px;
+    height: 62px;
+    margin-left: -14px;
+    box-shadow: 0 0 0 4px var(--woop-orange);
+  }
+
+  .hp-avs > span:first-child { margin-left: 0; }
+
+  .hp-avs--sm > span {
+    width: 36px;
+    height: 36px;
+    margin-left: -10px;
+    box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* ===== 10. TÉMOIGNAGES ===== */
+  .hp-tcar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'view view'
+      'prev next';
+    gap: 18px 12px;
+  }
+
+  @media (min-width: 640px) {
+    .hp-tcar {
+      grid-template-columns: 44px minmax(0, 1fr) 44px;
+      grid-template-areas: 'prev view next';
+      align-items: center;
+      gap: 14px;
+    }
+  }
+
+  .hp-tcar__viewport {
+    grid-area: view;
+    min-width: 0;
+    /* Sans JavaScript : défilement horizontal interne, au doigt ou au pavé tactile */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    padding-bottom: 6px;
+  }
+
+  .hp-tcar.is-ready .hp-tcar__viewport {
     overflow: hidden;
-    /* No height constraint : the track stretches to the tallest card,
-       and align-items: stretch on the track gives every card the same
-       height. The section stays stable while sliding. */
+    padding-bottom: 0;
   }
 
-  .testimonials-carousel__track {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .hp-tcar__track {
     display: flex;
     align-items: stretch;
-    gap: 12px;
+    gap: 20px;
+    list-style: none;
     transform: translateX(0);
     transition: transform 500ms ease;
     will-change: transform;
   }
 
-  /* Nav arrows */
-  .testimonials-carousel__nav {
-    flex: 0 0 44px;
-    align-self: center;
+  .hp-tcar__nav {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-primary);
-    cursor: pointer;
+    padding: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background 250ms ease, border-color 250ms ease, color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
-    padding: 0;
+    background: var(--hp-card);
+    border: 1px solid var(--hp-line);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 250ms ease, border-color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
   }
 
-  .testimonials-carousel__nav:hover,
-  .testimonials-carousel__nav:focus-visible {
+  .hp-tcar__nav[hidden] { display: none; }
+  .hp-tcar__nav--prev { grid-area: prev; justify-self: end; }
+  .hp-tcar__nav--next { grid-area: next; justify-self: start; }
+
+  .hp-tcar__nav:hover,
+  .hp-tcar__nav:focus-visible {
     background: var(--woop-gradient);
     border-color: transparent;
-    color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(230, 43, 127, 0.3);
   }
 
-  .testimonials-carousel__nav:focus-visible {
+  .hp-tcar__nav:focus-visible {
     outline: 2px solid var(--woop-pink);
     outline-offset: 3px;
   }
 
-  /* Cards : 1 visible on mobile, 2 on tablet, 3 on desktop. */
-  .testimonial-card {
+  /* 1 carte visible sur téléphone, 2 sur tablette, 3 sur ordinateur */
+  .hp-tcard {
     flex: 0 0 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 24px;
-    border-radius: var(--radius-bento);
-    position: relative;
-    overflow: hidden;
+    gap: 22px;
+    padding: 28px 24px;
+    border-radius: 30px;
+    background: var(--hp-card);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+    scroll-snap-align: start;
   }
 
   @media (min-width: 640px) {
-    .testimonial-card {
-      flex-basis: calc((100% - 12px) / 2);
-      padding: 28px;
+    .hp-tcard {
+      flex-basis: calc((100% - 20px) / 2);
+      padding: 32px 30px;
     }
   }
 
   @media (min-width: 1024px) {
-    .testimonial-card {
-      flex-basis: calc((100% - 24px) / 3);
-    }
+    .hp-tcard { flex-basis: calc((100% - 40px) / 3); }
   }
 
-  /* Outline variant : translucide, accent rose-orange en haut. */
-  .testimonial-card--outline {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-  }
-
-  .testimonial-card--outline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--woop-gradient);
-  }
-
-  /* Gradient variant : la carte EST le dégradé. Pas de filet en haut. */
-  .testimonial-card--gradient {
-    background: linear-gradient(135deg, #E62B7F 0%, #FA6244 100%);
-    color: #fff;
-    border: 1px solid transparent;
-  }
-
-  /* Body wraps the paragraphs container + the « Voir plus » toggle, so the
-     author block can stay anchored at the bottom via space-between on the card. */
-  .testimonial-card__body {
+  .hp-tcard__body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     min-width: 0;
   }
 
-  /* Paragraphs container : truncated at a fixed max-height computed in JS
-     (calé sur la 2e plus grande carte mesurée). Expansion lifts the cap. */
-  .testimonial-card__paragraphs {
+  .hp-tcard__stars { margin-bottom: 16px; }
+
+  /* Conteneur des paragraphes : hauteur plafonnée en JS (2e plus grande carte) */
+  .hp-tcard__paragraphs {
     width: 100%;
     overflow: hidden;
     transition: max-height 250ms ease;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .testimonial-card__paragraphs {
-      transition: none;
-    }
-  }
-
-  .testimonial-card__paragraph {
-    font-size: 14px;
-    line-height: 1.6;
-    color: inherit;
+  .hp-tcard__paragraph {
     margin: 0 0 12px;
-  }
-
-  .testimonial-card__paragraph:last-child {
-    margin-bottom: 0;
-  }
-
-  @media (min-width: 1024px) {
-    .testimonial-card__paragraph { font-size: 15px; }
-  }
-
-  .testimonial-card--outline .testimonial-card__paragraph {
+    font-size: 15px;
+    line-height: 1.65;
     color: var(--text-secondary);
   }
 
-  .testimonial-card--gradient .testimonial-card__paragraph {
-    color: #fff;
-  }
+  .hp-tcard__paragraph:last-child { margin-bottom: 0; }
 
-  /* Toggle button : discret, lisible sur les deux variants. */
-  .testimonial-card__toggle {
+  .hp-tcard__toggle {
     margin-top: 12px;
     padding: 6px 0;
     background: transparent;
@@ -960,181 +2414,201 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
-    color: var(--woop-pink);
+    color: var(--hp-pinklight);
     text-decoration: underline;
     text-underline-offset: 3px;
-    align-self: flex-start;
     transition: color 200ms ease;
   }
 
-  .testimonial-card__toggle:hover,
-  .testimonial-card__toggle:focus-visible {
-    color: var(--woop-orange);
-  }
+  .hp-tcard__toggle:hover,
+  .hp-tcard__toggle:focus-visible { color: var(--woop-orange); }
 
-  .testimonial-card__toggle:focus-visible {
+  .hp-tcard__toggle:focus-visible {
     outline: 2px solid var(--woop-pink);
     outline-offset: 2px;
     border-radius: 4px;
   }
 
-  .testimonial-card--gradient .testimonial-card__toggle {
-    color: #fff;
-    opacity: 0.92;
-  }
-
-  .testimonial-card--gradient .testimonial-card__toggle:hover,
-  .testimonial-card--gradient .testimonial-card__toggle:focus-visible {
-    color: #fff;
-    opacity: 1;
-  }
-
-  .testimonial-card--gradient .testimonial-card__toggle:focus-visible {
-    outline-color: #fff;
-  }
-
-  /* Spacing above author block, kept consistent with the previous design. */
-  .testimonial-card__author {
-    margin-top: 20px;
-  }
-
-  .testimonial-card__author {
+  .hp-tcard__author {
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
-  .testimonial-card__name {
-    font-size: 14px;
+  .hp-tcard__name {
+    font-size: 16px;
     font-weight: 700;
     color: var(--text-primary);
   }
 
-  .testimonial-card--gradient .testimonial-card__name {
-    color: #fff;
-  }
-
-  .testimonial-card__role {
-    font-size: 12px;
+  .hp-tcard__role {
+    font-size: 13px;
+    font-weight: 600;
     color: var(--text-muted);
   }
 
-  @media (min-width: 1024px) {
-    .testimonial-card__role { font-size: 14px; }
-  }
+  /* ===== 11. BANDEAU FINAL ===== */
+  .hp-sec--final { padding-top: 0; }
 
-  .testimonial-card--gradient .testimonial-card__role {
-    color: rgba(255, 255, 255, 0.85);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .testimonials-carousel__track,
-    .testimonials-carousel__nav {
-      transition: none;
-    }
-    .testimonials-carousel__nav:hover,
-    .testimonials-carousel__nav:focus-visible {
-      transform: none;
-    }
-  }
-
-  /* ===== CTA FINAL ===== */
-  .cta-final {
-    background: var(--woop-gradient);
-    border-radius: var(--radius-bento);
-    padding: 56px 32px;
+  .hp-final {
+    padding: 64px 22px;
+    border-radius: 28px;
+    background: var(--hp-grad-band);
     text-align: center;
   }
 
   @media (min-width: 768px) {
-    .cta-final { padding: 72px 48px; }
+    .hp-final { padding: 100px 40px; border-radius: 40px; }
   }
 
-  .cta-final__title {
-    font-family: var(--font-display);
-    font-size: 36px;
-    text-transform: uppercase;
-    color: #fff;
-    margin-bottom: 32px;
+  .hp-final h2 {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
   }
 
   @media (min-width: 768px) {
-    .cta-final__title { font-size: 52px; }
+    .hp-final h2 { font-size: 46px; }
   }
 
-  .cta-final :global(.btn--primary) {
-    background: #fff;
-    color: var(--woop-pink);
+  @media (min-width: 1280px) {
+    .hp-final h2 { font-size: 56px; }
   }
 
-  .cta-final :global(.btn--primary:hover) {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  .hp-final p {
+    margin: 18px auto 36px;
+    max-width: 620px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+
+  /* ===== BANDEAU COLLANT ===== */
+  .hp-pop {
+    --pop-left: 12px;
+    --pop-right: 12px;
+    position: fixed;
+    left: var(--pop-left);
+    right: var(--pop-right);
+    bottom: 12px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 6px 6px 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 43, 127, 0.45),
+      0 20px 50px var(--hp-shadow),
+      0 0 40px rgba(230, 43, 127, 0.2);
+    transform: translateY(calc(100% + 40px));
+    visibility: hidden;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s linear 600ms;
+  }
+
+  .hp-pop.is-shown {
+    transform: none;
+    visibility: visible;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s;
+  }
+
+  .hp-pop__txt {
+    display: none;
+    font-size: 15px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
+
+  @media (min-width: 520px) {
+    .hp-pop__txt {
+      display: block;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 13px;
+      line-height: 1.3;
+      white-space: normal;
+    }
+  }
+
+  @media (min-width: 720px) {
+    .hp-pop {
+      left: 50%;
+      right: auto;
+      bottom: 20px;
+      gap: 16px;
+      max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
+      padding: 8px 8px 8px 12px;
+      transform: translate(-50%, calc(100% + 40px));
+    }
+    .hp-pop.is-shown { transform: translate(-50%, 0); }
+    .hp-pop__txt { display: inline; flex: none; font-size: 15px; white-space: nowrap; }
+  }
+
+  /* ===== MOUVEMENT RÉDUIT ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .hp-mq__track { animation: none; width: auto; }
+    .hp-mq__list { flex-wrap: wrap; justify-content: center; row-gap: 10px; padding: 0 20px; }
+    .hp-mq__list--dup { display: none; }
+    .hp-mq { -webkit-mask: none; mask: none; }
+
+    .cta,
+    .cta::after,
+    .hp-tile,
+    .hp-ico,
+    .hp-s,
+    .hp-m,
+    .hp-tcar__track,
+    .hp-tcar__nav,
+    .hp-tcard__paragraphs,
+    .hp-pop,
+    .hp-pop.is-shown { transition: none; }
+
+    .cta:hover,
+    .hp-tile:hover,
+    .hp-s:hover,
+    .hp-m:hover,
+    .hp-tcar__nav:hover,
+    .hp-tcar__nav:focus-visible,
+    .hp-tile:hover .hp-ico { transform: none; }
+
+    .cta:hover::after { left: -60%; }
   }
 </style>
 
 <script>
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px',
-  };
-
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (!prefersReducedMotion) {
-    const animatedElements = document.querySelectorAll(
-      '.bento-grid--approche > *, .personas > *, .testimonials > *, .proof, .team-strip'
-    );
-
-    animatedElements.forEach((el) => {
-      (el as HTMLElement).style.opacity = '0';
-      (el as HTMLElement).style.transform = 'translateY(24px)';
-    });
-
-    let staggerIndex = 0;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const el = entry.target as HTMLElement;
-          const delay = staggerIndex * 80;
-          staggerIndex++;
-
-          setTimeout(() => {
-            el.style.transition = 'opacity 600ms ease, transform 600ms ease';
-            el.style.opacity = '1';
-            el.style.transform = 'translateY(0)';
-          }, delay);
-
-          observer.unobserve(el);
-
-          setTimeout(() => { staggerIndex = 0; }, 400);
-        }
-      });
-    }, observerOptions);
-
-    animatedElements.forEach((el) => observer.observe(el));
-  }
-</script>
-
-<script>
-  // Carrousel des avis clients :
-  // - Navigation BORNÉE (positions 0..(N-V), pas de clonage). Depuis la
-  //   dernière position, next() revient à 0 avec une transition douce ; idem
-  //   prev() depuis 0 vers la dernière position. Avec V cartes visibles et
-  //   N=7 au total, chaque vue contient toujours des avis aux index croissants
-  //   contigus, donc l'alternance translucide/dégradé est garantie à toutes
-  //   les vues, sans collage 7↔1.
-  // - Auto-défilement 6 s, pause au survol et au focus, respect de
-  //   prefers-reduced-motion (pas d'auto, pas de transition, flèches OK).
+  // Carrousel des avis clients (comportement repris de la version précédente) :
+  // - Navigation bornée (positions 0..(N-V), sans clonage). Depuis la dernière
+  //   position, next() revient à 0 ; prev() depuis 0 va à la dernière position.
+  // - Avancement automatique toutes les 6 s, pause au survol et au focus,
+  //   respect de prefers-reduced-motion (pas d'auto, pas de transition, flèches OK).
   // - Hauteur fixe calée sur la 2e plus grande carte mesurée. Cartes plus
   //   longues : bouton « Voir plus / Voir moins », sinon le bouton reste caché.
+  // - Sans JavaScript : tout le texte est visible et la rangée défile au doigt.
   (function () {
     const carousel = document.querySelector<HTMLElement>('[data-testimonials-carousel]');
     if (!carousel) return;
+    const viewport = carousel.querySelector<HTMLElement>('[data-testimonials-viewport]');
     const track = carousel.querySelector<HTMLElement>('[data-testimonials-track]');
     const prevBtn = carousel.querySelector<HTMLButtonElement>('[data-testimonials-prev]');
     const nextBtn = carousel.querySelector<HTMLButtonElement>('[data-testimonials-next]');
-    if (!track || !prevBtn || !nextBtn) return;
+    if (!viewport || !track || !prevBtn || !nextBtn) return;
+
+    // Passage du défilement natif (sans JS) à la navigation par flèches.
+    carousel.classList.add('is-ready');
+    viewport.scrollLeft = 0;
+    prevBtn.hidden = false;
+    nextBtn.hidden = false;
 
     const TRANSITION_MS = 500;
     const AUTO_MS = 6000;
@@ -1156,7 +2630,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     }
 
     function getMaxIndex(): number {
-      // Plus grand index de départ : N - V (positions bornées).
       const n = getSlides().length;
       const v = getVisibleCount();
       return Math.max(0, n - v);
@@ -1202,32 +2675,23 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       }
     }
 
-    // === Hauteur fixe + bouton « Voir plus / Voir moins » par carte =========
-    // On mesure la hauteur naturelle de chaque conteneur de paragraphes, on
-    // prend la 2e plus grande, on la pose comme max-height sur tous. Seules
-    // les cartes qui débordent (typiquement AlliancePharma) reçoivent un
-    // bouton actif.
+    // Hauteur fixe + bouton « Voir plus / Voir moins » par carte.
     function setupTruncation() {
       const containers = Array.from(carousel!.querySelectorAll<HTMLElement>('[data-testimonial-paragraphs]'));
       if (containers.length === 0) return;
-      // Laisser les conteneurs s'étendre librement pour mesurer.
       containers.forEach((c) => { c.style.maxHeight = 'none'; });
-      // Forcer un reflow.
       containers.forEach((c) => void c.offsetHeight);
       const heights = containers.map((c) => c.scrollHeight);
       const sortedDesc = [...heights].sort((a, b) => b - a);
-      // 2e plus grand (si 7 cartes), sinon le plus grand.
       const target = sortedDesc.length >= 2 ? sortedDesc[1] : sortedDesc[0];
       containers.forEach((c, i) => {
         c.dataset.maxHeight = String(target);
-        const card = c.closest('.testimonial-card');
+        const card = c.closest('.hp-tcard');
         const toggle = card?.querySelector<HTMLButtonElement>('[data-testimonial-toggle]') ?? null;
-        const overflows = heights[i] > target + 2; // tolérance
+        const overflows = heights[i] > target + 2;
         const isExpanded = toggle?.getAttribute('aria-expanded') === 'true';
         if (overflows) {
-          if (toggle) {
-            toggle.hidden = false;
-          }
+          if (toggle) toggle.hidden = false;
           if (!isExpanded) c.style.maxHeight = target + 'px';
         } else {
           if (toggle) {
@@ -1243,17 +2707,15 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     function bindToggles() {
       carousel!.querySelectorAll<HTMLButtonElement>('[data-testimonial-toggle]').forEach((btn) => {
         btn.addEventListener('click', () => {
-          const card = btn.closest('.testimonial-card');
+          const card = btn.closest('.hp-tcard');
           const container = card?.querySelector<HTMLElement>('[data-testimonial-paragraphs]');
           if (!container) return;
           const expanded = btn.getAttribute('aria-expanded') === 'true';
           if (expanded) {
-            // Recapper à la hauteur cible.
             container.style.maxHeight = (container.dataset.maxHeight ?? '0') + 'px';
             btn.setAttribute('aria-expanded', 'false');
             btn.textContent = 'Voir plus';
           } else {
-            // Lever le cap.
             container.style.maxHeight = container.scrollHeight + 'px';
             btn.setAttribute('aria-expanded', 'true');
             btn.textContent = 'Voir moins';
@@ -1261,7 +2723,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
         });
       });
     }
-    // ========================================================================
 
     prevBtn.addEventListener('click', () => { prev(); startAuto(); });
     nextBtn.addEventListener('click', () => { next(); startAuto(); });
@@ -1274,7 +2735,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     window.addEventListener('resize', () => {
       if (resizeTimer !== null) window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
-        // Recalculer max-height (la largeur des cartes a pu changer) et borner l'index.
         setupTruncation();
         const max = getMaxIndex();
         if (currentIndex > max) currentIndex = max;
@@ -1286,5 +2746,95 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     setupTruncation();
     applyTransform(false);
     startAuto();
+  })();
+</script>
+
+<script>
+  // Bandeau collant : visible une fois le hero dépassé, masqué dès que le
+  // bandeau final entre à l'écran (et au-delà). Il ne recouvre jamais la
+  // bannière de consentement CookieYes : il se retire tant qu'elle (ou sa
+  // fenêtre de préférences) est affichée, et s'écarte du bouton flottant
+  // « préférences » de CookieYes s'il est présent dans le bas de l'écran.
+  (function () {
+    const pop = document.querySelector<HTMLElement>('[data-hp-pop]');
+    const hero = document.querySelector<HTMLElement>('[data-hp-hero]');
+    const finalBand = document.querySelector<HTMLElement>('[data-hp-final]');
+    if (!pop || !hero || !finalBand) return;
+
+    const isShown = (el: Element | null): el is HTMLElement => {
+      if (!el) return false;
+      const r = (el as HTMLElement).getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) return false;
+      const cs = window.getComputedStyle(el);
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && Number(cs.opacity) > 0;
+    };
+
+    // Bannière ou fenêtre de préférences CookieYes ouverte.
+    const consentOpen = () => {
+      const banner = document.querySelector('.cky-consent-container');
+      if (banner && !banner.classList.contains('cky-hide') && isShown(banner)) return true;
+      const modal = document.querySelector('.cky-modal.cky-modal-open');
+      if (modal && isShown(modal)) return true;
+      return false;
+    };
+
+    let lastLeft = 12;
+    let lastRight = 12;
+
+    // Bouton flottant CookieYes : on réserve sa place sur le côté où il se trouve.
+    const avoidRevisit = () => {
+      const btn = document.querySelector('.cky-btn-revisit-wrapper');
+      let left = 12;
+      let right = 12;
+      if (btn && isShown(btn)) {
+        const r = btn.getBoundingClientRect();
+        if (r.bottom > window.innerHeight - 120) {
+          if (r.left + r.width / 2 < window.innerWidth / 2) left = Math.max(left, Math.ceil(r.right) + 10);
+          else right = Math.max(right, Math.ceil(window.innerWidth - r.left) + 10);
+        }
+      }
+      if (left !== lastLeft) pop.style.setProperty('--pop-left', `${left}px`);
+      if (right !== lastRight) pop.style.setProperty('--pop-right', `${right}px`);
+      lastLeft = left;
+      lastRight = right;
+    };
+
+    let shown = false;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      const pastHero = hero.getBoundingClientRect().bottom < 0;
+      const finalReached = finalBand.getBoundingClientRect().top < vh;
+      const next = pastHero && !finalReached && !consentOpen();
+      avoidRevisit();
+      if (next === shown) return;
+      shown = next;
+      pop.classList.toggle('is-shown', shown);
+      if (shown) pop.removeAttribute('inert');
+      else pop.setAttribute('inert', '');
+    };
+
+    const schedule = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    document.addEventListener('cookieyes_banner_load', schedule);
+    document.addEventListener('cookieyes_consent_update', schedule);
+
+    // CookieYes insère et masque ses éléments par classes : on suit ces changements.
+    new MutationObserver(schedule).observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    update();
   })();
 </script>
