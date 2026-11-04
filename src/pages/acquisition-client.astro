@@ -961,6 +961,72 @@ const jsonLd = [
     color: var(--text-secondary);
   }
 
+  /* ----- Téléphone (moins de 600 px) : deux tuiles compactes par ligne, étapes 1 à 9 ----- */
+  @media (max-width: 599px) {
+    /* Titre des étapes à tuiles uniquement (le titre de l'étape 10 ne change pas) */
+    .quiz :global(.qtitle:has(+ .grid)) { font-size: 24px; }
+
+    .quiz :global(.grid) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    /* Nombre impair de réponses (étapes 4 et 8) : la dernière tuile prend toute la ligne */
+    .quiz :global(.grid > .card:last-child:nth-child(odd)) { grid-column: 1 / -1; }
+
+    .quiz :global(.card) {
+      gap: 10px;
+      min-height: 88px;
+      padding: 14px;
+      border-radius: 18px;
+    }
+
+    .quiz :global(.card__visual) { gap: 8px; }
+
+    .quiz :global(.ic) {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+    }
+
+    .quiz :global(.ic svg) { width: 22px; height: 22px; }
+
+    .quiz :global(.lab) {
+      font-size: 15px;
+      line-height: 1.25;
+      overflow-wrap: break-word;
+    }
+
+    /* Étape 2 : barres */
+    .quiz :global(.card__visual > svg) { width: 84px; height: auto; }
+
+    /* Étapes 4 et 6 : montants et nombre d'avis */
+    .quiz :global(.big) { font-size: 28px; }
+
+    /* Étape 6 : étoiles */
+    .quiz :global(.stars) { font-size: 14px; letter-spacing: 1px; }
+
+    /* Étape 5 : résultats Google */
+    .quiz :global(.serp) {
+      height: 62px;
+      padding: 7px;
+      gap: 4px;
+      border-radius: 10px;
+    }
+
+    .quiz :global(.serp b) { height: 7px; border-radius: 4px; }
+    .quiz :global(.serp b.me) { height: 11px; }
+    .quiz :global(.serp--unknown) { font-size: 30px; }
+
+    /* Étape 8 : vignettes */
+    .quiz :global(.crea) { height: 60px; }
+    .quiz :global(.crea--few),
+    .quiz :global(.crea--full) { gap: 4px; }
+    .quiz :global(.crea i) { border-radius: 7px; }
+    .quiz :global(.crea--full i) { border-radius: 6px; }
+    .quiz :global(.crea--empty) { font-size: 26px; border-radius: 10px; }
+  }
+
   /* ----- Formulaire de la dernière étape ----- */
   .quiz :global(.contact-form) {
     display: grid;
