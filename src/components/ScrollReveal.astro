@@ -1,0 +1,129 @@
+---
+/**
+ * ScrollReveal : apparition progressive des blocs au défilement.
+ *
+ * Utilisation (sur n'importe quelle page) :
+ *   1. Inclure <ScrollReveal /> tout en haut du contenu de la page, avant le premier bloc animé.
+ *   2. Ajouter sur chaque bloc : data-reveal="left" | "right" | "up"
+ *      et, si besoin, un délai en millisecondes : data-reveal-delay="100".
+ *   3. Ajouter data-reveal-clip sur les sections qui contiennent des glissements latéraux
+ *      (évite tout défilement horizontal pendant l'animation).
+ *
+ * Chaque bloc s'anime d'un seul tenant (fondu + glissement), une seule fois.
+ * Sécurité : le contenu est visible par défaut. Il n'est masqué en attente que si le JavaScript
+ * a démarré (classe .reveal-js posée sur <html> par le script en ligne ci-dessous), et jamais
+ * quand le visiteur demande moins d'animations.
+ */
+---
+<script is:inline>
+  (function () {
+    var html = document.documentElement;
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    html.classList.add('reveal-js');
+    // Filet de sécurité : si le script principal ne démarre pas, tout redevient visible.
+    window.setTimeout(function () {
+      if (!window.__woopReveal) html.classList.remove('reveal-js');
+    }, 4000);
+  })();
+</script>
+
+<script>
+  const html = document.documentElement;
+  (window as unknown as { __woopReveal?: boolean }).__woopReveal = true;
+
+  const DURATION = 650;
+  const pending = new Set<HTMLElement>(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+
+  const reveal = (el: HTMLElement, animate: boolean) => {
+    if (!pending.has(el)) return;
+    pending.delete(el);
+    observer?.unobserve(el);
+    if (!animate) {
+      el.classList.add('is-revealed');
+      return;
+    }
+    const delay = Number(el.dataset.revealDelay) || 0;
+    el.style.setProperty('--reveal-delay', `${delay}ms`);
+    el.classList.add('is-revealing', 'is-revealed');
+    // Une fois l'animation terminée, le bloc retrouve ses propres transitions (survol, etc.).
+    window.setTimeout(() => {
+      el.classList.remove('is-revealing');
+      el.style.removeProperty('--reveal-delay');
+    }, delay + DURATION + 50);
+  };
+
+  let observer: IntersectionObserver | null = null;
+
+  if (!html.classList.contains('reveal-js')) {
+    // Pas d'animation (mouvement réduit, navigateur ancien) : rien n'a été masqué.
+    pending.forEach((el) => el.classList.add('is-revealed'));
+    pending.clear();
+  } else {
+    observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          const box = entry.boundingClientRect;
+          if (entry.isIntersecting) reveal(el, true);
+          // Bloc déjà dépassé (rechargement en milieu de page, ancre) : visible tout de suite.
+          else if (box.bottom < 0) reveal(el, false);
+          // Bloc non affiché à cette largeur (display: none) : marqué comme apparu, pour qu'il soit
+          // visible s'il s'affiche plus tard (fenêtre élargie, rotation de l'écran).
+          else if (box.width === 0 && box.height === 0) reveal(el, false);
+        });
+      },
+      { threshold: 0.15 },
+    );
+    pending.forEach((el) => observer!.observe(el));
+
+    // Focus au clavier dans un bloc pas encore apparu : il apparaît immédiatement.
+    document.addEventListener('focusin', (event) => {
+      const el = (event.target as Element | null)?.closest<HTMLElement>('[data-reveal]');
+      if (el) reveal(el, false);
+    });
+  }
+</script>
+
+<style is:global>
+  /* Sections contenant des glissements latéraux : pas de défilement horizontal */
+  [data-reveal-clip] {
+    overflow-x: clip;
+  }
+
+  /* État d'attente : uniquement si le JavaScript a démarré */
+  html.reveal-js [data-reveal]:not(.is-revealed) {
+    opacity: 0;
+    transform: translate3d(var(--reveal-x, 0), var(--reveal-y, 0), 0);
+  }
+
+  html.reveal-js [data-reveal='left'] { --reveal-x: -40px; }
+  html.reveal-js [data-reveal='right'] { --reveal-x: 40px; }
+  html.reveal-js [data-reveal='up'] { --reveal-y: 40px; }
+
+  /* Pendant l'animation seulement (ensuite le bloc retrouve ses propres transitions) */
+  html.reveal-js [data-reveal].is-revealing {
+    transition:
+      opacity 650ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+      transform 650ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  }
+
+  /* Téléphone : simple fondu avec un léger glissement vers le haut, quelle que soit la direction */
+  @media (max-width: 599px) {
+    html.reveal-js [data-reveal] {
+      --reveal-x: 0px;
+      --reveal-y: 24px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.reveal-js [data-reveal]:not(.is-revealed) {
+      opacity: 1;
+      transform: none;
+    }
+
+    html.reveal-js [data-reveal].is-revealing {
+      transition: none;
+    }
+  }
+</style>
