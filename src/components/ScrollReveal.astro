@@ -4,10 +4,14 @@
  *
  * Utilisation (sur n'importe quelle page) :
  *   1. Inclure <ScrollReveal /> tout en haut du contenu de la page, avant le premier bloc animé.
- *   2. Ajouter sur chaque bloc : data-reveal="left" | "right" | "up"
- *      et, si besoin, un délai en millisecondes : data-reveal-delay="100".
+ *   2. Ajouter sur chaque bloc : data-reveal="left" | "right" | "up".
+ *      Décalage dans une rangée : data-reveal-step="1", "2"… (rang × --reveal-stagger),
+ *      ou un délai explicite en millisecondes : data-reveal-delay="100".
  *   3. Ajouter data-reveal-clip sur les sections qui contiennent des glissements latéraux
  *      (évite tout défilement horizontal pendant l'animation).
+ *
+ * Tous les réglages (déclenchement, durée, courbe, distance, décalage) sont les variables CSS
+ * ci-dessous, en tête du fichier.
  *
  * Chaque bloc s'anime d'un seul tenant (fondu + glissement), une seule fois.
  * Sécurité : le contenu est visible par défaut. Il n'est masqué en attente que si le JavaScript
@@ -15,6 +19,74 @@
  * quand le visiteur demande moins d'animations.
  */
 ---
+<style is:global>
+  /* ===== RÉGLAGES DE L'ANIMATION ===== */
+  :root {
+    /* Déclenchement : zone d'observation (ici, l'écran sans son dernier cinquième)
+       et part du bloc qui doit y être entrée */
+    --reveal-root-margin: 0px 0px -20% 0px;
+    --reveal-threshold: 0.2;
+    /* Mouvement sur ordinateur et tablette */
+    --reveal-duration: 900ms;
+    --reveal-distance: 60px;
+    /* Courbe douce qui ralentit nettement à l'arrivée */
+    --reveal-easing: cubic-bezier(0.22, 1, 0.36, 1);
+    /* Décalage entre deux éléments d'une même rangée (data-reveal-step) */
+    --reveal-stagger: 150ms;
+    /* Téléphone (moins de 600 px) : simple fondu avec glissement vers le haut */
+    --reveal-duration-mobile: 800ms;
+    --reveal-distance-mobile: 30px;
+  }
+
+  /* Durée effective selon la largeur (lue aussi par le script) */
+  :root { --reveal-duration-active: var(--reveal-duration); }
+
+  @media (max-width: 599px) {
+    :root { --reveal-duration-active: var(--reveal-duration-mobile); }
+  }
+
+  /* Sections contenant des glissements latéraux : pas de défilement horizontal */
+  [data-reveal-clip] {
+    overflow-x: clip;
+  }
+
+  /* État d'attente : uniquement si le JavaScript a démarré */
+  html.reveal-js [data-reveal]:not(.is-revealed) {
+    opacity: 0;
+    transform: translate3d(var(--reveal-x, 0), var(--reveal-y, 0), 0);
+  }
+
+  html.reveal-js [data-reveal='left'] { --reveal-x: calc(-1 * var(--reveal-distance)); }
+  html.reveal-js [data-reveal='right'] { --reveal-x: var(--reveal-distance); }
+  html.reveal-js [data-reveal='up'] { --reveal-y: var(--reveal-distance); }
+
+  /* Pendant l'animation seulement (ensuite le bloc retrouve ses propres transitions) */
+  html.reveal-js [data-reveal].is-revealing {
+    transition:
+      opacity var(--reveal-duration-active) var(--reveal-easing) var(--reveal-delay, 0ms),
+      transform var(--reveal-duration-active) var(--reveal-easing) var(--reveal-delay, 0ms);
+  }
+
+  /* Téléphone : simple fondu avec un léger glissement vers le haut, quelle que soit la direction */
+  @media (max-width: 599px) {
+    html.reveal-js [data-reveal] {
+      --reveal-x: 0px;
+      --reveal-y: var(--reveal-distance-mobile);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.reveal-js [data-reveal]:not(.is-revealed) {
+      opacity: 1;
+      transform: none;
+    }
+
+    html.reveal-js [data-reveal].is-revealing {
+      transition: none;
+    }
+  }
+</style>
+
 <script is:inline>
   (function () {
     var html = document.documentElement;
@@ -32,7 +104,17 @@
   const html = document.documentElement;
   (window as unknown as { __woopReveal?: boolean }).__woopReveal = true;
 
-  const DURATION = 650;
+  /* Lecture des réglages CSS (avec des valeurs de repli si une variable manque) */
+  const setting = (name: string) => getComputedStyle(html).getPropertyValue(name).trim();
+  const toMs = (value: string, fallback: number) => {
+    const n = parseFloat(value);
+    if (Number.isNaN(n)) return fallback;
+    return /ms$/.test(value) ? n : /s$/.test(value) ? n * 1000 : n;
+  };
+  const threshold = Number(setting('--reveal-threshold')) || 0.2;
+  const rootMargin = setting('--reveal-root-margin') || '0px 0px -20% 0px';
+  const stagger = toMs(setting('--reveal-stagger'), 150);
+
   const pending = new Set<HTMLElement>(document.querySelectorAll<HTMLElement>('[data-reveal]'));
 
   const reveal = (el: HTMLElement, animate: boolean) => {
@@ -43,14 +125,16 @@
       el.classList.add('is-revealed');
       return;
     }
-    const delay = Number(el.dataset.revealDelay) || 0;
+    const step = Number(el.dataset.revealStep) || 0;
+    const delay = el.dataset.revealDelay !== undefined ? Number(el.dataset.revealDelay) || 0 : step * stagger;
+    const duration = toMs(setting('--reveal-duration-active'), 900);
     el.style.setProperty('--reveal-delay', `${delay}ms`);
     el.classList.add('is-revealing', 'is-revealed');
     // Une fois l'animation terminée, le bloc retrouve ses propres transitions (survol, etc.).
     window.setTimeout(() => {
       el.classList.remove('is-revealing');
       el.style.removeProperty('--reveal-delay');
-    }, delay + DURATION + 50);
+    }, delay + duration + 50);
   };
 
   let observer: IntersectionObserver | null = null;
@@ -73,7 +157,7 @@
           else if (box.width === 0 && box.height === 0) reveal(el, false);
         });
       },
-      { threshold: 0.15 },
+      { rootMargin, threshold },
     );
     pending.forEach((el) => observer!.observe(el));
 
@@ -84,46 +168,3 @@
     });
   }
 </script>
-
-<style is:global>
-  /* Sections contenant des glissements latéraux : pas de défilement horizontal */
-  [data-reveal-clip] {
-    overflow-x: clip;
-  }
-
-  /* État d'attente : uniquement si le JavaScript a démarré */
-  html.reveal-js [data-reveal]:not(.is-revealed) {
-    opacity: 0;
-    transform: translate3d(var(--reveal-x, 0), var(--reveal-y, 0), 0);
-  }
-
-  html.reveal-js [data-reveal='left'] { --reveal-x: -40px; }
-  html.reveal-js [data-reveal='right'] { --reveal-x: 40px; }
-  html.reveal-js [data-reveal='up'] { --reveal-y: 40px; }
-
-  /* Pendant l'animation seulement (ensuite le bloc retrouve ses propres transitions) */
-  html.reveal-js [data-reveal].is-revealing {
-    transition:
-      opacity 650ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
-      transform 650ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
-  }
-
-  /* Téléphone : simple fondu avec un léger glissement vers le haut, quelle que soit la direction */
-  @media (max-width: 599px) {
-    html.reveal-js [data-reveal] {
-      --reveal-x: 0px;
-      --reveal-y: 24px;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html.reveal-js [data-reveal]:not(.is-revealed) {
-      opacity: 1;
-      transform: none;
-    }
-
-    html.reveal-js [data-reveal].is-revealing {
-      transition: none;
-    }
-  }
-</style>
