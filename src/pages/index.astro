@@ -49,11 +49,35 @@ const agenda = [
   { time: '17:00', title: 'Massothérapie', note: 'Réservé en ligne' },
 ];
 
-const team = [
-  { name: 'Gauthier', role: 'Co-fondateur · Stratégie · Infirmier clinicien', img: 'gauthier', fx: '48%', fy: '33%' },
+// Photos rondes de l'équipe.
+// - fx / fy : cadrage d'origine (photo calée en haut, agrandie autour de ce point).
+// - objectPosition / zoom (optionnels, photos rondes seulement) : réglage de cadrage propre
+//   à une photo. Dès que l'un des deux est défini, il remplace le cadrage d'origine :
+//   la photo est positionnée sur ce point (object-position, « center » par défaut) puis
+//   agrandie autour de lui (facteur d'échelle, 1 par défaut).
+type TeamMember = {
+  name: string;
+  role: string;
+  img: string;
+  fx?: string;
+  fy?: string;
+  objectPosition?: string;
+  zoom?: number;
+};
+
+const team: TeamMember[] = [
+  // Aligné sur Kevin (ligne des yeux, haut de la tête, taille du visage).
+  { name: 'Gauthier', role: 'Co-fondateur · Stratégie · Infirmier clinicien', img: 'gauthier', objectPosition: '57.8% 30.6%', zoom: 1.7 },
   { name: 'Kevin', role: 'Co-fondateur · Création', img: 'kevin', fx: '50%', fy: '31%' },
   { name: 'Emma', role: 'Spécialiste Paid Media Junior', img: 'emma', fx: '55%', fy: '31%' },
 ];
+
+// Variables CSS de cadrage d'une photo ronde.
+const framing = (m: TeamMember) =>
+  m.objectPosition !== undefined || m.zoom !== undefined
+    ? `--obj-pos: ${m.objectPosition ?? 'center'}; --zoom: ${m.zoom ?? 1};`
+    : `--fx: ${m.fx ?? '50%'}; --fy: ${m.fy ?? '30%'};`;
+const isFramed = (m: TeamMember) => m.objectPosition !== undefined || m.zoom !== undefined;
 
 const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 
@@ -498,7 +522,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
             data-reveal={i === 0 ? 'left' : i === 2 ? 'right' : 'up'}
             data-reveal-step={i === 0 ? undefined : String(i)}
           >
-            <div class="hp-m__ph" style={`--fx: ${m.fx}; --fy: ${m.fy};`}>
+            <div class:list={['hp-m__ph', { 'is-framed': isFramed(m) }]} style={framing(m)}>
               <img src={`${base}/images/${m.img}.webp`} alt={m.name} width="671" height="822" loading="lazy" decoding="async" />
             </div>
             <b class="hp-m__name">{m.name}</b>
@@ -598,7 +622,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       <div class="hp-final" data-reveal="up">
         <div class="hp-avs hp-avs--final" aria-hidden="true">
           {team.map((m) => (
-            <span style={`--fx: ${m.fx}; --fy: ${m.fy};`}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
           ))}
         </div>
         <h2>Votre équipe marketing commence par un appel.</h2>
@@ -615,7 +639,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
     <span class="hp-avs hp-avs--sm" aria-hidden="true">
       {team.map((m) => (
-        <span style={`--fx: ${m.fx}; --fy: ${m.fy};`}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
       ))}
     </span>
     <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l'embaucher</strong></span>
@@ -2260,6 +2284,14 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     object-position: 50% 0;
     transform: scale(1.55);
     transform-origin: var(--fx, 50%) var(--fy, 30%);
+  }
+
+  /* Cadrage propre à une photo (objectPosition / zoom dans les données de l'équipe) */
+  .hp-m__ph.is-framed img,
+  .hp-avs .is-framed img {
+    object-position: var(--obj-pos, center);
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--obj-pos, center);
   }
 
   .hp-m__name {
