@@ -62,7 +62,7 @@ const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 const services: {
   key: 'ads' | 'cx' | 'brand' | 'web' | 'social';
   title: string;
-  text: string;
+  text: string | string[];
   variant: 'grad' | 'blush' | 'plum' | 'orange' | 'rose';
   layout: 'ads' | 'cx' | 'sq' | 'social';
   reveal: 'left' | 'right' | 'up';
@@ -72,9 +72,9 @@ const services: {
 }[] = [
   { key: 'ads', title: 'Publicité Google et Meta', text: 'Être trouvé en premier, là où vos clients cherchent.', variant: 'grad', layout: 'ads', reveal: 'left' },
   { key: 'cx', title: 'Conseil en expérience client', text: 'Du premier clic au rendez-vous, on rend chaque étape plus simple pour vos patients.', variant: 'blush', layout: 'cx', reveal: 'right' },
-  { key: 'brand', title: 'Image de marque', text: 'Logo, charte, système complet.', variant: 'plum', layout: 'sq', reveal: 'up', step: '1', icoGrad: true },
+  { key: 'brand', title: 'Image de marque', text: 'Logo, charte, système complet. Une identité cohérente qui inspire confiance dès le premier regard.', variant: 'plum', layout: 'sq', reveal: 'up', step: '1', icoGrad: true },
   { key: 'web', title: 'Sites web & pages de conversion', text: 'Un site clair et rapide, conçu pour inspirer confiance et donner envie de prendre rendez-vous.', variant: 'orange', layout: 'sq', reveal: 'right', step: '2' },
-  { key: 'social', title: 'Gestion des réseaux sociaux', text: 'Instagram, Facebook, LinkedIn. On crée, on publie, on anime votre communauté.', variant: 'rose', layout: 'social', reveal: 'up' },
+  { key: 'social', title: 'Gestion des réseaux sociaux', text: ['Instagram, Facebook, LinkedIn.', 'On crée, on publie, on anime votre communauté.'], variant: 'rose', layout: 'social', reveal: 'up' },
 ];
 
 const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
@@ -242,7 +242,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </div>
 
   <!-- 3. NOS SERVICES -->
-  <section class="hp-sec hp-sec--services" id="services" data-reveal-clip>
+  <section class="hp-block hp-sec hp-sec--services" id="services" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
         <h2 class="section-title hp-title" data-reveal="left">Nos <span class="gradient-accent">services</span></h2>
@@ -287,7 +287,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
               )}
               <div class="hp-tile__txt">
                 <h3>{t.title}</h3>
-                <p>{t.text}</p>
+                <p>{Array.isArray(t.text) ? t.text.map((line, i) => <>{i > 0 && <br />}{line}</>) : t.text}</p>
               </div>
               {t.key === 'social' && (
                 <div class="hp-posts" aria-hidden="true">
@@ -327,7 +327,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 4. MARQUE + PERFORMANCE -->
-  <section class="hp-sec hp-sec--tight" id="approche" data-reveal-clip>
+  <section class="hp-block hp-sec" id="approche" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
         <h2 class="section-title hp-title hp-title--plus" data-reveal="left"><span class="gradient-accent">Marque</span> <span class="hp-plus"><span class="gradient-accent">+</span></span> <span class="gradient-accent">performance</span></h2>
@@ -355,13 +355,13 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       <a class="hp-teaser" href={`${base}/acquisition-client`} data-reveal="up">
         <span class="hp-teaser__dot" aria-hidden="true"></span>
         <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
-        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="url(#hp-teaser-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="hp-teaser-grad" x1="3" y1="4" x2="13" y2="12" gradientUnits="userSpaceOnUse"><stop offset="0" class="stop-orange" /><stop offset="1" class="stop-pink" /></linearGradient></defs><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
       </a>
     </div>
   </section>
 
   <!-- 5. UNE ÉQUIPE, SANS EMBAUCHE -->
-  <section class="hp-sec hp-sec--tight" data-reveal-clip>
+  <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
         <h2 class="section-title hp-title" data-reveal="left"><span class="gradient-accent">Une équipe</span>, sans embauche</h2>
@@ -421,7 +421,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 6. DEUX SECTEURS, UNE MÉTHODE -->
-  <section class="hp-sec" data-reveal-clip>
+  <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
         <h2 class="section-title hp-title" data-reveal="left">Deux secteurs, <span class="gradient-accent">une méthode</span></h2>
@@ -430,31 +430,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
       <div class="hp-sect">
         <article class="hp-s hp-s--sante" data-reveal="left">
-          <div class="hp-ill hp-ill--cal" aria-hidden="true">
-            <div class="hp-ill__head">
-              <svg class="hp-ill__clinic" viewBox="0 0 24 24" fill="none">
-                <defs>
-                  <linearGradient id="hp-clinic-grad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" class="stop-orange" />
-                    <stop offset="1" class="stop-pink" />
-                  </linearGradient>
-                </defs>
-                <rect x="2" y="9" width="20" height="13" rx="2.5" fill="url(#hp-clinic-grad)" />
-                <rect x="1" y="7.5" width="22" height="3" rx="1.5" class="f-plum" />
-                <rect x="8" y="1" width="8" height="8" rx="2.2" class="f-light s-pink" stroke-width="1.4" />
-                <path d="M12 3v4M10 5h4" class="s-pink" stroke-width="1.8" stroke-linecap="round" />
-                <rect x="4.5" y="13" width="3.5" height="3" rx=".8" class="f-light" />
-                <rect x="16" y="13" width="3.5" height="3" rx=".8" class="f-light" />
-                <rect x="10" y="15" width="4" height="7" rx="1" class="f-light" />
-              </svg>
-              <div><b>Votre clinique</b><small>Agenda de la semaine</small></div>
-            </div>
-            <div class="hp-ill__days"><span>L</span><span>M</span><span class="is-on">M</span><span>J</span><span>V</span></div>
-            <i class="is-ok"></i><i></i><i class="is-ok"></i><i class="is-ok"></i><i></i><i class="is-ok"></i>
-            <div class="hp-ill__cf">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>
-              4 nouveaux rendez-vous
-            </div>
+          <div class="hp-ill hp-ill--cross" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M9.5 3h5a1 1 0 011 1v4.5H20a1 1 0 011 1v5a1 1 0 01-1 1h-4.5V20a1 1 0 01-1 1h-5a1 1 0 01-1-1v-4.5H4a1 1 0 01-1-1v-5a1 1 0 011-1h4.5V4a1 1 0 011-1z" class="f-light" /></svg>
           </div>
           <div class="hp-s__body">
             <p class="hp-over">Santé &amp; Médical</p>
@@ -492,7 +469,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 7. LA PREUVE -->
-  <section class="hp-proof" data-reveal-clip>
+  <section class="hp-block hp-proof" data-reveal-clip>
     <div class="container">
       <div class="hp-proof__inner">
         <h2 class="hp-over hp-proof__title" data-reveal="left">La preuve</h2>
@@ -507,7 +484,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 8. L'ÉQUIPE -->
-  <section class="hp-sec" id="equipe" data-reveal-clip>
+  <section class="hp-block hp-sec" id="equipe" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
         <h2 class="section-title hp-title" data-reveal="left">Les visages de <span class="gradient-accent">votre équipe</span></h2>
@@ -537,7 +514,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 9. BANDEAU INTERMÉDIAIRE -->
-  <section class="hp-sec hp-sec--tight">
+  <section class="hp-block hp-sec">
     <div class="container">
       <div class="hp-band" data-reveal="up">
         <div class="hp-band__txt">
@@ -553,7 +530,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 10. TÉMOIGNAGES -->
-  <section class="hp-sec hp-sec--tight" data-reveal-clip>
+  <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
         <h2 class="section-title hp-title" data-reveal="left">Ce qu'en disent <span class="gradient-accent">nos clients</span></h2>
@@ -616,7 +593,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 11. BANDEAU FINAL -->
-  <section class="hp-sec hp-sec--final" data-hp-final>
+  <section class="hp-block hp-block--last hp-sec--final" data-hp-final>
     <div class="container">
       <div class="hp-final" data-reveal="up">
         <div class="hp-avs hp-avs--final" aria-hidden="true">
@@ -654,14 +631,47 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
      (color-mix) et des rgba() dérivées de #FA6244 et #E62B7F.
      ===================================================================== */
 
+  /* ===== ESPACEMENTS DE RÉFÉRENCE (mêmes valeurs que /acquisition-client) ===== */
+  .hp-hero,
+  .hp-mq,
+  .hp-block {
+    /* entre deux sections : 80 px mobile, 100 px tablette, 120 px ordinateur */
+    --home-section-gap: 80px;
+    /* dans une section : titre → sous-texte, puis titre ou sous-texte → contenu */
+    --home-head-gap: 16px;
+    --home-head-content: 36px;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero,
+    .hp-mq,
+    .hp-block { --home-section-gap: 100px; }
+  }
+
+  @media (min-width: 900px) {
+    .hp-hero,
+    .hp-mq,
+    .hp-block {
+      --home-head-gap: 20px;
+      --home-head-content: 46px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero,
+    .hp-mq,
+    .hp-block { --home-section-gap: 120px; }
+  }
+
   /* Jetons locaux, dérivés de la charte */
   .hp-hero,
   .hp-mq,
-  .hp-sec,
-  .hp-proof,
+  .hp-block,
   .hp-pop {
     --hp-ink: var(--text-primary);
     --hp-dark: var(--bg-deep);
+    /* Petits textes, libellés et flèches posés sur le dégradé ou l'orange de la charte */
+    --hp-on-grad: var(--bg-deep);
     --hp-light: var(--text-primary);
     --hp-blush: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
     --hp-pinklight: color-mix(in srgb, var(--woop-pink) 45%, var(--text-primary));
@@ -728,7 +738,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     padding: 7px 7px 7px 24px;
     border-radius: var(--radius-button);
     background: var(--woop-gradient);
-    color: var(--hp-ink);
+    color: var(--hp-on-grad);
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 15px;
@@ -771,7 +781,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     height: 40px;
     border-radius: 50%;
     background: var(--hp-light);
-    color: var(--woop-pink);
+    color: var(--hp-on-grad);
   }
 
   .cta__ico svg {
@@ -787,10 +797,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   .cta--light .cta__ico,
   .cta--line .cta__ico {
     background: var(--woop-gradient);
-    color: var(--hp-ink);
+    color: var(--hp-on-grad);
   }
 
   .cta--line {
+    color: var(--text-primary);
     background: transparent;
     box-shadow: inset 0 0 0 1.5px var(--hp-line);
   }
@@ -800,6 +811,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .cta--on-grad {
+    color: var(--hp-on-grad);
     box-shadow: inset 0 0 0 1.5px var(--hp-light);
   }
 
@@ -809,7 +821,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .cta--on-grad .cta__ico {
     background: var(--hp-light);
-    color: var(--woop-pink);
+    color: var(--hp-on-grad);
   }
 
   .cta--sm {
@@ -829,12 +841,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 36px;
-  }
-
-  @media (min-width: 900px) {
-    .hp-head { gap: 20px; margin-bottom: 46px; }
+    gap: var(--home-head-gap);
+    margin-bottom: var(--home-head-content);
   }
 
   /* Titres Ganky : blanc, un ou deux mots en dégradé (.gradient-accent) */
@@ -904,22 +912,14 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   /* ===== SECTIONS ===== */
-  .hp-sec { padding: 72px 0; }
-  .hp-sec--tight { padding-top: 0; }
+  /* Une seule règle d'espacement entre deux sections consécutives (voir --home-section-gap).
+     Le bandeau défilant fait bloc avec le hero ; le bandeau final garde l'écart avant le footer. */
+  .hp-mq + .hp-block,
+  .hp-block + .hp-block { margin-top: var(--home-section-gap); }
 
-  @media (min-width: 768px) {
-    .hp-sec { padding: 104px 0; }
-    .hp-sec--tight { padding-top: 0; }
-  }
+  .hp-block--last { padding-bottom: var(--home-section-gap); }
 
-  .hp-sec--services {
-    padding-top: 24px;
-    scroll-margin-top: 90px;
-  }
-
-  @media (min-width: 768px) {
-    .hp-sec--services { padding-top: 40px; }
-  }
+  .hp-sec--services { scroll-margin-top: 90px; }
 
   /* ===== 1. HERO ===== */
   .hp-hero {
@@ -946,7 +946,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     }
   }
 
-  .hp-hero__kicker { margin-bottom: 20px; }
+  /* Rose éclairci pour atteindre 4,5:1 sur le fond sombre du hero */
+  .hp-hero__kicker {
+    margin-bottom: 20px;
+    color: color-mix(in srgb, var(--woop-pink) 70%, var(--text-primary));
+  }
 
   .hp-hero__title {
     font-family: var(--font-body);
@@ -1443,6 +1447,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .hp-tile--grad { background: var(--woop-gradient); }
+  .hp-tile--grad p,
+  .hp-tile--rose p { color: var(--hp-on-grad); }
 
   .hp-tile--blush {
     background: var(--hp-blush);
@@ -1724,10 +1730,9 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-st--hot + .hp-st { border-color: transparent; }
   .hp-st--hot .hp-st__idx,
-  .hp-st--hot p { color: var(--hp-ink); }
+  .hp-st--hot p { color: var(--hp-on-grad); }
 
-  /* Bandeau « Nouveau » : fond dégradé de la charte. Un voile sombre, plus marqué
-     côté orange, garantit un contraste d'au moins 4,5:1 pour le texte blanc. */
+  /* Bandeau « Nouveau » : fond dégradé de la charte, texte et pastille foncés */
   .hp-teaser {
     display: flex;
     align-items: center;
@@ -1735,13 +1740,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     margin-top: 22px;
     padding: 14px 14px 14px 22px;
     border-radius: 999px;
-    background:
-      linear-gradient(90deg, color-mix(in srgb, var(--bg-deep) 30%, transparent), color-mix(in srgb, var(--bg-deep) 14%, transparent)),
-      var(--woop-gradient);
+    background: var(--woop-gradient);
     font-size: 16px;
     font-weight: 700;
     line-height: 1.4;
-    color: var(--text-primary);
+    color: var(--hp-on-grad);
     transition: transform 250ms ease, box-shadow 250ms ease;
   }
 
@@ -1751,19 +1754,18 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .hp-teaser:focus-visible {
-    outline: 2px solid var(--text-primary);
+    outline: 2px solid var(--woop-pink);
     outline-offset: 3px;
   }
 
-  .hp-teaser strong { color: var(--text-primary); }
+  .hp-teaser strong { color: var(--hp-on-grad); }
 
   .hp-teaser__dot {
     flex: none;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--text-primary);
-    box-shadow: 0 0 12px color-mix(in srgb, var(--text-primary) 70%, transparent);
+    background: var(--hp-on-grad);
   }
 
   .hp-go {
@@ -1776,6 +1778,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     margin-left: auto;
     border-radius: 50%;
     background: var(--text-primary);
+    color: var(--hp-on-grad);
     transition: transform 250ms ease;
   }
 
@@ -1820,7 +1823,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     box-shadow: 0 30px 70px rgba(230, 43, 127, 0.3);
   }
 
-  .hp-cx--on .hp-over { color: color-mix(in srgb, var(--text-primary) 88%, transparent); }
+  .hp-cx--on .hp-over { color: var(--hp-on-grad); }
   .hp-cx .cta { align-self: flex-start; }
 
   .hp-vs {
@@ -1942,7 +1945,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-chips--on li {
     background: color-mix(in srgb, var(--text-primary) 20%, transparent);
-    color: var(--hp-ink);
+    color: var(--hp-on-grad);
   }
 
   /* ===== 6. DEUX SECTEURS ===== */
@@ -1974,7 +1977,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .hp-s--sante { background: var(--woop-gradient); }
-  .hp-s--sante .hp-over { color: color-mix(in srgb, var(--text-primary) 85%, transparent); }
+  .hp-s--sante .hp-over { color: var(--hp-on-grad); }
 
   .hp-s--rh {
     background: var(--hp-card);
@@ -2010,90 +2013,27 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     align-self: flex-start;
   }
 
-  /* Illustration agenda (santé) */
-  .hp-ill--cal {
+  /* Croix de santé (carte Santé & Médical) */
+  .hp-ill--cross {
     display: flex;
-    flex-direction: column;
-    gap: 9px;
-    width: 220px;
-    padding: 16px;
-    border-radius: 20px;
-    background: var(--hp-light);
-    box-shadow: 0 20px 40px var(--hp-shadow);
-    transform: rotate(4deg);
+    align-items: center;
+    justify-content: center;
+    width: 124px;
+    height: 124px;
     margin-left: 6px;
-  }
-
-  .hp-ill__head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-  }
-
-  .hp-ill__clinic { width: 34px; height: 34px; flex: none; }
-
-  .hp-ill__head div { display: flex; flex-direction: column; }
-  .hp-ill__head b { color: var(--hp-dark); font-size: 13px; line-height: 1.2; }
-  .hp-ill__head small { color: var(--text-muted); font-size: 10px; font-weight: 600; }
-
-  .hp-ill__days {
-    display: flex;
-    gap: 5px;
-    margin: 2px 0 4px;
-  }
-
-  .hp-ill__days span {
-    flex: 1;
-    padding: 5px 0;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 10px;
-    font-weight: 700;
-    background: var(--hp-skel-2);
-    color: var(--text-muted);
-  }
-
-  .hp-ill__days span.is-on {
+    border-radius: 32px;
     background: var(--woop-gradient);
-    color: var(--hp-ink);
+    box-shadow:
+      inset 0 0 0 1.5px color-mix(in srgb, var(--text-primary) 45%, transparent),
+      0 20px 40px var(--hp-shadow);
+    transform: rotate(4deg);
   }
 
-  .hp-ill--cal > i {
-    position: relative;
-    display: block;
-    height: 20px;
-    border-radius: 8px;
-    background: var(--hp-skel-2);
+  .hp-ill--cross svg {
+    width: 64px;
+    height: 64px;
+    filter: drop-shadow(0 4px 10px rgba(230, 43, 127, 0.45));
   }
-
-  .hp-ill--cal > i.is-ok { background: var(--hp-blush); }
-
-  .hp-ill--cal > i.is-ok::after {
-    content: '';
-    position: absolute;
-    right: 6px;
-    top: 5px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--woop-pink);
-  }
-
-  .hp-ill__cf {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 4px;
-    padding: 7px 9px;
-    border-radius: 8px;
-    background: var(--hp-blush);
-    color: var(--woop-pink);
-    font-size: 10.5px;
-    font-weight: 700;
-  }
-
-  .hp-ill__cf svg { width: 11px; height: 11px; flex: none; }
 
   /* Illustration CV (recrutement) */
   .hp-ill--cv {
@@ -2226,7 +2166,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 30px 20px;
-    margin-top: 28px;
+    margin-top: var(--home-head-content);
     list-style: none;
   }
 
@@ -2240,7 +2180,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     display: block;
     font-size: 48px;
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.2;
     letter-spacing: -0.02em;
     color: var(--text-primary);
   }
@@ -2263,7 +2203,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-pgrid span {
     display: block;
-    margin-top: 12px;
+    margin-top: 4px;
     color: var(--text-secondary);
     font-weight: 600;
     line-height: 1.4;
@@ -2373,7 +2313,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     margin-top: 8px;
     font-size: 16px;
     line-height: 1.5;
-    color: var(--text-primary);
+    color: var(--hp-on-grad);
   }
 
   .hp-avs {
@@ -2395,25 +2335,27 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .hp-avs--final > span {
-    width: 52px;
-    height: 52px;
-    margin-left: -12px;
-    box-shadow: 0 0 0 3px var(--text-primary);
+    width: 104px;
+    height: 104px;
+    margin-left: -22px;
+    box-shadow: 0 0 0 4px var(--text-primary);
   }
 
   .hp-avs--final > span:first-child { margin-left: 0; }
 
   .hp-team__more {
+    display: flex;
+    justify-content: center;
     margin-top: 30px;
-    text-align: center;
   }
 
   .hp-team__more a {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 2px;
+    padding: 0 2px;
     font-size: 15px;
+    line-height: 1.2;
     font-weight: 600;
     color: var(--text-secondary);
     text-decoration: underline;
@@ -2508,6 +2450,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   .hp-tcar__nav:focus-visible {
     background: var(--woop-gradient);
     border-color: transparent;
+    color: var(--hp-on-grad);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(230, 43, 127, 0.3);
   }
@@ -2610,17 +2553,15 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   /* ===== 11. BANDEAU FINAL ===== */
-  .hp-sec--final { padding-top: 0; }
-
   .hp-final {
-    padding: 64px 22px;
+    padding: 52px 22px;
     border-radius: 28px;
     background: var(--hp-grad-band);
     text-align: center;
   }
 
   @media (min-width: 768px) {
-    .hp-final { padding: 100px 40px; border-radius: 40px; }
+    .hp-final { padding: 80px 40px; border-radius: 40px; }
   }
 
   .hp-final h2 {
@@ -2647,7 +2588,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     max-width: 620px;
     font-size: 18px;
     line-height: 1.5;
-    color: var(--text-primary);
+    color: var(--hp-on-grad);
   }
 
   /* ===== BANDEAU COLLANT ===== */
