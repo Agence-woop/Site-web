@@ -1060,7 +1060,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
      L'ombre est portée par le conteneur, pour suivre le contour de la croix. */
   .hp-hv__cross {
     position: absolute;
-    right: 0;
+    /* Décalée vers la gauche : la branche verticale passe derrière le bord droit du téléphone */
+    right: 38px;
     top: 10px;
     width: 250px;
     height: 250px;
@@ -1673,14 +1674,22 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       max-width: none;
       margin-top: 14px;
     }
+    /* Illustrations à 75 % (proportions, inclinaison et ombres conservées) :
+       zoom réduit le rendu et la place occupée ; la largeur de 75 % redonne la mise
+       en page d'origine ; l'espace au-dessus est compensé pour rester identique. */
     .hp-tile--ads .hp-ad {
       grid-area: ill;
       justify-self: center;
-      margin-top: 24px;
+      width: 75%;
+      zoom: 0.75;
+      margin-top: 32px; /* 24 px une fois réduit */
     }
     .hp-tile--social .hp-posts {
       grid-area: ill;
-      padding-top: 28px;
+      justify-self: center;
+      width: 75%;
+      zoom: 0.75;
+      padding-top: 37.333px; /* 28 px une fois réduit */
     }
   }
 
