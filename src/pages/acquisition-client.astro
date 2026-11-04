@@ -271,9 +271,10 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- 3. LES 3 ÉTAPES -->
+  <!-- 3. LES 3 ÉTAPES ET LE BOUTON DU MILIEU DE PAGE (un seul bloc) -->
   <section class="acq acq-steps">
     <div class="container">
+      <h2 class="acq-h2">De votre score à vos premiers <span class="gradient-accent acq-kw">patients</span>.</h2>
       <ol class="steps3">
         <li class="step3"><span class="gradient-accent step3__num">01</span>Audit 30 min</li>
         <li class="steps3__arrow" aria-hidden="true">›</li>
@@ -281,17 +282,15 @@ const jsonLd = [
         <li class="steps3__arrow" aria-hidden="true">›</li>
         <li class="step3 step3--hot"><span class="step3__num step3__num--plain">03</span>Lancement</li>
       </ol>
+
+      <!-- Bouton du milieu de page : remonte au quiz -->
+      <div class="acq-midcta">
+        <button type="button" class="acq-btn acq-btn--lg acq-btn--cta acq-btn--block" data-quiz-cta>
+        <span class="label-full">Calculer mon score de visibilité</span><span class="label-short">Calculer mon score</span> <ChevronRight size={16} />
+        </button>
+      </div>
     </div>
   </section>
-
-  <!-- BOUTON DU MILIEU DE PAGE : remonte au quiz -->
-  <div class="acq acq-midcta">
-    <div class="container">
-      <button type="button" class="acq-btn acq-btn--lg acq-btn--cta acq-btn--block" data-quiz-cta>
-        <span class="label-full">Calculer mon score de visibilité</span><span class="label-short">Calculer mon score</span> <ChevronRight size={16} />
-      </button>
-    </div>
-  </div>
 
   <!-- 4. CONTENU DE RÉFÉRENCEMENT -->
   <div class="acq acq-seo">
@@ -312,7 +311,7 @@ const jsonLd = [
   <!-- 5. FAQ -->
   <section class="acq acq-faq">
     <div class="container">
-      <h2 class="acq-h2 acq-h2--faq">Questions fréquentes</h2>
+      <h2 class="acq-h2 acq-h2--faq">Questions <span class="gradient-accent acq-kw">fréquentes</span></h2>
       <div class="faq">
         {[faq.slice(0, 3), faq.slice(3)].map((column) => (
           <div class="faq__col">
@@ -347,6 +346,21 @@ const jsonLd = [
 
 <style>
   /* ===== JETONS LOCAUX (dérivés de la charte) ===== */
+  /* Espacement vertical entre les sections de la page (référence : hero → services) */
+  .acq {
+    --acq-section-gap: 80px;
+  }
+
+  @media (min-width: 768px) {
+    .acq { --acq-section-gap: 100px; }
+  }
+
+  @media (min-width: 1024px) {
+    .acq { --acq-section-gap: 120px; }
+  }
+
+  .acq + .acq { margin-top: var(--acq-section-gap); }
+
   .acq {
     --acq-pink-soft: color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
     --acq-line: color-mix(in srgb, var(--text-primary) 12%, transparent);
@@ -457,11 +471,11 @@ const jsonLd = [
 
   /* ===== CARTE DU QUIZ ===== */
   .acq-quiz {
-    padding: 32px 0 64px;
+    padding: 32px 0 0;
   }
 
   @media (min-width: 1024px) {
-    .acq-quiz { padding: 40px 0 96px; }
+    .acq-quiz { padding: 40px 0 0; }
   }
 
   .quiz {
@@ -1172,9 +1186,10 @@ const jsonLd = [
   }
 
   /* ===== SERVICES ===== */
-  .acq-services { padding: 24px 0 48px; }
+  .acq-services { padding: 0; }
 
-  .acq-services .acq-h2 { margin-bottom: 40px; }
+  .acq-services .acq-h2,
+  .acq-steps .acq-h2 { margin-bottom: 40px; }
 
   .bento {
     display: grid;
@@ -1633,9 +1648,9 @@ const jsonLd = [
   }
 
   /* ===== 3 ÉTAPES ===== */
-  .acq-steps { padding: 24px 0 48px; }
+  .acq-steps { padding: 0; }
 
-  .acq-midcta { padding: 0 0 48px; margin-top: -16px; }
+  .acq-midcta { margin-top: 32px; }
 
   .steps3 {
     display: flex;
@@ -1694,7 +1709,7 @@ const jsonLd = [
   }
 
   /* ===== CONTENU DE RÉFÉRENCEMENT ===== */
-  .acq-seo { padding: 24px 0 48px; }
+  .acq-seo { padding: 0; }
 
   .seo-grid {
     display: grid;
@@ -1755,7 +1770,7 @@ const jsonLd = [
   .seo-block__text + .seo-block__text { margin-top: 16px; }
 
   /* ===== FAQ ===== */
-  .acq-faq { padding: 24px 0 48px; }
+  .acq-faq { padding: 0; }
 
   .acq-h2--faq { margin-bottom: 32px; }
 
@@ -1851,7 +1866,7 @@ const jsonLd = [
   }
 
   /* ===== BANDEAU FINAL ===== */
-  .acq-band { padding: 24px 0 96px; }
+  .acq-band { padding: 0 0 var(--acq-section-gap); }
 
   .cta-band {
     display: flex;
