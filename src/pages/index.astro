@@ -57,6 +57,26 @@ const team = [
 
 const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 
+// Tuiles de Nos services. Si `href` est défini, toute la tuile devient un lien
+// (effet au survol + chevron). Aucune tuile n'a de lien pour l'instant.
+const services: {
+  key: 'ads' | 'cx' | 'brand' | 'web' | 'social';
+  title: string;
+  text: string;
+  variant: 'grad' | 'blush' | 'plum' | 'orange' | 'rose';
+  layout: 'ads' | 'cx' | 'sq' | 'social';
+  reveal: 'left' | 'right' | 'up';
+  step?: string;
+  icoGrad?: boolean;
+  href?: string;
+}[] = [
+  { key: 'ads', title: 'Publicité Google et Meta', text: 'Être trouvé en premier, là où vos clients cherchent.', variant: 'grad', layout: 'ads', reveal: 'left' },
+  { key: 'cx', title: 'Conseil en expérience client', text: 'Du premier clic au rendez-vous, on rend chaque étape plus simple pour vos patients.', variant: 'blush', layout: 'cx', reveal: 'right' },
+  { key: 'brand', title: 'Image de marque', text: 'Logo, charte, système complet.', variant: 'plum', layout: 'sq', reveal: 'up', step: '1', icoGrad: true },
+  { key: 'web', title: 'Sites web & pages de conversion', text: 'Un site clair et rapide, conçu pour inspirer confiance et donner envie de prendre rendez-vous.', variant: 'orange', layout: 'sq', reveal: 'right', step: '2' },
+  { key: 'social', title: 'Gestion des réseaux sociaux', text: 'Instagram, Facebook, LinkedIn. On crée, on publie, on anime votre communauté.', variant: 'rose', layout: 'social', reveal: 'up' },
+];
+
 const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   {
     paragraphs: [
@@ -138,7 +158,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       <div class="hp-hero__text">
         <p class="kicker hp-hero__kicker">Agence marketing santé · Montréal</p>
         <h1 class="hp-hero__title">Le marketing <span class="gradient-accent hp-kw">santé</span> qui remplit votre agenda.</h1>
-        <p class="hp-hero__sub">Une équipe marketing complète, <strong>sans avoir à en embaucher une.</strong> Un clinicien, un créatif et une experte en acquisition, dédiés aux cliniques, pharmacies, professionnels de la santé et cabinets de recrutement du Québec.</p>
+        <p class="hp-hero__sub">Une équipe marketing complète, <strong>sans avoir à en embaucher une.</strong> Un clinicien, un créatif et une experte en acquisition, dédiés aux cliniques, pharmacies, professionnels de la santé et cabinets de recrutement au Québec.</p>
         <div class="hp-acts">
           <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           <a class="cta cta--line" href="#services">Voir nos services<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
@@ -161,6 +181,10 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
           </svg>
 
           <div class="hp-phone">
+            <span class="hp-phone__btn hp-phone__btn--power"></span>
+            <span class="hp-phone__btn hp-phone__btn--vol1"></span>
+            <span class="hp-phone__btn hp-phone__btn--vol2"></span>
+            <div class="hp-phone__screen">
             <div class="hp-phone__bar"><span class="hp-phone__isl"></span></div>
             <div class="hp-phone__top">
               <b>Agenda</b>
@@ -177,6 +201,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
                 </i>
               </div>
             ))}
+            <span class="hp-phone__home"></span>
+            </div>
           </div>
 
           <div class="hp-float hp-float--rdv">
@@ -219,92 +245,78 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec hp-sec--services" id="services" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Nos services</h2>
-        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Tout ce que ferait une équipe marketing interne. Sans recruter, sans former, sans gérer.</p>
+        <h2 class="section-title hp-title" data-reveal="left">Nos <span class="gradient-accent">services</span></h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Tout ce que ferait une équipe marketing interne. Sans recruter, sans former, sans gérer.</p>
       </div>
 
       <div class="hp-bento">
-        <!-- Publicité Google et Meta -->
-        <article class="hp-tile hp-tile--grad hp-tile--ads" data-reveal="left">
-          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M8 16l1.5 4.5"/><path d="M19 9.5a4 4 0 010 5"/></svg></span>
-          <div class="hp-ad" aria-hidden="true">
-            <div class="hp-ad__search">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
-              <i></i>
-            </div>
-            <div class="hp-ad__res hp-ad__res--top">
-              <span class="hp-ad__badge"></span>
-              <span class="hp-ad__line hp-ad__line--lg"></span>
-              <span class="hp-stars hp-stars--sm"><svg viewBox="0 0 100 20"><use href="#hp-star" x="0" y="0" width="20" height="20" /><use href="#hp-star" x="20" y="0" width="20" height="20" /><use href="#hp-star" x="40" y="0" width="20" height="20" /><use href="#hp-star" x="60" y="0" width="20" height="20" /><use href="#hp-star" x="80" y="0" width="20" height="20" /></svg></span>
-              <span class="hp-ad__line"></span>
-            </div>
-            <div class="hp-ad__res"><span class="hp-ad__line hp-ad__line--md"></span><span class="hp-ad__line"></span></div>
-            <div class="hp-ad__res"><span class="hp-ad__line hp-ad__line--md"></span><span class="hp-ad__line"></span></div>
-          </div>
-          <div class="hp-tile__txt">
-            <h3>Publicité Google et Meta</h3>
-            <p>Être trouvé en premier, là où vos clients cherchent.</p>
-          </div>
-        </article>
-
-        <!-- Conseil en expérience client -->
-        <article class="hp-tile hp-tile--blush hp-tile--cx" data-reveal="right">
-          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/><path d="M12 15.5s-3.5-2-3.5-4.3a2 2 0 013.5-1.3 2 2 0 013.5 1.3c0 2.3-3.5 4.3-3.5 4.3z"/></svg></span>
-          <div class="hp-tile__txt">
-            <h3>Conseil en expérience client</h3>
-            <p>Du premier clic au rendez-vous, on rend chaque étape plus simple pour vos patients.</p>
-          </div>
-        </article>
-
-        <!-- Image de marque -->
-        <article class="hp-tile hp-tile--plum hp-tile--sq" data-reveal="up" data-reveal-step="1">
-          <span class="hp-ico hp-ico--grad" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg></span>
-          <div class="hp-tile__txt">
-            <h3>Image de marque</h3>
-            <p>Logo, charte, système complet.</p>
-          </div>
-        </article>
-
-        <!-- Sites web & pages de conversion -->
-        <article class="hp-tile hp-tile--orange hp-tile--sq" data-reveal="right" data-reveal-step="2">
-          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 8h18"/><path d="M12 12l6 2.5-2.6 1-1 2.6z"/></svg></span>
-          <div class="hp-tile__txt">
-            <h3>Sites web &amp; pages de conversion</h3>
-            <p>Le trafic devient rendez-vous.</p>
-          </div>
-        </article>
-
-        <!-- Gestion des réseaux sociaux -->
-        <article class="hp-tile hp-tile--rose hp-tile--social" data-reveal="up">
-          <span class="hp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></span>
-          <div class="hp-tile__txt">
-            <h3>Gestion des réseaux sociaux</h3>
-            <p>Instagram, Facebook, LinkedIn. On crée, on publie, on anime votre communauté.</p>
-          </div>
-          <div class="hp-posts" aria-hidden="true">
-            {[1, 2, 3].map((n) => (
-              <div class:list={['hp-post', `hp-post--${n}`]}>
-                <div class="hp-post__head"><span class="hp-post__av"></span><span class="hp-post__lines"><i></i><i></i></span></div>
-                <div class="hp-post__img">
-                  {n === 1 && (
-                    <svg viewBox="0 0 120 80"><rect width="120" height="80" class="f-blush" /><circle cx="60" cy="34" r="16" class="f-pink" /><rect x="40" y="56" width="40" height="8" rx="4" class="f-plum" /><path d="M54 34h12M60 28v12" class="s-light" stroke-width="4" stroke-linecap="round" /></svg>
-                  )}
-                  {n === 2 && (
-                    <svg viewBox="0 0 120 80"><rect width="120" height="80" class="f-plum" /><circle cx="40" cy="36" r="11" class="f-pinklight" /><path d="M22 70c2-12 10-18 18-18s16 6 18 18" class="f-pinklight" /><circle cx="80" cy="36" r="11" class="f-orange" /><path d="M62 70c2-12 10-18 18-18s16 6 18 18" class="f-orange" /></svg>
-                  )}
-                  {n === 3 && (
-                    <svg viewBox="0 0 120 80"><rect width="60" height="80" class="f-orange" /><rect x="60" width="60" height="80" class="f-pink" /><path d="M14 56l12-14 10 10 10-16" class="s-light" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" /><path d="M74 60l10-10 8 6 16-24" class="s-light" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" /><rect x="58" width="4" height="80" class="f-light" /></svg>
-                  )}
+        {services.map((t) => {
+          const Tag = t.href ? 'a' : 'article';
+          return (
+            <Tag
+              href={t.href}
+              class:list={['hp-tile', `hp-tile--${t.variant}`, `hp-tile--${t.layout}`, { 'hp-tile--link': t.href }]}
+              data-reveal={t.reveal}
+              data-reveal-step={t.step}
+            >
+              <span class:list={['hp-ico', { 'hp-ico--grad': t.icoGrad }]} aria-hidden="true">
+                {t.key === 'ads' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M8 16l1.5 4.5"/><path d="M19 9.5a4 4 0 010 5"/></svg>)}
+                {t.key === 'cx' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/><path d="M12 15.5s-3.5-2-3.5-4.3a2 2 0 013.5-1.3 2 2 0 013.5 1.3c0 2.3-3.5 4.3-3.5 4.3z"/></svg>)}
+                {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
+                {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 8h18"/><path d="M12 12l6 2.5-2.6 1-1 2.6z"/></svg>)}
+                {t.key === 'social' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>)}
+              </span>
+              {t.href && (
+                <span class="hp-tile__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg></span>
+              )}
+              {t.key === 'ads' && (
+                <div class="hp-ad" aria-hidden="true">
+                  <div class="hp-ad__search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+                    <i></i>
+                  </div>
+                  <div class="hp-ad__res hp-ad__res--top">
+                    <span class="hp-ad__badge"></span>
+                    <span class="hp-ad__line hp-ad__line--lg"></span>
+                    <span class="hp-stars hp-stars--sm"><svg viewBox="0 0 100 20"><use href="#hp-star" x="0" y="0" width="20" height="20" /><use href="#hp-star" x="20" y="0" width="20" height="20" /><use href="#hp-star" x="40" y="0" width="20" height="20" /><use href="#hp-star" x="60" y="0" width="20" height="20" /><use href="#hp-star" x="80" y="0" width="20" height="20" /></svg></span>
+                    <span class="hp-ad__line"></span>
+                  </div>
+                  <div class="hp-ad__res"><span class="hp-ad__line hp-ad__line--md"></span><span class="hp-ad__line"></span></div>
+                  <div class="hp-ad__res"><span class="hp-ad__line hp-ad__line--md"></span><span class="hp-ad__line"></span></div>
                 </div>
-                <div class="hp-post__foot">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/></svg>
-                </div>
-                <div class="hp-post__cap"><i></i><i></i></div>
+              )}
+              <div class="hp-tile__txt">
+                <h3>{t.title}</h3>
+                <p>{t.text}</p>
               </div>
-            ))}
-          </div>
-        </article>
+              {t.key === 'social' && (
+                <div class="hp-posts" aria-hidden="true">
+                  {[1, 2, 3].map((n) => (
+                    <div class:list={['hp-post', `hp-post--${n}`]}>
+                      <div class="hp-post__head"><span class="hp-post__av"></span><span class="hp-post__lines"><i></i><i></i></span></div>
+                      <div class="hp-post__img">
+                        {n === 1 && (
+                          <svg viewBox="0 0 120 80"><rect width="120" height="80" class="f-blush" /><circle cx="60" cy="34" r="16" class="f-pink" /><rect x="40" y="56" width="40" height="8" rx="4" class="f-plum" /><path d="M54 34h12M60 28v12" class="s-light" stroke-width="4" stroke-linecap="round" /></svg>
+                        )}
+                        {n === 2 && (
+                          <svg viewBox="0 0 120 80"><rect width="120" height="80" class="f-plum" /><circle cx="40" cy="36" r="11" class="f-pinklight" /><path d="M22 70c2-12 10-18 18-18s16 6 18 18" class="f-pinklight" /><circle cx="80" cy="36" r="11" class="f-orange" /><path d="M62 70c2-12 10-18 18-18s16 6 18 18" class="f-orange" /></svg>
+                        )}
+                        {n === 3 && (
+                          <svg viewBox="0 0 120 80"><rect width="60" height="80" class="f-orange" /><rect x="60" width="60" height="80" class="f-pink" /><path d="M14 56l12-14 10 10 10-16" class="s-light" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" /><path d="M74 60l10-10 8 6 16-24" class="s-light" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" /><rect x="58" width="4" height="80" class="f-light" /></svg>
+                        )}
+                      </div>
+                      <div class="hp-post__foot">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/></svg>
+                      </div>
+                      <div class="hp-post__cap"><i></i><i></i></div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Tag>
+          );
+        })}
       </div>
 
       <div class="hp-inl" data-reveal="up">
@@ -318,8 +330,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec hp-sec--tight" id="approche" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Marque <span class="gradient-accent">+</span> performance</h2>
-        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Une marque solide fait baisser le coût d'acquisition. L'un ne va pas sans l'autre.</p>
+        <h2 class="section-title hp-title hp-title--plus" data-reveal="left"><span class="gradient-accent">Marque</span> <span class="hp-plus"><span class="gradient-accent">+</span></span> <span class="gradient-accent">performance</span></h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Une marque solide fait baisser le coût d'acquisition. L'un ne va pas sans l'autre.</p>
       </div>
 
       <ol class="hp-spi">
@@ -343,7 +355,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       <a class="hp-teaser" href={`${base}/acquisition-client`} data-reveal="up">
         <span class="hp-teaser__dot" aria-hidden="true"></span>
         <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
-        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="url(#hp-teaser-grad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="hp-teaser-grad" x1="3" y1="4" x2="13" y2="12" gradientUnits="userSpaceOnUse"><stop offset="0" class="stop-orange" /><stop offset="1" class="stop-pink" /></linearGradient></defs><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
       </a>
     </div>
   </section>
@@ -352,8 +364,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec hp-sec--tight" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Une équipe, <span class="gradient-accent">sans embauche</span></h2>
-        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Tout le savoir-faire d'un service marketing, sans les postes à pourvoir.</p>
+        <h2 class="section-title hp-title" data-reveal="left"><span class="gradient-accent">Une équipe</span>, sans embauche</h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Tout le savoir-faire d'un service marketing, sans les postes à pourvoir.</p>
       </div>
 
       <div class="hp-cmp">
@@ -412,8 +424,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Deux secteurs, une méthode</h2>
-        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">On ne fait que ça. C'est pour ça qu'on le fait bien.</p>
+        <h2 class="section-title hp-title" data-reveal="left">Deux secteurs, <span class="gradient-accent">une méthode</span></h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">On ne fait que ça. C'est pour ça qu'on le fait bien.</p>
       </div>
 
       <div class="hp-sect">
@@ -498,8 +510,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec" id="equipe" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Les visages de votre équipe</h2>
-        <p class="hp-head__intro" data-reveal="right" data-reveal-step="1">Des experts qui travaillent pour vous comme s'ils étaient dans vos murs.</p>
+        <h2 class="section-title hp-title" data-reveal="left">Les visages de <span class="gradient-accent">votre équipe</span></h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Des experts qui travaillent pour vous comme s'ils étaient dans vos murs.</p>
       </div>
 
       <ul class="hp-team">
@@ -518,13 +530,9 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
         ))}
       </ul>
 
-      <div class="hp-inl" data-reveal="up">
-        <p>Envie de parler à l'un de nous ? <strong>On répond vite.</strong></p>
-        <div class="hp-acts">
-          <a class="cta" href={`${base}/contact`}>Parler à l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-          <a class="cta cta--line" href={`${base}/equipe`}>Rencontrer l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-        </div>
-      </div>
+      <p class="hp-team__more" data-reveal="up">
+        <a href={`${base}/equipe`}>Rencontrer l'équipe <span aria-hidden="true">›</span></a>
+      </p>
     </div>
   </section>
 
@@ -532,11 +540,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec hp-sec--tight">
     <div class="container">
       <div class="hp-band" data-reveal="up">
-        <div class="hp-avs" aria-hidden="true">
-          {team.map((m) => (
-            <span style={`--fx: ${m.fx}; --fy: ${m.fy};`}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
-          ))}
-        </div>
         <div class="hp-band__txt">
           <h2>Votre équipe marketing est déjà prête.</h2>
           <p>Un appel de 30 minutes pour la rencontrer et voir ce qu'elle peut faire pour vous.</p>
@@ -553,7 +556,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec hp-sec--tight" data-reveal-clip>
     <div class="container">
       <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Ce qu'en disent nos clients</h2>
+        <h2 class="section-title hp-title" data-reveal="left">Ce qu'en disent <span class="gradient-accent">nos clients</span></h2>
       </div>
 
       <div
@@ -616,6 +619,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <section class="hp-sec hp-sec--final" data-hp-final>
     <div class="container">
       <div class="hp-final" data-reveal="up">
+        <div class="hp-avs hp-avs--final" aria-hidden="true">
+          {team.map((m) => (
+            <span style={`--fx: ${m.fx}; --fy: ${m.fy};`}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+          ))}
+        </div>
         <h2>Votre équipe marketing commence par un appel.</h2>
         <p>Un appel de 30 minutes pour voir où vous en êtes et ce qu'on peut faire.</p>
         <div class="hp-acts hp-acts--center">
@@ -816,41 +824,74 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   /* ===== TITRES DE SECTION ===== */
+  /* Titre puis sous-texte, l'un sous l'autre, alignés à gauche */
   .hp-head {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 16px;
     margin-bottom: 36px;
   }
 
   @media (min-width: 900px) {
-    .hp-head {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 40px;
-      margin-bottom: 46px;
-    }
+    .hp-head { gap: 20px; margin-bottom: 46px; }
   }
 
+  /* Titres Ganky : blanc, un ou deux mots en dégradé (.gradient-accent) */
   .hp-title {
     margin-bottom: 0;
     line-height: 1.02;
+    color: var(--text-primary);
     text-wrap: balance;
     overflow-wrap: break-word;
     max-width: 100%;
   }
 
-  .hp-head__intro {
-    max-width: 440px;
-    color: var(--text-secondary);
-    font-size: 16px;
-    line-height: 1.6;
-    flex: none;
+  /* « Marque + performance » : le + dans un cercle blanc plein, centré sur la hauteur du titre */
+  .hp-title--plus {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.28em;
+    row-gap: 0.08em;
   }
 
-  @media (min-width: 900px) {
-    .hp-head__intro { flex: 0 1 440px; }
+  .hp-plus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 0.84em;
+    height: 0.84em;
+    border-radius: 50%;
+    background: var(--text-primary);
+    line-height: 1;
+  }
+
+  .hp-plus .gradient-accent {
+    display: block;
+    font-size: 1.05em;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .hp-head__intro {
+    max-width: 760px;
+    color: var(--text-secondary);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 1024px) {
+    .hp-head__intro { font-size: 19px; }
+  }
+
+  /* Pas de mot seul en fin de paragraphe */
+  p,
+  .hp-m__role,
+  .hp-pgrid span,
+  .hp-pop__txt {
+    text-wrap: pretty;
   }
 
   .hp-over {
@@ -859,7 +900,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--text-secondary);
   }
 
   /* ===== SECTIONS ===== */
@@ -1013,35 +1054,71 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     opacity: 0.12;
   }
 
+  /* Smartphone : cadre fin, coins très arrondis, encoche, boutons latéraux
+     (d'après le téléphone de /acquisition-client) */
   .hp-phone {
     position: absolute;
-    left: 165px;
-    top: 36px;
+    left: 172px;
+    top: 30px;
     z-index: 2;
-    width: 290px;
-    padding: 12px;
-    border-radius: 44px;
+    width: 256px;
+    height: 500px;
+    padding: 8px;
+    border-radius: 46px;
     background: var(--bg-deep);
+    border: 2px solid rgba(230, 43, 127, 0.25);
     box-shadow:
-      0 0 0 2px color-mix(in srgb, var(--woop-pink) 22%, var(--bg-elevated)),
-      0 0 0 9px color-mix(in srgb, var(--text-primary) 3%, transparent),
+      inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent),
       0 50px 90px var(--hp-shadow),
       0 0 90px rgba(230, 43, 127, 0.25);
     transform: rotate(-5deg);
   }
 
+  .hp-phone__btn {
+    position: absolute;
+    width: 3px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--woop-pink) 30%, var(--bg-elevated));
+  }
+
+  .hp-phone__btn--power { right: -5px; top: 132px; height: 62px; }
+  .hp-phone__btn--vol1 { left: -5px; top: 110px; height: 40px; }
+  .hp-phone__btn--vol2 { left: -5px; top: 160px; height: 40px; }
+
+  .hp-phone__screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    padding: 0 10px 10px;
+    border-radius: 37px;
+    background: var(--bg-elevated);
+  }
+
+  /* Barre d'état avec l'encoche (îlot) au centre */
   .hp-phone__bar {
     display: flex;
     justify-content: center;
-    padding: 4px 0 10px;
+    flex: none;
+    padding: 11px 0 14px;
   }
 
   .hp-phone__isl {
-    width: 70px;
-    height: 20px;
+    width: 78px;
+    height: 23px;
     border-radius: 12px;
     background: var(--bg-deep);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent);
+  }
+
+  .hp-phone__home {
+    display: block;
+    flex: none;
+    width: 92px;
+    height: 4px;
+    margin: auto auto 0;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--text-primary) 55%, transparent);
   }
 
   .hp-phone__top {
@@ -1049,7 +1126,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     justify-content: space-between;
     align-items: center;
     padding: 16px 14px;
-    border-radius: 26px 26px 10px 10px;
+    border-radius: 22px 22px 10px 10px;
     background: var(--hp-light);
   }
 
@@ -1088,8 +1165,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 7px;
-    padding: 11px 12px;
+    margin-top: 9px;
+    padding: 12px;
     border-radius: 14px;
     background: var(--hp-light);
     color: var(--hp-dark);
@@ -1221,12 +1298,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     font-size: 24px;
     line-height: 1.2;
     white-space: nowrap;
-    color: transparent;
-    -webkit-text-stroke: 1.2px color-mix(in srgb, var(--text-primary) 60%, transparent);
+    color: var(--text-primary);
   }
 
   .hp-mq__list li:nth-child(3n + 2) span {
-    -webkit-text-stroke-color: var(--woop-pink);
+    color: var(--woop-pink);
   }
 
   .hp-mq__list b {
@@ -1287,9 +1363,42 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-tile { padding: 34px 32px; min-height: 280px; }
   }
 
-  .hp-tile:hover {
+  /* Tuile-lien (href défini) : survol, focus et chevron */
+  .hp-tile--link { cursor: pointer; }
+
+  .hp-tile--link:hover {
     transform: translateY(-5px);
     box-shadow: 0 30px 60px var(--hp-shadow), inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent);
+  }
+
+  .hp-tile--link:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 3px;
+  }
+
+  .hp-tile__go {
+    position: absolute;
+    top: 28px;
+    right: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px currentColor;
+    transition: transform 250ms ease, background 250ms ease;
+  }
+
+  .hp-tile__go svg { width: 18px; height: 18px; }
+
+  @media (min-width: 768px) {
+    .hp-tile__go { top: 34px; right: 32px; }
+  }
+
+  .hp-tile--link:hover .hp-tile__go {
+    transform: translateX(4px);
+    background: color-mix(in srgb, var(--text-primary) 18%, transparent);
   }
 
   .hp-tile h3 {
@@ -1326,7 +1435,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-ico svg { width: 28px; height: 28px; }
 
-  .hp-tile:hover .hp-ico { transform: rotate(-6deg) scale(1.06); }
+  .hp-tile--link:hover .hp-ico { transform: rotate(-6deg) scale(1.06); }
 
   .hp-ico--grad {
     background: var(--woop-gradient);
@@ -1617,6 +1726,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   .hp-st--hot .hp-st__idx,
   .hp-st--hot p { color: var(--hp-ink); }
 
+  /* Bandeau « Nouveau » : fond dégradé de la charte. Un voile sombre, plus marqué
+     côté orange, garantit un contraste d'au moins 4,5:1 pour le texte blanc. */
   .hp-teaser {
     display: flex;
     align-items: center;
@@ -1624,30 +1735,35 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     margin-top: 22px;
     padding: 14px 14px 14px 22px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);
-    box-shadow: inset 0 0 0 1px var(--hp-line);
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--bg-deep) 30%, transparent), color-mix(in srgb, var(--bg-deep) 14%, transparent)),
+      var(--woop-gradient);
     font-size: 16px;
+    font-weight: 700;
     line-height: 1.4;
     color: var(--text-primary);
-    transition: box-shadow 200ms ease;
+    transition: transform 250ms ease, box-shadow 250ms ease;
   }
 
-  .hp-teaser:hover { box-shadow: inset 0 0 0 1px var(--woop-pink); }
+  .hp-teaser:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
+  }
 
   .hp-teaser:focus-visible {
-    outline: 2px solid var(--woop-pink);
+    outline: 2px solid var(--text-primary);
     outline-offset: 3px;
   }
 
-  .hp-teaser strong { color: var(--hp-pinklight); }
+  .hp-teaser strong { color: var(--text-primary); }
 
   .hp-teaser__dot {
     flex: none;
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--woop-pink);
-    box-shadow: 0 0 12px var(--woop-pink);
+    background: var(--text-primary);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--text-primary) 70%, transparent);
   }
 
   .hp-go {
@@ -1659,16 +1775,13 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     height: 42px;
     margin-left: auto;
     border-radius: 50%;
-    box-shadow: inset 0 0 0 1.5px currentColor;
-    transition: background 200ms ease, color 200ms ease;
+    background: var(--text-primary);
+    transition: transform 250ms ease;
   }
 
   .hp-go svg { width: 18px; height: 18px; }
 
-  .hp-teaser:hover .hp-go {
-    background: var(--woop-gradient);
-    box-shadow: none;
-  }
+  .hp-teaser:hover .hp-go { transform: translateX(3px); }
 
   /* ===== 5. UNE ÉQUIPE, SANS EMBAUCHE ===== */
   .hp-cmp {
@@ -1752,7 +1865,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     padding: 14px 40px 14px 14px;
     border-radius: 18px;
     border: 1.5px dashed color-mix(in srgb, var(--text-primary) 25%, transparent);
-    color: var(--text-muted);
+    color: var(--text-secondary);
   }
 
   .hp-rt b {
@@ -1823,7 +1936,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-chips--off li {
     background: color-mix(in srgb, var(--text-primary) 6%, transparent);
-    color: var(--text-muted);
+    color: var(--text-secondary);
     text-decoration: line-through;
   }
 
@@ -1868,11 +1981,15 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     box-shadow: inset 0 0 0 1.5px var(--hp-line);
   }
 
+  /* Surtitre et texte en haut de la carte, boutons ancrés en bas */
   .hp-s__body {
+    order: -1;
     display: flex;
     flex-direction: column;
     gap: 18px;
   }
+
+  .hp-s__acts { margin-top: auto; }
 
   .hp-s h3 {
     font-size: 24px;
@@ -2093,9 +2210,9 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       gap: 34px 28px;
       min-height: 440px;
     }
-    .hp-s__body { grid-area: body; align-self: end; }
+    .hp-s__body { grid-area: body; align-self: start; }
     .hp-ill { grid-area: ill; align-self: start; margin-top: -6px; margin-right: 4px; }
-    .hp-s__acts { grid-area: acts; }
+    .hp-s__acts { grid-area: acts; align-self: end; margin-top: 0; }
   }
 
   /* ===== 7. LA PREUVE ===== */
@@ -2234,7 +2351,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   @media (min-width: 1100px) {
     .hp-band {
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       gap: 30px;
       padding: 44px 48px;
     }
@@ -2271,6 +2388,51 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   .hp-avs > span:first-child { margin-left: 0; }
+
+  .hp-avs--final {
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+
+  .hp-avs--final > span {
+    width: 52px;
+    height: 52px;
+    margin-left: -12px;
+    box-shadow: 0 0 0 3px var(--text-primary);
+  }
+
+  .hp-avs--final > span:first-child { margin-left: 0; }
+
+  .hp-team__more {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .hp-team__more a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 2px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: color 200ms ease, text-decoration-color 200ms ease;
+  }
+
+  .hp-team__more a:hover,
+  .hp-team__more a:focus-visible {
+    color: var(--text-primary);
+    text-decoration-color: var(--woop-pink);
+  }
+
+  .hp-team__more a:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
 
   .hp-avs--sm > span {
     width: 36px;
@@ -2444,7 +2606,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   .hp-tcard__role {
     font-size: 13px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-secondary);
   }
 
   /* ===== 11. BANDEAU FINAL ===== */
@@ -2575,12 +2737,15 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-pop.is-shown { transition: none; }
 
     .cta:hover,
-    .hp-tile:hover,
+    .hp-tile--link:hover,
+    .hp-tile--link:hover .hp-tile__go,
+    .hp-teaser:hover,
+    .hp-teaser:hover .hp-go,
     .hp-s:hover,
     .hp-m:hover,
     .hp-tcar__nav:hover,
     .hp-tcar__nav:focus-visible,
-    .hp-tile:hover .hp-ico { transform: none; }
+    .hp-tile--link:hover .hp-ico { transform: none; }
 
     .cta:hover::after { left: -60%; }
   }
