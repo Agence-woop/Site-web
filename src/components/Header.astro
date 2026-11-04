@@ -10,13 +10,20 @@ interface NavChild {
 
 interface NavItem {
   label: string;
-  href: string;
+  /* Sans href : l'entrée n'est pas une page, c'est un bouton qui ouvre son sous-menu. */
+  href?: string;
   children?: NavChild[];
 }
 
 const navItems: NavItem[] = [
-  { label: 'Santé & Médical', href: `${base}/services-medical` },
-  { label: 'RH & Recrutement', href: `${base}/services-recrutement` },
+  {
+    label: "Secteurs d'activité",
+    children: [
+      { label: 'Santé & Médical', href: `${base}/services-medical` },
+      { label: 'RH & Recrutement', href: `${base}/services-recrutement` },
+    ],
+  },
+  { label: 'Test de visibilité', href: `${base}/acquisition-client` },
   { label: 'Équipe', href: `${base}/equipe` },
   { label: 'Contact', href: `${base}/contact` },
   {
@@ -50,10 +57,24 @@ const navItems: NavItem[] = [
     <div class="header__menu" id="nav-menu" role="dialog" aria-label="Menu de navigation">
       <ul class="header__links">
         {navItems.map((item, idx) => (
-          <li class:list={['header__item', item.children && 'header__item--has-children']}>
+          <li class:list={['header__item', item.children && 'header__item--has-children', !item.href && 'header__item--trigger']}>
             <div class="header__item-head">
-              <a href={item.href} class="header__link">{item.label}</a>
-              {item.children && (
+              {item.href ? (
+                <a href={item.href} class="header__link">{item.label}</a>
+              ) : (
+                <button
+                  type="button"
+                  class="header__link header__trigger"
+                  aria-expanded="false"
+                  aria-controls={`header-submenu-${idx}`}
+                >
+                  {item.label}
+                  <svg class="header__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+              )}
+              {item.children && item.href && (
                 <button
                   type="button"
                   class="header__toggle"
@@ -86,11 +107,6 @@ const navItems: NavItem[] = [
         <a href="tel:+14388152295" class="header__linkedin" aria-label="Nous appeler au 438 815 2295" title="Nous appeler au (438) 815-2295">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-          </svg>
-        </a>
-        <a href="https://www.linkedin.com/company/106509640" target="_blank" rel="noopener noreferrer" class="header__linkedin" aria-label="LinkedIn de l'Agence WOOP">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
           </svg>
         </a>
       </div>
@@ -217,6 +233,29 @@ const navItems: NavItem[] = [
   .header__link:hover,
   .header__link:focus-visible {
     color: var(--text-primary);
+  }
+
+  /* « Secteurs d'activité » : bouton qui a l'apparence d'un lien du menu, avec son chevron */
+  .header__trigger {
+    background: none;
+    border: none;
+    font-family: inherit;
+    line-height: inherit;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .header__trigger:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 4px;
+  }
+
+  .header__trigger[aria-expanded="true"] {
+    color: var(--text-primary);
+  }
+
+  .header__trigger[aria-expanded="true"] .header__chevron {
+    transform: rotate(180deg);
   }
 
   /* Bouton de bascule du sous-menu (mobile : clic ; desktop : indicateur visuel + clavier) */
@@ -373,17 +412,43 @@ const navItems: NavItem[] = [
       display: flex;
     }
 
-    /* Sur desktop on n'utilise pas .header__item--open ; le hover/focus suffit. */
-    .header__item--has-children:hover .header__submenu,
-    .header__item--has-children:focus-within .header__submenu {
+    /* Blog : sous-menu révélé au survol et au focus (CSS pur, inchangé). */
+    .header__item--has-children:not(.header__item--trigger):hover .header__submenu,
+    .header__item--has-children:not(.header__item--trigger):focus-within .header__submenu {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
     }
 
-    .header__item--has-children:hover .header__chevron,
-    .header__item--has-children:focus-within .header__chevron {
+    .header__item--has-children:not(.header__item--trigger):hover .header__chevron,
+    .header__item--has-children:not(.header__item--trigger):focus-within .header__chevron {
       transform: rotate(180deg);
+    }
+
+    /*
+     * « Secteurs d'activité » : ouvert quand son bouton est déplié (survol, clic, clavier).
+     * La visibilité bascule tout de suite à l'ouverture (liens atteignables au clavier sans attendre
+     * la fin du fondu) et seulement après le fondu à la fermeture.
+     */
+    .header__item--trigger .header__submenu {
+      transition: opacity 200ms ease, transform 200ms ease, visibility 0s linear 200ms;
+    }
+
+    .header__item--trigger.header__item--open .header__submenu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition-delay: 0s;
+    }
+
+    /* Pont invisible entre le bouton et le panneau, pour ne pas le refermer en descendant la souris */
+    .header__item--trigger .header__submenu::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 100%;
+      height: 26px;
     }
 
     .header__sublink {
@@ -453,6 +518,64 @@ const navItems: NavItem[] = [
       btn.setAttribute('aria-expanded', String(!expanded));
       btn.setAttribute('aria-label', expanded ? `Dérouler le sous-menu ${btn.textContent?.trim() ?? ''}` : `Replier le sous-menu`);
       btn.closest('.header__item')?.classList.toggle('header__item--open', !expanded);
+    });
+  });
+
+  // « Secteurs d'activité » : bouton sans lien qui ouvre son sous-menu.
+  // Ordinateur : survol (souris), clic et clavier (Entrée / Espace ouvrent, Échap ferme).
+  // Menu mobile : accordéon (même classe .header__item--open que le sous-menu Blog).
+  const canHover = window.matchMedia('(hover: hover) and (min-width: 1100px)');
+  menu?.querySelectorAll<HTMLElement>('.header__item--trigger').forEach((item) => {
+    const trigger = item.querySelector<HTMLButtonElement>('.header__trigger');
+    if (!trigger) return;
+    let closeTimer = 0;
+    // Ouvert par le survol de la souris : un clic à ce moment-là garde le panneau ouvert
+    // au lieu de le refermer (sinon survol puis clic donnerait un menu fermé).
+    let openedByHover = false;
+    const setOpen = (open: boolean) => {
+      window.clearTimeout(closeTimer);
+      if (!open) openedByHover = false;
+      trigger.setAttribute('aria-expanded', String(open));
+      item.classList.toggle('header__item--open', open);
+    };
+    const isOpen = () => trigger.getAttribute('aria-expanded') === 'true';
+
+    trigger.addEventListener('click', () => {
+      if (isOpen() && openedByHover) {
+        openedByHover = false;
+        return;
+      }
+      setOpen(!isOpen());
+    });
+
+    item.addEventListener('mouseenter', () => {
+      if (!canHover.matches) return;
+      window.clearTimeout(closeTimer);
+      if (!isOpen()) {
+        setOpen(true);
+        openedByHover = true;
+      }
+    });
+    item.addEventListener('mouseleave', () => {
+      if (!canHover.matches || (!openedByHover && item.contains(document.activeElement))) return;
+      closeTimer = window.setTimeout(() => setOpen(false), 200);
+    });
+
+    item.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen()) {
+        event.stopPropagation();
+        setOpen(false);
+        trigger.focus();
+      }
+    });
+
+    // Sur ordinateur, le panneau se referme quand le focus ou un clic sort de l'entrée.
+    item.addEventListener('focusout', (event) => {
+      const next = event.relatedTarget as Node | null;
+      if (window.innerWidth >= 1100 && (!next || !item.contains(next))) setOpen(false);
+    });
+    document.addEventListener('click', (event) => {
+      if (window.innerWidth >= 1100 && isOpen() && !item.contains(event.target as Node)) setOpen(false);
     });
   });
 
