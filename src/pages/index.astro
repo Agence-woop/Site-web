@@ -193,19 +193,9 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
         <div class="hp-hv__stage">
           <div class="hp-hv__grid"></div>
           <div class="hp-hv__glow"></div>
-          <svg class="hp-hv__cross" viewBox="0 0 100 100" focusable="false">
-            <defs>
-              <linearGradient id="hp-cross-grad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" class="stop-orange" />
-                <stop offset="1" class="stop-pink" />
-              </linearGradient>
-            </defs>
-            <path d="M42 0h16a8 8 0 018 8v26h26a8 8 0 018 8v16a8 8 0 01-8 8H66v26a8 8 0 01-8 8H42a8 8 0 01-8-8V66H8a8 8 0 01-8-8V42a8 8 0 018-8h26V8a8 8 0 018-8z" fill="url(#hp-cross-grad)" />
-            <path d="M42 0h16a8 8 0 018 8v26h26a8 8 0 018 8v4H34V8a8 8 0 018-8z" class="hp-hv__cross-shine" />
-          </svg>
+          <div class="hp-hv__cross"><span class="hp-hv__cross-shape"></span></div>
 
           <div class="hp-phone">
-            <span class="hp-phone__btn hp-phone__btn--power"></span>
             <span class="hp-phone__btn hp-phone__btn--vol1"></span>
             <span class="hp-phone__btn hp-phone__btn--vol2"></span>
             <div class="hp-phone__screen">
@@ -1066,6 +1056,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     filter: blur(10px);
   }
 
+  /* Croix de santé : une seule forme (clip-path), un seul dégradé continu.
+     L'ombre est portée par le conteneur, pour suivre le contour de la croix. */
   .hp-hv__cross {
     position: absolute;
     right: 0;
@@ -1075,9 +1067,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     filter: drop-shadow(0 30px 60px rgba(230, 43, 127, 0.45));
   }
 
-  .hp-hv__cross-shine {
-    fill: var(--text-primary);
-    opacity: 0.12;
+  .hp-hv__cross-shape {
+    position: absolute;
+    inset: 0;
+    background: var(--woop-gradient);
+    clip-path: path('M105 0H145A20 20 0 0 1 165 20V85H230A20 20 0 0 1 250 105V145A20 20 0 0 1 230 165H165V230A20 20 0 0 1 145 250H105A20 20 0 0 1 85 230V165H20A20 20 0 0 1 0 145V105A20 20 0 0 1 20 85H85V20A20 20 0 0 1 105 0Z');
   }
 
   /* Smartphone : cadre fin, coins très arrondis, encoche, boutons latéraux
@@ -1095,8 +1089,10 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     border: 2px solid rgba(230, 43, 127, 0.25);
     box-shadow:
       inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent),
-      0 50px 90px var(--hp-shadow),
       0 0 90px rgba(230, 43, 127, 0.25);
+    /* Ombre sombre en drop-shadow (même rendu que box-shadow 0 50px 90px) :
+       le flou de box-shadow s'arrête net et dessinait une ligne sur la croix. */
+    filter: drop-shadow(0 50px 45px var(--hp-shadow));
     transform: rotate(-5deg);
   }
 
@@ -1107,7 +1103,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     background: color-mix(in srgb, var(--woop-pink) 30%, var(--bg-elevated));
   }
 
-  .hp-phone__btn--power { right: -5px; top: 132px; height: 62px; }
   .hp-phone__btn--vol1 { left: -5px; top: 110px; height: 40px; }
   .hp-phone__btn--vol2 { left: -5px; top: 160px; height: 40px; }
 
@@ -1632,6 +1627,61 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-tile--social .hp-ico { grid-column: 1; grid-row: 1; align-self: start; }
     .hp-tile--social .hp-tile__txt { grid-column: 1 / 3; grid-row: 2; max-width: 380px; }
     .hp-posts { grid-column: 3; grid-row: 1 / 3; gap: 16px; padding-top: 0; }
+  }
+
+  /* Téléphone : tuiles pleine largeur compactes. Icône et titre sur une ligne,
+     puis le sous-texte sur toute la largeur, puis l'illustration éventuelle. */
+  @media (max-width: 599px) {
+    .hp-tile--ads,
+    .hp-tile--orange,
+    .hp-tile--social {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-areas:
+        'ico title'
+        'text text'
+        'ill ill';
+      align-items: center;
+      column-gap: 14px;
+      row-gap: 0;
+      min-height: 0;
+    }
+    .hp-tile--ads .hp-tile__txt,
+    .hp-tile--orange .hp-tile__txt,
+    .hp-tile--social .hp-tile__txt { display: contents; }
+    .hp-tile--ads .hp-ico,
+    .hp-tile--orange .hp-ico,
+    .hp-tile--social .hp-ico {
+      grid-area: ico;
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+    }
+    .hp-tile--ads .hp-ico svg,
+    .hp-tile--orange .hp-ico svg,
+    .hp-tile--social .hp-ico svg { width: 24px; height: 24px; }
+    .hp-tile--ads h3,
+    .hp-tile--orange h3,
+    .hp-tile--social h3 {
+      grid-area: title;
+      font-size: 21px;
+    }
+    .hp-tile--ads p,
+    .hp-tile--orange p,
+    .hp-tile--social p {
+      grid-area: text;
+      max-width: none;
+      margin-top: 14px;
+    }
+    .hp-tile--ads .hp-ad {
+      grid-area: ill;
+      justify-self: center;
+      margin-top: 24px;
+    }
+    .hp-tile--social .hp-posts {
+      grid-area: ill;
+      padding-top: 28px;
+    }
   }
 
   .hp-post {
