@@ -525,8 +525,10 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
             <div class:list={['hp-m__ph', { 'is-framed': isFramed(m) }]} style={framing(m)}>
               <img src={`${base}/images/${m.img}.webp`} alt={m.name} width="671" height="822" loading="lazy" decoding="async" />
             </div>
-            <b class="hp-m__name">{m.name}</b>
-            <span class="hp-m__role">{m.role}</span>
+            <div class="hp-m__txt">
+              <b class="hp-m__name">{m.name}</b>
+              <span class="hp-m__role">{m.role}</span>
+            </div>
           </li>
         ))}
       </ul>
@@ -1483,7 +1485,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     box-shadow: none;
   }
 
-  .hp-tile--plum { background: var(--hp-plum); }
+  /* Prune plus foncé (davantage de --bg-deep) pour se détacher du fond de la page */
+  .hp-tile--plum { background: color-mix(in srgb, var(--woop-pink) 12%, var(--bg-deep)); }
   .hp-tile--plum p { color: var(--text-secondary); }
 
   .hp-tile--orange { background: var(--woop-orange); }
@@ -1491,6 +1494,45 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-tile--rose {
     background: linear-gradient(150deg, color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary)), var(--woop-pink));
+  }
+
+  /* Téléphone : Conseil en expérience client et Image de marque côte à côte, en version compacte */
+  @media (max-width: 599px) {
+    .hp-bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 12px;
+    }
+    .hp-tile--ads,
+    .hp-tile--orange,
+    .hp-tile--social { grid-column: span 2; }
+    .hp-tile--cx,
+    .hp-tile--plum {
+      min-height: 0;
+      gap: 16px;
+      padding: 18px 16px;
+      border-radius: 24px;
+    }
+    .hp-tile--cx h3,
+    .hp-tile--plum h3 {
+      font-size: 17px;
+      line-height: 1.15;
+      letter-spacing: 0;
+      hyphens: manual;
+    }
+    .hp-tile--cx p,
+    .hp-tile--plum p {
+      margin-top: 8px;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .hp-tile--cx .hp-ico,
+    .hp-tile--plum .hp-ico {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+    }
+    .hp-tile--cx .hp-ico svg,
+    .hp-tile--plum .hp-ico svg { width: 20px; height: 20px; }
   }
 
   /* Fausse annonce */
@@ -2294,6 +2336,33 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     transform-origin: var(--obj-pos, center);
   }
 
+  /* Nom et rôle : groupés seulement sur téléphone (sans effet sur la mise en page ailleurs) */
+  .hp-m__txt { display: contents; }
+
+  @media (max-width: 599px) {
+    .hp-team { gap: 12px; }
+    .hp-m {
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 22px;
+      text-align: left;
+    }
+    .hp-m__ph {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 0;
+      box-shadow: 0 0 0 3px var(--bg-elevated), 0 0 0 4.5px rgba(230, 43, 127, 0.55), 0 10px 24px rgba(230, 43, 127, 0.18);
+    }
+    .hp-m__txt {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+  }
+
   .hp-m__name {
     font-size: 22px;
     font-weight: 700;
@@ -2304,6 +2373,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     font-size: 14px;
     line-height: 1.45;
     color: var(--text-secondary);
+  }
+
+  @media (max-width: 599px) {
+    .hp-m__name { font-size: 18px; }
+    .hp-m__role { font-size: 13.5px; }
   }
 
   /* ===== 9. BANDEAU INTERMÉDIAIRE ===== */
@@ -2527,6 +2601,28 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     width: 100%;
     overflow: hidden;
     transition: max-height 250ms ease;
+  }
+
+  /* Téléphone : texte limité à 6 lignes en CSS (le texte complet reste dans le HTML),
+     cartes fermées de même hauteur (--tcard-h, calculée en JS sur la version tronquée).
+     Uniquement quand le carrousel est actif : sans JavaScript, tout le texte reste visible. */
+  @media (max-width: 599px) {
+    .hp-tcar.is-ready .hp-tcar__track { align-items: flex-start; }
+    .hp-tcar.is-ready .hp-tcard { min-height: var(--tcard-h, 0); }
+    .hp-tcar.is-ready .hp-tcard__paragraphs {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 6;
+      line-clamp: 6;
+      max-height: none !important;
+      overflow: hidden;
+      transition: none;
+    }
+    .hp-tcar.is-ready .hp-tcard.is-open .hp-tcard__paragraphs {
+      display: block;
+      -webkit-line-clamp: unset;
+      line-clamp: none;
+    }
   }
 
   .hp-tcard__paragraph {
@@ -2780,12 +2876,14 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     }
 
     function next() {
+      if (isMobile()) collapseAll();
       const max = getMaxIndex();
       currentIndex = currentIndex < max ? currentIndex + 1 : 0;
       applyTransform(true);
     }
 
     function prev() {
+      if (isMobile()) collapseAll();
       const max = getMaxIndex();
       currentIndex = currentIndex > 0 ? currentIndex - 1 : max;
       applyTransform(true);
@@ -2806,10 +2904,69 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       }
     }
 
+    // Téléphone (moins de 600 px) : troncature à 6 lignes en CSS, ouverture par classe.
+    const mobileMq = window.matchMedia('(max-width: 599px)');
+    const isMobile = () => mobileMq.matches;
+
+    function setToggle(btn: HTMLButtonElement | null, open: boolean) {
+      if (!btn) return;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? 'Voir moins' : 'Voir plus';
+    }
+
+    // Referme les avis ouverts (téléphone, au changement d'avis).
+    function collapseAll() {
+      getSlides().forEach((card) => {
+        if (!card.classList.contains('is-open')) return;
+        card.classList.remove('is-open');
+        setToggle(card.querySelector<HTMLButtonElement>('[data-testimonial-toggle]'), false);
+      });
+      setMobileCardHeight();
+    }
+
+    // Hauteur commune des cartes fermées, mesurée sur la version tronquée.
+    function setMobileCardHeight() {
+      const cards = getSlides();
+      track!.style.removeProperty('--tcard-h');
+      const open = cards.filter((c) => c.classList.contains('is-open'));
+      open.forEach((c) => c.classList.remove('is-open'));
+      const h = Math.max(...cards.map((c) => c.offsetHeight));
+      open.forEach((c) => c.classList.add('is-open'));
+      track!.style.setProperty('--tcard-h', `${h}px`);
+    }
+
+    function setupMobileTruncation(containers: HTMLElement[]) {
+      containers.forEach((c) => { c.style.maxHeight = ''; });
+      containers.forEach((c) => {
+        const card = c.closest<HTMLElement>('.hp-tcard');
+        if (!card) return;
+        const toggle = card.querySelector<HTMLButtonElement>('[data-testimonial-toggle]');
+        const open = card.classList.contains('is-open');
+        card.classList.remove('is-open');
+        const overflows = c.scrollHeight > c.clientHeight + 2;
+        if (toggle) toggle.hidden = !overflows;
+        const keepOpen = open && overflows;
+        card.classList.toggle('is-open', keepOpen);
+        setToggle(toggle, keepOpen);
+      });
+      setMobileCardHeight();
+    }
+
     // Hauteur fixe + bouton « Voir plus / Voir moins » par carte.
     function setupTruncation() {
       const containers = Array.from(carousel!.querySelectorAll<HTMLElement>('[data-testimonial-paragraphs]'));
       if (containers.length === 0) return;
+      if (isMobile()) {
+        setupMobileTruncation(containers);
+        return;
+      }
+      // Tablette et ordinateur : comportement d'origine.
+      track!.style.removeProperty('--tcard-h');
+      getSlides().forEach((card) => {
+        if (!card.classList.contains('is-open')) return;
+        card.classList.remove('is-open');
+        setToggle(card.querySelector<HTMLButtonElement>('[data-testimonial-toggle]'), false);
+      });
       containers.forEach((c) => { c.style.maxHeight = 'none'; });
       containers.forEach((c) => void c.offsetHeight);
       const heights = containers.map((c) => c.scrollHeight);
@@ -2841,6 +2998,12 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
           const card = btn.closest('.hp-tcard');
           const container = card?.querySelector<HTMLElement>('[data-testimonial-paragraphs]');
           if (!container) return;
+          if (isMobile()) {
+            const open = !card!.classList.contains('is-open');
+            card!.classList.toggle('is-open', open);
+            setToggle(btn, open);
+            return;
+          }
           const expanded = btn.getAttribute('aria-expanded') === 'true';
           if (expanded) {
             container.style.maxHeight = (container.dataset.maxHeight ?? '0') + 'px';
