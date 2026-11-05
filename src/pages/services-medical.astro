@@ -56,7 +56,6 @@ const framing = (m: TeamMember) =>
     ? `--obj-pos: ${m.objectPosition ?? 'center'}; --zoom: ${m.zoom ?? 1};`
     : `--fx: ${m.fx ?? '50%'}; --fy: ${m.fy ?? '30%'};`;
 const isFramed = (m: TeamMember) => m.objectPosition !== undefined || m.zoom !== undefined;
-const gauthier = team[0];
 
 // Parcours patient du hero (illustration animée)
 const journey = [
@@ -114,8 +113,15 @@ const profiles: {
 
 // 02 · Nos services. Comme sur l'accueil : si `href` est défini, toute la tuile devient un lien
 // (effet au survol + chevron). Aucune tuile n'a de lien pour l'instant.
+// Ordre de lecture = ordre de la grille. Formats :
+// - feat : bandeau dégradé, pleine largeur ;
+// - wide : 2 colonnes, en-tête et texte à gauche, illustration à droite ;
+// - tall : 1 colonne, haute sur 2 rangées sur ordinateur ;
+// - sq   : 1 colonne.
+// `step` : décalage d'apparition (data-reveal-step), recalculé dans l'ordre de lecture de chaque rangée.
 const services: {
-  key: 'cx' | 'acq' | 'brand' | 'web' | 'ord' | 'strat' | 'rep';
+  key: 'cx' | 'acq' | 'brand' | 'ord' | 'web' | 'strat' | 'rep';
+  shape: 'feat' | 'wide' | 'tall' | 'sq';
   title: string;
   text: string;
   badge?: string;
@@ -125,50 +131,57 @@ const services: {
 }[] = [
   {
     key: 'cx',
-    title: 'Expérience patient',
+    shape: 'feat',
+    title: 'Expérience et parcours patient',
     badge: 'Santé uniquement',
     text: `L'art de transformer chaque interaction (avant, pendant et après le rendez-vous) en une raison de revenir. Site, communications, parcours patient, fidélisation${NB}: on travaille tout ce qui se passe autour du soin.`,
     reveal: 'up',
   },
   {
     key: 'acq',
+    shape: 'wide',
     title: 'Acquisition de patients',
     text: 'Campagnes Google et Meta, ciblage local précis, pages de conversion. On va chercher les patients dans votre rayon, là où ils cherchent déjà.',
     reveal: 'up',
   },
   {
     key: 'brand',
+    shape: 'sq',
     title: 'Image de marque clinique',
     text: 'Logo, charte visuelle, ton de marque, système de design complet. Une identité qui justifie un positionnement premium et qui se distingue dans votre secteur.',
     reveal: 'up',
     step: '1',
   },
   {
-    key: 'web',
-    title: 'Site web et présence en ligne',
-    text: 'Sites de conversion pensés pour transformer un visiteur en rendez-vous. Présence soignée sur les réseaux sociaux avec un calendrier éditorial régulier. Le tout conforme aux meilleures pratiques web et optimisé pour Google.',
-    reveal: 'up',
-    step: '2',
-  },
-  {
     key: 'ord',
+    shape: 'tall',
     title: 'Connaissance des ordres professionnels',
     text: 'Marketing médical respectueux des règles encadrant votre profession. Pas de promesse abusive, des messages conçus dans le respect du code de déontologie de votre ordre. Une agence qui connaît vos limites.',
     reveal: 'up',
   },
   {
-    key: 'strat',
-    title: 'Stratégie et conseil',
-    text: "Audit, positionnement, plan d'action. Pour les directeurs de clinique qui veulent une vision claire avant de lancer leurs investissements marketing.",
+    key: 'web',
+    shape: 'wide',
+    title: 'Site web et présence en ligne',
+    text: 'Sites de conversion pensés pour transformer un visiteur en rendez-vous. Présence soignée sur les réseaux sociaux avec un calendrier éditorial régulier. Le tout conforme aux meilleures pratiques web et optimisé pour Google.',
     reveal: 'up',
     step: '1',
   },
   {
+    key: 'strat',
+    shape: 'sq',
+    title: 'Stratégie et conseil',
+    text: "Audit, positionnement, plan d'action. Pour les directeurs de clinique qui veulent une vision claire avant de lancer leurs investissements marketing.",
+    reveal: 'up',
+    step: '2',
+  },
+  {
     key: 'rep',
+    shape: 'sq',
     title: 'Gestion de la réputation en ligne',
     text: "Avis Google, réponses aux commentaires, suivi de votre image sur le web. On vous aide à construire et protéger la réputation de votre clinique, aujourd'hui votre actif le plus visible.",
     reveal: 'up',
-    step: '2',
+    step: '3',
   },
 ];
 
@@ -278,11 +291,14 @@ const steps = [
               )}
               {p.key === 'tech' && (
                 <div class="md-fc5">
-                  <div class="md-dv5"><span class="md-dv5__scr"><i></i><i></i><i></i></span><span class="md-dv5__arm"></span><span class="md-dv5__base"></span><span class="md-dv5__ring"></span></div>
-                  <div class="md-tgs5">
-                    <div class="md-tg5"><span class="md-dot5"></span><div><b></b><small></small></div></div>
-                    <div class="md-tg5 md-tg5--2"><span class="md-dot5"></span><div><b></b><small></small></div></div>
+                  <div class="md-fc5__head">
+                    <span class="md-fc5__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
+                    <b></b>
                   </div>
+                  <div class="md-fc5__ft"><span class="md-fc5__dot"></span><i></i></div>
+                  <div class="md-fc5__ft"><span class="md-fc5__dot"></span><i></i></div>
+                  <div class="md-fc5__ft"><span class="md-fc5__dot"></span><i></i></div>
+                  <span class="md-fc5__cert"><span class="md-fc5__av"></span>Praticien certifié</span>
                 </div>
               )}
               {p.key === 'pro' && (
@@ -300,11 +316,6 @@ const steps = [
             </div>
           </article>
         ))}
-      </div>
-
-      <div class="md-band" data-reveal="up">
-        <p>Vous vous êtes reconnu{NB}? <strong>On en parle 30 minutes, sans engagement.</strong></p>
-        <a class="cta cta--light" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
       </div>
 
       <a class="hp-teaser" href={`${base}/acquisition-client`} data-reveal="up">
@@ -327,81 +338,98 @@ const steps = [
       <div class="md-svs">
         {services.map((t) => {
           const Tag = t.href ? 'a' : 'article';
-          const feat = t.key === 'cx';
+          const feat = t.shape === 'feat';
           return (
             <Tag
               href={t.href}
-              class:list={['md-sv', feat ? 'md-sv--feat' : 'md-glass', { 'hp-tile--link': t.href }]}
+              class:list={['md-sv', `md-sv--${t.shape}`, `md-sv--${t.key}`, { 'md-glass': !feat, 'hp-tile--link': t.href }]}
               data-reveal={t.reveal}
               data-reveal-step={t.step}
             >
               {t.href && (
                 <span class="hp-tile__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg></span>
               )}
-              <div class="md-sv__txt">
-                <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true">
+              {feat ? (
+                <>
+                  <div class="md-sv__txt">
+                    <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true">
                   {t.key === 'cx' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>)}
                   {t.key === 'acq' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg>)}
-                  {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 7l3 3"/></svg>)}
+                  {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
                   {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>)}
                   {t.key === 'ord' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>)}
                   {t.key === 'strat' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>)}
                   {t.key === 'rep' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
                 </span>
-                {t.badge && <span class="md-hs">{t.badge}</span>}
-                {!feat && (
-                  <div class:list={['md-mui', `md-mui--${t.key}`]} aria-hidden="true">
-                    {t.key === 'acq' && (
-                      <>
-                        <div class="md-ad"><span class="md-ad__tag"></span><span class="md-ad__title"></span><span class="md-ad__ln"></span></div>
-                        <div class="md-ad__chips"><span>Google</span><span>Meta</span><span class="md-ad__pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span></div>
-                      </>
-                    )}
-                    {t.key === 'brand' && (
-                      <>
-                        <span class="md-lg"><i></i></span>
-                        <span class="md-pal"><span class="md-pal--o"></span><span class="md-pal--p"></span><span class="md-pal--b"></span></span>
-                        <span class="md-type"><i></i><i></i><i></i></span>
-                      </>
-                    )}
-                    {t.key === 'web' && (
-                      <>
-                        <div class="md-brw"><span></span><span></span><span></span></div>
-                        <div class="md-pg"><i class="md-pg__h"></i><i class="md-pg__t"></i><span class="md-pg__cta"></span></div>
-                        <div class="md-phn"><i></i><span></span></div>
-                      </>
-                    )}
-                    {t.key === 'ord' && (
-                      <>
-                        <div class="md-shd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
-                        <div class="md-sl"><b></b><small></small><small class="md-sl--sh"></small></div>
-                      </>
-                    )}
-                    {t.key === 'strat' && (
-                      <>
-                        <div class="md-road"><span class="md-road__d is-on"></span><i></i><span class="md-road__d is-on"></span><i class="is-dim"></i><span class="md-road__d"></span></div>
-                        <div class="md-rl"><i></i><i></i><i></i></div>
-                      </>
-                    )}
-                    {t.key === 'rep' && (
-                      <>
-                        <div class="md-rc"><span class="md-rc__av"></span><div><span class="md-rc__stars">★★★★★</span><i></i></div></div>
-                        <div class="md-rp"><i></i><i></i></div>
-                      </>
-                    )}
+                    {t.badge && <span class="md-hs">{t.badge}</span>}
+                    <h3>{t.title}</h3>
+                    <p>{t.text}</p>
                   </div>
-                )}
-                <h3>{t.title}</h3>
-                <p>{t.text}</p>
-              </div>
-              {feat && (
-                <div class="md-jy" aria-hidden="true">
-                  <div><b>Avant</b><i></i></div>
-                  <span class="md-jy__link"></span>
-                  <div class="is-on"><b>Pendant</b><i></i></div>
-                  <span class="md-jy__link"></span>
-                  <div><b>Après</b><i></i></div>
+                  <div class="md-jy" aria-hidden="true">
+                    <div><b>Avant</b><i></i></div>
+                    <span class="md-jy__link"></span>
+                    <div class="is-on"><b>Pendant</b><i></i></div>
+                    <span class="md-jy__link"></span>
+                    <div><b>Après</b><i></i></div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div class="md-sv__head">
+                    <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true">
+                  {t.key === 'cx' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>)}
+                  {t.key === 'acq' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg>)}
+                  {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
+                  {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>)}
+                  {t.key === 'ord' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>)}
+                  {t.key === 'strat' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>)}
+                  {t.key === 'rep' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
+                </span>
+                    <h3>{t.title}</h3>
+                  </div>
+                  <p class="md-sv__text">{t.text}</p>
+                  <div class:list={['md-mui', `md-mui--${t.key}`]} aria-hidden="true">
+                  {t.key === 'acq' && (
+                    <>
+                      <div class="md-ad"><span class="md-ad__tag"></span><span class="md-ad__title"></span><span class="md-ad__ln"></span></div>
+                      <div class="md-ad__chips"><span>Google</span><span>Meta</span><span class="md-ad__pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span></div>
+                    </>
+                  )}
+                  {t.key === 'brand' && (
+                    <>
+                      <span class="md-lg"><i></i></span>
+                      <span class="md-pal"><span class="md-pal--o"></span><span class="md-pal--p"></span><span class="md-pal--b"></span></span>
+                      <span class="md-type"><i></i><i></i><i></i></span>
+                    </>
+                  )}
+                  {t.key === 'web' && (
+                    <>
+                      <div class="md-brw"><span></span><span></span><span></span></div>
+                      <div class="md-pg"><i class="md-pg__h"></i><i class="md-pg__t"></i><span class="md-pg__cta"></span></div>
+                      <div class="md-phn"><i></i><span></span></div>
+                    </>
+                  )}
+                  {t.key === 'ord' && (
+                    <div class="md-doc">
+                      <span class="md-doc__title"></span>
+                      <i></i><i></i><i></i><i class="md-doc__sh"></i>
+                      <span class="md-seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8v18.4"/><path d="M10.4 2.8h3.2"/><path d="M9.2 6.6c1.4-.9 5.3-.8 5.3.8 0 1.5-5.4 1.3-5.4 3.2s5.4 1.6 5.4 3.4-5.1 1.5-5.1 3.1c0 .9 1.2 1.4 2.6 1.4"/><path d="M9.2 6.6c-.7.4-1.3.2-1.5-.4.4-.6 1.1-.7 1.5.4z" fill="currentColor"/></svg></span>
+                    </div>
+                  )}
+                  {t.key === 'strat' && (
+                    <>
+                      <div class="md-road"><span class="md-road__d is-on"></span><i></i><span class="md-road__d is-on"></span><i class="is-dim"></i><span class="md-road__d"></span></div>
+                      <div class="md-rl"><i></i><i></i><i></i></div>
+                    </>
+                  )}
+                  {t.key === 'rep' && (
+                    <>
+                      <div class="md-rc"><span class="md-rc__av"></span><div><span class="md-rc__stars">★★★★★</span><i></i></div></div>
+                      <div class="md-rp"><i></i><i></i></div>
+                    </>
+                  )}
                 </div>
+                </>
               )}
             </Tag>
           );
@@ -428,9 +456,7 @@ const steps = [
 
       <div class="md-gau md-glass">
         <div class="md-gau__ph" data-reveal="left">
-          <div class:list={['hp-m__ph', 'md-gau__photo', { 'is-framed': isFramed(gauthier) }]} style={framing(gauthier)}>
-            <img src={`${base}/images/${gauthier.img}.webp`} alt={gauthier.name} width="671" height="822" loading="lazy" decoding="async" />
-          </div>
+          <img class="md-gau__img" src={`${base}/images/gauthier.webp`} alt="Gauthier" width="671" height="822" loading="lazy" decoding="async" />
           <p class="md-gau__tag">Infirmier clinicien</p>
         </div>
         <div class="md-gau__txt" data-reveal="right" data-reveal-step="1">
@@ -1367,108 +1393,102 @@ const steps = [
   .md-fc2__lbl svg { width: 12px; height: 12px; }
   .md-fc2__lbl i { display: block; width: 58px; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 70%, transparent); }
 
+  /* Fiche technologie (Centre médico-esthétique) */
   .md-fc5 {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .md-dv5 {
     position: relative;
-    flex: none;
-    width: 110px;
-    height: 150px;
-  }
-
-  .md-dv5__scr {
-    position: absolute;
-    left: 18px;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 74px;
-    height: 58px;
-    padding: 10px;
-    border-radius: 12px;
-    background: var(--hp-light);
-    box-shadow: 0 14px 30px var(--hp-shadow);
-  }
-
-  .md-dv5__scr i { display: block; height: 6px; border-radius: 3px; background: var(--hp-skel-2); }
-  .md-dv5__scr i:first-child { width: 60%; background: var(--woop-gradient); }
-
-  .md-dv5__arm {
-    position: absolute;
-    left: 51px;
-    top: 56px;
-    width: 8px;
-    height: 52px;
-    border-radius: 4px;
-    background: var(--hp-light);
-  }
-
-  .md-dv5__base {
-    position: absolute;
-    left: 8px;
-    bottom: 0;
-    width: 94px;
-    height: 38px;
-    border-radius: 14px;
-    background: var(--woop-gradient);
-    box-shadow: 0 12px 26px rgba(230, 43, 127, 0.45);
-  }
-
-  .md-dv5__ring {
-    position: absolute;
-    right: -6px;
-    top: 22px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    box-shadow:
-      0 0 0 2px var(--hp-pinklight),
-      0 0 0 8px rgba(230, 43, 127, 0.25),
-      0 0 0 14px rgba(230, 43, 127, 0.1);
-    animation: md-pulse 2s infinite;
-  }
-
-  @keyframes md-pulse {
-    70% { transform: scale(1.25); opacity: 0.55; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  .md-tgs5 {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 250px;
+    padding: 16px 16px 26px;
+    border-radius: 18px;
+    background: var(--hp-light);
+    box-shadow: 0 18px 36px var(--hp-shadow);
   }
 
-  .md-tg5 {
+  .md-fc5__head {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 150px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: var(--hp-light);
-    box-shadow: 0 14px 30px var(--hp-shadow);
+    margin-bottom: 4px;
   }
 
-  .md-tg5--2 { margin-left: 24px; }
-
-  .md-tg5 div { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-  .md-tg5 b { display: block; width: 85%; height: 8px; border-radius: 4px; background: var(--hp-plum); }
-  .md-tg5 small { display: block; width: 60%; height: 6px; border-radius: 3px; background: var(--hp-skel); }
-
-  .md-dot5 {
+  .md-fc5__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: none;
-    width: 10px;
-    height: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--woop-gradient);
+    color: var(--hp-light);
+    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.35);
+  }
+
+  .md-fc5__ico svg { width: 18px; height: 18px; }
+
+  .md-fc5__head b { display: block; width: 112px; height: 10px; border-radius: 5px; background: var(--hp-plum); }
+
+  .md-fc5__ft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .md-fc5__dot {
+    flex: none;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background: var(--woop-gradient);
-    box-shadow: 0 0 0 4px var(--hp-blush);
+    box-shadow: 0 0 0 3px var(--hp-blush);
   }
+
+  .md-fc5__ft i { display: block; width: 80%; height: 6px; border-radius: 3px; background: var(--hp-skel); }
+  .md-fc5__ft:nth-child(3) i { width: 64%; }
+  .md-fc5__ft:nth-child(4) i { width: 72%; }
+
+  .md-fc5__cert {
+    position: absolute;
+    right: -18px;
+    bottom: -16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 5px;
+    border-radius: 999px;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: 0 12px 26px var(--hp-shadow);
+  }
+
+  .md-fc5__av {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+  }
+
+  .md-fc5__av::before,
+  .md-fc5__av::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    border-radius: 50%;
+    background: var(--hp-light);
+    transform: translateX(-50%);
+  }
+
+  .md-fc5__av::before { top: 5px; width: 8px; height: 8px; }
+  .md-fc5__av::after { bottom: -6px; width: 16px; height: 12px; }
 
   .md-fc4 {
     display: flex;
@@ -1542,36 +1562,6 @@ const steps = [
   .md-pbt svg { width: 14px; height: 14px; }
   .md-pbt i { display: block; width: 70px; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 70%, transparent); }
 
-  /* Bandeau « Vous vous êtes reconnu ? » : fond dégradé, texte foncé, bouton clair */
-  .md-band {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-    margin-top: 40px;
-    padding: 26px;
-    border-radius: 26px;
-    background: var(--hp-grad-band);
-  }
-
-  .md-band p {
-    font-size: 18px;
-    line-height: 1.45;
-    color: var(--hp-on-grad);
-  }
-
-  .md-band strong { font-weight: 700; }
-
-  @media (min-width: 821px) {
-    .md-band {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 26px 26px 26px 36px;
-    }
-  }
-
   /* Bandeau « Nouveau » (identique à l'accueil) */
   .hp-teaser {
     display: flex;
@@ -1627,27 +1617,39 @@ const steps = [
   .hp-teaser:hover .hp-go { transform: translateX(3px); }
 
   /* ===== 3. NOS SERVICES ===== */
+  /* Grille bento : 1 colonne sur téléphone, 2 sur tablette (600 à 1099 px), 3 sur ordinateur.
+     L'ordre du HTML est l'ordre de lecture ; sur ordinateur, chaque tuile est placée explicitement. */
   .md-svs {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 600px) {
     .md-svs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .md-sv--feat { grid-column: span 2; }
+    .md-sv--feat,
+    .md-sv--wide { grid-column: span 2; }
   }
 
   @media (min-width: 1100px) {
-    .md-svs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .md-sv--feat { grid-column: span 3; }
+    .md-svs {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .md-sv--cx { grid-column: 1 / -1; grid-row: 1; }
+    .md-sv--acq { grid-column: 1 / span 2; grid-row: 2; }
+    .md-sv--brand { grid-column: 3; grid-row: 2; }
+    .md-sv--ord { grid-column: 1; grid-row: 3 / span 2; }
+    .md-sv--web { grid-column: 2 / span 2; grid-row: 3; }
+    .md-sv--strat { grid-column: 2; grid-row: 4; }
+    .md-sv--rep { grid-column: 3; grid-row: 4; }
   }
 
   .md-sv {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 20px;
     padding: 28px 24px;
     border-radius: 26px;
     overflow: hidden;
@@ -1659,16 +1661,7 @@ const steps = [
     .md-sv { padding: 30px; }
   }
 
-  .md-sv__txt {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
   .md-sv h3 {
-    margin-top: 6px;
     font-size: 21px;
     font-weight: 700;
     line-height: 1.2;
@@ -1679,6 +1672,53 @@ const steps = [
     font-size: 15px;
     line-height: 1.6;
     color: var(--text-secondary);
+  }
+
+  /* Tuiles foncées : icône et titre sur la même ligne (le titre peut passer sur 2 lignes) */
+  .md-sv__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Illustration en bas de la tuile : Image de marque, Ordres, Réputation */
+  .md-sv--brand .md-mui,
+  .md-sv--ord .md-mui,
+  .md-sv--rep .md-mui { margin-top: auto; }
+
+  /* Stratégie : en-tête, illustration, puis texte */
+  .md-sv--strat .md-sv__text { order: 1; }
+
+  /* Tuiles larges (Acquisition, Site web) : en-tête et texte à gauche, illustration à droite,
+     centrés verticalement. À la verticale sur téléphone. */
+  @media (min-width: 600px) {
+    .md-sv--wide {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: 1fr auto auto 1fr;
+      grid-template-areas:
+        '. ill'
+        'head ill'
+        'text ill'
+        '. ill';
+      column-gap: 28px;
+      row-gap: 0;
+    }
+    .md-sv--wide .md-sv__head { grid-area: head; }
+    .md-sv--wide .md-sv__text { grid-area: text; margin-top: 16px; }
+    .md-sv--wide .md-mui {
+      grid-area: ill;
+      align-self: center;
+      height: 150px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .md-sv--wide { column-gap: 36px; }
+    .md-sv--wide .md-mui { height: 170px; }
+    /* Tuile haute (Ordres) : l'illustration en grand en bas */
+    .md-sv--tall .md-mui { height: 270px; }
+    .md-sv--tall .md-doc { zoom: 1.5; }
   }
 
   /* Tuile-lien (href défini) : survol, focus et chevron, comme sur l'accueil */
@@ -1733,23 +1773,40 @@ const steps = [
 
   .hp-tile--link:hover .md-xi { transform: rotate(-6deg) scale(1.06); }
 
-  /* Tuile vedette : Expérience patient, en dégradé, sur toute la largeur */
+  /* Tuile dégradée : Expérience et parcours patient, sur toute la largeur.
+     À l'horizontale dès la tablette : texte à gauche, étapes à droite. */
   .md-sv--feat {
     gap: 30px;
     background: var(--woop-gradient);
     box-shadow: 0 24px 60px rgba(230, 43, 127, 0.25);
   }
 
-  @media (min-width: 1100px) {
+  @media (min-width: 600px) {
     .md-sv--feat {
       flex-direction: row;
       align-items: center;
+      gap: 32px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .md-sv--feat {
       gap: 40px;
       padding: 40px;
     }
   }
 
+  .md-sv__txt {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+
   .md-sv--feat h3 {
+    margin-top: 6px;
     font-size: 26px;
     color: var(--text-primary);
   }
@@ -1781,21 +1838,27 @@ const steps = [
     text-transform: uppercase;
   }
 
-  /* Avant · Pendant · Après */
+  /* Avant · Pendant · Après : 3 étapes identiques (même taille, même alignement),
+     seul le fond de « Pendant » change. Empilées sur téléphone et tablette, en ligne sur ordinateur. */
   .md-jy {
     display: flex;
+    flex: none;
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
     width: 100%;
   }
 
-  @media (min-width: 640px) {
-    .md-jy { flex-direction: row; align-items: center; width: auto; }
+  @media (min-width: 600px) {
+    .md-jy { width: 150px; }
   }
 
   @media (min-width: 1100px) {
-    .md-jy { flex: none; }
+    .md-jy {
+      flex-direction: row;
+      align-items: center;
+      width: auto;
+    }
   }
 
   .md-jy div {
@@ -1808,7 +1871,7 @@ const steps = [
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 35%, transparent);
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 1100px) {
     .md-jy div { width: 130px; }
   }
 
@@ -1831,10 +1894,6 @@ const steps = [
     box-shadow: 0 14px 30px color-mix(in srgb, var(--bg-deep) 18%, transparent);
   }
 
-  @media (min-width: 640px) {
-    .md-jy div.is-on { transform: translateY(-10px); }
-  }
-
   .md-jy div.is-on b { color: var(--md-pink-deep); }
   .md-jy div.is-on i { background: var(--hp-blush); }
 
@@ -1846,20 +1905,19 @@ const steps = [
     background: color-mix(in srgb, var(--text-primary) 60%, transparent);
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 1100px) {
     .md-jy__link { display: block; }
   }
 
-  /* Mini-illustrations des tuiles */
+  /* Mini-illustrations des tuiles (même dessin, redimensionné selon le format de la tuile) */
   .md-mui {
     display: flex;
+    flex: none;
     flex-direction: column;
     justify-content: center;
     gap: 9px;
     align-self: stretch;
-    /* Même hauteur pour toutes les tuiles : les titres restent alignés sur une rangée */
     height: 126px;
-    margin: 8px 0 6px;
     padding: 14px;
     border-radius: 16px;
     background: color-mix(in srgb, var(--text-primary) 4%, transparent);
@@ -1998,33 +2056,56 @@ const steps = [
   .md-phn i { display: block; height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 40%, transparent); }
   .md-phn span { display: block; height: 18px; border-radius: 6px; background: var(--woop-gradient); }
 
-  /* Ordres professionnels : écusson */
+  /* Ordres professionnels : code de déontologie avec un sceau (bâton d'Asclépios) */
   .md-mui--ord {
-    flex-direction: row;
     align-items: center;
-    gap: 16px;
     background: rgba(230, 43, 127, 0.08);
     box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.3);
   }
 
-  .md-shd {
+  .md-doc {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 150px;
+    padding: 14px 14px 16px;
+    border-radius: 12px;
+    background: var(--hp-light);
+    box-shadow: 0 14px 30px var(--hp-shadow);
+    transform: rotate(-3deg);
+  }
+
+  .md-doc__title {
+    display: block;
+    width: 62%;
+    height: 9px;
+    margin-bottom: 3px;
+    border-radius: 5px;
+    background: var(--hp-plum);
+  }
+
+  .md-doc i { display: block; height: 5px; border-radius: 3px; background: var(--hp-skel); }
+  .md-doc i:nth-of-type(2) { width: 88%; }
+  .md-doc i.md-doc__sh { width: 56%; }
+
+  .md-seal {
+    position: absolute;
+    right: -18px;
+    bottom: -14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: none;
-    width: 62px;
-    height: 70px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
     background: var(--woop-gradient);
     color: var(--hp-light);
-    clip-path: path('M31 0 L62 12 V36 C62 54 48 66 31 70 C14 66 0 54 0 36 V12 Z');
+    box-shadow: 0 0 0 3px var(--hp-light), 0 10px 22px rgba(230, 43, 127, 0.45);
+    transform: rotate(3deg);
   }
 
-  .md-shd svg { width: 30px; height: 30px; }
-
-  .md-sl { display: flex; flex: 1; flex-direction: column; gap: 7px; }
-  .md-sl b { display: block; width: 60%; height: 10px; border-radius: 5px; background: var(--text-primary); }
-  .md-sl small { display: block; width: 85%; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 28%, transparent); }
-  .md-sl small.md-sl--sh { width: 55%; }
+  .md-seal svg { width: 28px; height: 28px; }
 
   /* Stratégie : feuille de route */
   .md-mui--strat {
@@ -2136,63 +2217,74 @@ const steps = [
     border-radius: 30px;
   }
 
-  @media (min-width: 900px) {
-    .md-gau { grid-template-columns: 360px minmax(0, 1fr); }
-  }
-
-  .md-gau__ph {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 26px;
-    min-height: 320px;
-    padding: 40px 20px;
-    background: linear-gradient(160deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-orange) 40%, var(--woop-pink));
-  }
-
-  @media (min-width: 900px) {
-    .md-gau__ph { min-height: 480px; }
-  }
-
-  /* Photo ronde : même rendu et même cadrage que les photos de l'équipe sur l'accueil */
-  .hp-m__ph {
-    position: relative;
-    overflow: hidden;
-    flex: none;
-    width: 168px;
-    height: 168px;
-    border-radius: 50%;
-    background: var(--woop-gradient);
+  @media (min-width: 768px) {
+    .md-gau { grid-template-columns: 300px minmax(0, 1fr); }
   }
 
   @media (min-width: 1024px) {
-    .hp-m__ph { width: 200px; height: 200px; }
+    .md-gau { grid-template-columns: 360px minmax(0, 1fr); }
   }
 
-  .md-gau__photo {
-    box-shadow: 0 0 0 4px var(--text-primary), 0 24px 50px color-mix(in srgb, var(--bg-deep) 35%, transparent);
+  /* Portrait de Gauthier : photo non détourée (fond dégradé dans l'image), qui remplit tout le panneau.
+     Téléphone et tablette : panneau au-dessus, carré (420 px de haut au plus). */
+  .md-gau__ph {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    max-height: 420px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-orange) 40%, var(--woop-pink));
   }
 
-  .hp-m__ph img,
-  .hp-avs img {
+  .md-gau__img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
+    max-width: none;
     object-fit: cover;
-    object-position: 50% 0;
-    transform: scale(1.55);
-    transform-origin: var(--fx, 50%) var(--fy, 30%);
+    /* Visage dans le tiers supérieur du panneau carré */
+    object-position: 51% 60%;
   }
 
-  .hp-m__ph.is-framed img,
-  .hp-avs .is-framed img {
-    object-position: var(--obj-pos, center);
-    transform: scale(var(--zoom, 1));
-    transform-origin: var(--obj-pos, center);
+  /* Tablette : panneau plus large que haut, recadrage plus haut pour garder la tête entière */
+  @media (min-width: 600px) and (max-width: 767px) {
+    .md-gau__img { object-position: 51% 36%; }
+  }
+
+  /* À partir de 768 px : panneau à gauche, sur toute la hauteur du bloc. Le panneau étant plus
+     étroit que la photo, cover la cadre en hauteur ; un léger agrandissement ancré en bas
+     remonte le visage dans le tiers supérieur. */
+  @media (min-width: 768px) {
+    .md-gau__ph {
+      aspect-ratio: auto;
+      max-height: none;
+      min-height: 480px;
+    }
+    .md-gau__img {
+      object-position: 51% 100%;
+      transform: scale(1.15);
+      transform-origin: 51% 100%;
+    }
+  }
+
+  /* Léger voile sombre, uniquement derrière la pastille */
+  .md-gau__ph::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40%;
+    background: radial-gradient(70% 60% at 50% 100%, color-mix(in srgb, var(--bg-deep) 50%, transparent), transparent 75%);
+    pointer-events: none;
   }
 
   .md-gau__tag {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    z-index: 1;
+    transform: translateX(-50%);
     padding: 12px 20px;
     border-radius: 18px;
     background: color-mix(in srgb, var(--bg-deep) 82%, transparent);
@@ -2201,6 +2293,7 @@ const steps = [
     font-size: 16px;
     font-weight: 700;
     line-height: 1.3;
+    white-space: nowrap;
     color: var(--text-primary);
   }
 
@@ -2370,6 +2463,21 @@ const steps = [
 
   .hp-avs > span:first-child { margin-left: 0; }
 
+  .hp-avs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0;
+    transform: scale(1.55);
+    transform-origin: var(--fx, 50%) var(--fy, 30%);
+  }
+
+  .hp-avs .is-framed img {
+    object-position: var(--obj-pos, center);
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--obj-pos, center);
+  }
+
   .hp-avs--final {
     justify-content: center;
     margin-bottom: 26px;
@@ -2464,7 +2572,6 @@ const steps = [
     .md-dev { animation: none; }
     .md-xf,
     .md-flow__link { transition: none; }
-    .md-dv5__ring { animation: none; }
 
     .cta,
     .md-pr,
