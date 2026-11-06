@@ -17,6 +17,19 @@ const sortedPosts = allPosts.sort(
 const featured = sortedPosts[0];
 const others = sortedPosts.slice(1);
 
+// « Derniers articles » : pagination dans la page. Tous les articles restent dans le HTML
+// (lus par Google et visibles sans JavaScript) ; le script n'affiche que ceux de la page active.
+const PER_PAGE = 6;
+const pageCount = Math.ceil(others.length / PER_PAGE);
+
+// Icônes des pôles : mêmes tracés que sur les pages de services (pouls et palette des tuiles
+// de la page Santé, deux personnes du badge de la page RH).
+const categoryIcons: Record<CategoryKey, string> = {
+  sante: '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  recrutement: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.2 14.6c2.6.1 4.3 2 4.8 4.9"/>',
+  'strategie-marque': '<path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/>',
+};
+
 const categoryEntries: { key: CategoryKey; label: string; description: string; href: string }[] = [
   { key: 'sante', label: categoryLabels.sante, description: categoryDescriptions.sante, href: `${base}/blog/sante/` },
   { key: 'recrutement', label: categoryLabels.recrutement, description: categoryDescriptions.recrutement, href: `${base}/blog/recrutement/` },
@@ -47,7 +60,12 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
       <div class="blog-categories__grid">
         {categoryEntries.map((entry) => (
           <a href={entry.href} class:list={['blog-category-card', `blog-category-card--${entry.key}`]}>
-            <h2 class="blog-category-card__title">{entry.label}</h2>
+            <div class="blog-category-card__head">
+              <span class="blog-category-card__ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={categoryIcons[entry.key]} />
+              </span>
+              <h2 class="blog-category-card__title">{entry.label}</h2>
+            </div>
             <p class="blog-category-card__text">{entry.description}</p>
             <span class="blog-category-card__link">
               Découvrir les articles
@@ -73,12 +91,29 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   {others.length > 0 && (
     <section class="blog-latest">
       <div class="container">
-        <span class="kicker">Derniers articles</span>
-        <div class="blog-latest__grid">
+        <span class="kicker blog-latest__title" id="derniers-articles" tabindex="-1">Derniers articles</span>
+        <div class="blog-latest__grid" data-pager-grid data-per-page={PER_PAGE}>
           {others.map((post) => (
             <ArticleCard post={post} showCategory={true} />
           ))}
         </div>
+        {pageCount > 1 && (
+          <nav class="blog-pager" aria-label="Pagination des articles" data-pager hidden>
+            <button type="button" class="blog-pager__btn blog-pager__btn--arrow" data-pager-prev aria-label="Page précédente">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+            </button>
+            <ol class="blog-pager__list">
+              {Array.from({ length: pageCount }, (_, i) => (
+                <li>
+                  <button type="button" class="blog-pager__btn" data-pager-page={i + 1} aria-label={`Page ${i + 1}`} aria-current={i === 0 ? 'page' : undefined}>{i + 1}</button>
+                </li>
+              ))}
+            </ol>
+            <button type="button" class="blog-pager__btn blog-pager__btn--arrow" data-pager-next aria-label="Page suivante">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+            </button>
+          </nav>
+        )}
       </div>
     </section>
   )}
@@ -174,11 +209,13 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     margin-top: 24px;
   }
 
+  /* 3 colonnes seulement quand l'icône et le titre tiennent côte à côte dans chaque carte */
   @media (min-width: 768px) {
-    .blog-categories__grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
+    .blog-categories__grid { gap: 20px; }
+  }
+
+  @media (min-width: 1024px) {
+    .blog-categories__grid { grid-template-columns: repeat(3, 1fr); }
   }
 
   .blog-category-card {
@@ -211,7 +248,32 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     transform: translateY(-2px);
   }
 
+  /* Icône et titre du pôle sur la même ligne (même sur mobile : le titre peut passer sur 2 lignes) */
+  .blog-category-card__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  /* Même carré en dégradé, même taille et même trait que les icônes des tuiles de la page Santé */
+  .blog-category-card__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+  }
+
+  .blog-category-card__ico svg { width: 26px; height: 26px; }
+
   .blog-category-card__title {
+    min-width: 0;
     font-family: var(--font-display);
     text-transform: uppercase;
     font-size: 24px;
@@ -290,6 +352,79 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     }
   }
 
+  /* Cible du défilement au changement de page (sous l'en-tête fixe) */
+  .blog-latest__title { scroll-margin-top: 110px; }
+  .blog-latest__title:focus { outline: none; }
+
+  /* Pagination : cartes hors de la page active masquées par le script */
+  .blog-latest__grid :global(.article-card[hidden]) { display: none; }
+
+  .blog-pager[hidden] { display: none; }
+
+  .blog-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+  }
+
+  .blog-pager__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Pastilles rondes ; page active en dégradé WOOP, chiffre en --bg-deep (contraste hybride) */
+  .blog-pager__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--bg-card);
+    box-shadow: inset 0 0 0 1px var(--border-subtle);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition: box-shadow 200ms ease, background 200ms ease, transform 200ms ease;
+  }
+
+  .blog-pager__btn svg { width: 16px; height: 16px; }
+
+  .blog-pager__btn:hover:not(:disabled):not([aria-current='page']) {
+    box-shadow: inset 0 0 0 1px var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .blog-pager__btn:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .blog-pager__btn[aria-current='page'] {
+    background: var(--woop-gradient);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+    color: var(--bg-deep);
+    cursor: default;
+  }
+
+  .blog-pager__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
   /* ===== État vide ===== */
   .blog-empty-section {
     padding: 32px 0 96px;
@@ -319,5 +454,59 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     .blog-category-card:hover .blog-category-card__link {
       transform: none;
     }
+
+    .blog-pager__btn { transition: none; }
+    .blog-pager__btn:hover:not(:disabled):not([aria-current='page']) { transform: none; }
   }
 </style>
+
+<script>
+  // Pagination des « Derniers articles » : tous les articles sont dans le HTML ; on n'affiche
+  // que ceux de la page active. Sans JavaScript, tout reste visible et la navigation est cachée.
+  (function () {
+    const grid = document.querySelector<HTMLElement>('[data-pager-grid]');
+    const nav = document.querySelector<HTMLElement>('[data-pager]');
+    if (!grid || !nav) return;
+    const cards = Array.from(grid.children) as HTMLElement[];
+    const perPage = Number(grid.dataset.perPage) || 6;
+    const pageCount = Math.ceil(cards.length / perPage);
+    if (pageCount < 2) return;
+
+    const title = document.getElementById('derniers-articles');
+    const prev = nav.querySelector<HTMLButtonElement>('[data-pager-prev]');
+    const next = nav.querySelector<HTMLButtonElement>('[data-pager-next]');
+    const pages = Array.from(nav.querySelectorAll<HTMLButtonElement>('[data-pager-page]'));
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let current = 1;
+
+    const render = () => {
+      cards.forEach((card, i) => { card.hidden = Math.floor(i / perPage) + 1 !== current; });
+      pages.forEach((b) => {
+        if (Number(b.dataset.pagerPage) === current) b.setAttribute('aria-current', 'page');
+        else b.removeAttribute('aria-current');
+      });
+      if (prev) prev.disabled = current === 1;
+      if (next) next.disabled = current === pageCount;
+    };
+
+    const goTo = (n: number) => {
+      const target = Math.min(Math.max(n, 1), pageCount);
+      if (target === current) return;
+      current = target;
+      render();
+      if (title) {
+        // Focus sur le titre de la section (lecteurs d'écran, clavier), puis défilement doux
+        // (instantané avec prefers-reduced-motion)
+        title.focus({ preventScroll: true });
+        title.scrollIntoView({ behavior: reduceMotion.matches ? 'instant' : 'smooth', block: 'start' });
+      }
+    };
+
+    pages.forEach((b) => b.addEventListener('click', () => goTo(Number(b.dataset.pagerPage))));
+    prev?.addEventListener('click', () => goTo(current - 1));
+    next?.addEventListener('click', () => goTo(current + 1));
+
+    nav.hidden = false;
+    render();
+  })();
+</script>

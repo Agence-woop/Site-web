@@ -169,32 +169,20 @@ const dateFormatted = new Intl.DateTimeFormat('fr-CA', {
     opacity: 0.6;
   }
 
-  /* ===== Variant : featured (grande carte pleine largeur) ===== */
+  /* ===== Variant : featured (grande carte « À la une ») =====
+   * Image en 16:9, comme les images d'articles (1600 × 900), donc jamais rognée.
+   * Desktop : image à gauche sur 55 % de la largeur, texte à droite centré verticalement ;
+   * la hauteur de la carte suit celle de l'image. Tablette et mobile : image au-dessus du texte. */
   .article-card--featured {
-    padding: 24px;
-    gap: 24px;
+    padding: 20px;
+    gap: 22px;
+  }
+
+  .article-card--featured .article-card__media {
+    aspect-ratio: 16 / 9;
   }
 
   @media (min-width: 768px) {
-    .article-card--featured {
-      flex-direction: row;
-      align-items: stretch;
-      padding: 28px;
-      gap: 32px;
-    }
-
-    .article-card--featured .article-card__media {
-      flex: 1;
-      aspect-ratio: 4 / 3;
-      max-width: 55%;
-    }
-
-    .article-card--featured .article-card__body {
-      flex: 1;
-      justify-content: center;
-      gap: 14px;
-    }
-
     .article-card--featured .article-card__title {
       font-size: 24px;
       line-height: 1.2;
@@ -202,17 +190,42 @@ const dateFormatted = new Intl.DateTimeFormat('fr-CA', {
 
     .article-card--featured .article-card__resume {
       font-size: 15px;
-      -webkit-line-clamp: 4;
     }
   }
 
   @media (min-width: 1024px) {
+    .article-card--featured {
+      flex-direction: row;
+      align-items: center;
+      padding: 22px;
+      gap: 36px;
+    }
+
+    .article-card--featured .article-card__media {
+      flex: 0 0 55%;
+      max-width: 55%;
+    }
+
+    .article-card--featured .article-card__body {
+      flex: 1 1 0;
+      justify-content: center;
+      gap: 12px;
+      padding-right: 14px;
+    }
+
+    .article-card--featured .article-card__resume {
+      -webkit-line-clamp: 3;
+    }
+  }
+
+  @media (min-width: 1280px) {
     .article-card--featured .article-card__title {
       font-size: 30px;
     }
 
     .article-card--featured .article-card__resume {
       font-size: 16px;
+      -webkit-line-clamp: 4;
     }
   }
 
