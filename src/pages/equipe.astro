@@ -26,8 +26,9 @@ const jsonLd = [
         breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
       },
       {
-        // Même @id et même type que sur l'accueil ; téléphone, adresse et sameAs restent sur l'accueil
-        '@type': 'ProfessionalService',
+        // Même @id que sur l'accueil (qui garde le type ProfessionalService avec téléphone, adresse et
+        // sameAs). Ici, simple Organization : ProfessionalService exigerait ces coordonnées.
+        '@type': 'Organization',
         '@id': ORG_ID,
         name: 'Agence WOOP',
         url: `${SITE_URL}/`,
