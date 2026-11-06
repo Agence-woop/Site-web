@@ -42,14 +42,96 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   ogImage="/images/og-image.jpg"
 >
 
-  <!-- Bloc 1 : intro -->
+  <!-- Bloc 1 : intro (texte à gauche, illustration « un article, partout » à droite dès 1100 px) -->
   <section class="blog-intro">
-    <div class="container">
-      <span class="blog-intro__kicker">Le blog WOOP</span>
-      <h1 class="blog-intro__title">Des analyses du terrain.</h1>
-      <p class="blog-intro__tagline">
-        Des perspectives concr&egrave;tes sur le marketing en sant&eacute; et en recrutement, pens&eacute;es par des praticiens du terrain.
-      </p>
+    <div class="container blog-intro__grid">
+      <div class="blog-intro__text">
+        <span class="blog-intro__kicker">Le blog WOOP</span>
+        <h1 class="blog-intro__title">Nos analyses <span class="gradient-accent">du terrain</span>.</h1>
+        <p class="blog-intro__tagline">
+          Des perspectives concr&egrave;tes sur le marketing en sant&eacute; et en recrutement, pens&eacute;es par des praticiens du terrain.
+        </p>
+      </div>
+
+      <!-- Illustration décorative : un ordinateur et un téléphone affichent le même article -->
+      <div class="bh" aria-hidden="true">
+        <div class="bh__stage">
+          <div class="bh__grid"></div>
+          <div class="bh__glow"></div>
+
+          <!-- Ordinateur portable, incliné en perspective -->
+          <div class="bh-lap">
+            <div class="bh-lap__screen">
+              <div class="bh-lap__page">
+                <span class="bh-pill"></span>
+                <span class="bh-bar bh-bar--title"></span>
+                <span class="bh-bar bh-bar--title bh-bar--short"></span>
+                <div class="bh-img">
+                  <svg viewBox="0 0 320 120" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="bh-curve" x1="0" y1="0" x2="1" y2="0">
+                        <stop class="bh-stop-a" offset="0" />
+                        <stop class="bh-stop-b" offset="1" />
+                      </linearGradient>
+                    </defs>
+                    <path class="bh-img__line" d="M24 84C52 84 60 40 92 40S128 76 156 76" />
+                    <path class="bh-img__line bh-img__line--dash" d="M156 76C184 76 196 86 220 86" />
+                    <path class="bh-img__line" d="M220 86C248 86 262 44 296 44" />
+                    <circle class="bh-img__dot" cx="24" cy="84" r="6" />
+                    <circle class="bh-img__dot" cx="92" cy="40" r="6" />
+                    <circle class="bh-img__dot bh-img__dot--hollow" cx="156" cy="76" r="6" />
+                    <circle class="bh-img__dot bh-img__dot--hollow" cx="220" cy="86" r="6" />
+                    <circle class="bh-img__dot" cx="296" cy="44" r="6" />
+                  </svg>
+                </div>
+                <span class="bh-bar bh-bar--text"></span>
+                <span class="bh-bar bh-bar--text"></span>
+                <span class="bh-bar bh-bar--text"></span>
+                <span class="bh-bar bh-bar--text bh-bar--w80"></span>
+                <span class="bh-bar bh-bar--text bh-bar--w60"></span>
+              </div>
+            </div>
+            <div class="bh-lap__base"></div>
+          </div>
+
+          <!-- Téléphone, même article en version mobile -->
+          <div class="bh-phone">
+            <div class="bh-phone__screen">
+              <span class="bh-phone__isl"></span>
+              <span class="bh-phone__prog"><i></i></span>
+              <div class="bh-phone__card">
+                <div class="bh-img bh-img--sm">
+                  <svg viewBox="0 0 120 64" preserveAspectRatio="none">
+                    <path class="bh-img__line" d="M10 46C22 46 26 22 40 22S56 40 66 40" />
+                    <path class="bh-img__line bh-img__line--dash" d="M66 40C78 40 84 46 92 46" />
+                    <path class="bh-img__line" d="M92 46C100 46 104 26 112 26" />
+                    <circle class="bh-img__dot" cx="10" cy="46" r="4" />
+                    <circle class="bh-img__dot" cx="40" cy="22" r="4" />
+                    <circle class="bh-img__dot bh-img__dot--hollow" cx="66" cy="40" r="4" />
+                    <circle class="bh-img__dot" cx="112" cy="26" r="4" />
+                  </svg>
+                </div>
+                <span class="bh-bar bh-bar--title"></span>
+                <span class="bh-bar bh-bar--title bh-bar--short"></span>
+                <span class="bh-bar bh-bar--text"></span>
+                <span class="bh-bar bh-bar--text"></span>
+                <span class="bh-bar bh-bar--text bh-bar--w80"></span>
+                <span class="bh-bar bh-bar--text bh-bar--w60"></span>
+              </div>
+              <span class="bh-phone__home"></span>
+            </div>
+          </div>
+
+          <!-- Étiquettes flottantes -->
+          <div class="bh-float bh-float--time">
+            <span class="bh-float__ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></svg>
+            </span>
+            <b>6 min de lecture</b>
+          </div>
+          <span class="bh-tag">Santé &amp; Médical</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -162,10 +244,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     font-size: 40px;
     line-height: 1;
     margin-bottom: 16px;
-    background: var(--woop-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-primary);
     max-width: 900px;
   }
 
@@ -191,6 +270,338 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
 
   @media (min-width: 1024px) {
     .blog-intro__tagline { font-size: 20px; }
+  }
+
+  /* Hero : 2 colonnes dès 1100 px ; illustration sous le texte entre 768 et 1099 px ; masquée en dessous */
+  .blog-intro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: 40px;
+  }
+
+  .blog-intro__text { min-width: 0; }
+
+  @media (min-width: 1100px) {
+    .blog-intro__grid {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 48px;
+    }
+  }
+
+  /* ===== Illustration « un article, partout » =====
+     Scène de 560 × 440 px mise à l'échelle selon la largeur (même principe que l'accueil). */
+  .bh {
+    --bh-scale: 0.72;
+    display: none;
+    position: relative;
+    width: calc(560px * var(--bh-scale));
+    height: calc(440px * var(--bh-scale));
+    justify-self: center;
+  }
+
+  @media (min-width: 768px) { .bh { display: block; } }
+  @media (min-width: 1100px) { .bh { --bh-scale: 0.86; justify-self: end; } }
+  @media (min-width: 1280px) { .bh { --bh-scale: 1; } }
+
+  .bh__stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 560px;
+    height: 440px;
+    transform: scale(var(--bh-scale));
+    transform-origin: top left;
+  }
+
+  .bh__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--text-primary) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--text-primary) 6%, transparent) 1px, transparent 1px);
+    background-size: 40px 40px;
+    -webkit-mask: radial-gradient(circle at 50% 50%, var(--bg-deep) 10%, transparent 65%);
+    mask: radial-gradient(circle at 50% 50%, var(--bg-deep) 10%, transparent 65%);
+  }
+
+  .bh__glow {
+    position: absolute;
+    left: 90px;
+    top: 10px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 43, 127, 0.34), rgba(250, 98, 68, 0.12) 45%, transparent 70%);
+    filter: blur(10px);
+  }
+
+  /* Ordinateur : cadre sombre fin (comme le téléphone de l'accueil), écran blanc, socle */
+  .bh-lap {
+    position: absolute;
+    left: 20px;
+    top: 38px;
+    width: 400px;
+    transform: perspective(1400px) rotateY(16deg) rotateX(6deg) rotate(-3deg);
+    transform-origin: 50% 60%;
+    filter: drop-shadow(0 40px 40px rgba(10, 10, 15, 0.55));
+  }
+
+  .bh-lap__screen {
+    padding: 10px;
+    border-radius: 18px 18px 6px 6px;
+    background: var(--bg-deep);
+    border: 2px solid rgba(230, 43, 127, 0.25);
+    box-shadow: 0 0 80px rgba(230, 43, 127, 0.22);
+  }
+
+  .bh-lap__page {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    height: 262px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    background: var(--text-primary);
+    overflow: hidden;
+  }
+
+  .bh-lap__base {
+    position: relative;
+    width: 456px;
+    height: 14px;
+    margin-left: -28px;
+    border-radius: 3px 3px 14px 14px;
+    background: linear-gradient(color-mix(in srgb, var(--text-primary) 22%, var(--bg-elevated)), var(--bg-elevated));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text-primary) 30%, transparent);
+  }
+
+  .bh-lap__base::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 70px;
+    height: 5px;
+    margin-left: -35px;
+    border-radius: 0 0 6px 6px;
+    background: color-mix(in srgb, var(--bg-deep) 70%, transparent);
+  }
+
+  /* Barres de gabarit de la page d'article */
+  .bh-pill {
+    flex: none;
+    width: 74px;
+    height: 12px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+  }
+
+  .bh-bar {
+    display: block;
+    flex: none;
+    height: 8px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--bg-deep) 18%, var(--text-primary));
+  }
+
+  .bh-bar--title {
+    width: 88%;
+    height: 13px;
+    border-radius: 6px;
+    background: var(--bg-deep);
+  }
+
+  .bh-bar--short { width: 56%; }
+  .bh-bar--w80 { width: 80%; }
+  .bh-bar--w60 { width: 60%; }
+
+  /* Image d'article : rectangle sombre traversé d'une courbe en dégradé, une partie en pointillés */
+  .bh-img {
+    flex: none;
+    height: 80px;
+    margin: 4px 0;
+    border-radius: 8px;
+    background: var(--bg-deep);
+    overflow: hidden;
+  }
+
+  .bh-img svg { display: block; width: 100%; height: 100%; }
+
+  .bh-img__line {
+    fill: none;
+    stroke: url(#bh-curve);
+    stroke-width: 4;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .bh-img__line--dash {
+    stroke: color-mix(in srgb, var(--text-primary) 75%, transparent);
+    stroke-width: 2.5;
+    stroke-dasharray: 5 6;
+  }
+
+  .bh-stop-a { stop-color: var(--woop-pink); }
+  .bh-stop-b { stop-color: var(--woop-orange); }
+
+  .bh-img__dot { fill: var(--woop-pink); stroke: var(--text-primary); stroke-width: 2; }
+  .bh-img__dot--hollow { fill: var(--bg-deep); }
+
+  /* Téléphone devant, en bas à droite (cadre, encoche et ombre comme sur l'accueil) */
+  .bh-phone {
+    position: absolute;
+    right: 34px;
+    top: 128px;
+    z-index: 2;
+    width: 156px;
+    height: 300px;
+    padding: 6px;
+    border-radius: 30px;
+    background: var(--bg-deep);
+    border: 2px solid rgba(230, 43, 127, 0.25);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent),
+      0 0 70px rgba(230, 43, 127, 0.25);
+    filter: drop-shadow(0 34px 34px rgba(10, 10, 15, 0.6));
+    animation: bh-float-phone 7s ease-in-out infinite;
+  }
+
+  .bh-phone__screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 30px 8px 8px;
+    border-radius: 24px;
+    background: var(--bg-elevated);
+    overflow: hidden;
+  }
+
+  .bh-phone__isl {
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    width: 46px;
+    height: 13px;
+    margin-left: -23px;
+    border-radius: 7px;
+    background: var(--bg-deep);
+  }
+
+  /* Barre de progression de lecture, en haut de l'écran */
+  .bh-phone__prog {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 4px;
+    background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  }
+
+  .bh-phone__prog i {
+    display: block;
+    height: 100%;
+    background: var(--woop-gradient);
+    transform-origin: left;
+    animation: bh-read 6s ease-in-out infinite;
+  }
+
+  .bh-phone__card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 9px;
+    border-radius: 14px;
+    background: var(--text-primary);
+  }
+
+  .bh-phone__card .bh-bar { height: 6px; }
+  .bh-phone__card .bh-bar--title { height: 9px; }
+  .bh-img--sm { height: 64px; margin: 0 0 4px; border-radius: 7px; }
+
+  .bh-phone__home {
+    display: block;
+    flex: none;
+    width: 56px;
+    height: 3px;
+    margin: auto auto 2px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--text-primary) 55%, transparent);
+  }
+
+  /* Étiquettes : petite carte vitrée (comme l'accueil) et pastille en dégradé */
+  .bh-float {
+    position: absolute;
+    left: 0;
+    top: 300px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: max-content;
+    padding: 12px 18px 12px 12px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 14%, transparent),
+      0 24px 50px color-mix(in srgb, var(--bg-deep) 55%, transparent);
+    animation: bh-float-tag 8s ease-in-out infinite;
+    animation-delay: -2s;
+  }
+
+  .bh-float b { font-size: 14px; line-height: 1.3; color: var(--text-primary); }
+
+  .bh-float__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    box-shadow: 0 8px 20px rgba(230, 43, 127, 0.45);
+  }
+
+  .bh-float__ico svg { width: 19px; height: 19px; }
+
+  /* Pastille sur dégradé : petit texte en --bg-deep (contraste hybride) */
+  .bh-tag {
+    position: absolute;
+    right: 0;
+    top: 66px;
+    z-index: 3;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    box-shadow: 0 14px 34px rgba(230, 43, 127, 0.45);
+    color: var(--bg-deep);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    animation: bh-float-tag 8s ease-in-out infinite;
+    animation-delay: -5s;
+  }
+
+  @keyframes bh-float-phone {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-10px) rotate(-4deg); }
+  }
+
+  @keyframes bh-float-tag {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes bh-read {
+    0% { transform: scaleX(0); }
+    80%, 100% { transform: scaleX(1); }
   }
 
   /* ===== Categories ===== */
@@ -442,6 +853,12 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   }
 
   @media (prefers-reduced-motion: reduce) {
+    /* Illustration immobile ; barre de lecture affichée à moitié pleine */
+    .bh-phone { animation: none; transform: rotate(-4deg); }
+    .bh-float,
+    .bh-tag { animation: none; }
+    .bh-phone__prog i { animation: none; transform: scaleX(0.5); }
+
     .blog-category-card,
     .blog-category-card__link {
       transition: none;
