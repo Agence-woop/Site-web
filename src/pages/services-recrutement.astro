@@ -28,7 +28,8 @@ const jsonLd = [
 ];
 
 // Espace insécable devant « : » et « ? » (typographie française, sans changer le texte)
-const NB = ' ';
+// Espace insécable (écrite en échappement pour ne pas se perdre au copier-coller)
+const NB = '\u00a0';
 
 // Photos rondes de l'équipe : mêmes données et même cadrage que la page d'accueil.
 // - fx / fy : cadrage d'origine (photo calée en haut, agrandie autour de ce point).
@@ -221,7 +222,7 @@ const steps = [
 ---
 <Layout
   title="Marketing pour cabinets de recrutement à Montréal | WOOP"
-  description="Acquisition de mandats, attraction de candidats et image de marque pour cabinets de recrutement. Pensé par un designer qui a piloté le marketing d’un cabinet."
+  description="Acquisition de mandats, attraction de candidats et image de marque pour cabinets de recrutement. Pensé par un designer qui a piloté le marketing d'un cabinet."
   ogImage="/images/og-recrutement.jpg"
   jsonLd={jsonLd}
 >
@@ -234,7 +235,7 @@ const steps = [
     <div class="container">
       <div class="md-hero__text">
         <p class="md-pill"><i aria-hidden="true"></i>RH &amp; Recrutement</p>
-        <h1 class="md-hero__title">Le marketing pour cabinets de recrutement, pensé par quelqu’un qui <span class="gradient-accent hp-kw">les a connus de l’intérieur.</span></h1>
+        <h1 class="md-hero__title">Le marketing pour cabinets de recrutement, pensé par quelqu'un qui <span class="gradient-accent hp-kw">les a connus de l'intérieur.</span></h1>
         <p class="md-hero__sub">Stratégie, branding, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats.</p>
         <p class="md-hero__strong"><strong>Votre équipe marketing recrutement, sans avoir à l'embaucher.</strong></p>
         <div class="hp-acts hp-acts--center md-hero__acts">
@@ -347,7 +348,7 @@ const steps = [
 
       <a class="hp-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
         <span class="hp-teaser__dot" aria-hidden="true"></span>
-        <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
+        <span><strong>Nouveau&nbsp;:</strong> testez votre visibilité en 2 minutes</span>
         <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
       </a>
     </div>

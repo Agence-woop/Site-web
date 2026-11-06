@@ -8,7 +8,7 @@ thematiques: ["Image de marque", "Intelligence artificielle"]
 auteur: "kevin"
 datePublication: 2026-06-18
 imageEntete: "/images/blog/recrutement-ia-ce-qui-vous-distingue.webp"
-imageEnteteAlt: "Illustration minimaliste : un grand robot produit une foule de silhouettes humaines identiques et indistinctes; parmi elles, une seule silhouette remplie du dégradé rose et orange demeure nettement distincte."
+imageEnteteAlt: "Illustration minimaliste : un grand robot produit une foule de silhouettes humaines identiques et indistinctes ; parmi elles, une seule silhouette remplie du dégradé rose et orange demeure nettement distincte."
 brouillon: false
 ---
 
