@@ -59,7 +59,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
           <div class="bh__grid"></div>
           <div class="bh__glow"></div>
 
-          <!-- Ordinateur portable, incliné en perspective -->
+          <!-- Tablette, inclinée en perspective (même angle, taille et position que l'ancien ordinateur) -->
           <div class="bh-lap">
             <div class="bh-lap__screen">
               <div class="bh-lap__page">
@@ -91,14 +91,12 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
                 <span class="bh-bar bh-bar--text bh-bar--w60"></span>
               </div>
             </div>
-            <div class="bh-lap__base"></div>
           </div>
 
           <!-- Téléphone : un autre article, du pôle Recrutement -->
           <div class="bh-phone">
             <div class="bh-phone__screen">
               <span class="bh-phone__isl"></span>
-              <span class="bh-phone__prog"><i></i></span>
               <div class="bh-phone__card">
                 <div class="bh-img bh-img--sm bh-img--pool">
                   <span class="bh-cand"></span>
@@ -109,7 +107,11 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
                 </div>
                 <span class="bh-bar bh-bar--title"></span>
                 <span class="bh-bar bh-bar--title bh-bar--short"></span>
+                <span class="bh-bar bh-bar--text bh-bar--para"></span>
                 <span class="bh-bar bh-bar--text"></span>
+                <span class="bh-bar bh-bar--text"></span>
+                <span class="bh-bar bh-bar--text bh-bar--w80"></span>
+                <span class="bh-bar bh-bar--text bh-bar--para"></span>
                 <span class="bh-bar bh-bar--text"></span>
                 <span class="bh-bar bh-bar--text bh-bar--w80"></span>
                 <span class="bh-bar bh-bar--text bh-bar--w60"></span>
@@ -333,20 +335,22 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     filter: blur(10px);
   }
 
-  /* Ordinateur : cadre sombre fin (comme le téléphone de l'accueil), écran blanc, socle */
+  /* Tablette : cadre sombre fin (comme le téléphone de l'accueil), écran blanc */
   .bh-lap {
     position: absolute;
     left: 20px;
     top: 38px;
     width: 400px;
     transform: perspective(1400px) rotateY(16deg) rotateX(6deg) rotate(-3deg);
-    transform-origin: 50% 60%;
+    /* Même centre de rotation qu'avec l'ancienne base (60 % de 300 px) : même position exacte */
+    transform-origin: 50% 180px;
     filter: drop-shadow(0 40px 40px rgba(10, 10, 15, 0.55));
   }
 
+  /* Cadre noir de même épaisseur sur les 4 côtés, coins arrondis, comme une tablette */
   .bh-lap__screen {
     padding: 10px;
-    border-radius: 18px 18px 6px 6px;
+    border-radius: 20px;
     background: var(--bg-deep);
     border: 2px solid rgba(230, 43, 127, 0.25);
     box-shadow: 0 0 80px rgba(230, 43, 127, 0.22);
@@ -361,28 +365,6 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     border-radius: 10px;
     background: var(--text-primary);
     overflow: hidden;
-  }
-
-  .bh-lap__base {
-    position: relative;
-    width: 456px;
-    height: 14px;
-    margin-left: -28px;
-    border-radius: 3px 3px 14px 14px;
-    background: linear-gradient(color-mix(in srgb, var(--text-primary) 22%, var(--bg-elevated)), var(--bg-elevated));
-    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text-primary) 30%, transparent);
-  }
-
-  .bh-lap__base::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 70px;
-    height: 5px;
-    margin-left: -35px;
-    border-radius: 0 0 6px 6px;
-    background: color-mix(in srgb, var(--bg-deep) 70%, transparent);
   }
 
   /* Barres de gabarit de la page d'article */
@@ -486,25 +468,12 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     background: var(--bg-deep);
   }
 
-  /* Barre de progression de lecture, en haut de l'écran */
-  .bh-phone__prog {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 4px;
-    background: color-mix(in srgb, var(--text-primary) 12%, transparent);
-  }
-
-  .bh-phone__prog i {
-    display: block;
-    height: 100%;
-    background: var(--woop-gradient);
-    transform-origin: left;
-    animation: bh-read 6s ease-in-out infinite;
-  }
-
+  /* Carte de l'article : tout l'écran, de sous l'encoche jusqu'à la barre du bas */
   .bh-phone__card {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    margin-bottom: 8px;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -515,7 +484,10 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
 
   .bh-phone__card .bh-bar { height: 6px; }
   .bh-phone__card .bh-bar--title { height: 9px; }
-  .bh-img--sm { height: 64px; margin: 0 0 4px; border-radius: 7px; }
+  .bh-img--sm { height: 72px; margin: 0 0 4px; border-radius: 7px; }
+
+  /* Début de paragraphe dans la carte du téléphone */
+  .bh-phone__card .bh-bar--para { margin-top: 6px; }
 
   /* Image de l'article Recrutement : rangée de candidats (comme la tuile « Attraction de candidats »
      de la page RH : tête de 37,5 % du rond, épaules de 67,5 %), un seul mis en avant */
@@ -643,11 +615,6 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   @keyframes bh-float-tag {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
-  }
-
-  @keyframes bh-read {
-    0% { transform: scaleX(0); }
-    80%, 100% { transform: scaleX(1); }
   }
 
   /* ===== Categories ===== */
@@ -899,11 +866,10 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   }
 
   @media (prefers-reduced-motion: reduce) {
-    /* Illustration immobile ; barre de lecture affichée à moitié pleine */
+    /* Illustration immobile */
     .bh-phone { animation: none; transform: rotate(-4deg); }
     .bh-float,
     .bh-tag { animation: none; }
-    .bh-phone__prog i { animation: none; transform: scaleX(0.5); }
 
     .blog-category-card,
     .blog-category-card__link {
