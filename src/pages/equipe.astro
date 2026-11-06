@@ -1,584 +1,2085 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Button from '../components/Button.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const team = [
+const SITE_URL = 'https://agence-woop.ca';
+const PAGE_URL = `${SITE_URL}/equipe/`;
+const ORG_ID = `${SITE_URL}/#organization`;
+const PAGE_TITLE = 'L’équipe WOOP : Gauthier, Kevin, Emma et Ludo | Montréal';
+
+// Graphe JSON-LD : la page, l'agence (fondateurs et employée), les 4 personnes, le fil d'Ariane.
+// Ludo est seulement cité par la page (mentions), sans lien avec l'organisation ni sameAs.
+const jsonLd = [
   {
-    name: 'Gauthier Figueres',
-    badge: 'Stratégie',
-    role: 'Co-fondateur · Stratégie',
-    photo: `${base}/images/gauthier.webp`,
-    linkedin: 'https://www.linkedin.com/in/gauthier-f-00561b203/',
-    bio: [
-      'Infirmier clinicien de formation, Gauthier a basculé vers la gestion médicale il y a plusieurs années. Il dirige aujourd\'hui les opérations médicales dans l\'aéromédical et il est expert des soins en communauté et en régions éloignées.',
-      'Ancien directeur de clinique privée, désormais inscrit en MBA, il pilote chez WOOP la stratégie et les comptes Santé.',
-    ],
-  },
-  {
-    name: 'Kevin Zounias',
-    badge: 'Création',
-    role: 'Co-fondateur · Création',
-    photo: `${base}/images/kevin.webp`,
-    linkedin: 'https://www.linkedin.com/in/k%C3%A9vin-zounias/',
-    bio: [
-      'Designer graphique de formation, Kevin a développé son expertise marketing au sein d\'un cabinet de recrutement spécialisé en santé. Cette double exposition à la création et au marketing en fait l\'œil et la main de WOOP.',
-      'Il pilote l\'identité de marque de chaque projet et accompagne les comptes Recrutement.',
-    ],
-  },
-  {
-    name: 'Emma Despujols',
-    badge: 'Paid Media Junior',
-    role: 'Spécialiste Paid Media Junior',
-    photo: `${base}/images/emma.webp`,
-    linkedin: 'https://www.linkedin.com/in/emma-despujols-161235211/',
-    bio: [
-      'Diplômée de l\'EmLyon Business School, actuellement en Master 2 Project Management à HEC Montréal, Emma a fait ses classes dans de grands médias français.',
-      'Chez WOOP, elle pilote la performance publicitaire sur Google Ads et Meta Ads, et conçoit les landing pages de conversion.',
-    ],
-  },
-  {
-    name: 'Ludo Santos',
-    badge: 'Développement',
-    role: 'Développeur web',
-    photo: `${base}/images/ludo.webp`,
-    linkedin: 'https://www.linkedin.com/in/ludo-snts',
-    bio: [
-      'Développeur web de formation, Ludo a construit son expertise au sein d\'agences de communication. Sensible aux questions d\'écoconception et de sobriété numérique, il développe des sites légers, rapides et respectueux des données.',
-      'Chez WOOP, il prend en charge le développement et l\'intégration, et fait le pont entre la création et la performance.',
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'AboutPage',
+        '@id': `${PAGE_URL}#page`,
+        url: PAGE_URL,
+        name: PAGE_TITLE,
+        inLanguage: 'fr-CA',
+        about: { '@id': ORG_ID },
+        mentions: [{ '@id': `${PAGE_URL}#ludo-santos` }],
+        breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
+      },
+      {
+        '@type': 'Organization',
+        '@id': ORG_ID,
+        name: 'Agence WOOP',
+        url: `${SITE_URL}/`,
+        founder: [{ '@id': `${PAGE_URL}#gauthier-figueres` }, { '@id': `${PAGE_URL}#kevin-zounias` }],
+        employee: [{ '@id': `${PAGE_URL}#emma-despujols` }],
+      },
+      {
+        '@type': 'Person',
+        '@id': `${PAGE_URL}#gauthier-figueres`,
+        name: 'Gauthier Figueres',
+        jobTitle: 'Cofondateur, stratégie',
+        image: `${SITE_URL}/images/gauthier.webp`,
+        worksFor: { '@id': ORG_ID },
+        sameAs: ['https://www.linkedin.com/in/gauthier-f-00561b203/'],
+      },
+      {
+        '@type': 'Person',
+        '@id': `${PAGE_URL}#kevin-zounias`,
+        name: 'Kevin Zounias',
+        jobTitle: 'Cofondateur, création',
+        image: `${SITE_URL}/images/kevin.webp`,
+        worksFor: { '@id': ORG_ID },
+        sameAs: ['https://www.linkedin.com/in/k%C3%A9vin-zounias/'],
+      },
+      {
+        '@type': 'Person',
+        '@id': `${PAGE_URL}#emma-despujols`,
+        name: 'Emma Despujols',
+        jobTitle: 'Spécialiste Paid Media',
+        image: `${SITE_URL}/images/emma.webp`,
+        worksFor: { '@id': ORG_ID },
+        sameAs: ['https://www.linkedin.com/in/emma-despujols-161235211/'],
+      },
+      {
+        '@type': 'Person',
+        '@id': `${PAGE_URL}#ludo-santos`,
+        name: 'Ludo Santos',
+        jobTitle: 'Développeur web',
+        image: `${SITE_URL}/images/ludo.webp`,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${PAGE_URL}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'Équipe', item: PAGE_URL },
+        ],
+      },
     ],
   },
 ];
 
-const methods = [
-  { num: '01', title: 'Diagnostic', text: [
-    'Appel découverte et audit. On comprend votre projet, vos objectifs, et ce qui freine votre développement aujourd\'hui.',
-    'On observe aussi votre présence en ligne actuelle : ce qui fonctionne, ce qui manque, ce qui peut être renforcé.',
-  ]},
-  { num: '02', title: 'Stratégie & marque', text: [
-    'Positionnement, identité visuelle, ton de marque. On pose les fondations sur lesquelles tout le reste va s\'appuyer.',
-    'Une marque solide vous permet de justifier un positionnement premium, et de faire baisser le coût pour attirer chaque nouveau patient ou candidat.',
-  ]},
-  { num: '03', title: 'Acquisition', text: [
-    'Campagnes publicitaires sur Google Ads et Meta Ads, landing pages de conversion. On va chercher vos prospects là où ils sont déjà.',
-    'Chaque dollar investi est suivi, mesuré, optimisé. Pas de pub à l\'aveugle.',
-  ]},
-  { num: '04', title: 'Optimisation', text: [
-    'Mesure, itération, ajustements. On observe ce qui fonctionne, on corrige ce qui ne marche pas, et on réinvestit là où ça paie.',
-    'Résultat : votre marque gagne en force, votre coût pour générer un nouveau patient (ou candidat) baisse, et la machine s\'amplifie d\'elle-même.',
-  ]},
+// Espace insécable devant « : » et « ? » (typographie française, sans changer le texte)
+const NB = ' ';
+
+// Photos rondes : mêmes données et même cadrage que la page d'accueil (Ludo : cadrage propre).
+// - fx / fy : cadrage d'origine (photo calée en haut, agrandie autour de ce point).
+// - objectPosition / zoom : cadrage propre à une photo (remplace le cadrage d'origine).
+type Framed = {
+  fx?: string;
+  fy?: string;
+  objectPosition?: string;
+  zoom?: number;
+};
+
+type TeamMember = Framed & { name: string; img: string };
+
+const team: TeamMember[] = [
+  { name: 'Gauthier', img: 'gauthier', objectPosition: '57.8% 30.6%', zoom: 1.7 },
+  { name: 'Kevin', img: 'kevin', fx: '50%', fy: '31%' },
+  { name: 'Emma', img: 'emma', fx: '55%', fy: '31%' },
 ];
+
+const framing = (m: Framed) =>
+  m.objectPosition !== undefined || m.zoom !== undefined
+    ? `--obj-pos: ${m.objectPosition ?? 'center'}; --zoom: ${m.zoom ?? 1};`
+    : `--fx: ${m.fx ?? '50%'}; --fy: ${m.fy ?? '30%'};`;
+const isFramed = (m: Framed) => m.objectPosition !== undefined || m.zoom !== undefined;
+
+// 01 · Qui fait quoi ? Une fiche par personne (bio complète, en paragraphes).
+// Dans `bio`, un segment { link } devient un lien discret, identique au texte qui l'entoure.
+type Segment = string | { text: string; href: string };
+
+type Profile = Framed & {
+  key: string;
+  expertise: string;
+  hub: string;
+  first: string;
+  name: string;
+  role: string;
+  img: string;
+  width: number;
+  height: number;
+  /** Cadrage de la photo verticale de la fiche */
+  photoPos: string;
+  bio: Segment[][];
+  linkedin?: string;
+  contact?: string;
+  hubPos: 'a' | 'b' | 'c' | 'd';
+};
+
+const profiles: Profile[] = [
+  {
+    key: 'gauthier',
+    expertise: 'Stratégie',
+    hub: 'Stratégie',
+    first: 'Gauthier',
+    name: 'Gauthier Figueres',
+    role: 'Cofondateur · Stratégie',
+    img: 'gauthier',
+    width: 671,
+    height: 822,
+    photoPos: '50% 35%',
+    objectPosition: '57.8% 30.6%',
+    zoom: 1.7,
+    bio: [
+      ['Infirmier clinicien de formation, Gauthier a basculé vers la gestion médicale il y a plusieurs années. Il dirige aujourd’hui les opérations médicales dans l’aéromédical et il est expert des soins en communauté et en régions éloignées.'],
+      ['Ancien directeur de cliniques privées et détenteur d’un MBA, il pilote chez WOOP la stratégie et ', { text: 'les comptes Santé', href: `${base}/services-medical/` }, '.'],
+    ],
+    linkedin: 'https://www.linkedin.com/in/gauthier-f-00561b203/',
+    contact: `${base}/contact?personne=gauthier`,
+    hubPos: 'a',
+  },
+  {
+    key: 'kevin',
+    expertise: 'Création',
+    hub: 'Création',
+    first: 'Kevin',
+    name: 'Kevin Zounias',
+    role: 'Cofondateur · Création',
+    img: 'kevin',
+    width: 671,
+    height: 822,
+    photoPos: '50% 30%',
+    fx: '50%',
+    fy: '31%',
+    bio: [
+      ['Designer graphique de formation, Kevin a développé son expertise marketing au sein d’un cabinet de recrutement spécialisé en santé. Cette double exposition à la création et au marketing en fait l’œil et la main de WOOP.'],
+      ['Il pilote l’identité de marque de chaque projet et accompagne ', { text: 'les comptes Recrutement', href: `${base}/services-recrutement/` }, '.'],
+    ],
+    linkedin: 'https://www.linkedin.com/in/k%C3%A9vin-zounias/',
+    contact: `${base}/contact?personne=kevin`,
+    hubPos: 'b',
+  },
+  {
+    key: 'emma',
+    expertise: 'Acquisition',
+    hub: 'Paid Media',
+    first: 'Emma',
+    name: 'Emma Despujols',
+    role: 'Spécialiste Paid Media',
+    img: 'emma',
+    width: 671,
+    height: 822,
+    photoPos: '50% 30%',
+    fx: '55%',
+    fy: '31%',
+    bio: [
+      ['Diplômée d’emlyon business school, Emma poursuit une maîtrise en gestion de projet à HEC Montréal, après avoir fait ses classes dans de grands médias français.'],
+      ['Chez WOOP, elle pilote la performance publicitaire sur Google Ads et Meta Ads, et conçoit les pages de conversion.'],
+    ],
+    linkedin: 'https://www.linkedin.com/in/emma-despujols-161235211/',
+    contact: `${base}/contact?personne=emma`,
+    hubPos: 'c',
+  },
+  {
+    key: 'ludo',
+    expertise: 'Web',
+    hub: 'Web',
+    first: 'Ludo',
+    name: 'Ludo Santos',
+    role: 'Développeur web',
+    img: 'ludo',
+    width: 928,
+    height: 1137,
+    photoPos: '50% 30%',
+    fx: '50%',
+    fy: '29%',
+    bio: [
+      ['Développeur web de formation, Ludo a construit son expertise au sein d’agences de communication. Sensible aux questions d’écoconception et de sobriété numérique, il développe des sites légers, rapides et respectueux des données.'],
+      ['Chez WOOP, il prend en charge le développement et l’intégration, et fait le pont entre la création et la performance.'],
+    ],
+    hubPos: 'd',
+  },
+];
+
+// 02 · Notre méthode. `hot` : 4e carte en dégradé.
+const steps: {
+  n: string;
+  title: string;
+  icon: 'search' | 'pen' | 'megaphone' | 'trend';
+  text: string;
+  sub: string;
+  reveal: 'left' | 'right' | 'up';
+  step?: string;
+  hot?: boolean;
+}[] = [
+  {
+    n: '01',
+    title: 'Diagnostic',
+    icon: 'search',
+    text: 'Appel découverte et audit. On comprend votre projet, vos objectifs, et ce qui freine votre développement aujourd’hui.',
+    sub: `On observe aussi votre présence en ligne actuelle${NB}: ce qui fonctionne, ce qui manque, ce qui peut être renforcé.`,
+    reveal: 'left',
+  },
+  {
+    n: '02',
+    title: 'Stratégie & marque',
+    icon: 'pen',
+    text: 'Positionnement, identité visuelle, ton de marque. On pose les fondations sur lesquelles tout le reste va s’appuyer.',
+    sub: 'Une marque solide vous permet de justifier un positionnement premium, et aide à faire baisser le coût pour attirer chaque nouveau patient ou candidat.',
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    n: '03',
+    title: 'Acquisition',
+    icon: 'megaphone',
+    text: 'Campagnes publicitaires sur Google Ads et Meta Ads, pages de conversion. On va chercher vos prospects là où ils sont déjà.',
+    sub: 'Chaque dollar investi est suivi, mesuré, optimisé. Pas de pub à l’aveugle.',
+    reveal: 'up',
+    step: '2',
+  },
+  {
+    n: '04',
+    title: 'Optimisation',
+    icon: 'trend',
+    text: 'Mesure, itération, ajustements. On observe ce qui fonctionne, on corrige ce qui ne marche pas, et on réinvestit là où ça paie.',
+    sub: `Résultat${NB}: votre marque gagne en force, votre coût pour générer un nouveau patient (ou candidat) tend à baisser, et la machine s’amplifie d’elle-même.`,
+    reveal: 'right',
+    step: '3',
+    hot: true,
+  },
+];
+
+// 03 · Notre promesse
+const promises = [
+  'Vous parlez directement aux gens qui font le travail.',
+  'Une équipe 100 % dédiée, qui connaît votre projet de A à Z.',
+  'Un fondateur reste toujours dans la boucle.',
+];
+
+// Durée d'affichage de chaque profil du carrousel (lue par le script via data-eq-dur)
+const SLIDE_MS = 8000;
 ---
 <Layout
-  title="WOOP — L'équipe | Les experts du terrain"
-  description="Un clinicien stratège, un créatif designer, une experte en acquisition, un développeur web. Découvrez les expertises complémentaires de l'équipe WOOP."
+  title={PAGE_TITLE}
+  description="Gauthier Figueres, Kevin Zounias, Emma Despujols et Ludo Santos : découvrez l’équipe WOOP, qui fait quoi sur votre projet et comment on travaille ensemble."
   ogImage="/images/og-image.jpg"
+  jsonLd={jsonLd}
 >
 
-  <!-- SECTION 1 — HERO -->
-  <section class="equipe-hero">
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Le hero n'est jamais animé par reveal. -->
+  <ScrollReveal />
+
+  <!-- 1. HERO (sans data-reveal) -->
+  <section class="hp-hero md-hero eq-hero" data-hp-hero>
     <div class="container">
-      <div class="equipe-hero__watermark" aria-hidden="true">&Eacute;QUIPE</div>
-      <span class="equipe-hero__eyebrow">L'&eacute;quipe WOOP</span>
-      <h1 class="equipe-hero__title">
-        Des experts du terrain.<br>
-        Vous savez qui fait quoi sur votre projet.
-      </h1>
-      <p class="equipe-hero__subtitle">
-        Une &eacute;quipe compl&eacute;mentaire et nomm&eacute;e. Vous parlez directement aux gens qui font le travail, du premier appel jusqu'&agrave; la livraison, et un fondateur reste toujours dans la boucle.
-      </p>
+      <div class="eq-hero__grid">
+        <div class="eq-hero__text">
+          <p class="md-pill"><i aria-hidden="true"></i>L’équipe WOOP</p>
+          <h1 class="md-hero__title eq-hero__title">L’équipe WOOP, des experts du terrain. <span class="gradient-accent hp-kw">Vous savez qui fait quoi</span> sur votre projet.</h1>
+          <p class="md-hero__sub eq-hero__sub">Une équipe complémentaire et nommée. Vous parlez directement aux gens qui font le travail, du premier appel jusqu’à la livraison.</p>
+          <p class="md-hero__strong"><strong>Votre équipe marketing, sans avoir à l’embaucher.</strong></p>
+          <div class="hp-acts md-hero__acts">
+            <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+            <a class="cta cta--line" href="#qui-fait-quoi">Rencontrer l’équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+          </div>
+        </div>
+
+        <!-- Schéma décoratif : votre projet au centre, relié aux 4 personnes -->
+        <div class="eq-hub" aria-hidden="true">
+          <svg class="eq-hub__lines" viewBox="0 0 560 420" preserveAspectRatio="none">
+            <path d="M280 210 L110 80 M280 210 L450 80 M280 210 L110 340 M280 210 L450 340" vector-effect="non-scaling-stroke" />
+          </svg>
+          <div class="eq-hub__core">
+            <span class="eq-hub__ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"/></svg></span>
+            <b>Votre projet</b>
+            <small>Un fondateur toujours dans la boucle</small>
+          </div>
+          {profiles.map((p) => (
+            <div class:list={['eq-hub__n', `eq-hub__n--${p.hubPos}`]}>
+              <span class:list={['eq-hub__ph', { 'is-framed': isFramed(p) }]} style={framing(p)}><img src={`${base}/images/${p.img}.webp`} alt="" width={p.width} height={p.height} decoding="async" /></span>
+              <span class="eq-hub__lbl"><b>{p.hub}</b><small>{p.first}</small></span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- SECTION 2 — LE TRIO -->
-  <section class="section">
+  <!-- 2. QUI FAIT QUOI ? (carrousel à onglets ; sans JavaScript, les 4 fiches s'affichent l'une sous l'autre) -->
+  <section class="hp-block hp-sec eq-sec--sp" id="qui-fait-quoi" data-reveal-clip>
     <div class="container">
-      <div class="trio-anchor">
-        <h3 class="trio-anchor__title gradient-text">L'&eacute;quipe</h3>
-        <p class="trio-anchor__tagline">Des expertises compl&eacute;mentaires.</p>
+      <div class="hp-head">
+        <p class="md-over" data-reveal="left">01 · Qui fait quoi{NB}?</p>
+        <h2 class="section-title hp-title" data-reveal="left">Chacun son <span class="gradient-accent">expertise</span>.</h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Un rôle, une personne. Voici qui travaille sur votre projet.</p>
       </div>
 
-      <div class="trio-cards">
-        {team.map((member) => (
-          <div class="trio-card">
-            <div class="trio-card__photo-wrap">
-              <img src={member.photo} alt={member.name} class="trio-card__photo" loading="lazy" />
-              <span class="trio-card__badge">{member.badge}</span>
-            </div>
-            <div class="trio-card__body">
-              <div class="trio-card__header">
-                <div>
-                  <h2 class="trio-card__name">{member.name}</h2>
-                  <span class="trio-card__role">{member.role}</span>
+      <div class="eq-sp md-glass" data-eq-sp data-eq-dur={SLIDE_MS} data-reveal="up">
+        <!-- Onglets et bouton Pause : affichés seulement si le script tourne -->
+        <div class="eq-sp__bar" data-eq-bar hidden>
+          <div class="eq-sp__tabs" role="tablist" aria-label="Qui fait quoi">
+            {profiles.map((p, i) => (
+              <button
+                type="button"
+                class="eq-sp__tab"
+                role="tab"
+                id={`eq-tab-${p.key}`}
+                aria-controls={`eq-panel-${p.key}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? '0' : '-1'}
+                data-eq-tab
+              >
+                <span>{p.expertise}</span>
+                <i class="eq-sp__prog" aria-hidden="true"></i>
+              </button>
+            ))}
+          </div>
+          <button type="button" class="eq-sp__pause" data-eq-pause aria-label="Mettre en pause le défilement automatique">
+            <svg class="eq-sp__i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2"/></svg>
+            <svg class="eq-sp__i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 001.5.86l10.2-6.4a1 1 0 000-1.72L9.5 4.74A1 1 0 008 5.6z"/></svg>
+          </button>
+        </div>
+
+        <div class="eq-sp__stage">
+          {profiles.map((p, i) => (
+            <div class:list={['eq-sp__panel', { 'is-active': i === 0 }]} id={`eq-panel-${p.key}`} data-eq-panel>
+              <div class="eq-sp__role">
+                <span class="eq-sp__k">Sur votre projet</span>
+                <b class="gradient-accent eq-sp__word">{p.expertise}</b>
+              </div>
+              <article class="eq-sp__card">
+                <div class="eq-sp__ph">
+                  <img src={`${base}/images/${p.img}.webp`} alt={p.name} width={p.width} height={p.height} loading="lazy" decoding="async" style={`object-position: ${p.photoPos};`} />
                 </div>
-                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" class="trio-card__linkedin" aria-label={`LinkedIn de ${member.name}`}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                </a>
-              </div>
-              <div class="trio-card__bio">
-                {member.bio.map((paragraph: string) => <p>{paragraph}</p>)}
-              </div>
+                <div class="eq-sp__tx">
+                  <p class="eq-sp__rl">{p.role}</p>
+                  <h3>{p.name}</h3>
+                  {p.bio.map((para) => (
+                    <p class="eq-sp__bio">
+                      {para.map((seg) => (typeof seg === 'string' ? seg : <a class="md-inl" href={seg.href}>{seg.text}</a>))}
+                    </p>
+                  ))}
+                  {(p.linkedin || p.contact) && (
+                    <div class="eq-sp__links">
+                      {p.linkedin && (
+                        <a class="eq-sp__li" href={p.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`LinkedIn de ${p.name}`}>
+                          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.01 5 2.5 2.5 0 01.01-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C20.6 8.65 21 11.1 21 14.3V21h-4v-6c0-1.45-.03-3.3-2-3.3-2 0-2.3 1.55-2.3 3.2V21H9z"/></svg>
+                        </a>
+                      )}
+                      {p.contact && (
+                        <a class="cta cta--line cta--sm" href={p.contact}>Parler à {p.first}<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </article>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 3 — MÉTHODOLOGIE -->
-  <section class="section">
+  <!-- 3. NOTRE MÉTHODE -->
+  <section class="hp-block hp-sec" id="methode" data-reveal-clip>
     <div class="container">
-      <span class="kicker">Notre m&eacute;thode</span>
-      <h2 class="section-title">Comment on travaille ensemble.</h2>
-      <div class="method-grid">
-        {methods.map((step) => (
-          <div class="method-step">
-            <div class="method-step__num">{step.num}</div>
-            <h3 class="method-step__title">{step.title}</h3>
-            <div class="method-step__text">
-              {step.text.map((paragraph: string) => <p>{paragraph}</p>)}
+      <div class="hp-head">
+        <p class="md-over" data-reveal="left">02 · Notre méthode</p>
+        <h2 class="section-title hp-title" data-reveal="left">Comment on travaille <span class="gradient-accent">ensemble</span>.</h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Quatre étapes, toujours dans le même ordre. Vous savez où on en est à chaque moment.</p>
+      </div>
+
+      <ol class="md-steps eq-steps">
+        {steps.map((s) => (
+          <li class:list={['md-st', 'eq-st', { 'md-glass': !s.hot, 'eq-st--hot': s.hot }]} data-reveal={s.reveal} data-reveal-step={s.step}>
+            <span class:list={['md-st__d', { 'is-on': s.hot }]} aria-hidden="true">{s.n}</span>
+            <div class="eq-st__head">
+              <span class:list={['md-xi', 'eq-st__ico', { 'md-xi--w': s.hot }]} aria-hidden="true">
+                {s.icon === 'search' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>)}
+                {s.icon === 'pen' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 7l3 3"/></svg>)}
+                {s.icon === 'megaphone' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M19 9.5a4 4 0 010 5"/></svg>)}
+                {s.icon === 'trend' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>)}
+              </span>
+              <h3><span class="visually-hidden">{s.n} </span>{s.title}</h3>
             </div>
-          </div>
+            <p>{s.text}</p>
+            <p class="eq-st__sub">{s.sub}</p>
+          </li>
         ))}
+      </ol>
+
+      <div class="md-svc-cta" data-reveal="up">
+        <a class="cta" href={`${base}/contact`}>Discuter de votre projet<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
       </div>
+
+      <a class="hp-teaser eq-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
+        <span class="hp-teaser__dot" aria-hidden="true"></span>
+        <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
+        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
     </div>
   </section>
 
-  <!-- CTA INTERMÉDIAIRE -->
-  <div class="container cta-mid">
-    <Button variant="primary" href={`${base}/contact`}>Discuter de votre projet</Button>
-  </div>
-
-  <!-- SECTION 4 — PROMESSE ÉQUIPE -->
-  <section class="section">
+  <!-- 4. NOTRE PROMESSE -->
+  <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
-      <div class="promise-card">
-        <span class="kicker">Notre promesse</span>
-        <h2 class="promise-card__title">
-          Pas d'agence anonyme.<br>
-          Pas d'usine &agrave; projets.
-        </h2>
-        <p class="promise-card__text">
-          Vous parlez directement &agrave; un membre de l'&eacute;quipe, du premier appel jusqu'&agrave; la livraison. Vous savez qui pilote votre projet. Vous savez qui est responsable de quoi. Et un fondateur reste toujours dans la boucle, du d&eacute;but &agrave; la fin.
-        </p>
+      <div class="eq-prom" data-reveal="up">
+        <div class="eq-prom__head">
+          <p class="md-over">03 · Notre promesse</p>
+          <h2 class="section-title hp-title">Pas d’agence <span class="gradient-accent">anonyme</span>.</h2>
+          <p class="hp-head__intro">Chez WOOP, vous savez toujours qui travaille sur votre projet.</p>
+        </div>
+        <ul class="eq-prom__list">
+          {promises.map((t) => (
+            <li><span class="eq-prom__ck" aria-hidden="true">✓</span>{t}</li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 5 — CTA FINAL -->
-  <section class="section cta-final-section">
+  <!-- 5. BANDEAU FINAL (identique à celui de l'accueil) -->
+  <section class="hp-block hp-block--last hp-sec--final" data-hp-final>
     <div class="container">
-      <div class="cta-final">
-        <h2 class="cta-final__title">Envie de savoir qui s'occuperait de votre projet ?</h2>
-        <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
+      <div class="hp-final" data-reveal="up">
+        <div class="hp-avs hp-avs--final" aria-hidden="true">
+          {team.map((m) => (
+            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+          ))}
+        </div>
+        <h2>Envie de savoir qui s’occuperait de votre projet{NB}?</h2>
+        <p>Un appel de 30 minutes pour rencontrer l’équipe.</p>
+        <div class="hp-acts hp-acts--center">
+          <a class="cta cta--light" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
+  <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
+    <span class="hp-avs hp-avs--sm" aria-hidden="true">
+      {team.map((m) => (
+        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+      ))}
+    </span>
+    <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l’embaucher</strong></span>
+    <a class="cta cta--sm" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+  </aside>
 
 </Layout>
 
 <style>
-  /* ===== HERO ===== */
-  .equipe-hero {
-    position: relative;
-    padding: 120px 0 48px;
-    overflow: hidden;
+  /* =====================================================================
+     PAGE ÉQUIPE : styles locaux (scopés).
+     Les classes hp-* reprennent à l'identique celles de la page d'accueil
+     (mêmes noms, mêmes valeurs). Les classes md-* reprennent celles des pages
+     Santé & Médical et RH & Recrutement (blocs copiés). Les classes eq-* sont
+     propres à cette page : hero en 2 colonnes, schéma « Votre projet »,
+     carrousel « Chacun son expertise », étapes et promesse.
+     Couleurs : uniquement les jetons de global.css, leurs mélanges
+     (color-mix) et des rgba() dérivées de #FA6244 et #E62B7F.
+     ===================================================================== */
+
+  /* ===== ESPACEMENTS DE RÉFÉRENCE (mêmes valeurs que l'accueil) ===== */
+  .hp-hero,
+  .hp-block {
+    /* entre deux sections : 80 px mobile, 100 px tablette, 120 px ordinateur */
+    --home-section-gap: 80px;
+    /* dans une section : titre → sous-texte, puis titre ou sous-texte → contenu */
+    --home-head-gap: 16px;
+    --home-head-content: 36px;
   }
 
   @media (min-width: 768px) {
-    .equipe-hero { padding: 140px 0 64px; }
+    .hp-hero,
+    .hp-block { --home-section-gap: 100px; }
   }
 
-  .equipe-hero__watermark {
-    position: absolute;
-    font-family: var(--font-display);
-    font-size: 28vw;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.12);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: -1;
-    letter-spacing: -0.02em;
+  @media (min-width: 900px) {
+    .hp-hero,
+    .hp-block {
+      --home-head-gap: 20px;
+      --home-head-content: 46px;
+    }
   }
 
-  .equipe-hero__eyebrow {
-    display: inline-block;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--woop-pink);
-    background: rgba(230, 43, 127, 0.1);
-    border: 1px solid var(--border-accent);
-    border-radius: 100px;
-    padding: 8px 18px;
-    font-weight: 700;
-    margin-bottom: 24px;
+  @media (min-width: 1024px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 120px; }
   }
 
-  .equipe-hero__title {
+  /* Jetons locaux, dérivés de la charte (mêmes valeurs que l'accueil) */
+  .hp-hero,
+  .hp-block,
+  .hp-pop {
+    --hp-ink: var(--text-primary);
+    --hp-dark: var(--bg-deep);
+    /* Petits textes, libellés et flèches posés sur le dégradé ou l'orange de la charte */
+    --hp-on-grad: var(--bg-deep);
+    --hp-light: var(--text-primary);
+    --hp-blush: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
+    --hp-pinklight: color-mix(in srgb, var(--woop-pink) 45%, var(--text-primary));
+    --hp-plum: color-mix(in srgb, var(--woop-pink) 20%, var(--bg-deep));
+    --hp-card: var(--bg-elevated);
+    --hp-line: color-mix(in srgb, var(--text-primary) 14%, transparent);
+    --hp-skel: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
+    --hp-skel-2: color-mix(in srgb, var(--text-muted) 12%, var(--text-primary));
+    --hp-shadow: color-mix(in srgb, var(--bg-deep) 55%, transparent);
+    --hp-grad-band: linear-gradient(120deg, var(--woop-orange) 25%, var(--woop-pink));
+    /* Propres à cette page */
+    --md-pink-soft: color-mix(in srgb, var(--woop-pink) 70%, var(--text-primary));
+    --md-pink-deep: color-mix(in srgb, var(--woop-pink) 80%, var(--bg-deep));
+  }
+
+  /* ===== BOUTONS (identiques à l'accueil) ===== */
+  .hp-acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hp-acts--center { justify-content: center; }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 100%;
+    padding: 7px 7px 7px 24px;
+    border-radius: var(--radius-button);
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
     font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 1.2;
-    color: var(--text-primary);
-    max-width: 900px;
-    margin-bottom: 20px;
-  }
-
-  @media (min-width: 768px) {
-    .equipe-hero__title { font-size: 40px; }
-  }
-
-  @media (min-width: 1024px) {
-    .equipe-hero__title { font-size: 48px; line-height: 1.15; max-width: 1000px; }
-  }
-
-  .equipe-hero__subtitle {
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--text-secondary);
-    max-width: 600px;
-  }
-
-  @media (min-width: 768px) {
-    .equipe-hero__subtitle { font-size: 18px; }
-  }
-
-  @media (min-width: 1024px) {
-    .equipe-hero__subtitle { font-size: 20px; }
-  }
-
-  /* ===== TRIO CARDS ===== */
-  .trio-cards {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-  }
-
-  @media (min-width: 768px) {
-    .trio-cards {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .trio-cards {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .trio-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .trio-card__photo-wrap {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-  }
-
-  .trio-card__photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .trio-card__badge {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    background: var(--woop-gradient);
-    color: #fff;
-    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    padding: 6px 16px;
-    border-radius: 100px;
+    font-size: 15px;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: box-shadow 200ms ease, transform 200ms ease;
   }
 
-  .trio-card__body {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex: 1;
+  .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
   }
 
-  .trio-card__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
+  .cta:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 3px;
   }
 
-  .trio-card__name {
-    font-family: var(--font-display);
-    font-size: 22px;
-    text-transform: uppercase;
-    line-height: 1;
-    color: var(--text-primary);
-    margin-bottom: 4px;
+  .cta--light:hover {
+    box-shadow: 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
   }
 
-  .trio-card__role {
-    font-size: 12px;
-    color: var(--text-muted);
+  .cta--light:focus-visible,
+  .cta--on-grad:focus-visible {
+    outline-color: var(--text-primary);
   }
 
-  @media (min-width: 1024px) {
-    .trio-card__role { font-size: 14px; }
-  }
-
-  .trio-card__linkedin {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--woop-gradient);
-    display: flex;
+  .cta__ico {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    flex-shrink: 0;
-    transition: transform 200ms ease, box-shadow 200ms ease;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    color: var(--hp-on-grad);
   }
 
-  .trio-card__linkedin:hover {
+  .cta__ico svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .cta--light {
+    background: var(--hp-light);
+    color: var(--hp-dark);
+  }
+
+  .cta--light .cta__ico,
+  .cta--line .cta__ico {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  .cta--line {
+    color: var(--text-primary);
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+  }
+
+  .cta--line:hover {
+    box-shadow: inset 0 0 0 1.5px var(--hp-line), 0 10px 40px rgba(230, 43, 127, 0.45);
+  }
+
+  .cta--on-grad {
+    color: var(--hp-on-grad);
+    box-shadow: inset 0 0 0 1.5px var(--hp-light);
+  }
+
+  .cta--on-grad:hover {
+    box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
+  }
+
+  .cta--on-grad .cta__ico {
+    background: var(--hp-light);
+    color: var(--hp-on-grad);
+  }
+
+  .cta--sm {
+    gap: 10px;
+    padding: 5px 5px 5px 18px;
+    font-size: 14px;
+  }
+
+  .cta--sm .cta__ico {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* ===== TITRES DE SECTION (identiques à l'accueil) ===== */
+  .hp-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--home-head-gap);
+    margin-bottom: var(--home-head-content);
+  }
+
+  .hp-title {
+    margin-bottom: 0;
+    line-height: 1.02;
+    color: var(--text-primary);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .hp-head__intro {
+    max-width: 760px;
+    color: var(--text-secondary);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 1024px) {
+    .hp-head__intro { font-size: 19px; }
+  }
+
+  /* Surtitre numéroté (01 · Pour qui ?) : rose éclairci, comme l'accroche du hero de l'accueil */
+  .md-over {
+    margin-bottom: -4px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+  }
+
+  /* Pas de mot seul en fin de paragraphe */
+  p,
+  .hp-pop__txt {
+    text-wrap: pretty;
+  }
+
+  /* Pastille rose (hero) */
+  .md-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    max-width: 100%;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+    background: rgba(230, 43, 127, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.4);
+  }
+
+  .md-pill i {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+  }
+
+  /* Cartes vitrées à filet dégradé (cartes, tuiles, bloc Kevin, étapes) */
+  .md-glass {
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--woop-pink) 8%, color-mix(in srgb, var(--bg-elevated) 80%, transparent)),
+      color-mix(in srgb, var(--bg-elevated) 75%, transparent)
+    );
+  }
+
+  .md-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(230, 43, 127, 0.4), color-mix(in srgb, var(--text-primary) 6%, transparent) 40%, rgba(250, 98, 68, 0.3));
+    -webkit-mask: linear-gradient(var(--bg-deep) 0 0) content-box, linear-gradient(var(--bg-deep) 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ===== SECTIONS ===== */
+  /* Une seule règle d'espacement entre deux sections consécutives (voir --home-section-gap). */
+  .hp-hero + .hp-block,
+  .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  .hp-block--last { padding-bottom: var(--home-section-gap); }
+
+  /* ===== 1. HERO ===== */
+  .hp-hero {
+    position: relative;
+    padding: 40px 0 0;
+    overflow-x: clip;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero { padding: 64px 0 0; }
+  }
+
+  /* Halo rose derrière le titre */
+  .md-hero::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -60px;
+    width: 900px;
+    max-width: 140%;
+    height: 520px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(230, 43, 127, 0.22), transparent 65%);
+    pointer-events: none;
+  }
+
+  .md-hero .container { position: relative; }
+
+  .md-hero__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .md-hero__title {
+    max-width: 960px;
+    margin-top: 26px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 600px) {
+    .md-hero__title { font-size: 48px; }
+  }
+
+  @media (min-width: 1024px) {
+    .md-hero__title { font-size: 56px; }
+  }
+
+  @media (min-width: 1280px) {
+    .md-hero__title { font-size: 62px; }
+  }
+
+  .hp-kw {
+    letter-spacing: 1px;
+    padding: 0 0.04em;
+  }
+
+  .md-hero__sub {
+    max-width: 680px;
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* Ordinateur : élargi pour tenir en 3 lignes au plus à 1440 px (3 lignes dès 920 px de large ;
+     2 lignes demanderaient environ 1450 px, plus que le H1), sans dépasser le cadre du H1 (960 px). */
+  @media (min-width: 1024px) {
+    .md-hero__sub {
+      max-width: 940px;
+      font-size: 18px;
+    }
+  }
+
+  .md-hero__strong {
+    margin-top: 14px;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .md-hero__strong strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  @media (min-width: 1024px) {
+    .md-hero__strong { font-size: 18px; }
+  }
+
+  .md-hero__acts { margin-top: 32px; }
+
+
+  /* Icônes en carré dégradé (mêmes que les tuiles des pages Santé et RH) */
+  .md-xi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+    transition: transform 350ms ease;
+  }
+
+  .md-xi svg { width: 26px; height: 26px; }
+
+  .md-xi--w {
+    background: color-mix(in srgb, var(--text-primary) 22%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 40%, transparent);
+  }
+
+
+  /* Bandeau « Nouveau » (identique à l'accueil) */
+  .hp-teaser {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding: 14px 14px 14px 22px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--hp-on-grad);
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+
+  .hp-teaser:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(230, 43, 127, 0.3);
+    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
   }
 
-  .trio-card__bio {
+  .hp-teaser:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .hp-teaser strong { color: var(--hp-on-grad); }
+
+  .hp-teaser__dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--hp-on-grad);
+  }
+
+  .hp-go {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-left: auto;
+    border-radius: 50%;
+    background: var(--text-primary);
+    color: var(--hp-on-grad);
+    transition: transform 250ms ease;
+  }
+
+  .hp-go svg { width: 18px; height: 18px; }
+
+  .hp-teaser:hover .hp-go { transform: translateX(3px); }
+
+  /* Bouton et lien sous les services */
+  .md-svc-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 34px;
+  }
+
+  /* ===== 5. COMMENT ÇA SE PASSE ===== */
+  .md-steps {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    list-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .md-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .md-st {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    font-size: 14px;
-    line-height: 1.65;
-    color: var(--text-secondary);
+    padding: 28px 24px;
+    border-radius: 24px;
   }
 
   @media (min-width: 1024px) {
-    .trio-card__bio { font-size: 16px; }
+    .md-st { padding: 30px; }
   }
 
-  /* ===== TRIO ANCHOR ===== */
-  .trio-anchor {
-    margin-bottom: 32px;
+  .md-st__d {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-weight: 700;
+    color: var(--md-pink-soft);
+    box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.55);
+  }
+
+  .md-st__d.is-on {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.35);
+  }
+
+  .md-st h3 {
+    margin-top: 6px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .md-st p {
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+
+  /* ===== 6. BANDEAU FINAL (identique à l'accueil) ===== */
+  .hp-final {
+    padding: 52px 22px;
+    border-radius: 28px;
+    background: var(--hp-grad-band);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .hp-final { padding: 80px 40px; border-radius: 40px; }
+  }
+
+  .hp-final h2 {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .hp-final h2 { font-size: 46px; }
+  }
+
+  @media (min-width: 1280px) {
+    .hp-final h2 { font-size: 56px; }
+  }
+
+  .hp-final p {
+    margin: 18px auto 36px;
+    max-width: 620px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--hp-on-grad);
+  }
+
+  .hp-avs { display: flex; }
+
+  .hp-avs > span {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 62px;
+    height: 62px;
+    margin-left: -14px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    box-shadow: 0 0 0 4px var(--woop-orange);
+  }
+
+  .hp-avs > span:first-child { margin-left: 0; }
+
+  .hp-avs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0;
+    transform: scale(1.55);
+    transform-origin: var(--fx, 50%) var(--fy, 30%);
+  }
+
+  .hp-avs .is-framed img {
+    object-position: var(--obj-pos, center);
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--obj-pos, center);
+  }
+
+  .hp-avs--final {
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+
+  .hp-avs--final > span {
+    width: 104px;
+    height: 104px;
+    margin-left: -22px;
+    box-shadow: 0 0 0 4px var(--text-primary);
+  }
+
+  .hp-avs--final > span:first-child { margin-left: 0; }
+
+  .hp-avs--sm > span {
+    width: 36px;
+    height: 36px;
+    margin-left: -10px;
+    box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* ===== BANDEAU COLLANT (identique à l'accueil) ===== */
+  .hp-pop {
+    --pop-left: 12px;
+    --pop-right: 12px;
+    position: fixed;
+    left: var(--pop-left);
+    right: var(--pop-right);
+    bottom: 12px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 6px 6px 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 43, 127, 0.45),
+      0 20px 50px var(--hp-shadow),
+      0 0 40px rgba(230, 43, 127, 0.2);
+    transform: translateY(calc(100% + 40px));
+    visibility: hidden;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s linear 600ms;
+  }
+
+  .hp-pop.is-shown {
+    transform: none;
+    visibility: visible;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s;
+  }
+
+  .hp-pop__txt {
+    display: none;
+    font-size: 15px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
+
+  @media (min-width: 520px) {
+    .hp-pop__txt {
+      display: block;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 13px;
+      line-height: 1.3;
+      white-space: normal;
+    }
+  }
+
+  @media (min-width: 720px) {
+    .hp-pop {
+      left: 50%;
+      right: auto;
+      bottom: 20px;
+      gap: 16px;
+      max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
+      padding: 8px 8px 8px 12px;
+      transform: translate(-50%, calc(100% + 40px));
+    }
+    .hp-pop.is-shown { transform: translate(-50%, 0); }
+    .hp-pop__txt { display: inline; flex: none; font-size: 15px; white-space: nowrap; }
+  }
+
+
+  /* Attribut hidden toujours respecté (les blocs ci-dessous définissent un display) */
+  [hidden] { display: none !important; }
+
+  /* Ancre « Rencontrer l'équipe » : la section s'arrête sous l'en-tête */
+  .eq-sec--sp { scroll-margin-top: 90px; }
+
+  /* ===== 1. HERO (2 colonnes : texte à gauche, schéma à droite) ===== */
+  .eq-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .eq-hero__grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 50px;
+    }
+  }
+
+  .eq-hero__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .md-hero__title.eq-hero__title { max-width: 640px; }
+
+  @media (min-width: 600px) {
+    .md-hero__title.eq-hero__title { font-size: 44px; }
+  }
+
+  @media (min-width: 1024px) {
+    .md-hero__title.eq-hero__title { font-size: 48px; }
+  }
+
+  @media (min-width: 1280px) {
+    .md-hero__title.eq-hero__title { font-size: 56px; }
+  }
+
+  .md-hero__sub.eq-hero__sub { max-width: 560px; }
+
+  /* Schéma décoratif « Votre projet » */
+  .eq-hub {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    height: 360px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 621px) {
+    .eq-hub { height: 420px; }
+  }
+
+  @media (min-width: 1024px) {
+    .eq-hub { margin: 0 0 0 auto; }
+  }
+
+  /* Liaisons fixes en pointillés (masquées sur téléphone, comme dans la maquette) */
+  .eq-hub__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    fill: none;
+    stroke: rgba(230, 43, 127, 0.55);
+    stroke-width: 2;
+    stroke-dasharray: 5 8;
+  }
+
+  @media (min-width: 621px) {
+    .eq-hub__lines { display: block; }
+  }
+
+  .eq-hub__core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 170px;
+    padding: 22px 16px;
+    border-radius: 28px;
+    text-align: center;
+    background: var(--woop-gradient);
+    box-shadow: 0 30px 70px rgba(230, 43, 127, 0.45);
+    transform: translate(-50%, -50%);
+  }
+
+  @media (min-width: 621px) {
+    .eq-hub__core { width: 200px; padding: 22px 18px; }
+  }
+
+  .eq-hub__ico {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--hp-light);
+    color: var(--woop-pink);
+  }
+
+  .eq-hub__ico svg { width: 24px; height: 24px; }
+
+  .eq-hub__core b {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  /* Petite ligne sur le dégradé : --bg-deep (contraste hybride) */
+  .eq-hub__core small {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--hp-on-grad);
+  }
+
+  /* Bulles : photo ronde, expertise et prénom. Seule animation du schéma : un léger flottement. */
+  .eq-hub__n {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px 7px 7px;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--bg-elevated) 82%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 12%, transparent),
+      0 18px 40px var(--hp-shadow);
+    animation: eq-float 7s ease-in-out infinite;
+  }
+
+  @media (min-width: 621px) {
+    .eq-hub__n { gap: 12px; padding: 10px 16px 10px 10px; }
+  }
+
+  .eq-hub__n--a { left: 0; top: 0; }
+  .eq-hub__n--b { right: 0; top: 0; animation-delay: -2s; }
+  .eq-hub__n--c { left: 0; bottom: 0; animation-delay: -4s; }
+  .eq-hub__n--d { right: 0; bottom: 0; animation-delay: -5s; }
+
+  @media (min-width: 621px) {
+    .eq-hub__n--a { left: 20px; top: 40px; }
+    .eq-hub__n--b { right: 10px; top: 40px; }
+    .eq-hub__n--c { left: 20px; bottom: 40px; }
+    .eq-hub__n--d { right: 10px; bottom: 40px; }
+  }
+
+  @keyframes eq-float {
+    50% { transform: translateY(-8px); }
+  }
+
+  .eq-hub__ph {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+  }
+
+  @media (min-width: 621px) {
+    .eq-hub__ph { width: 46px; height: 46px; }
+  }
+
+  /* Même cadrage que les photos rondes de l'accueil (hp-avs) */
+  .eq-hub__ph img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0;
+    transform: scale(1.55);
+    transform-origin: var(--fx, 50%) var(--fy, 30%);
+  }
+
+  .eq-hub__ph.is-framed img {
+    object-position: var(--obj-pos, center);
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--obj-pos, center);
+  }
+
+  .eq-hub__lbl { display: flex; flex-direction: column; }
+  .eq-hub__lbl b { font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--text-primary); }
+  .eq-hub__lbl small { font-size: 12px; line-height: 1.3; color: var(--text-secondary); }
+
+  /* ===== 2. CARROUSEL « CHACUN SON EXPERTISE » ===== */
+  .eq-sp {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    padding: 22px 18px;
+    border-radius: 30px;
+  }
+
+  @media (min-width: 768px) {
+    .eq-sp { padding: 40px; border-radius: 36px; }
+  }
+
+  @media (min-width: 1100px) {
+    .eq-sp { padding: 50px; }
+  }
+
+  /* Onglets : 2 × 2 au-dessus de la fiche sur téléphone et tablette, en ligne sous la fiche sur ordinateur */
+  .eq-sp__bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+  }
+
+  @media (min-width: 900px) {
+    .eq-sp__bar { order: 2; }
+  }
+
+  .eq-sp__tabs {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 16px;
+    min-width: 0;
+  }
+
+  @media (min-width: 900px) {
+    .eq-sp__tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  .eq-sp__tab {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 6px 0;
+    border: 0;
+    background: none;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+    transition: color 200ms ease;
+  }
+
+  .eq-sp__tab:hover,
+  .eq-sp__tab[aria-selected='true'] { color: var(--text-primary); }
+
+  .eq-sp__tab:focus-visible,
+  .eq-sp__pause:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+
+  /* Barre de progression : sa fin déclenche le profil suivant (le script écoute animationend) */
+  .eq-sp__prog {
+    position: relative;
+    display: block;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  }
+
+  .eq-sp__prog::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--woop-gradient);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .eq-sp__tab.is-done .eq-sp__prog::after { transform: scaleX(1); }
+
+  .eq-sp__tab.is-run .eq-sp__prog::after {
+    animation: eq-bar var(--eq-dur, 8s) linear forwards;
+  }
+
+  .eq-sp.is-paused .eq-sp__tab.is-run .eq-sp__prog::after { animation-play-state: paused; }
+
+  /* Défilement arrêté : la barre de l'onglet choisi reste pleine, les autres vides */
+  .eq-sp.is-stopped .eq-sp__tab .eq-sp__prog::after { animation: none; transform: scaleX(0); }
+  .eq-sp.is-stopped .eq-sp__tab[aria-selected='true'] .eq-sp__prog::after { transform: scaleX(1); }
+
+  @keyframes eq-bar {
+    to { transform: scaleX(1); }
+  }
+
+  .eq-sp__pause {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    margin-bottom: 2px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 200ms ease, box-shadow 200ms ease;
+  }
+
+  .eq-sp__pause:hover {
+    color: var(--text-primary);
+    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--woop-pink) 60%, transparent);
+  }
+
+  .eq-sp__pause svg { width: 14px; height: 14px; }
+  .eq-sp__i-play { display: none; }
+  .eq-sp.is-user-paused .eq-sp__i-pause { display: none; }
+  .eq-sp.is-user-paused .eq-sp__i-play { display: block; }
+
+  /* Fiches : sans JavaScript, empilées l'une sous l'autre */
+  .eq-sp__stage {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* Avec JavaScript : les 4 fiches occupent la même cellule ; la cellule prend la hauteur
+     de la fiche la plus haute, donc la page ne saute pas au changement de profil. */
+  .eq-sp.is-enhanced .eq-sp__stage {
+    display: grid;
+    gap: 0;
+  }
+
+  .eq-sp.is-enhanced .eq-sp__panel {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 450ms ease, visibility 0s linear 450ms;
+  }
+
+  .eq-sp.is-enhanced .eq-sp__panel.is-active {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 450ms ease, visibility 0s;
+  }
+
+  .eq-sp.is-enhanced .eq-sp__panel .eq-sp__card {
+    transform: translateX(24px);
+    transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .eq-sp.is-enhanced .eq-sp__panel.is-active .eq-sp__card { transform: none; }
+
+  .eq-sp__panel:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 6px;
+    border-radius: 24px;
+  }
+
+  /* Répartition 30 / 70 à partir de 1100 px ; en dessous, l'expertise au-dessus de la fiche */
+  .eq-sp__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    align-items: center;
+  }
+
+  @media (min-width: 1100px) {
+    .eq-sp__panel {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+      gap: 36px;
+    }
+  }
+
+  .eq-sp__role {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
 
-  @media (min-width: 768px) {
-    .trio-anchor {
-      flex-direction: row;
-      align-items: baseline;
-      gap: 24px;
-    }
-  }
-
-  .trio-anchor__title {
-    font-family: var(--font-display);
-    font-size: 64px;
+  .eq-sp__k {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    line-height: 0.9;
-    letter-spacing: -0.01em;
-  }
-
-  @media (min-width: 768px) {
-    .trio-anchor__title { font-size: 96px; }
-  }
-
-  @media (min-width: 1024px) {
-    .trio-anchor__title { font-size: 120px; }
-  }
-
-  .trio-anchor__tagline {
-    font-size: 16px;
     color: var(--text-secondary);
   }
 
-  @media (min-width: 768px) {
-    .trio-anchor__tagline { font-size: 18px; }
-  }
-
-  /* ===== MÉTHODOLOGIE ===== */
-  .method-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-    margin-top: 32px;
+  .eq-sp__word {
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.05;
   }
 
   @media (min-width: 600px) {
-    .method-grid { grid-template-columns: 1fr 1fr; }
+    .eq-sp__word { font-size: 48px; }
+  }
+
+  @media (min-width: 1100px) {
+    .eq-sp__word { font-size: 44px; }
+  }
+
+  @media (min-width: 1280px) {
+    .eq-sp__word { font-size: 56px; }
+  }
+
+  .eq-sp__card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 16px;
+    border-radius: 26px;
+    background: color-mix(in srgb, var(--bg-deep) 55%, transparent);
+    box-shadow:
+      inset 0 0 0 1px var(--hp-line),
+      0 30px 60px color-mix(in srgb, var(--bg-deep) 40%, transparent);
+  }
+
+  /* Photo à gauche du texte dès 768 px ; au-dessus en dessous */
+  @media (min-width: 768px) {
+    .eq-sp__card {
+      grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+      gap: 26px;
+      align-items: center;
+      padding: 20px;
+    }
+  }
+
+  /* Photo verticale (format d'origine, 335 px de large au plus) */
+  .eq-sp__ph {
+    overflow: hidden;
+    width: 100%;
+    max-width: 335px;
+    aspect-ratio: 671 / 822;
+    border-radius: 20px;
+    background: var(--woop-gradient);
+  }
+
+  .eq-sp__ph img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .eq-sp__tx {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .eq-sp__rl {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+  }
+
+  .eq-sp__tx h3 {
+    margin-top: -4px;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text-primary);
   }
 
   @media (min-width: 1024px) {
-    .method-grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .eq-sp__tx h3 { font-size: 30px; }
   }
 
-  .method-step {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    padding: 24px;
+  .eq-sp__bio {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  .eq-sp__links {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 12px;
+    margin-top: 6px;
   }
 
-  .method-step__num {
-    width: 36px;
-    height: 36px;
+  .eq-sp__li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: var(--woop-gradient);
-    color: #fff;
-    font-weight: 700;
-    font-size: 13px;
+    color: var(--hp-on-grad);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .eq-sp__li svg { width: 18px; height: 18px; }
+
+  .eq-sp__li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(230, 43, 127, 0.45);
+  }
+
+  .eq-sp__li:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 3px;
+  }
+
+  /* Lien discret dans la bio (vers les pages Santé et RH) : identique au texte qui l'entoure
+     (même couleur, même graisse, sans soulignement). Souligné uniquement au survol et au focus clavier. */
+  .eq-sp__bio .md-inl {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
+  }
+
+  .eq-sp__bio .md-inl:hover,
+  .eq-sp__bio .md-inl:focus-visible {
+    text-decoration: underline;
+    text-decoration-color: var(--woop-pink);
+    text-decoration-thickness: 1.5px;
+    outline: none;
+  }
+
+  /* ===== 3. NOTRE MÉTHODE (4 étapes) ===== */
+  @media (min-width: 600px) {
+    .md-steps.eq-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1100px) {
+    .md-steps.eq-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+
+  .eq-st { gap: 12px; }
+
+  /* Icône et titre sur la même ligne */
+  .eq-st__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 6px;
+  }
+
+  .md-xi.eq-st__ico {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+
+  .md-xi.eq-st__ico svg { width: 22px; height: 22px; }
+
+  .eq-st .eq-st__head h3 { margin-top: 0; }
+
+  .eq-st p { font-size: 15px; }
+
+  .eq-st p.eq-st__sub {
+    padding-top: 12px;
+    border-top: 1px solid var(--hp-line);
+    color: var(--text-primary);
+    font-size: 14.5px;
+  }
+
+  /* 4e carte en dégradé : grand titre en blanc, petits textes et icône en --bg-deep */
+  .eq-st--hot {
+    background: var(--woop-gradient);
+    box-shadow: 0 26px 60px rgba(230, 43, 127, 0.3);
+  }
+
+  .eq-st--hot p,
+  .eq-st--hot p.eq-st__sub { color: var(--hp-on-grad); }
+
+  .eq-st--hot p.eq-st__sub { border-top-color: color-mix(in srgb, var(--bg-deep) 25%, transparent); }
+
+  .eq-st--hot .md-st__d.is-on {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--text-primary) 20%, transparent);
+  }
+
+  .eq-st--hot .md-xi--w { color: var(--hp-on-grad); }
+
+  .eq-teaser { margin-top: 34px; }
+
+  /* ===== 4. NOTRE PROMESSE ===== */
+  .eq-prom {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    align-items: center;
+    padding: 34px 22px;
+    border-radius: 30px;
+    background: color-mix(in srgb, var(--bg-elevated) 70%, transparent);
+  }
+
+  @media (min-width: 900px) {
+    .eq-prom {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 50px;
+      padding: 56px;
+      border-radius: 36px;
+    }
+  }
+
+  /* Grand cadre à filet dégradé */
+  .eq-prom::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: var(--woop-gradient);
+    -webkit-mask: linear-gradient(var(--bg-deep) 0 0) content-box, linear-gradient(var(--bg-deep) 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .eq-prom__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--home-head-gap);
+  }
+
+  .eq-prom__list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    list-style: none;
+  }
+
+  .eq-prom__list li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hp-line);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--text-primary);
+  }
+
+  /* Coche : même dessin que les cartes « Pour qui » des pages Santé et RH (md-pr__change) */
+  .eq-prom__ck {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .method-step__title {
-    font-family: var(--font-display);
-    font-size: 18px;
-    text-transform: uppercase;
-    line-height: 1;
-    color: var(--text-primary);
-  }
-
-  .method-step__text {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    flex: 1;
-  }
-
-  @media (min-width: 1024px) {
-    .method-step__text { font-size: 16px; }
-  }
-
-  /* ===== CTA INTERMÉDIAIRE ===== */
-  .cta-mid {
-    text-align: center;
-    padding: 32px 0;
-  }
-
-  /* ===== PROMESSE ===== */
-  .promise-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    padding: 40px 32px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .promise-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
     background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 12px;
+    font-weight: 700;
   }
 
-  .promise-card__title {
-    font-family: var(--font-display);
-    font-size: 28px;
-    text-transform: uppercase;
-    line-height: 1.15;
-    color: var(--text-primary);
-    margin-bottom: 16px;
-  }
-
-  @media (min-width: 768px) {
-    .promise-card__title { font-size: 36px; }
-  }
-
-  .promise-card__text {
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--text-secondary);
-    max-width: 700px;
-  }
-
-  @media (min-width: 1024px) {
-    .promise-card__text { font-size: 17px; }
-  }
-
-  /* ===== CTA FINAL ===== */
-  .cta-final {
-    background: var(--woop-gradient);
-    border-radius: var(--radius-bento);
-    padding: 56px 32px;
-    text-align: center;
-  }
-
-  @media (min-width: 768px) {
-    .cta-final { padding: 72px 48px; }
-  }
-
-  .cta-final__title {
-    font-family: var(--font-display);
-    font-size: 28px;
-    text-transform: uppercase;
-    color: #fff;
-    margin-bottom: 28px;
-    line-height: 1.1;
-  }
-
-  @media (min-width: 768px) {
-    .cta-final__title { font-size: 40px; }
-  }
-
-  .cta-final :global(.btn--primary) {
-    background: #fff;
-    color: var(--woop-pink);
-  }
-
-  .cta-final :global(.btn--primary:hover) {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-  }
-
+  /* ===== MOUVEMENT RÉDUIT ===== */
   @media (prefers-reduced-motion: reduce) {
-    .trio-card__linkedin {
-      transition: none;
-    }
-  }
+    /* Schéma du hero immobile */
+    .eq-hub__n { animation: none; }
 
-  /* Cartes équipe en format horizontal — placé en fin de feuille et avec une spécificité supérieure pour l'emporter définitivement sur les règles de base verticales */
-  @media (min-width: 768px) {
-    .trio-cards .trio-card {
-      flex-direction: row;
-    }
+    /* Carrousel : changement de profil instantané (le script ne lance aucun défilement) */
+    .eq-sp.is-enhanced .eq-sp__panel,
+    .eq-sp.is-enhanced .eq-sp__panel.is-active,
+    .eq-sp.is-enhanced .eq-sp__panel .eq-sp__card { transition: none; }
+    .eq-sp.is-enhanced .eq-sp__panel .eq-sp__card { transform: none; }
 
-    .trio-cards .trio-card__photo-wrap {
-      flex: 0 0 220px;
-      aspect-ratio: auto;
-      align-self: stretch;
-    }
-  }
+    .cta,
+    .eq-sp__li,
+    .hp-pop,
+    .hp-pop.is-shown { transition: none; }
 
-  @media (min-width: 1024px) {
-    .trio-cards .trio-card__photo-wrap {
-      flex: 0 0 200px;
-    }
+    .cta:hover,
+    .eq-sp__li:hover,
+    .hp-teaser:hover,
+    .hp-teaser:hover .hp-go { transform: none; }
   }
 </style>
+
+<script>
+  // Carrousel « Chacun son expertise » : onglets accessibles (tablist / tab / tabpanel).
+  // - Un profil toutes les 8 s ; la fin de l'animation de la barre déclenche le profil suivant,
+  //   donc mettre la barre en pause met aussi le minuteur en pause.
+  // - Démarre seulement quand le carrousel est visible ; pause au survol, au focus clavier,
+  //   avec le bouton Pause, et quand l'onglet du navigateur est masqué.
+  // - S'arrête définitivement au premier clic ou toucher sur un onglet ou une fiche,
+  //   ou à la première touche du clavier dans les onglets.
+  // - Aucun défilement automatique avec prefers-reduced-motion.
+  // - Sans JavaScript : onglets cachés, les 4 fiches affichées l'une sous l'autre.
+  (function () {
+    const root = document.querySelector<HTMLElement>('[data-eq-sp]');
+    if (!root) return;
+    const bar = root.querySelector<HTMLElement>('[data-eq-bar]');
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-eq-tab]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-eq-panel]'));
+    const pauseBtn = root.querySelector<HTMLButtonElement>('[data-eq-pause]');
+    const stage = root.querySelector<HTMLElement>('.eq-sp__stage');
+    if (!bar || !pauseBtn || !stage || tabs.length !== panels.length || !tabs.length) return;
+
+    const dur = Number(root.dataset.eqDur) || 8000;
+    root.style.setProperty('--eq-dur', `${dur}ms`);
+
+    // Mise en place des rôles (les fiches restent lisibles sans JavaScript)
+    panels.forEach((panel, k) => {
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', tabs[k].id);
+      panel.tabIndex = 0;
+    });
+    bar.hidden = false;
+    root.classList.add('is-enhanced');
+
+    let cur = 0;
+    let stopped = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reasons = { hover: false, focus: false, user: false, offscreen: true, hidden: document.hidden };
+
+    const updatePause = () => {
+      const paused = Object.values(reasons).some(Boolean);
+      root.classList.toggle('is-paused', paused);
+    };
+
+    // Relance la barre de l'onglet actif depuis le début
+    const restartBar = () => {
+      tabs.forEach((t, k) => {
+        t.classList.remove('is-run');
+        t.classList.toggle('is-done', !stopped && k < cur);
+      });
+      if (stopped) return;
+      void tabs[cur].offsetWidth;
+      tabs[cur].classList.add('is-run');
+    };
+
+    const select = (n: number, focus = false) => {
+      cur = (n + tabs.length) % tabs.length;
+      tabs.forEach((t, k) => {
+        const on = k === cur;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        panels[k].classList.toggle('is-active', on);
+      });
+      if (focus) tabs[cur].focus();
+      restartBar();
+    };
+
+    const stop = () => {
+      if (stopped) return;
+      stopped = true;
+      root.classList.add('is-stopped');
+      pauseBtn.hidden = true;
+      restartBar();
+    };
+
+    if (stopped) {
+      root.classList.add('is-stopped');
+      pauseBtn.hidden = true;
+    }
+
+    // Fin de la barre active : profil suivant
+    tabs.forEach((t) => {
+      t.querySelector('.eq-sp__prog')?.addEventListener('animationend', () => {
+        if (!stopped && t === tabs[cur]) select(cur + 1);
+      });
+    });
+
+    // Clic ou toucher : arrêt définitif
+    tabs.forEach((t, k) => {
+      t.addEventListener('pointerdown', stop);
+      t.addEventListener('click', () => { stop(); select(k); });
+    });
+    stage.addEventListener('pointerdown', stop);
+
+    // Flèches du clavier, Début et Fin (activation immédiate)
+    bar.addEventListener('keydown', (e) => {
+      if (!(e.target instanceof HTMLElement) || !e.target.matches('[data-eq-tab]')) return;
+      const keys: Record<string, number> = { ArrowRight: cur + 1, ArrowLeft: cur - 1, Home: 0, End: tabs.length - 1 };
+      if (!(e.key in keys)) return;
+      e.preventDefault();
+      stop();
+      select(keys[e.key], true);
+    });
+
+    // Pause au survol (souris) et au focus clavier
+    root.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { reasons.hover = true; updatePause(); } });
+    root.addEventListener('pointerleave', () => { reasons.hover = false; updatePause(); });
+    root.addEventListener('focusin', () => { reasons.focus = true; updatePause(); });
+    root.addEventListener('focusout', (e) => {
+      if (e.relatedTarget instanceof Node && root.contains(e.relatedTarget)) return;
+      reasons.focus = false;
+      updatePause();
+    });
+
+    // Bouton Pause / Lecture
+    pauseBtn.addEventListener('click', () => {
+      reasons.user = !reasons.user;
+      root.classList.toggle('is-user-paused', reasons.user);
+      pauseBtn.setAttribute('aria-label', reasons.user ? 'Reprendre le défilement automatique' : 'Mettre en pause le défilement automatique');
+      updatePause();
+    });
+
+    // Démarrage seulement quand le carrousel est visible (et pause s'il sort de l'écran)
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          reasons.offscreen = !entry.isIntersecting;
+          updatePause();
+        });
+      }, { rootMargin: '-20% 0px -20% 0px', threshold: 0 }).observe(root);
+    } else {
+      reasons.offscreen = false;
+    }
+
+    document.addEventListener('visibilitychange', () => { reasons.hidden = document.hidden; updatePause(); });
+
+    updatePause();
+    select(0);
+  })();
+</script>
+
+<script>
+  // Bandeau collant (même script que la page d'accueil) : visible une fois le hero dépassé,
+  // masqué dès que le bandeau final entre à l'écran (et au-delà). Il ne recouvre jamais la
+  // bannière de consentement CookieYes : il se retire tant qu'elle (ou sa fenêtre de
+  // préférences) est affichée, et s'écarte du bouton flottant « préférences » de CookieYes
+  // s'il est présent dans le bas de l'écran.
+  (function () {
+    const pop = document.querySelector<HTMLElement>('[data-hp-pop]');
+    const hero = document.querySelector<HTMLElement>('[data-hp-hero]');
+    const finalBand = document.querySelector<HTMLElement>('[data-hp-final]');
+    if (!pop || !hero || !finalBand) return;
+
+    const isShown = (el: Element | null): el is HTMLElement => {
+      if (!el) return false;
+      const r = (el as HTMLElement).getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) return false;
+      const cs = window.getComputedStyle(el);
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && Number(cs.opacity) > 0;
+    };
+
+    // Bannière ou fenêtre de préférences CookieYes ouverte.
+    const consentOpen = () => {
+      const banner = document.querySelector('.cky-consent-container');
+      if (banner && !banner.classList.contains('cky-hide') && isShown(banner)) return true;
+      const modal = document.querySelector('.cky-modal.cky-modal-open');
+      if (modal && isShown(modal)) return true;
+      return false;
+    };
+
+    let lastLeft = 12;
+    let lastRight = 12;
+
+    // Bouton flottant CookieYes : on réserve sa place sur le côté où il se trouve.
+    const avoidRevisit = () => {
+      const btn = document.querySelector('.cky-btn-revisit-wrapper');
+      let left = 12;
+      let right = 12;
+      if (btn && isShown(btn)) {
+        const r = btn.getBoundingClientRect();
+        if (r.bottom > window.innerHeight - 120) {
+          if (r.left + r.width / 2 < window.innerWidth / 2) left = Math.max(left, Math.ceil(r.right) + 10);
+          else right = Math.max(right, Math.ceil(window.innerWidth - r.left) + 10);
+        }
+      }
+      if (left !== lastLeft) pop.style.setProperty('--pop-left', `${left}px`);
+      if (right !== lastRight) pop.style.setProperty('--pop-right', `${right}px`);
+      lastLeft = left;
+      lastRight = right;
+    };
+
+    let shown = false;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      const pastHero = hero.getBoundingClientRect().bottom < 0;
+      const finalReached = finalBand.getBoundingClientRect().top < vh;
+      const next = pastHero && !finalReached && !consentOpen();
+      avoidRevisit();
+      if (next === shown) return;
+      shown = next;
+      pop.classList.toggle('is-shown', shown);
+      if (shown) pop.removeAttribute('inert');
+      else pop.setAttribute('inert', '');
+    };
+
+    const schedule = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    document.addEventListener('cookieyes_banner_load', schedule);
+    document.addEventListener('cookieyes_consent_update', schedule);
+
+    // CookieYes insère et masque ses éléments par classes : on suit ces changements.
+    new MutationObserver(schedule).observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    update();
+  })();
+</script>
