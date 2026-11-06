@@ -111,12 +111,12 @@ const profiles: {
 // Ordre de lecture = ordre de la grille. Formats :
 // - feat : bandeau dégradé, pleine largeur ;
 // - wide : 2 colonnes, en-tête et texte à gauche, illustration à droite ;
-// - tall : 1 colonne, haute sur 2 rangées sur ordinateur ;
 // - sq   : 1 colonne.
-// `step` : décalage d'apparition (data-reveal-step), recalculé dans l'ordre de lecture de chaque rangée.
+// `step` : décalage d'apparition (data-reveal-step), recalculé dans l'ordre de lecture de chaque rangée :
+// Expérience 0 · Acquisition 0, Image de marque 1 · Site web 0, Stratégie 1, Réputation 2.
 const services: {
-  key: 'cx' | 'acq' | 'brand' | 'ord' | 'web' | 'strat' | 'rep';
-  shape: 'feat' | 'wide' | 'tall' | 'sq';
+  key: 'cx' | 'acq' | 'brand' | 'web' | 'strat' | 'rep';
+  shape: 'feat' | 'wide' | 'sq';
   title: string;
   text: string;
   badge?: string;
@@ -148,19 +148,11 @@ const services: {
     step: '1',
   },
   {
-    key: 'ord',
-    shape: 'tall',
-    title: 'Connaissance des ordres professionnels',
-    text: 'Marketing médical respectueux des règles encadrant votre profession. Pas de promesse abusive, des messages conçus dans le respect du code de déontologie de votre ordre. Une agence qui connaît vos limites.',
-    reveal: 'up',
-  },
-  {
     key: 'web',
-    shape: 'wide',
+    shape: 'sq',
     title: 'Site web et présence en ligne',
     text: 'Sites de conversion pensés pour transformer un visiteur en rendez-vous. Présence soignée sur les réseaux sociaux avec un calendrier éditorial régulier. Le tout conforme aux meilleures pratiques web et optimisé pour Google.',
     reveal: 'up',
-    step: '1',
   },
   {
     key: 'strat',
@@ -168,7 +160,7 @@ const services: {
     title: 'Stratégie et conseil',
     text: "Audit, positionnement, plan d'action. Pour les directeurs de clinique qui veulent une vision claire avant de lancer leurs investissements marketing.",
     reveal: 'up',
-    step: '2',
+    step: '1',
   },
   {
     key: 'rep',
@@ -176,7 +168,7 @@ const services: {
     title: 'Gestion de la réputation en ligne',
     text: "Avis Google, réponses aux commentaires, suivi de votre image sur le web. On vous aide à construire et protéger la réputation de votre clinique, aujourd'hui votre actif le plus visible.",
     reveal: 'up',
-    step: '3',
+    step: '2',
   },
 ];
 
@@ -351,7 +343,6 @@ const steps = [
                   {t.key === 'acq' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg>)}
                   {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
                   {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>)}
-                  {t.key === 'ord' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>)}
                   {t.key === 'strat' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>)}
                   {t.key === 'rep' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
                 </span>
@@ -375,7 +366,6 @@ const steps = [
                   {t.key === 'acq' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg>)}
                   {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
                   {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>)}
-                  {t.key === 'ord' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>)}
                   {t.key === 'strat' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>)}
                   {t.key === 'rep' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
                 </span>
@@ -402,13 +392,6 @@ const steps = [
                       <div class="md-pg"><i class="md-pg__h"></i><i class="md-pg__t"></i><span class="md-pg__cta"></span></div>
                       <div class="md-phn"><i></i><span></span></div>
                     </>
-                  )}
-                  {t.key === 'ord' && (
-                    <div class="md-doc">
-                      <span class="md-doc__title"></span>
-                      <i></i><i></i><i></i><i class="md-doc__sh"></i>
-                      <span class="md-seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8v18.4"/><path d="M10.4 2.8h3.2"/><path d="M9.2 6.6c1.4-.9 5.3-.8 5.3.8 0 1.5-5.4 1.3-5.4 3.2s5.4 1.6 5.4 3.4-5.1 1.5-5.1 3.1c0 .9 1.2 1.4 2.6 1.4"/><path d="M9.2 6.6c-.7.4-1.3.2-1.5-.4.4-.6 1.1-.7 1.5.4z" fill="currentColor"/></svg></span>
-                    </div>
                   )}
                   {t.key === 'strat' && (
                     <>
@@ -457,7 +440,9 @@ const steps = [
           <p class="md-gau__lead">Gauthier est infirmier clinicien de formation et détenteur d'un MBA. Il dirige aujourd'hui les opérations médicales dans l'aéromédical, expert des soins en communauté et en régions éloignées.</p>
           <p>Avant ça, il était directeur de cliniques privées, où il vivait au quotidien les défis que vous connaissez aujourd'hui{NB}: remplir l'agenda, structurer l'équipe, gérer la réputation, comprendre ce qui fait revenir un patient.</p>
           <p>Cette double expérience, la pratique clinique et la direction de clinique, change tout.</p>
+          <p>Elle nous donne aussi un réflexe que peu d'agences ont{NB}: connaître les règles qui encadrent votre profession. Pas de promesse abusive{NB}: chaque message respecte le code de déontologie de votre ordre.</p>
           <p class="md-gau__quote">Quand on conçoit votre stratégie, on ne devine pas vos problèmes. <strong>On les a déjà résolus.</strong></p>
+          <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span>Marketing conforme aux règles de votre ordre professionnel</span></p>
           <div class="md-gau__foot">
             <p class="md-gau__hl">Aucune autre agence marketing au Québec ne peut dire ça.</p>
             <a class="cta" href={`${base}/contact?personne=gauthier`}>Parler à Gauthier<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
@@ -1633,10 +1618,9 @@ const steps = [
     .md-sv--cx { grid-column: 1 / -1; grid-row: 1; }
     .md-sv--acq { grid-column: 1 / span 2; grid-row: 2; }
     .md-sv--brand { grid-column: 3; grid-row: 2; }
-    .md-sv--ord { grid-column: 1; grid-row: 3 / span 2; }
-    .md-sv--web { grid-column: 2 / span 2; grid-row: 3; }
-    .md-sv--strat { grid-column: 2; grid-row: 4; }
-    .md-sv--rep { grid-column: 3; grid-row: 4; }
+    .md-sv--web { grid-column: 1; grid-row: 3; }
+    .md-sv--strat { grid-column: 2; grid-row: 3; }
+    .md-sv--rep { grid-column: 3; grid-row: 3; }
   }
 
   .md-sv {
@@ -1675,15 +1659,15 @@ const steps = [
     gap: 16px;
   }
 
-  /* Illustration en bas de la tuile : Image de marque, Ordres, Réputation */
+  /* En-tête, texte, puis illustration en bas : Image de marque, Stratégie */
   .md-sv--brand .md-mui,
-  .md-sv--ord .md-mui,
-  .md-sv--rep .md-mui { margin-top: auto; }
+  .md-sv--strat .md-mui { margin-top: auto; }
 
-  /* Stratégie : en-tête, illustration, puis texte */
-  .md-sv--strat .md-sv__text { order: 1; }
+  /* En-tête, illustration, puis texte : Site web, Réputation */
+  .md-sv--web .md-sv__text,
+  .md-sv--rep .md-sv__text { order: 1; }
 
-  /* Tuiles larges (Acquisition, Site web) : en-tête et texte à gauche, illustration à droite,
+  /* Tuile large (Acquisition) : en-tête et texte à gauche, illustration à droite,
      centrés verticalement. À la verticale sur téléphone. */
   @media (min-width: 600px) {
     .md-sv--wide {
@@ -1710,9 +1694,6 @@ const steps = [
   @media (min-width: 1100px) {
     .md-sv--wide { column-gap: 36px; }
     .md-sv--wide .md-mui { height: 170px; }
-    /* Tuile haute (Ordres) : l'illustration en grand en bas */
-    .md-sv--tall .md-mui { height: 270px; }
-    .md-sv--tall .md-doc { zoom: 1.5; }
   }
 
   /* Tuile-lien (href défini) : survol, focus et chevron, comme sur l'accueil */
@@ -2050,57 +2031,6 @@ const steps = [
   .md-phn i { display: block; height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 40%, transparent); }
   .md-phn span { display: block; height: 18px; border-radius: 6px; background: var(--woop-gradient); }
 
-  /* Ordres professionnels : code de déontologie avec un sceau (bâton d'Asclépios) */
-  .md-mui--ord {
-    align-items: center;
-    background: rgba(230, 43, 127, 0.08);
-    box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.3);
-  }
-
-  .md-doc {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    width: 150px;
-    padding: 14px 14px 16px;
-    border-radius: 12px;
-    background: var(--hp-light);
-    box-shadow: 0 14px 30px var(--hp-shadow);
-    transform: rotate(-3deg);
-  }
-
-  .md-doc__title {
-    display: block;
-    width: 62%;
-    height: 9px;
-    margin-bottom: 3px;
-    border-radius: 5px;
-    background: var(--hp-plum);
-  }
-
-  .md-doc i { display: block; height: 5px; border-radius: 3px; background: var(--hp-skel); }
-  .md-doc i:nth-of-type(2) { width: 88%; }
-  .md-doc i.md-doc__sh { width: 56%; }
-
-  .md-seal {
-    position: absolute;
-    right: -18px;
-    bottom: -14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: var(--woop-gradient);
-    color: var(--hp-light);
-    box-shadow: 0 0 0 3px var(--hp-light), 0 10px 22px rgba(230, 43, 127, 0.45);
-    transform: rotate(3deg);
-  }
-
-  .md-seal svg { width: 28px; height: 28px; }
-
   /* Stratégie : feuille de route */
   .md-mui--strat {
     gap: 12px;
@@ -2330,6 +2260,47 @@ const steps = [
     font-weight: 700;
     color: var(--md-pink-soft);
   }
+
+  /* Badge « ordre professionnel » : pilule sombre, filet dégradé fin, texte blanc semi-gras */
+  .md-gau__txt .md-gau__badge {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 12px;
+    max-width: 100%;
+    margin-top: 4px;
+    padding: 8px 18px 8px 8px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background:
+      linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
+      var(--woop-gradient) border-box;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: left;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 600px) {
+    .md-gau__txt .md-gau__badge { border-radius: 999px; }
+  }
+
+  .md-gau__badge-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
+  }
+
+  .md-gau__badge-ico svg { width: 17px; height: 17px; }
 
   .md-gau__foot {
     display: flex;
