@@ -854,8 +854,13 @@ const steps = [
     color: var(--text-secondary);
   }
 
+  /* Ordinateur : élargi pour tenir en 3 lignes au plus à 1440 px, comme le sous-titre de la page RH,
+     sans dépasser le cadre du H1 (960 px). Mobile et tablette inchangés. */
   @media (min-width: 1024px) {
-    .md-hero__sub { font-size: 18px; }
+    .md-hero__sub {
+      max-width: 940px;
+      font-size: 18px;
+    }
   }
 
   .md-hero__strong {
