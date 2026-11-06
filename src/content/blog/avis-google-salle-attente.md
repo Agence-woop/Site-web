@@ -45,7 +45,7 @@ La bonne nouvelle, c'est qu'une salle d'attente bien tenue ne demande pas de tri
 
 Invitez tous vos patients à laisser un avis, pas seulement ceux que vous devinez satisfaits. Un flux régulier d'avis sincères vaut mieux qu'une collection trop lisse. Répondez ensuite, mais dans les limites du secret : restez générique, chaleureux et respectueux, remerciez pour le retour sans jamais confirmer de soin ni entrer dans les détails. Face à une critique, ne vous défendez pas et ne ripostez pas ; une réponse posée désamorce plus qu'elle ne prouve. Et quand une même critique revient, l'attente, l'accueil au téléphone, la difficulté à vous joindre, ne la voyez pas comme une attaque, mais comme une rétroaction gratuite sur ce qu'il faut corriger à l'intérieur.
 
-Le but n'a jamais été d'atteindre un 5,0 parfait. C'est d'avoir une salle d'attente numérique honnête, vivante et bien tenue, où un inconnu se sent en confiance avant même d'avoir composé votre numéro.
+Le but n'a jamais été d'atteindre un 5,0 parfait. C'est d'avoir une salle d'attente numérique honnête, vivante et bien tenue, où un inconnu se sent en confiance avant même d'avoir composé votre numéro. C'est aussi l'un des volets de notre [marketing médical pour cliniques](/services-medical/).
 
 ## La salle que vous ne voyez pas
 

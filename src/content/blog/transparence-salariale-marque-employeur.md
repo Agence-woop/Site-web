@@ -42,7 +42,7 @@ C'est exactement pour cela que la transparence salariale relève autant du marke
 
 ## Pour un cabinet spécialisé, c'est encore plus vrai
 
-Si vous dirigez un cabinet de recrutement spécialisé, ce point vous concerne doublement, pour vos clients autant que pour vous.
+Si vous dirigez un [cabinet de recrutement spécialisé](/services-recrutement/), ce point vous concerne doublement, pour vos clients autant que pour vous.
 
 Votre valeur entière repose sur une promesse : vous connaissez votre marché mieux que quiconque. Or refuser d'annoncer un salaire, ou laisser un client le faire à sa place, contredit frontalement cette promesse. Le cabinet qui affiche des fourchettes justes et sait les expliquer démontre, par ce seul geste, qu'il maîtrise son marché sur le bout des doigts. C'est une preuve d'expertise, pas une concession. La transparence devient un argument de marque, celui qui vous distingue du cabinet d'à côté qui se cache encore derrière des « selon l'expérience ».
 

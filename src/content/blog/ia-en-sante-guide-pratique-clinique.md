@@ -12,9 +12,9 @@ imageEnteteAlt: "Une réceptionniste de clinique utilise un outil d'IA en santé
 brouillon: false
 ---
 
-En santé, la bonne question n'a jamais été « qu'est-ce que l'IA peut faire à notre place », mais « qu'est-ce qui doit rester humain ». Le principe est simple : on automatise le bruit administratif, on [protège les moments humains](/blog/marketing-sante-ia-plus-humain). Reste la vraie question, celle que tout le monde me pose : concrètement, où ?
+En santé, la bonne question n'a jamais été « qu'est-ce que l'IA peut faire à notre place », mais « qu'est-ce qui doit rester humain ». Le principe est simple : on automatise le bruit administratif, on [protège les moments humains](/blog/marketing-sante-ia-plus-humain/). Reste la vraie question, celle que tout le monde me pose : concrètement, où ?
 
-Voici la réponse. Ce guide pratique de l'IA en santé délimite la seule zone où la technologie aide vraiment une clinique sans dénaturer le soin, et les garde-fous qui ne se négocient pas. Je l'écris en ancien directeur de clinique, pas en vendeur de logiciels : mon but est que vous gagniez du temps sans jamais mettre un patient, ni votre permis, en danger.
+Voici la réponse. Ce guide pratique de l'IA en santé délimite la seule zone où la technologie aide vraiment une clinique sans dénaturer le soin, et les garde-fous qui ne se négocient pas. Je l'écris en [ancien directeur de clinique](/services-medical/), pas en vendeur de logiciels : mon but est que vous gagniez du temps sans jamais mettre un patient, ni votre permis, en danger.
 
 ## Une seule zone sûre : tout ce qui entoure le soin, jamais le soin
 

@@ -23,7 +23,7 @@ Le problème n'est pas technique, il est structurel. C'est une question de qui r
 
 Votre publicité est jugée au clic. Le tableau de bord affiche des impressions, des clics, un coût par clic, et tout cela monte. De l'autre côté, votre clinique se juge à l'agenda, aux nouveaux patients, aux plages remplies. Deux tableaux de bord, deux équipes, deux vérités. Et quand l'agence vous dit que les clics sont en hausse pendant que la réception vous jure que le téléphone ne sonne pas plus, les deux ont raison en même temps.
 
-Ce qui manque, c'est le milieu. Personne n'est responsable du couloir entre les deux, donc personne ne le mesure, donc personne ne sait où les gens s'arrêtent. C'est le véritable angle mort du marketing santé : on optimise l'entrée, on compte la sortie, et on ignore tout du trajet.
+Ce qui manque, c'est le milieu. Personne n'est responsable du couloir entre les deux, donc personne ne le mesure, donc personne ne sait où les gens s'arrêtent. C'est le véritable angle mort du [marketing santé](/services-medical/) : on optimise l'entrée, on compte la sortie, et on ignore tout du trajet.
 
 ## Ce que votre patient traverse vraiment
 
@@ -41,7 +41,7 @@ Quand quelqu'un abandonne un panier d'achat en ligne, il renonce à un plaisir. 
 
 Chaque friction lui offre exactement cette raison. Le formulaire trop long devient « je ferai ça demain, quand j'aurai le temps ». La ligne occupée devient « bon, le destin a parlé ». Le prix absent devient « je vais d'abord vérifier mes assurances », c'est-à-dire jamais. Ailleurs, la friction coûte une vente. En santé, elle donne la permission de reporter, et reporter est toujours l'option par défaut.
 
-C'est pourquoi un parcours de prise de rendez-vous, dans votre domaine, ne doit pas chercher à convaincre. Il doit enlever les obstacles un à un pour qu'il ne reste plus aucune bonne excuse. Le marketing santé ne fabrique pas l'envie de venir, il [retire ce qui empêche de venir](/blog/marketing-sante-marketing-classique).
+C'est pourquoi un parcours de prise de rendez-vous, dans votre domaine, ne doit pas chercher à convaincre. Il doit enlever les obstacles un à un pour qu'il ne reste plus aucune bonne excuse. Le marketing santé ne fabrique pas l'envie de venir, il [retire ce qui empêche de venir](/blog/marketing-sante-marketing-classique/).
 
 ## Les trois fuites les plus coûteuses
 
@@ -71,7 +71,7 @@ Enfin, confiez ce couloir à quelqu'un. Tant qu'il n'appartient à personne, il 
 
 ## L'entonnoir ne s'arrête pas au clic
 
-On parle beaucoup d'être visible, d'être trouvé, d'apparaître au bon moment. C'est nécessaire, et [ça reste la base](/blog/clinique-introuvable-en-ligne). Mais la visibilité ne remplit aucun agenda à elle seule.
+On parle beaucoup d'être visible, d'être trouvé, d'apparaître au bon moment. C'est nécessaire, et [ça reste la base](/blog/clinique-introuvable-en-ligne/). Mais la visibilité ne remplit aucun agenda à elle seule.
 
 Entre le clic que vous payez et le rendez-vous que vous attendez, il y a un trajet que votre patient parcourt seul, souvent le soir, souvent en hésitant. Tant que personne ne regarde ce qui s'y passe, acheter davantage de clics revient à verser plus d'eau dans un seau percé. La vraie question n'est donc pas de savoir combien de personnes ont cliqué. C'est de savoir combien se sont arrêtées en chemin, et à quel endroit précis vous les avez laissées filer.
 

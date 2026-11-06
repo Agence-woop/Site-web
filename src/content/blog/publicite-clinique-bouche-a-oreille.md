@@ -48,11 +48,11 @@ Vos patients ne peuvent pas recommander ce qu'ils ignorent. Un nouveau service, 
 
 ### Vous dépendez d'une seule source de patients
 
-Beaucoup de cliniques tiennent sur une poignée de médecins référents ou sur un seul établissement voisin. Le jour où cette source se tarit, un départ à la retraite, un déménagement, un partenariat qui se termine, l'agenda se vide d'un coup. La publicité en ligne diversifie l'origine de vos patients. C'est une assurance autant qu'un levier de croissance.
+Beaucoup de cliniques tiennent sur une poignée de médecins référents ou sur un seul établissement voisin. Le jour où cette source se tarit, un départ à la retraite, un déménagement, un partenariat qui se termine, l'agenda se vide d'un coup. La [publicité en ligne](/services-medical/) diversifie l'origine de vos patients. C'est une assurance autant qu'un levier de croissance.
 
 ## Une précision honnête
 
-La publicité ne règle pas tout, et il m'arrive de déconseiller d'en faire. Si vous êtes déjà à pleine capacité, acheter de la demande que vous ne pouvez pas servir ne fait que créer des patients frustrés. Et si votre site affiche de mauvaises heures ou ne permet pas de prendre rendez-vous en ligne, payer pour y envoyer des gens revient à verser de l'eau dans un seau percé. On [répare les fondations](/blog/publicite-numerique-clinique-petit-budget) avant d'acheter du trafic. Mais aucun de ces deux cas n'annule les moments où la publicité devient indispensable : ils déterminent seulement le bon moment pour s'y mettre.
+La publicité ne règle pas tout, et il m'arrive de déconseiller d'en faire. Si vous êtes déjà à pleine capacité, acheter de la demande que vous ne pouvez pas servir ne fait que créer des patients frustrés. Et si votre site affiche de mauvaises heures ou ne permet pas de prendre rendez-vous en ligne, payer pour y envoyer des gens revient à verser de l'eau dans un seau percé. On [répare les fondations](/blog/publicite-numerique-clinique-petit-budget/) avant d'acheter du trafic. Mais aucun de ces deux cas n'annule les moments où la publicité devient indispensable : ils déterminent seulement le bon moment pour s'y mettre.
 
 ## Au Québec, une couche que les autres oublient
 

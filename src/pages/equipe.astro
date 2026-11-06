@@ -7,7 +7,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const SITE_URL = 'https://agence-woop.ca';
 const PAGE_URL = `${SITE_URL}/equipe/`;
 const ORG_ID = `${SITE_URL}/#organization`;
-const PAGE_TITLE = 'L’équipe WOOP : Gauthier, Kevin, Emma et Ludo | Montréal';
+const PAGE_TITLE = "L'équipe WOOP\u00a0: Gauthier, Kevin, Emma et Ludo | Montréal";
 
 // Graphe JSON-LD : la page, l'agence (fondateurs et employée), les 4 personnes, le fil d'Ariane.
 // Ludo est seulement cité par la page (mentions), sans lien avec l'organisation ni sameAs.
@@ -26,7 +26,8 @@ const jsonLd = [
         breadcrumb: { '@id': `${PAGE_URL}#breadcrumb` },
       },
       {
-        '@type': 'Organization',
+        // Même @id et même type que sur l'accueil ; téléphone, adresse et sameAs restent sur l'accueil
+        '@type': 'ProfessionalService',
         '@id': ORG_ID,
         name: 'Agence WOOP',
         url: `${SITE_URL}/`,
@@ -80,7 +81,8 @@ const jsonLd = [
 ];
 
 // Espace insécable devant « : » et « ? » (typographie française, sans changer le texte)
-const NB = ' ';
+// Espace insécable (écrite en échappement pour ne pas se perdre au copier-coller)
+const NB = '\u00a0';
 
 // Photos rondes : mêmes données et même cadrage que la page d'accueil (Ludo : cadrage propre).
 // - fx / fy : cadrage d'origine (photo calée en haut, agrandie autour de ce point).
@@ -152,11 +154,11 @@ const profiles: Profile[] = [
     objectPosition: '57.8% 30.6%',
     zoom: 1.7,
     bio: [
-      ['Infirmier clinicien de formation, Gauthier a basculé vers la gestion médicale il y a plusieurs années. Il dirige aujourd’hui les opérations médicales dans l’aéromédical et il est expert des soins en communauté et en régions éloignées.'],
-      ['Ancien directeur de cliniques privées et détenteur d’un MBA, il pilote chez WOOP la stratégie et ', { text: 'les comptes Santé', href: `${base}/services-medical/` }, '.'],
+      ["Infirmier clinicien de formation, Gauthier a basculé vers la gestion médicale il y a plusieurs années. Il dirige aujourd'hui les opérations médicales dans l'aéromédical et il est expert des soins en communauté et en régions éloignées."],
+      ["Ancien directeur de cliniques privées et détenteur d'un MBA, il pilote chez WOOP la stratégie et ", { text: 'les comptes Santé', href: `${base}/services-medical/` }, '.'],
     ],
     linkedin: 'https://www.linkedin.com/in/gauthier-f-00561b203/',
-    contact: `${base}/contact?personne=gauthier`,
+    contact: `${base}/contact/?personne=gauthier`,
     hubPos: 'a',
   },
   {
@@ -173,11 +175,11 @@ const profiles: Profile[] = [
     fx: '50%',
     fy: '31%',
     bio: [
-      ['Designer graphique de formation, Kevin a développé son expertise marketing au sein d’un cabinet de recrutement spécialisé en santé. Cette double exposition à la création et au marketing en fait l’œil et la main de WOOP.'],
-      ['Il pilote l’identité de marque de chaque projet et accompagne ', { text: 'les comptes Recrutement', href: `${base}/services-recrutement/` }, '.'],
+      ["Designer graphique de formation, Kevin a développé son expertise marketing au sein d'un cabinet de recrutement spécialisé en santé. Cette double exposition à la création et au marketing en fait l'œil et la main de WOOP."],
+      ["Il pilote l'identité de marque de chaque projet et accompagne ", { text: 'les comptes Recrutement', href: `${base}/services-recrutement/` }, '.'],
     ],
     linkedin: 'https://www.linkedin.com/in/k%C3%A9vin-zounias/',
-    contact: `${base}/contact?personne=kevin`,
+    contact: `${base}/contact/?personne=kevin`,
     hubPos: 'b',
   },
   {
@@ -194,11 +196,11 @@ const profiles: Profile[] = [
     fx: '55%',
     fy: '31%',
     bio: [
-      ['Diplômée d’emlyon business school, Emma poursuit une maîtrise en gestion de projet à HEC Montréal, après avoir fait ses classes dans de grands médias français.'],
+      ["Diplômée d'emlyon business school, Emma poursuit une maîtrise en gestion de projet à HEC Montréal, après avoir fait ses classes dans de grands médias français."],
       ['Chez WOOP, elle pilote la performance publicitaire sur Google Ads et Meta Ads, et conçoit les pages de conversion.'],
     ],
     linkedin: 'https://www.linkedin.com/in/emma-despujols-161235211/',
-    contact: `${base}/contact?personne=emma`,
+    contact: `${base}/contact/?personne=emma`,
     hubPos: 'c',
   },
   {
@@ -216,8 +218,8 @@ const profiles: Profile[] = [
     objectPosition: '50.4% 21.7%',
     zoom: 1.9,
     bio: [
-      ['Développeur web de formation, Ludo a construit son expertise au sein d’agences de communication. Sensible aux questions d’écoconception et de sobriété numérique, il développe des sites légers, rapides et respectueux des données.'],
-      ['Chez WOOP, il prend en charge le développement et l’intégration, et fait le pont entre la création et la performance.'],
+      ["Développeur web de formation, Ludo a construit son expertise au sein d'agences de communication. Sensible aux questions d'écoconception et de sobriété numérique, il développe des sites légers, rapides et respectueux des données."],
+      ["Chez WOOP, il prend en charge le développement et l'intégration, et fait le pont entre la création et la performance."],
     ],
     hubPos: 'd',
   },
@@ -238,7 +240,7 @@ const steps: {
     n: '01',
     title: 'Diagnostic',
     icon: 'search',
-    text: 'Appel découverte et audit. On comprend votre projet, vos objectifs, et ce qui freine votre développement aujourd’hui.',
+    text: "Appel découverte et audit. On comprend votre projet, vos objectifs, et ce qui freine votre développement aujourd'hui.",
     sub: `On observe aussi votre présence en ligne actuelle${NB}: ce qui fonctionne, ce qui manque, ce qui peut être renforcé.`,
     reveal: 'left',
   },
@@ -246,7 +248,7 @@ const steps: {
     n: '02',
     title: 'Stratégie & marque',
     icon: 'pen',
-    text: 'Positionnement, identité visuelle, ton de marque. On pose les fondations sur lesquelles tout le reste va s’appuyer.',
+    text: "Positionnement, identité visuelle, ton de marque. On pose les fondations sur lesquelles tout le reste va s'appuyer.",
     sub: 'Une marque solide vous permet de justifier un positionnement premium, et aide à faire baisser le coût pour attirer chaque nouveau patient ou candidat.',
     reveal: 'up',
     step: '1',
@@ -256,7 +258,7 @@ const steps: {
     title: 'Acquisition',
     icon: 'megaphone',
     text: 'Campagnes publicitaires sur Google Ads et Meta Ads, pages de conversion. On va chercher vos prospects là où ils sont déjà.',
-    sub: 'Chaque dollar investi est suivi, mesuré, optimisé. Pas de pub à l’aveugle.',
+    sub: "Chaque dollar investi est suivi, mesuré, optimisé. Pas de pub à l'aveugle.",
     reveal: 'up',
     step: '2',
   },
@@ -265,7 +267,7 @@ const steps: {
     title: 'Optimisation',
     icon: 'trend',
     text: 'Mesure, itération, ajustements. On observe ce qui fonctionne, on corrige ce qui ne marche pas, et on réinvestit là où ça paie.',
-    sub: `Résultat${NB}: votre marque gagne en force, votre coût pour générer un nouveau patient (ou candidat) tend à baisser, et la machine s’amplifie d’elle-même.`,
+    sub: `Résultat${NB}: votre marque gagne en force, votre coût pour générer un nouveau patient (ou candidat) tend à baisser, et la machine s'amplifie d'elle-même.`,
     reveal: 'right',
     step: '3',
     hot: true,
@@ -284,7 +286,7 @@ const SLIDE_MS = 10000;
 ---
 <Layout
   title={PAGE_TITLE}
-  description="Gauthier Figueres, Kevin Zounias, Emma Despujols et Ludo Santos : découvrez l’équipe WOOP, qui fait quoi sur votre projet et comment on travaille ensemble."
+  description={`Gauthier Figueres, Kevin Zounias, Emma Despujols et Ludo Santos\u00a0: découvrez l'équipe WOOP, qui fait quoi sur votre projet et comment on travaille ensemble.`}
   ogImage="/images/og-image.jpg"
   jsonLd={jsonLd}
 >
@@ -297,13 +299,13 @@ const SLIDE_MS = 10000;
     <div class="container">
       <div class="eq-hero__grid">
         <div class="eq-hero__text">
-          <p class="md-pill"><i aria-hidden="true"></i>L’équipe WOOP</p>
-          <h1 class="md-hero__title eq-hero__title">L’équipe WOOP, des experts du terrain. <span class="gradient-accent hp-kw">Vous savez qui fait quoi</span> sur votre projet.</h1>
-          <p class="md-hero__sub eq-hero__sub">Une équipe complémentaire et nommée. Vous parlez directement aux gens qui font le travail, du premier appel jusqu’à la livraison.</p>
-          <p class="md-hero__strong"><strong>Votre équipe marketing, sans avoir à l’embaucher.</strong></p>
+          <p class="md-pill"><i aria-hidden="true"></i>L'équipe WOOP</p>
+          <h1 class="md-hero__title eq-hero__title">L'équipe WOOP, des experts du terrain. <span class="gradient-accent hp-kw">Vous savez qui fait quoi</span> sur votre projet.</h1>
+          <p class="md-hero__sub eq-hero__sub">Une équipe complémentaire et nommée. Vous parlez directement aux gens qui font le travail, du premier appel jusqu'à la livraison.</p>
+          <p class="md-hero__strong"><strong>Votre équipe marketing, sans avoir à l'embaucher.</strong></p>
           <div class="hp-acts md-hero__acts">
-            <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-            <a class="cta cta--line" href="#qui-fait-quoi">Rencontrer l’équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+            <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+            <a class="cta cta--line" href="#qui-fait-quoi">Rencontrer l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
           </div>
         </div>
 
@@ -432,12 +434,12 @@ const SLIDE_MS = 10000;
       </ol>
 
       <div class="md-svc-cta" data-reveal="up">
-        <a class="cta" href={`${base}/contact`}>Discuter de votre projet<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        <a class="cta" href={`${base}/contact/`}>Discuter de votre projet<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
       </div>
 
       <a class="hp-teaser eq-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
         <span class="hp-teaser__dot" aria-hidden="true"></span>
-        <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
+        <span><strong>Nouveau&nbsp;:</strong> testez votre visibilité en 2 minutes</span>
         <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
       </a>
     </div>
@@ -449,7 +451,7 @@ const SLIDE_MS = 10000;
       <div class="eq-prom" data-reveal="up">
         <div class="eq-prom__head">
           <p class="md-over">03 · Notre promesse</p>
-          <h2 class="section-title hp-title">Pas d’agence <span class="gradient-accent">anonyme</span>.</h2>
+          <h2 class="section-title hp-title">Pas d'agence <span class="gradient-accent">anonyme</span>.</h2>
           <p class="hp-head__intro">Chez WOOP, vous savez toujours qui travaille sur votre projet.</p>
         </div>
         <ul class="eq-prom__list">
@@ -470,10 +472,10 @@ const SLIDE_MS = 10000;
             <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
           ))}
         </div>
-        <h2>Envie de savoir qui s’occuperait de votre projet{NB}?</h2>
-        <p>Un appel de 30 minutes pour rencontrer l’équipe.</p>
+        <h2>Envie de savoir qui s'occuperait de votre projet{NB}?</h2>
+        <p>Un appel de 30 minutes pour rencontrer l'équipe.</p>
         <div class="hp-acts hp-acts--center">
-          <a class="cta cta--light" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--light" href={`${base}/contact/`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
         </div>
       </div>
@@ -487,8 +489,8 @@ const SLIDE_MS = 10000;
         <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
       ))}
     </span>
-    <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l’embaucher</strong></span>
-    <a class="cta cta--sm" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+    <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l'embaucher</strong></span>
+    <a class="cta cta--sm" href={`${base}/contact/`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
   </aside>
 
 </Layout>

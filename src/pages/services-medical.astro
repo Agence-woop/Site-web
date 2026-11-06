@@ -12,11 +12,8 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Service',
     serviceType: 'Marketing médical pour cliniques',
-    provider: {
-      '@type': 'Organization',
-      name: 'Agence WOOP',
-      url: `${SITE_URL}/`,
-    },
+    // Renvoie à la fiche de l'organisation publiée sur l'accueil
+    provider: { '@id': `${SITE_URL}/#organization`, name: 'Agence WOOP' },
     areaServed: 'Québec',
     url: PAGE_URL,
   },
@@ -209,7 +206,7 @@ const steps = [
         <p class="md-hero__sub">Stratégie, image de marque, acquisition de patients et expérience patient. Pour les cliniques privées, les cabinets dentaires, les centres médico-esthétiques et les professionnels de la santé qui veulent attirer les bons patients, et les fidéliser.</p>
         <p class="md-hero__strong"><strong>Votre équipe marketing santé, sans avoir à l'embaucher.</strong></p>
         <div class="hp-acts hp-acts--center md-hero__acts">
-          <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           <a class="cta cta--line" href="#services">Nos services<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
         </div>
       </div>
@@ -315,9 +312,11 @@ const steps = [
         ))}
       </div>
 
-      <a class="hp-teaser" href={`${base}/acquisition-client`} data-reveal="up">
+      <p class="md-cross" data-reveal="up">Vous dirigez un cabinet de recrutement spécialisé en santé{NB}? Découvrez <a class="md-inl" href={`${base}/services-recrutement/`}>notre marketing pour cabinets de recrutement</a>.</p>
+
+      <a class="hp-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
         <span class="hp-teaser__dot" aria-hidden="true"></span>
-        <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
+        <span><strong>Nouveau&nbsp;:</strong> testez votre visibilité en 2 minutes</span>
         <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
       </a>
     </div>
@@ -425,9 +424,9 @@ const steps = [
       </div>
 
       <div class="md-svc-cta" data-reveal="up">
-        <a class="cta" href={`${base}/contact`}>Échanger 30 minutes avec l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        <a class="cta" href={`${base}/contact/`}>Échanger 30 minutes avec l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
         <p class="hp-team__more">
-          <a href={`${base}/blog/sante`}>Lire nos articles sur le marketing santé <span aria-hidden="true">›</span></a>
+          <a href={`${base}/blog/sante/`}>Lire nos articles sur le marketing santé <span aria-hidden="true">›</span></a>
         </p>
       </div>
     </div>
@@ -453,7 +452,7 @@ const steps = [
           <p>Elle nous donne aussi un réflexe que peu d'agences ont{NB}: connaître les règles qui encadrent votre profession. Pas de promesse abusive{NB}: chaque message respecte le code de déontologie de votre ordre.</p>
           <div class="md-gau__foot">
             <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span>Marketing conforme aux règles de votre ordre professionnel</span></p>
-            <a class="cta" href={`${base}/contact?personne=gauthier`}>Parler à Gauthier<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+            <a class="cta" href={`${base}/contact/?personne=gauthier`}>Parler à Gauthier<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           </div>
         </div>
       </div>
@@ -493,7 +492,7 @@ const steps = [
         <h2>Envie de bâtir une clinique qui se démarque{NB}?</h2>
         <p>Votre équipe marketing santé commence par un appel de 30 minutes.</p>
         <div class="hp-acts hp-acts--center">
-          <a class="cta cta--light" href={`${base}/contact`}>Parlons de votre clinique<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--light" href={`${base}/contact/`}>Parlons de votre clinique<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
         </div>
       </div>
@@ -508,7 +507,7 @@ const steps = [
       ))}
     </span>
     <span class="hp-pop__txt">Votre équipe marketing santé, <strong>sans l'embaucher</strong></span>
-    <a class="cta cta--sm" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+    <a class="cta cta--sm" href={`${base}/contact/`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
   </aside>
 
 </Layout>
@@ -1550,6 +1549,31 @@ const steps = [
   .md-pbt i { display: block; width: 70px; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 70%, transparent); }
 
   /* Bandeau « Nouveau » (identique à l'accueil) */
+  /* Lien retour vers la page RH : même couleur et même graisse que le texte, souligné au survol seulement */
+  .md-cross {
+    max-width: 760px;
+    margin: 28px 0 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .md-cross .md-inl {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
+  }
+
+  .md-cross .md-inl:hover,
+  .md-cross .md-inl:focus-visible {
+    text-decoration: underline;
+    text-decoration-color: var(--woop-pink);
+    text-decoration-thickness: 1.5px;
+    outline: none;
+  }
+
   .hp-teaser {
     display: flex;
     align-items: center;

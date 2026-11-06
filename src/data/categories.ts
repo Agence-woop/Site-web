@@ -22,6 +22,20 @@ export const categoryTaglines: Record<CategoryKey, string> = {
   'strategie-marque': "Pour bâtir une marque qui attire, dans n'importe quel secteur.",
 };
 
+// Lien discret vers la page de services correspondante, affiché sous la phrase de positionnement
+// des pages de pôle (src/components/blog/CategoryHub.astro). La phrase de positionnement et la
+// meta description ne changent pas. Pas de lien pour Stratégie & Marque.
+export interface ServiceLink {
+  lead: string;
+  anchor: string;
+  path: string;
+}
+
+export const categoryServiceLinks: Partial<Record<CategoryKey, ServiceLink>> = {
+  sante: { lead: 'Vous dirigez une clinique\u00a0? Découvrez notre', anchor: 'marketing médical pour cliniques', path: '/services-medical/' },
+  recrutement: { lead: 'Vous dirigez un cabinet\u00a0? Découvrez notre', anchor: 'marketing pour cabinets de recrutement', path: '/services-recrutement/' },
+};
+
 export interface CtaConfig {
   label: string;
   href: string;
@@ -34,11 +48,11 @@ export interface CtaConfig {
 export function getCtaForCategory(category: CategoryKey, base: string): CtaConfig {
   switch (category) {
     case 'sante':
-      return { label: 'Parler à Gauthier', href: `${base}/contact?personne=gauthier` };
+      return { label: 'Parler à Gauthier', href: `${base}/contact/?personne=gauthier` };
     case 'recrutement':
-      return { label: 'Parler à Kevin', href: `${base}/contact?personne=kevin` };
+      return { label: 'Parler à Kevin', href: `${base}/contact/?personne=kevin` };
     case 'strategie-marque':
-      return { label: 'Parler à Gauthier ou Kevin', href: `${base}/contact` };
+      return { label: 'Parler à Gauthier ou Kevin', href: `${base}/contact/` };
   }
 }
 
@@ -54,7 +68,7 @@ export function getCtaForArticle(
   base: string,
 ): CtaConfig {
   if (author === 'emma') {
-    return { label: 'Parler à Emma', href: `${base}/contact?personne=emma` };
+    return { label: 'Parler à Emma', href: `${base}/contact/?personne=emma` };
   }
   return getCtaForCategory(category, base);
 }
