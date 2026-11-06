@@ -1101,18 +1101,25 @@ const SLIDE_MS = 10000;
 
   .hp-avs--final > span:first-child { margin-left: 0; }
 
-  /* 4 photos : chevauchement un peu plus fort pour ne presque pas élargir la barre */
+  /* 4 photos : chevauchement de 25 % du diamètre au maximum, pour que chaque visage
+     reste visible aux trois quarts (36 px, chevauchement de 9 px) */
   .hp-avs--sm > span {
     width: 36px;
     height: 36px;
-    margin-left: -14px;
+    margin-left: -9px;
     box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* Vers 360 px : photos un peu plus petites (même proportion de chevauchement)
+     pour que le bouton reste entier */
+  @media (max-width: 374px) {
+    .hp-avs--sm > span { width: 34px; height: 34px; margin-left: -8px; }
   }
 
   /* Très petits écrans : photos et espacements réduits pour que le bouton reste entier */
   @media (max-width: 359px) {
     .hp-pop[data-hp-pop] { gap: 8px; }
-    .hp-avs--sm > span { width: 30px; height: 30px; margin-left: -13px; }
+    .hp-avs--sm > span { width: 25px; height: 25px; margin-left: -6px; }
     .hp-pop .cta { padding-left: 14px; }
   }
 
