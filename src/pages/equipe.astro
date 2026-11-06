@@ -194,8 +194,8 @@ const profiles: Profile[] = [
   },
   {
     key: 'ludo',
-    expertise: 'Web',
-    hub: 'Web',
+    expertise: 'Site web',
+    hub: 'Site web',
     first: 'Ludo',
     name: 'Ludo Santos',
     role: 'Développeur web',
@@ -270,7 +270,7 @@ const promises = [
 ];
 
 // Durée d'affichage de chaque profil du carrousel (lue par le script via data-eq-dur)
-const SLIDE_MS = 8000;
+const SLIDE_MS = 10000;
 ---
 <Layout
   title={PAGE_TITLE}
@@ -1445,7 +1445,7 @@ const SLIDE_MS = 8000;
   .eq-sp__tab.is-done .eq-sp__prog::after { transform: scaleX(1); }
 
   .eq-sp__tab.is-run .eq-sp__prog::after {
-    animation: eq-bar var(--eq-dur, 8s) linear forwards;
+    animation: eq-bar var(--eq-dur, 10s) linear forwards;
   }
 
   .eq-sp.is-paused .eq-sp__tab.is-run .eq-sp__prog::after { animation-play-state: paused; }
@@ -1518,6 +1518,9 @@ const SLIDE_MS = 8000;
   }
 
   .eq-sp.is-enhanced .eq-sp__panel.is-active .eq-sp__card { transform: none; }
+
+  /* La fiche qui sort pendant le fondu ne capte pas le survol */
+  .eq-sp.is-enhanced .eq-sp__panel:not(.is-active) { pointer-events: none; }
 
   .eq-sp__panel:focus-visible {
     outline: 2px solid var(--woop-pink);
@@ -1858,9 +1861,9 @@ const SLIDE_MS = 8000;
 
 <script>
   // Carrousel « Chacun son expertise » : onglets accessibles (tablist / tab / tabpanel).
-  // - Un profil toutes les 8 s ; la fin de l'animation de la barre déclenche le profil suivant,
+  // - Un profil toutes les 10 s ; la fin de l'animation de la barre déclenche le profil suivant,
   //   donc mettre la barre en pause met aussi le minuteur en pause.
-  // - Démarre seulement quand le carrousel est visible ; pause au survol, au focus clavier,
+  // - Démarre seulement quand le carrousel est visible ; pause au survol de la fiche, au focus clavier,
   //   avec le bouton Pause, et quand l'onglet du navigateur est masqué.
   // - S'arrête définitivement au premier clic ou toucher sur un onglet ou une fiche,
   //   ou à la première touche du clavier dans les onglets.
@@ -1876,7 +1879,7 @@ const SLIDE_MS = 8000;
     const stage = root.querySelector<HTMLElement>('.eq-sp__stage');
     if (!bar || !pauseBtn || !stage || tabs.length !== panels.length || !tabs.length) return;
 
-    const dur = Number(root.dataset.eqDur) || 8000;
+    const dur = Number(root.dataset.eqDur) || 10000;
     root.style.setProperty('--eq-dur', `${dur}ms`);
 
     // Mise en place des rôles (les fiches restent lisibles sans JavaScript)
@@ -1957,9 +1960,17 @@ const SLIDE_MS = 8000;
       select(keys[e.key], true);
     });
 
-    // Pause au survol (souris) et au focus clavier
-    root.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { reasons.hover = true; updatePause(); } });
-    root.addEventListener('pointerleave', () => { reasons.hover = false; updatePause(); });
+    // Pause au survol de la souris, seulement sur la fiche (photo, rôle, nom, bio, liens) :
+    // ni le bloc « Sur votre projet » ni les onglets. Les fiches inactives sont masquées
+    // (visibility: hidden), donc seule la fiche affichée reçoit le survol.
+    panels.forEach((panel) => {
+      const card = panel.querySelector<HTMLElement>('.eq-sp__card');
+      if (!card) return;
+      card.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { reasons.hover = true; updatePause(); } });
+      card.addEventListener('pointerleave', () => { reasons.hover = false; updatePause(); });
+    });
+
+    // Pause au focus clavier
     root.addEventListener('focusin', () => { reasons.focus = true; updatePause(); });
     root.addEventListener('focusout', (e) => {
       if (e.relatedTarget instanceof Node && root.contains(e.relatedTarget)) return;
