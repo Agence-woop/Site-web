@@ -12,11 +12,8 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Service',
     serviceType: 'Marketing pour cabinets de recrutement',
-    provider: {
-      '@type': 'Organization',
-      name: 'Agence WOOP',
-      url: `${SITE_URL}/`,
-    },
+    // Renvoie à la fiche de l'organisation publiée sur l'accueil
+    provider: { '@id': `${SITE_URL}/#organization`, name: 'Agence WOOP' },
     areaServed: 'Québec',
     url: PAGE_URL,
   },
@@ -241,7 +238,7 @@ const steps = [
         <p class="md-hero__sub">Stratégie, branding, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats.</p>
         <p class="md-hero__strong"><strong>Votre équipe marketing recrutement, sans avoir à l'embaucher.</strong></p>
         <div class="hp-acts hp-acts--center md-hero__acts">
-          <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           <a class="cta cta--line" href="#services">Nos services<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
         </div>
       </div>
@@ -460,7 +457,7 @@ const steps = [
       </div>
 
       <div class="md-svc-cta" data-reveal="up">
-        <a class="cta" href={`${base}/contact`}>Échanger 30 minutes avec l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        <a class="cta" href={`${base}/contact/`}>Échanger 30 minutes avec l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
         <p class="hp-team__more">
           <a href={`${base}/blog/recrutement/`}>Lire nos articles sur le marketing recrutement <span aria-hidden="true">›</span></a>
         </p>
@@ -487,7 +484,7 @@ const steps = [
           <p>Cette double expérience, la création graphique et le marketing en cabinet de recrutement, change tout. Quand on conçoit votre stratégie, on ne devine pas vos problèmes{NB}: <strong>on les a déjà vécus.</strong> Aucune autre agence marketing au Québec ne peut en dire autant.</p>
           <div class="md-gau__foot">
             <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.2 14.6c2.6.1 4.3 2 4.8 4.9"/></svg></span><span>Une stratégie pour vos deux marchés{NB}: clients et candidats</span></p>
-            <a class="cta" href={`${base}/contact?personne=kevin`}>Parler à Kevin<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+            <a class="cta" href={`${base}/contact/?personne=kevin`}>Parler à Kevin<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           </div>
         </div>
       </div>
@@ -527,7 +524,7 @@ const steps = [
         <h2>Envie de faire grandir votre activité de recrutement{NB}?</h2>
         <p>Votre équipe marketing recrutement commence par un appel de 30 minutes.</p>
         <div class="hp-acts hp-acts--center">
-          <a class="cta cta--light" href={`${base}/contact?personne=kevin`}>Parlons de votre cabinet<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--light" href={`${base}/contact/?personne=kevin`}>Parlons de votre cabinet<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
         </div>
       </div>
@@ -542,7 +539,7 @@ const steps = [
       ))}
     </span>
     <span class="hp-pop__txt">Votre équipe marketing recrutement, <strong>sans l'embaucher</strong></span>
-    <a class="cta cta--sm" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+    <a class="cta cta--sm" href={`${base}/contact/`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
   </aside>
 
 </Layout>

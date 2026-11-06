@@ -38,7 +38,7 @@ Voici le point que les gens oublient : vous n'avez pas le choix d'avoir une imag
 
 Que vous y travailliez ou pas, le marché se fait déjà une idée de votre cabinet. Il la construit à partir de votre page LinkedIn endormie, d'un vieil avis jamais commenté, de la façon dont un consultant répond au téléphone, de l'allure de votre dernière proposition envoyée en vitesse. Ces fragments racontent une histoire à votre place. La seule question est de savoir si c'est vous qui tenez le crayon, ou si vous laissez le hasard écrire à votre sujet.
 
-Un cabinet qui ne décide pas de son image en hérite quand même d'une. Le plus souvent, c'est celle de « [un cabinet comme un autre](/blog/recrutement-ia-ce-qui-vous-distingue) ». La pire des positions sur un marché où l'on vous compare.
+Un cabinet qui ne décide pas de son image en hérite quand même d'une. Le plus souvent, c'est celle de « [un cabinet comme un autre](/blog/recrutement-ia-ce-qui-vous-distingue/) ». La pire des positions sur un marché où l'on vous compare.
 
 ## Trois leviers pour rendre votre cabinet impossible à confondre
 
@@ -46,7 +46,7 @@ La bonne nouvelle, c'est que se distinguer ne demande pas un gros budget. Ça de
 
 Le premier levier, c'est un positionnement qui assume d'exclure. « Tous secteurs, tous postes » ne rassure personne et ne reste dans aucune mémoire. Le cabinet qui ose dire « nous ne faisons que la santé » ou « nous ne plaçons que des cadres en technologie » est précisément celui auquel une entreprise pense quand ce besoin précis arrive. Choisir, c'est renoncer à certains mandats pour devenir évident sur les autres.
 
-Le deuxième levier, c'est [une voix et une identité cohérentes](/blog/authenticite-marketing-coherence) sur chaque point de contact. Votre site, votre LinkedIn, vos propositions, vos signatures de courriel. Si tout ça donne l'impression de venir de trois cabinets différents, vous érodez la confiance que vous cherchez justement à bâtir. La cohérence est la forme la moins chère de crédibilité.
+Le deuxième levier, c'est [une voix et une identité cohérentes](/blog/authenticite-marketing-coherence/) sur chaque point de contact. Votre site, votre LinkedIn, vos propositions, vos signatures de courriel. Si tout ça donne l'impression de venir de trois cabinets différents, vous érodez la confiance que vous cherchez justement à bâtir. La cohérence est la forme la moins chère de crédibilité.
 
 Le troisième levier, c'est du contenu qui prouve au lieu d'affirmer. Tout le monde se dit expert. Très peu le démontrent. Publier votre lecture du marché, comme le ferait un vrai spécialiste, vaut dix fois mieux que d'écrire « nous sommes des experts » sur votre page d'accueil. C'est aussi ce qui vous rend visible auprès des dirigeants qui décident des mandats, bien avant qu'ils n'aient un poste à pourvoir.
 
@@ -54,7 +54,7 @@ Le troisième levier, c'est du contenu qui prouve au lieu d'affirmer. Tout le mo
 
 Vous avez passé des années à convaincre vos clients qu'à salaire égal, le meilleur talent va à la marque la plus attirante. Cette loi ne s'arrête pas à la porte de votre cabinet. Entre deux cabinets de compétence équivalente, le mandat va à celui que l'entreprise a l'impression de déjà connaître.
 
-La question n'est donc pas de savoir si votre cabinet a une image de marque. Il en a une, que vous le vouliez ou non. La vraie question, c'est de savoir si c'est celle que vous avez choisie.
+La question n'est donc pas de savoir si [votre cabinet a une image de marque](/services-recrutement/). Il en a une, que vous le vouliez ou non. La vraie question, c'est de savoir si c'est celle que vous avez choisie.
 
 ## Sources
 

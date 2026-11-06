@@ -25,7 +25,7 @@ On imagine encore que la vente d'un mandat se joue en réunion, dans la qualité
 
 Les recherches sur la décision en contexte professionnel sont formelles : un acheteur passe environ 17 % seulement de son temps en contact direct avec les fournisseurs qu'il envisage, selon Gartner. L'essentiel de son parcours, il le fait seul, en ligne, avant le premier échange. Et quand il compare trois prestataires, chacun ne récolte en moyenne que 5 à 6 % de son attention totale. Autrement dit, votre plus grande bataille se livre pendant votre absence.
 
-Le moment décisif n'est donc pas votre rencontre. C'est cette heure discrète où un client, seul devant son écran, décide lesquels méritent un appel. Et pour un cabinet de recrutement, cette heure-là se joue sur trois choses.
+Le moment décisif n'est donc pas votre rencontre. C'est cette heure discrète où un client, seul devant son écran, décide lesquels méritent un appel. Et pour un [cabinet de recrutement](/services-recrutement/), cette heure-là se joue sur trois choses.
 
 ## Votre site répond à la question, ou pas
 

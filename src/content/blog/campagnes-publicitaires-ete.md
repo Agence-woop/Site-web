@@ -49,7 +49,7 @@ D'abord, dites la vérité à l'algorithme. Google offre un réglage appelé aju
 
 Ensuite, adaptez votre message à l'été. Les préoccupations de vos patients changent avec la saison, et une annonce écrite pour le mois de mai ne leur parle plus en juillet. Un message qui colle à leur réalité du moment convertit mieux, même quand ils sont moins nombreux.
 
-Restez présent, mais avec discernement, en profitant des coûts plus bas pour maintenir votre visibilité sans gaspiller. Et surtout, servez-vous de cette période plus calme pour préparer la rentrée : ajustez vos pages, testez vos annonces, laissez vos campagnes continuer d'apprendre. Ainsi, quand la demande explose en septembre, vous êtes déjà en pleine forme au lieu de repartir de zéro.
+Restez présent, mais avec discernement, en profitant des coûts plus bas pour maintenir votre visibilité sans gaspiller. Et surtout, servez-vous de cette période plus calme pour préparer la rentrée : ajustez vos pages, testez vos annonces, laissez vos campagnes continuer d'apprendre. Ainsi, quand la demande explose en septembre, vous êtes déjà en pleine forme au lieu de repartir de zéro. C'est ce que nous appliquons, toute l'année, aux cliniques que nous accompagnons en [marketing médical](/services-medical/).
 
 ## L'été récompense les malins, pas les absents
 

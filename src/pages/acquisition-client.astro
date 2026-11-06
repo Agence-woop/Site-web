@@ -54,11 +54,8 @@ const jsonLd = [
     '@type': 'Service',
     serviceType: 'Marketing pour cliniques',
     url: PAGE_URL,
-    provider: {
-      '@type': 'Organization',
-      name: 'Agence WOOP',
-      url: `${SITE_URL}/`,
-    },
+    // Renvoie à la fiche de l'organisation publiée sur l'accueil
+    provider: { '@id': `${SITE_URL}/#organization`, name: 'Agence WOOP' },
     areaServed: 'Québec',
   },
 ];
@@ -80,7 +77,7 @@ const jsonLd = [
         class="quiz"
         data-quiz
         data-base={base}
-        data-privacy={`${base}/confidentialite-et-conditions`}
+        data-privacy={`${base}/confidentialite-et-conditions/`}
         aria-live="polite"
       >
         <div class="quiz__intro" data-intro>
@@ -339,7 +336,7 @@ const jsonLd = [
     <div class="container">
       <div class="cta-band" data-reveal="up">
         <h2 class="cta-band__title">Prêt à récupérer vos clients ?</h2>
-        <a href={`${base}/contact`} class="cta-band__btn" data-audit="bandeau_final" data-audit-band>
+        <a href={`${base}/contact/`} class="cta-band__btn" data-audit="bandeau_final" data-audit-band>
           Réserver mon audit <ChevronRight size={16} />
         </a>
       </div>
@@ -2142,8 +2139,8 @@ const jsonLd = [
 
   if (root && intro && stage) {
     const base = root.dataset.base ?? '';
-    const privacyUrl = root.dataset.privacy ?? `${base}/confidentialite-et-conditions`;
-    const auditUrl = (s: number) => `${base}/contact?source=quiz&score=${s}`;
+    const privacyUrl = root.dataset.privacy ?? `${base}/confidentialite-et-conditions/`;
+    const auditUrl = (s: number) => `${base}/contact/?source=quiz&score=${s}`;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let state: { step: number; answers: Record<number, number>; contact: Partial<Contact> } = { step: 0, answers: {}, contact: {} };

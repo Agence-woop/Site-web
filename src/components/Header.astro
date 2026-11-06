@@ -19,20 +19,20 @@ const navItems: NavItem[] = [
   {
     label: "Secteurs d'activité",
     children: [
-      { label: 'Santé & Médical', href: `${base}/services-medical` },
-      { label: 'RH & Recrutement', href: `${base}/services-recrutement` },
+      { label: 'Santé & Médical', href: `${base}/services-medical/` },
+      { label: 'RH & Recrutement', href: `${base}/services-recrutement/` },
     ],
   },
-  { label: 'Test de visibilité', href: `${base}/acquisition-client` },
-  { label: 'Équipe', href: `${base}/equipe` },
-  { label: 'Contact', href: `${base}/contact` },
+  { label: 'Test de visibilité', href: `${base}/acquisition-client/` },
+  { label: 'Équipe', href: `${base}/equipe/` },
+  { label: 'Contact', href: `${base}/contact/` },
   {
     label: 'Blog',
-    href: `${base}/blog`,
+    href: `${base}/blog/`,
     children: [
-      { label: 'Santé & Médical', href: `${base}/blog/sante` },
-      { label: 'RH & Recrutement', href: `${base}/blog/recrutement` },
-      { label: 'Stratégie & Marque', href: `${base}/blog/strategie-marque` },
+      { label: 'Santé & Médical', href: `${base}/blog/sante/` },
+      { label: 'RH & Recrutement', href: `${base}/blog/recrutement/` },
+      { label: 'Stratégie & Marque', href: `${base}/blog/strategie-marque/` },
     ],
   },
 ];
@@ -101,7 +101,7 @@ const navItems: NavItem[] = [
         ))}
       </ul>
       <div class="header__actions">
-        <Button variant="primary" href={`${base}/contact`}>
+        <Button variant="primary" href={`${base}/contact/`}>
           R&eacute;server un appel d&eacute;couverte
         </Button>
         <a href="tel:+14388152295" class="header__linkedin" aria-label="Nous appeler au 438 815 2295" title="Nous appeler au (438) 815-2295">

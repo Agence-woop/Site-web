@@ -48,7 +48,7 @@ On pourrait croire que cette frontière ne concerne que la salle d'examen. C'est
 
 Vos infolettres, vos réponses sur les réseaux sociaux, le ton de votre site, vos messages d'accueil : tout cela s'adresse à des gens qui, souvent, sont inquiets. Si vous laissez l'IA générer cette communication sans jamais la relire, vous obtiendrez ce que tout le monde obtient, des textes lisses, corrects et parfaitement interchangeables. Or un marketing santé qui sonne comme celui de n'importe quelle entreprise n'inspire aucune confiance particulière. Vous aurez automatisé la chaleur même que vous cherchiez à transmettre.
 
-Le bon marketing santé fait avec l'IA suit exactement la même règle que le bon soin. La machine peut aider à structurer, à corriger, à dégrossir. Mais la voix, le jugement sur ce qui se dit et comment, le choix des mots devant une personne fragile, tout cela reste à un humain. En marketing santé comme au chevet, l'IA est un bon assistant et un très mauvais porte-parole.
+Le bon [marketing santé](/services-medical/) fait avec l'IA suit exactement la même règle que le bon soin. La machine peut aider à structurer, à corriger, à dégrossir. Mais la voix, le jugement sur ce qui se dit et comment, le choix des mots devant une personne fragile, tout cela reste à un humain. En marketing santé comme au chevet, l'IA est un bon assistant et un très mauvais porte-parole.
 
 ## La clinique qui gagnera n'est pas la plus automatisée
 
