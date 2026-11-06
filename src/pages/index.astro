@@ -63,6 +63,8 @@ type TeamMember = {
   fy?: string;
   objectPosition?: string;
   zoom?: number;
+  w?: number;
+  h?: number;
 };
 
 const team: TeamMember[] = [
@@ -70,6 +72,9 @@ const team: TeamMember[] = [
   { name: 'Gauthier', role: 'Cofondateur · Stratégie · Infirmier clinicien', img: 'gauthier', objectPosition: '57.8% 30.6%', zoom: 1.7 },
   { name: 'Kevin', role: 'Cofondateur · Création', img: 'kevin', fx: '50%', fy: '31%' },
   { name: 'Emma', role: 'Spécialiste Paid Media', img: 'emma', fx: '55%', fy: '31%' },
+  // Ludo : photo plus large (928 × 1137, même format) où le visage est plus petit ; cadrage réglé
+  // pour aligner la ligne des yeux et la taille du visage sur Kevin.
+  { name: 'Ludo', role: 'Développeur web', img: 'ludo', w: 928, h: 1137, objectPosition: '50.4% 21.7%', zoom: 1.9 },
 ];
 
 // Variables CSS de cadrage d'une photo ronde.
@@ -509,11 +514,11 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
         {team.map((m, i) => (
           <li
             class="hp-m"
-            data-reveal={i === 0 ? 'left' : i === 2 ? 'right' : 'up'}
+            data-reveal={i === 0 ? 'left' : i === team.length - 1 ? 'right' : 'up'}
             data-reveal-step={i === 0 ? undefined : String(i)}
           >
             <div class:list={['hp-m__ph', { 'is-framed': isFramed(m) }]} style={framing(m)}>
-              <img src={`${base}/images/${m.img}.webp`} alt={m.name} width="671" height="822" loading="lazy" decoding="async" />
+              <img src={`${base}/images/${m.img}.webp`} alt={m.name} width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" />
             </div>
             <div class="hp-m__txt">
               <b class="hp-m__name">{m.name}</b>
@@ -614,7 +619,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       <div class="hp-final" data-reveal="up">
         <div class="hp-avs hp-avs--final" aria-hidden="true">
           {team.map((m) => (
-            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
           ))}
         </div>
         <h2>Votre équipe marketing commence par un appel.</h2>
@@ -631,7 +636,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
     <span class="hp-avs hp-avs--sm" aria-hidden="true">
       {team.map((m) => (
-        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
       ))}
     </span>
     <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l'embaucher</strong></span>
@@ -2338,8 +2343,13 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     list-style: none;
   }
 
-  @media (min-width: 640px) {
-    .hp-team { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* 4 vignettes : 1 par ligne sur téléphone, 2 × 2 sur tablette, en ligne sur desktop */
+  @media (min-width: 600px) {
+    .hp-team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-team { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
 
   .hp-m {
@@ -2373,7 +2383,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     box-shadow: 0 0 0 4px var(--bg-elevated), 0 0 0 6px rgba(230, 43, 127, 0.55), 0 24px 50px rgba(230, 43, 127, 0.22);
   }
 
-  @media (min-width: 1024px) {
+  /* 200 px seulement quand les 4 colonnes sont assez larges */
+  @media (min-width: 1280px) {
     .hp-m__ph { width: 200px; height: 200px; }
   }
 
@@ -2495,11 +2506,28 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     margin-bottom: 26px;
   }
 
+  /* 4 photos : plus petites sur téléphone pour tenir dans le bandeau sans déborder */
   .hp-avs--final > span {
-    width: 104px;
-    height: 104px;
-    margin-left: -22px;
+    width: 80px;
+    height: 80px;
+    margin-left: -18px;
     box-shadow: 0 0 0 4px var(--text-primary);
+  }
+
+  @media (max-width: 359px) {
+    .hp-avs--final > span {
+      width: 68px;
+      height: 68px;
+      margin-left: -16px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hp-avs--final > span {
+      width: 104px;
+      height: 104px;
+      margin-left: -22px;
+    }
   }
 
   .hp-avs--final > span:first-child { margin-left: 0; }
@@ -2537,11 +2565,19 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     border-radius: 4px;
   }
 
+  /* 4 photos : chevauchement un peu plus fort pour ne presque pas élargir la barre */
   .hp-avs--sm > span {
     width: 36px;
     height: 36px;
-    margin-left: -10px;
+    margin-left: -14px;
     box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* Très petits écrans : photos et espacements réduits pour que le bouton reste entier */
+  @media (max-width: 359px) {
+    .hp-pop[data-hp-pop] { gap: 8px; }
+    .hp-avs--sm > span { width: 30px; height: 30px; margin-left: -13px; }
+    .hp-pop .cta { padding-left: 14px; }
   }
 
   /* ===== 10. TÉMOIGNAGES ===== */
@@ -2816,6 +2852,9 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
 
+  /* Le bouton garde toujours son texte sur une ligne : c'est le texte de la barre qui passe à la ligne */
+  .hp-pop .cta { flex: none; white-space: nowrap; }
+
   @media (min-width: 520px) {
     .hp-pop__txt {
       display: block;
@@ -2833,12 +2872,15 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
       right: auto;
       bottom: 20px;
       gap: 16px;
+      /* Largeur du contenu : sans cela, left: 50% limite la barre à la moitié de l'écran
+         et le bouton passe sur 2 lignes quand le texte est long */
+      width: max-content;
       max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
       padding: 8px 8px 8px 12px;
       transform: translate(-50%, calc(100% + 40px));
     }
     .hp-pop.is-shown { transform: translate(-50%, 0); }
-    .hp-pop__txt { display: inline; flex: none; font-size: 15px; white-space: nowrap; }
+    .hp-pop__txt { display: inline; flex: 0 1 auto; min-width: 0; font-size: 15px; white-space: normal; }
   }
 
   /* ===== MOUVEMENT RÉDUIT ===== */

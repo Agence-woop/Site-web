@@ -92,12 +92,15 @@ type Framed = {
   zoom?: number;
 };
 
-type TeamMember = Framed & { name: string; img: string };
+type TeamMember = Framed & { name: string; img: string; w?: number; h?: number };
 
 const team: TeamMember[] = [
   { name: 'Gauthier', img: 'gauthier', objectPosition: '57.8% 30.6%', zoom: 1.7 },
   { name: 'Kevin', img: 'kevin', fx: '50%', fy: '31%' },
   { name: 'Emma', img: 'emma', fx: '55%', fy: '31%' },
+  // Ludo : photo plus large (928 × 1137, même format) où le visage est plus petit ; cadrage réglé
+  // pour aligner la ligne des yeux et la taille du visage sur Kevin.
+  { name: 'Ludo', img: 'ludo', w: 928, h: 1137, objectPosition: '50.4% 21.7%', zoom: 1.9 },
 ];
 
 const framing = (m: Framed) =>
@@ -203,8 +206,9 @@ const profiles: Profile[] = [
     width: 928,
     height: 1137,
     photoPos: '50% 30%',
-    fx: '50%',
-    fy: '29%',
+    // Même cadrage que dans le bandeau final et la barre collante
+    objectPosition: '50.4% 21.7%',
+    zoom: 1.9,
     bio: [
       ['Développeur web de formation, Ludo a construit son expertise au sein d’agences de communication. Sensible aux questions d’écoconception et de sobriété numérique, il développe des sites légers, rapides et respectueux des données.'],
       ['Chez WOOP, il prend en charge le développement et l’intégration, et fait le pont entre la création et la performance.'],
@@ -457,7 +461,7 @@ const SLIDE_MS = 10000;
       <div class="hp-final" data-reveal="up">
         <div class="hp-avs hp-avs--final" aria-hidden="true">
           {team.map((m) => (
-            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
           ))}
         </div>
         <h2>Envie de savoir qui s’occuperait de votre projet{NB}?</h2>
@@ -474,7 +478,7 @@ const SLIDE_MS = 10000;
   <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
     <span class="hp-avs hp-avs--sm" aria-hidden="true">
       {team.map((m) => (
-        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
       ))}
     </span>
     <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l’embaucher</strong></span>
@@ -1071,20 +1075,45 @@ const SLIDE_MS = 10000;
     margin-bottom: 26px;
   }
 
+  /* 4 photos : plus petites sur téléphone pour tenir dans le bandeau sans déborder */
   .hp-avs--final > span {
-    width: 104px;
-    height: 104px;
-    margin-left: -22px;
+    width: 80px;
+    height: 80px;
+    margin-left: -18px;
     box-shadow: 0 0 0 4px var(--text-primary);
+  }
+
+  @media (max-width: 359px) {
+    .hp-avs--final > span {
+      width: 68px;
+      height: 68px;
+      margin-left: -16px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hp-avs--final > span {
+      width: 104px;
+      height: 104px;
+      margin-left: -22px;
+    }
   }
 
   .hp-avs--final > span:first-child { margin-left: 0; }
 
+  /* 4 photos : chevauchement un peu plus fort pour ne presque pas élargir la barre */
   .hp-avs--sm > span {
     width: 36px;
     height: 36px;
-    margin-left: -10px;
+    margin-left: -14px;
     box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* Très petits écrans : photos et espacements réduits pour que le bouton reste entier */
+  @media (max-width: 359px) {
+    .hp-pop[data-hp-pop] { gap: 8px; }
+    .hp-avs--sm > span { width: 30px; height: 30px; margin-left: -13px; }
+    .hp-pop .cta { padding-left: 14px; }
   }
 
   /* ===== BANDEAU COLLANT (identique à l'accueil) ===== */
@@ -1129,6 +1158,9 @@ const SLIDE_MS = 10000;
 
   .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
 
+  /* Le bouton garde toujours son texte sur une ligne : c'est le texte de la barre qui passe à la ligne */
+  .hp-pop .cta { flex: none; white-space: nowrap; }
+
   @media (min-width: 520px) {
     .hp-pop__txt {
       display: block;
@@ -1146,12 +1178,15 @@ const SLIDE_MS = 10000;
       right: auto;
       bottom: 20px;
       gap: 16px;
+      /* Largeur du contenu : sans cela, left: 50% limite la barre à la moitié de l'écran
+         et le bouton passe sur 2 lignes quand le texte est long */
+      width: max-content;
       max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
       padding: 8px 8px 8px 12px;
       transform: translate(-50%, calc(100% + 40px));
     }
     .hp-pop.is-shown { transform: translate(-50%, 0); }
-    .hp-pop__txt { display: inline; flex: none; font-size: 15px; white-space: nowrap; }
+    .hp-pop__txt { display: inline; flex: 0 1 auto; min-width: 0; font-size: 15px; white-space: normal; }
   }
 
 
@@ -1863,11 +1898,14 @@ const SLIDE_MS = 10000;
   // Carrousel « Chacun son expertise » : onglets accessibles (tablist / tab / tabpanel).
   // - Un profil toutes les 10 s ; la fin de l'animation de la barre déclenche le profil suivant,
   //   donc mettre la barre en pause met aussi le minuteur en pause.
-  // - Démarre seulement quand le carrousel est visible ; pause au survol de la fiche, au focus clavier,
-  //   avec le bouton Pause, et quand l'onglet du navigateur est masqué.
-  // - S'arrête définitivement au premier clic ou toucher sur un onglet ou une fiche,
-  //   ou à la première touche du clavier dans les onglets.
-  // - Aucun défilement automatique avec prefers-reduced-motion.
+  // - Clic, toucher ou clavier (← →, Début, Fin) sur un onglet : le profil choisi s'affiche,
+  //   sa barre repart de zéro, puis le défilement continue.
+  // - Pause au survol de la fiche (souris), au focus clavier dans la fiche, avec le bouton
+  //   Pause / Lecture (toujours visible), au toucher de la fiche sur mobile (un 2e toucher
+  //   relance), hors de l'écran et quand l'onglet du navigateur est masqué.
+  // - Démarre seulement quand le carrousel est visible.
+  // - prefers-reduced-motion : aucun défilement automatique tant que la personne n'appuie
+  //   pas sur Lecture.
   // - Sans JavaScript : onglets cachés, les 4 fiches affichées l'une sous l'autre.
   (function () {
     const root = document.querySelector<HTMLElement>('[data-eq-sp]');
@@ -1892,8 +1930,9 @@ const SLIDE_MS = 10000;
     root.classList.add('is-enhanced');
 
     let cur = 0;
+    // Mouvement réduit : rien ne défile tant que la personne n'a pas appuyé sur Lecture
     let stopped = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const reasons = { hover: false, focus: false, user: false, offscreen: true, hidden: document.hidden };
+    const reasons = { hover: false, focus: false, user: stopped, offscreen: true, hidden: document.hidden };
 
     const updatePause = () => {
       const paused = Object.values(reasons).some(Boolean);
@@ -1923,18 +1962,21 @@ const SLIDE_MS = 10000;
       restartBar();
     };
 
-    const stop = () => {
-      if (stopped) return;
-      stopped = true;
-      root.classList.add('is-stopped');
-      pauseBtn.hidden = true;
-      restartBar();
+    // Pause / Lecture choisie par la personne (bouton ou toucher de la fiche)
+    const setUserPause = (on: boolean) => {
+      reasons.user = on;
+      root.classList.toggle('is-user-paused', on);
+      pauseBtn.setAttribute('aria-label', on ? 'Reprendre le défilement automatique' : 'Mettre en pause le défilement automatique');
+      if (!on && stopped) {
+        stopped = false;
+        root.classList.remove('is-stopped');
+        restartBar();
+      }
+      updatePause();
     };
 
-    if (stopped) {
-      root.classList.add('is-stopped');
-      pauseBtn.hidden = true;
-    }
+    if (stopped) root.classList.add('is-stopped');
+    setUserPause(reasons.user);
 
     // Fin de la barre active : profil suivant
     tabs.forEach((t) => {
@@ -1943,12 +1985,10 @@ const SLIDE_MS = 10000;
       });
     });
 
-    // Clic ou toucher : arrêt définitif
+    // Onglets : le profil choisi s'affiche et sa barre repart de zéro
     tabs.forEach((t, k) => {
-      t.addEventListener('pointerdown', stop);
-      t.addEventListener('click', () => { stop(); select(k); });
+      t.addEventListener('click', () => select(k));
     });
-    stage.addEventListener('pointerdown', stop);
 
     // Flèches du clavier, Début et Fin (activation immédiate)
     bar.addEventListener('keydown', (e) => {
@@ -1956,35 +1996,44 @@ const SLIDE_MS = 10000;
       const keys: Record<string, number> = { ArrowRight: cur + 1, ArrowLeft: cur - 1, Home: 0, End: tabs.length - 1 };
       if (!(e.key in keys)) return;
       e.preventDefault();
-      stop();
       select(keys[e.key], true);
     });
 
-    // Pause au survol de la souris, seulement sur la fiche (photo, rôle, nom, bio, liens) :
-    // ni le bloc « Sur votre projet » ni les onglets. Les fiches inactives sont masquées
-    // (visibility: hidden), donc seule la fiche affichée reçoit le survol.
+    // Fiche : pause au survol de la souris ; sur mobile, un toucher met en pause et un
+    // 2e toucher relance (comme le bouton). Le toucher passe par « click », qui ne se
+    // déclenche pas quand on fait défiler la page. Les fiches inactives sont masquées
+    // (visibility: hidden), donc seule la fiche affichée réagit.
+    let lastPointer = '';
     panels.forEach((panel) => {
       const card = panel.querySelector<HTMLElement>('.eq-sp__card');
       if (!card) return;
       card.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { reasons.hover = true; updatePause(); } });
       card.addEventListener('pointerleave', () => { reasons.hover = false; updatePause(); });
+      card.addEventListener('pointerdown', (e) => { lastPointer = e.pointerType; });
+      card.addEventListener('click', (e) => {
+        if (lastPointer !== 'touch' && lastPointer !== 'pen') return;
+        if (e.target instanceof Element && e.target.closest('a, button')) return;
+        setUserPause(!reasons.user);
+      });
     });
 
-    // Pause au focus clavier
-    root.addEventListener('focusin', () => { reasons.focus = true; updatePause(); });
-    root.addEventListener('focusout', (e) => {
-      if (e.relatedTarget instanceof Node && root.contains(e.relatedTarget)) return;
+    // Pause au focus clavier dans la fiche (pas sur les onglets ni sur le bouton,
+    // et pas quand un toucher ou un clic place le focus)
+    const keyboardFocus = (el: Element) => {
+      try { return el.matches(':focus-visible'); } catch { return true; }
+    };
+    stage.addEventListener('focusin', (e) => {
+      reasons.focus = e.target instanceof Element && keyboardFocus(e.target);
+      updatePause();
+    });
+    stage.addEventListener('focusout', (e) => {
+      if (e.relatedTarget instanceof Node && stage.contains(e.relatedTarget)) return;
       reasons.focus = false;
       updatePause();
     });
 
     // Bouton Pause / Lecture
-    pauseBtn.addEventListener('click', () => {
-      reasons.user = !reasons.user;
-      root.classList.toggle('is-user-paused', reasons.user);
-      pauseBtn.setAttribute('aria-label', reasons.user ? 'Reprendre le défilement automatique' : 'Mettre en pause le défilement automatique');
-      updatePause();
-    });
+    pauseBtn.addEventListener('click', () => setUserPause(!reasons.user));
 
     // Démarrage seulement quand le carrousel est visible (et pause s'il sort de l'écran)
     if ('IntersectionObserver' in window) {
