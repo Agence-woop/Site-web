@@ -19,10 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
+      # Installe les dépendances (npm install), compile le site (npm run build)
+      # et publie le dossier dist/ comme artefact Pages.
+      # En interne : actions/setup-node@v7 et actions/upload-pages-artifact@v5 (Node 24).
       - name: Build with Astro
-        uses: withastro/action@v3
+        uses: withastro/action@v6
+        with:
+          node-version: 24
 
   deploy:
     needs: build
@@ -33,4 +38,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
