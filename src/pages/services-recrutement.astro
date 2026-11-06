@@ -226,7 +226,7 @@ const steps = [
     <div class="container">
       <div class="md-hero__text">
         <p class="md-pill"><i aria-hidden="true"></i>RH &amp; Recrutement</p>
-        <h1 class="md-hero__title">Le marketing pour <span class="gradient-accent hp-kw">cabinets de recrutement</span>, pensé par quelqu'un qui les comprend de l'intérieur.</h1>
+        <h1 class="md-hero__title">Le marketing pour cabinets de recrutement, pensé par quelqu’un qui <span class="gradient-accent hp-kw">les a connus de l’intérieur.</span></h1>
         <p class="md-hero__sub">Stratégie, branding, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats.</p>
         <p class="md-hero__strong"><strong>Votre équipe marketing recrutement, sans avoir à l'embaucher.</strong></p>
         <div class="hp-acts hp-acts--center md-hero__acts">
@@ -317,7 +317,7 @@ const steps = [
               {p.key === 'grow' && (
                 <div class="md-ba">
                   <div class="md-ba__bl md-ba__bl--old"><span></span><small>Avant</small></div>
-                  <span class="md-ba__arr">→</span>
+                  <span class="md-ba__arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
                   <div class="md-ba__bl md-ba__bl--new"><span></span><small>Après</small></div>
                 </div>
               )}
@@ -360,7 +360,7 @@ const steps = [
           const feat = t.shape === 'feat';
           const icon = (
             <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true">
-              {t.key === 'mandats' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-4 3 2 4-4 7 7"/><path d="M8 16l2 2 4-4"/></svg>)}
+              {t.key === 'mandats' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m18 5-2.414-2.414A2 2 0 0 0 14.172 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2"/><path d="M21.378 12.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><path d="M8 18h1"/></svg>)}
               {t.key === 'cand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>)}
               {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
               {t.key === 'social' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-3.8M8.2 13l7.6 3.8"/></svg>)}
@@ -882,8 +882,13 @@ const steps = [
     color: var(--text-secondary);
   }
 
+  /* Ordinateur : élargi pour tenir en 3 lignes au plus à 1440 px (3 lignes dès 920 px de large ;
+     2 lignes demanderaient environ 1450 px, plus que le H1), sans dépasser le cadre du H1 (960 px). */
   @media (min-width: 1024px) {
-    .md-hero__sub { font-size: 18px; }
+    .md-hero__sub {
+      max-width: 940px;
+      font-size: 18px;
+    }
   }
 
   .md-hero__strong {
@@ -1457,9 +1462,10 @@ const steps = [
   .md-crowd__lens svg { width: 26px; height: 26px; }
 
   /* 4. Grandir : avant / après */
+  /* Alignement en haut : la flèche se centre sur les carrés, pas sur carré + étiquette */
   .md-ba {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 16px;
     color: var(--hp-on-grad);
   }
@@ -1499,7 +1505,16 @@ const steps = [
     background: var(--woop-gradient);
   }
 
-  .md-ba__arr { font-size: 26px; font-weight: 700; }
+  /* Flèche SVG (même rendu sur tous les appareils), dans une boîte de la hauteur d'un carré */
+  .md-ba__arr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    height: 84px;
+  }
+
+  .md-ba__arr svg { display: block; width: 26px; height: 26px; }
 
   /* 5. Consultant indépendant : profil et nouvelle demande */
   .md-solo {
@@ -1978,17 +1993,29 @@ const steps = [
     background: color-mix(in srgb, var(--text-primary) 30%, transparent);
   }
 
+  /* Silhouette « utilisateur » : tête de 15 px (37,5 % du rond), épaules arrondies de 27 px
+     (67,5 %), 3 px d'écart entre les deux, et de l'air tout autour dans le rond. */
+  .md-pool__p::before,
   .md-pool__p::after {
     content: '';
     position: absolute;
     left: 50%;
-    top: 8px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
     background: color-mix(in srgb, var(--text-primary) 70%, transparent);
-    box-shadow: 0 16px 0 6px color-mix(in srgb, var(--text-primary) 70%, transparent);
     transform: translateX(-50%);
+  }
+
+  .md-pool__p::before {
+    top: 7px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
+
+  .md-pool__p::after {
+    top: 25px;
+    width: 27px;
+    height: 9px;
+    border-radius: 14px 14px 4px 4px;
   }
 
   .md-pool__p.is-on {
@@ -1996,10 +2023,8 @@ const steps = [
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--text-primary) 40%, transparent);
   }
 
-  .md-pool__p.is-on::after {
-    background: var(--woop-pink);
-    box-shadow: 0 16px 0 6px var(--woop-pink);
-  }
+  .md-pool__p.is-on::before,
+  .md-pool__p.is-on::after { background: var(--woop-pink); }
 
   .md-pool em {
     grid-column: 1 / -1;
@@ -2344,26 +2369,22 @@ const steps = [
     color: var(--md-pink-soft);
   }
 
-  /* Lien discret dans le texte (vers la page Santé & Médical) */
+  /* Lien discret dans le texte (vers la page Santé & Médical) : identique au texte qui l'entoure
+     (même couleur, même graisse, sans soulignement). Souligné uniquement au survol et au focus clavier. */
   .md-gau__txt .md-inl {
     color: inherit;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--woop-pink) 60%, transparent);
-    text-decoration-thickness: 1px;
+    font-weight: inherit;
+    text-decoration: none;
+    text-decoration-thickness: 1.5px;
     text-underline-offset: 4px;
-    transition: color 200ms ease, text-decoration-color 200ms ease;
   }
 
   .md-gau__txt .md-inl:hover,
   .md-gau__txt .md-inl:focus-visible {
-    color: var(--md-pink-soft);
+    text-decoration: underline;
     text-decoration-color: var(--woop-pink);
-  }
-
-  .md-gau__txt .md-inl:focus-visible {
-    outline: 2px solid var(--woop-pink);
-    outline-offset: 3px;
-    border-radius: 4px;
+    text-decoration-thickness: 1.5px;
+    outline: none;
   }
 
   /* Badge « deux marchés » : pilule sombre, filet dégradé fin, texte blanc semi-gras */
