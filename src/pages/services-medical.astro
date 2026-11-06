@@ -434,7 +434,6 @@ const steps = [
       <div class="md-gau md-glass">
         <div class="md-gau__ph" data-reveal="left">
           <img class="md-gau__img" src={`${base}/images/gauthier.webp`} alt="Gauthier" width="671" height="822" loading="lazy" decoding="async" />
-          <p class="md-gau__tag">Infirmier clinicien</p>
         </div>
         <div class="md-gau__txt" data-reveal="right" data-reveal-step="1">
           <p class="md-gau__lead">Gauthier est infirmier clinicien de formation et détenteur d'un MBA. Il dirige aujourd'hui les opérations médicales dans l'aéromédical, expert des soins en communauté et en régions éloignées.</p>
@@ -2187,36 +2186,6 @@ const steps = [
       transform: scale(1.15);
       transform-origin: 51% 100%;
     }
-  }
-
-  /* Léger voile sombre, uniquement derrière la pastille */
-  .md-gau__ph::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 40%;
-    background: radial-gradient(70% 60% at 50% 100%, color-mix(in srgb, var(--bg-deep) 50%, transparent), transparent 75%);
-    pointer-events: none;
-  }
-
-  .md-gau__tag {
-    position: absolute;
-    left: 50%;
-    bottom: 20px;
-    z-index: 1;
-    transform: translateX(-50%);
-    padding: 12px 20px;
-    border-radius: 18px;
-    background: color-mix(in srgb, var(--bg-deep) 82%, transparent);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.3;
-    white-space: nowrap;
-    color: var(--text-primary);
   }
 
   .md-gau__txt {
