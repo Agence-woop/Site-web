@@ -1,607 +1,2794 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Button from '../components/Button.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SITE_URL = 'https://agence-woop.ca';
+const PAGE_URL = `${SITE_URL}/services-recrutement/`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Marketing pour cabinets de recrutement',
+    provider: {
+      '@type': 'Organization',
+      name: 'Agence WOOP',
+      url: `${SITE_URL}/`,
+    },
+    areaServed: 'Québec',
+    url: PAGE_URL,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'RH & Recrutement', item: PAGE_URL },
+    ],
+  },
+];
+
+// Espace insécable devant « : » et « ? » (typographie française, sans changer le texte)
+const NB = ' ';
+
+// Photos rondes de l'équipe : mêmes données et même cadrage que la page d'accueil.
+// - fx / fy : cadrage d'origine (photo calée en haut, agrandie autour de ce point).
+// - objectPosition / zoom : cadrage propre à une photo (remplace le cadrage d'origine).
+type TeamMember = {
+  name: string;
+  img: string;
+  fx?: string;
+  fy?: string;
+  objectPosition?: string;
+  zoom?: number;
+};
+
+const team: TeamMember[] = [
+  { name: 'Gauthier', img: 'gauthier', objectPosition: '57.8% 30.6%', zoom: 1.7 },
+  { name: 'Kevin', img: 'kevin', fx: '50%', fy: '31%' },
+  { name: 'Emma', img: 'emma', fx: '55%', fy: '31%' },
+];
+
+const framing = (m: TeamMember) =>
+  m.objectPosition !== undefined || m.zoom !== undefined
+    ? `--obj-pos: ${m.objectPosition ?? 'center'}; --zoom: ${m.zoom ?? 1};`
+    : `--fx: ${m.fx ?? '50%'}; --fy: ${m.fy ?? '30%'};`;
+const isFramed = (m: TeamMember) => m.objectPosition !== undefined || m.zoom !== undefined;
+
+// Parcours du prochain mandat (illustration animée du hero)
+const journey = [
+  { key: 'search', label: '01 · On vous cherche' },
+  { key: 'chosen', label: '02 · On vous choisit' },
+  { key: 'signed', label: '03 · Mandat signé' },
+  { key: 'filled', label: '04 · Poste pourvu' },
+];
+
+// 01 · Pour qui ? Le texte de chaque carte est coupé en deux : ce que vous vivez, puis ce qu'on change.
+// `wide` : carte sur toute la largeur, illustration à côté du texte (à la verticale sur téléphone).
+const profiles: {
+  key: 'mandat' | 'cand' | 'niche' | 'grow' | 'solo';
+  title: string;
+  lived: string;
+  change: string;
+  reveal: 'left' | 'right' | 'up';
+  step?: string;
+  wide?: boolean;
+}[] = [
+  {
+    key: 'mandat',
+    title: 'Un cabinet qui veut décrocher plus de mandats.',
+    lived: 'Les entreprises confient leurs recherches à vos concurrents.',
+    change: 'Il faut se faire connaître auprès des bons décideurs RH.',
+    reveal: 'left',
+  },
+  {
+    key: 'cand',
+    title: 'Un cabinet qui veut attirer plus de candidats qualifiés.',
+    lived: 'Vos mandats restent ouverts trop longtemps faute de bons profils.',
+    change: 'Il faut construire un bassin actif et engagé.',
+    reveal: 'right',
+    step: '1',
+  },
+  {
+    key: 'niche',
+    title: 'Un cabinet qui veut se différencier dans sa niche.',
+    lived: 'Trop de cabinets se ressemblent.',
+    change: `Il faut une marque qui dit ce qui vous rend unique${NB}: votre niche, votre méthode, votre fit culturel.`,
+    reveal: 'left',
+  },
+  {
+    key: 'grow',
+    title: 'Un cabinet en croissance qui veut professionnaliser son image.',
+    lived: 'Vous avez les résultats, mais votre marque ne suit plus.',
+    change: 'Il faut un branding à la hauteur de vos ambitions.',
+    reveal: 'right',
+    step: '1',
+  },
+  {
+    key: 'solo',
+    title: 'Un consultant RH indépendant qui veut décrocher ses propres mandats.',
+    lived: "Vous opérez en solo, votre réseau s'épuise, et votre visibilité en ligne ne suit pas.",
+    change: 'Il faut une marque personnelle qui attire les clients à vous.',
+    reveal: 'up',
+    wide: true,
+  },
+];
+
+// 02 · Nos services. Comme sur l'accueil : si `href` est défini, toute la tuile devient un lien
+// (effet au survol + chevron). Aucune tuile n'a de lien pour l'instant.
+// Ordre de lecture = ordre de la grille. Formats :
+// - feat : bandeau dégradé, pleine largeur ;
+// - wide : 2 colonnes, en-tête et texte à gauche, illustration à droite ;
+// - sq   : 1 colonne.
+// `step` : décalage d'apparition (data-reveal-step), recalculé dans l'ordre de lecture de chaque rangée :
+// Mandats 0 · Candidats 0, Branding 1 · Réseaux sociaux 0, Site web 1, Réputation 2.
+const services: {
+  key: 'mandats' | 'cand' | 'brand' | 'social' | 'web' | 'rep';
+  shape: 'feat' | 'wide' | 'sq';
+  title: string;
+  text: string[];
+  reveal: 'left' | 'right' | 'up';
+  step?: string;
+  href?: string;
+}[] = [
+  {
+    key: 'mandats',
+    shape: 'feat',
+    title: 'Acquisition de mandats',
+    text: [
+      'Décrocher plus de mandats auprès des entreprises clientes. Campagnes Google Ads, LinkedIn Ads et Meta Ads ciblées sur les décideurs RH et dirigeants.',
+      'On va chercher les entreprises qui ont besoin de vous, là où elles cherchent déjà.',
+    ],
+    reveal: 'up',
+  },
+  {
+    key: 'cand',
+    shape: 'wide',
+    title: 'Attraction de candidats',
+    text: [
+      'Construire un bassin actif et engagé de candidats qualifiés. Campagnes ciblées sur Meta, Google, LinkedIn et autres plateformes selon votre secteur.',
+      'On attire vers vous les bons profils, avant même qu\'ils cherchent activement.',
+    ],
+    reveal: 'up',
+  },
+  {
+    key: 'brand',
+    shape: 'sq',
+    title: 'Branding cabinet',
+    text: [
+      'Logo, charte visuelle, ton de marque, design system complet. Une identité qui justifie votre positionnement et qui fait de votre cabinet un endroit où les meilleurs candidats veulent postuler.',
+    ],
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'social',
+    shape: 'sq',
+    title: 'Stratégie réseaux sociaux',
+    text: [
+      'Présence soignée sur LinkedIn, Instagram, Facebook et autres plateformes adaptées à votre cible. Calendrier éditorial, publications qui mettent en avant votre expertise auprès des entreprises clientes, et contenu qui parle aux candidats.',
+    ],
+    reveal: 'up',
+  },
+  {
+    key: 'web',
+    shape: 'sq',
+    title: 'Site web et présence en ligne',
+    text: [
+      'Sites de conversion pensés pour transformer un visiteur en client, ou un candidat en candidature. Pages dédiées aux mandats, pages dédiées aux candidats, articles de blog pour le référencement Google. Le tout conforme aux meilleures pratiques web.',
+    ],
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'rep',
+    shape: 'sq',
+    title: 'Gestion de la réputation en ligne',
+    text: [
+      'Avis Google, témoignages clients et candidats, suivi de votre image sur le web. On vous aide à construire et protéger la réputation de votre cabinet.',
+    ],
+    reveal: 'up',
+    step: '2',
+  },
+];
+
+// Parcours de la tuile « Acquisition de mandats » : 3 étapes identiques, seul le fond de « Mandat » change
+const pipeline = [
+  { title: 'Décideur RH', text: 'Vous découvre' },
+  { title: 'Rencontre', text: 'Il vous appelle' },
+  { title: 'Mandat', text: 'Il vous confie le poste', on: true },
+];
+
+// Bassin de candidats (tuile « Attraction de candidats ») : 1 = profil retenu
+const pool = [0, 0, 1, 0, 1, 0, 1, 0];
+
+// 04 · Comment ça se passe
+const steps = [
+  { n: '1', title: 'Un appel de 30 minutes', text: 'On écoute où en est votre cabinet et ce que vous visez.', reveal: 'left' as const },
+  { n: '2', title: 'Un plan sur mesure', text: 'Les leviers qui rapportent le plus, côté mandats et côté candidats.', reveal: 'up' as const, step: '1' },
+  { n: '3', title: 'On se lance ensemble', text: 'Vous suivez les résultats, on s\'occupe du reste.', reveal: 'right' as const, step: '2', hot: true },
+];
 ---
 <Layout
-  title="WOOP — Marketing pour Cabinets de recrutement | Montréal"
-  description="Acquisition de mandats, attraction de candidats et marque cabinet. Pensée par quelqu'un qui a travaillé en marketing au sein d'un cabinet de recrutement."
+  title="Marketing pour cabinets de recrutement à Montréal | WOOP"
+  description="Acquisition de mandats, attraction de candidats et image de marque pour cabinets de recrutement. Pensé par un designer qui a piloté le marketing d’un cabinet."
   ogImage="/images/og-recrutement.jpg"
+  jsonLd={jsonLd}
 >
 
-  <!-- SECTION 1 — HERO -->
-  <section class="rh-hero">
-    <div class="container">
-      <div class="rh-hero__watermark" aria-hidden="true">RECRUTEMENT</div>
-      <h1 class="rh-hero__title">
-        Le marketing pour <span class="gradient-accent">cabinets de recrutement</span>,<br>
-        pens&eacute; par quelqu'un qui<br>
-        les comprend de l'int&eacute;rieur.
-      </h1>
-      <div class="rh-hero__subtitle">
-        <p>Strat&eacute;gie, branding, acquisition de mandats et attraction de candidats.</p>
-        <p>Pour les cabinets de recrutement (multisecteurs ou sp&eacute;cialis&eacute;s sant&eacute;, tech, finance, construction, juridique et autres) ainsi que les consultants RH ind&eacute;pendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats.</p>
-      </div>
-      <Button variant="primary" href={`${base}/contact`}>R&eacute;server un appel d&eacute;couverte</Button>
-    </div>
-  </section>
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Le hero n'est jamais animé. -->
+  <ScrollReveal />
 
-  <!-- SECTION 2 — POUR QUI -->
-  <section class="section">
+  <!-- 1. HERO (sans data-reveal) -->
+  <section class="hp-hero md-hero" data-hp-hero>
     <div class="container">
-      <span class="kicker">01 — Pour qui ?</span>
-      <h2 class="section-title">Vous vous reconnaissez ?</h2>
-      <div class="cas-layout">
-        <div class="cas-photo-bento">
-          <img src={`${base}/images/cas-recrutement-ambiance.webp`} alt="Ambiance cabinet de recrutement" class="cas-photo-bento__img" loading="lazy" />
-        </div>
-        <a href="#nos-services" class="cas-cta-bento">
-          <span class="cas-cta-bento__text">
-            <span class="cas-cta-bento__line">Vous cochez au moins une case ?</span>
-            <span class="cas-cta-bento__line">La suite est pour vous.</span>
-          </span>
-          <svg class="cas-cta-bento__chevron" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </a>
-        <div class="cas-list-bento">
-          <div class="cas-item">
-            <h3 class="cas-item__title gradient-text">Un cabinet qui veut d&eacute;crocher plus de mandats.</h3>
-            <p class="cas-item__text">Les entreprises confient leurs recherches &agrave; vos concurrents. Il faut se faire conna&icirc;tre aupr&egrave;s des bons d&eacute;cideurs RH.</p>
-          </div>
-          <div class="cas-item">
-            <h3 class="cas-item__title gradient-text">Un cabinet qui veut attirer plus de candidats qualifi&eacute;s.</h3>
-            <p class="cas-item__text">Vos mandats restent ouverts trop longtemps faute de bons profils. Il faut construire un bassin actif et engag&eacute;.</p>
-          </div>
-          <div class="cas-item">
-            <h3 class="cas-item__title gradient-text">Un cabinet qui veut se diff&eacute;rencier dans sa niche.</h3>
-            <p class="cas-item__text">Trop de cabinets se ressemblent. Il faut une marque qui dit ce qui vous rend unique : votre niche, votre m&eacute;thode, votre fit culturel.</p>
-          </div>
-          <div class="cas-item">
-            <h3 class="cas-item__title gradient-text">Un cabinet en croissance qui veut professionnaliser son image.</h3>
-            <p class="cas-item__text">Vous avez les r&eacute;sultats, mais votre marque ne suit plus. Il faut un branding &agrave; la hauteur de vos ambitions.</p>
-          </div>
-          <div class="cas-item">
-            <h3 class="cas-item__title gradient-text">Un consultant RH ind&eacute;pendant qui veut d&eacute;crocher ses propres mandats.</h3>
-            <p class="cas-item__text">Vous op&eacute;rez en solo, votre r&eacute;seau s'&eacute;puise, et votre visibilit&eacute; en ligne ne suit pas. Il faut une marque personnelle qui attire les clients &agrave; vous.</p>
-          </div>
+      <div class="md-hero__text">
+        <p class="md-pill"><i aria-hidden="true"></i>RH &amp; Recrutement</p>
+        <h1 class="md-hero__title">Le marketing pour <span class="gradient-accent hp-kw">cabinets de recrutement</span>, pensé par quelqu'un qui les comprend de l'intérieur.</h1>
+        <p class="md-hero__sub">Stratégie, branding, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats.</p>
+        <p class="md-hero__strong"><strong>Votre équipe marketing recrutement, sans avoir à l'embaucher.</strong></p>
+        <div class="hp-acts hp-acts--center md-hero__acts">
+          <a class="cta" href={`${base}/contact`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--line" href="#services">Nos services<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- SECTION 3 — NOS SERVICES -->
-  <section class="section" id="nos-services">
-    <div class="container">
-      <span class="kicker">02 — Nos services</span>
-      <h2 class="section-title">Une offre pens&eacute;e pour le secteur du recrutement.</h2>
-      <div class="services-grid">
-        <div class="svc-card svc-card--signature svc-card--mandats">
-          <div class="svc-card__icon">
-            <img src={`${base}/images/icons/icon-acquisition-mandats.svg`} alt="" class="svc-card__icon-img" />
+      <!-- Illustration : le parcours de votre prochain mandat, étapes allumées l'une après l'autre -->
+      <div class="md-dev-w" aria-hidden="true">
+        <div class="md-dev-glow"></div>
+        <div class="md-dev">
+          <div class="md-dev__bar"><span></span><span></span><span></span><em>Le parcours de votre prochain mandat</em></div>
+          <div class="md-dev__cap"><b>Comment les entreprises vous trouvent, avec WOOP</b><span>4 étapes, on s'occupe de chacune.</span></div>
+          <div class="md-flow" data-md-flow>
+            {journey.map((j, i) => (
+              <>
+                {i > 0 && <span class="md-flow__link" data-md-flow-link></span>}
+                <div class="md-xf" data-md-flow-step>
+                  <span class="md-xf__label">{j.label}</span>
+                  {j.key === 'search' && (
+                    <>
+                      <div class="md-sbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><span>cabinet recrutement Montréal</span></div>
+                      <i class="md-xf__ln md-w70"></i>
+                      <i class="md-xf__ln md-w50"></i>
+                    </>
+                  )}
+                  {j.key === 'chosen' && (
+                    <>
+                      <div class="md-xres"><small>En premier</small><b>Votre cabinet</b><em>Spécialiste de votre niche</em></div>
+                      <i class="md-xf__ln md-w60"></i>
+                    </>
+                  )}
+                  {j.key === 'signed' && (
+                    <>
+                      <div class="md-slotx"><em>Lun.</em><b>Nouveau mandat</b><i>+</i></div>
+                      <div class="md-slotx md-slotx--dim"><em>Mar.</em><b>Candidat qualifié</b><i>✓</i></div>
+                    </>
+                  )}
+                  {j.key === 'filled' && (
+                    <div class="md-xrv"><i class="md-xrv__h"></i><i class="md-xf__ln md-w70"></i><i class="md-xf__ln md-w50"></i></div>
+                  )}
+                </div>
+              </>
+            ))}
           </div>
-          <h3 class="svc-card__title">Acquisition de mandats</h3>
-          <p class="svc-card__text">D&eacute;crocher plus de mandats aupr&egrave;s des entreprises clientes. Campagnes Google Ads, LinkedIn Ads et Meta Ads cibl&eacute;es sur les d&eacute;cideurs RH et dirigeants.</p>
-          <p class="svc-card__text">On va chercher les entreprises qui ont besoin de vous, l&agrave; o&ugrave; elles cherchent d&eacute;j&agrave;.</p>
         </div>
-        <div class="svc-card svc-card--signature svc-card--candidats">
-          <div class="svc-card__icon">
-            <img src={`${base}/images/icons/icon-attraction-candidats.svg`} alt="" class="svc-card__icon-img" />
-          </div>
-          <h3 class="svc-card__title">Attraction de candidats</h3>
-          <p class="svc-card__text">Construire un bassin actif et engag&eacute; de candidats qualifi&eacute;s. Campagnes cibl&eacute;es sur Meta, Google, LinkedIn et autres plateformes selon votre secteur.</p>
-          <p class="svc-card__text">On attire vers vous les bons profils, avant m&ecirc;me qu'ils cherchent activement.</p>
-        </div>
-        <div class="svc-card svc-card--branding">
-          <div class="svc-card__icon">
-            <img src={`${base}/images/icons/icon-branding-clinique.svg`} alt="" class="svc-card__icon-img" />
-          </div>
-          <h3 class="svc-card__title">Branding cabinet</h3>
-          <p class="svc-card__text">Logo, charte visuelle, ton de marque, design system complet.</p>
-          <p class="svc-card__text">Une identit&eacute; qui justifie votre positionnement et qui fait de votre cabinet un endroit o&ugrave; les meilleurs candidats veulent postuler.</p>
-        </div>
-        <div class="svc-card svc-card--reseaux">
-          <div class="svc-card__icon">
-            <img src={`${base}/images/icons/icon-strategie-reseaux-sociaux.svg`} alt="" class="svc-card__icon-img" />
-          </div>
-          <h3 class="svc-card__title">Strat&eacute;gie r&eacute;seaux sociaux</h3>
-          <p class="svc-card__text">Pr&eacute;sence soign&eacute;e sur LinkedIn, Instagram, Facebook et autres plateformes adapt&eacute;es &agrave; votre cible.</p>
-          <p class="svc-card__text">Calendrier &eacute;ditorial, publications qui mettent en avant votre expertise aupr&egrave;s des entreprises clientes, et contenu qui parle aux candidats.</p>
-        </div>
-        <div class="svc-card svc-card--siteweb">
-          <div class="svc-card__icon">
-            <img src={`${base}/images/icons/icon-site-web.svg`} alt="" class="svc-card__icon-img" />
-          </div>
-          <h3 class="svc-card__title">Site web et pr&eacute;sence en ligne</h3>
-          <p class="svc-card__text">Sites de conversion pens&eacute;s pour transformer un visiteur en client, ou un candidat en candidature.</p>
-          <p class="svc-card__text">Pages d&eacute;di&eacute;es aux mandats, pages d&eacute;di&eacute;es aux candidats, articles de blog pour le r&eacute;f&eacute;rencement Google. Le tout, conforme aux meilleures pratiques web.</p>
-        </div>
-        <div class="svc-card svc-card--reputation">
-          <div class="svc-card__icon">
-            <img src={`${base}/images/icons/icon-gestion-reputation.svg`} alt="" class="svc-card__icon-img" />
-          </div>
-          <h3 class="svc-card__title">Gestion de la r&eacute;putation en ligne</h3>
-          <p class="svc-card__text">Avis Google, t&eacute;moignages clients et candidats, suivi de votre image sur le web.</p>
-          <p class="svc-card__text">On vous aide &agrave; construire et prot&eacute;ger la r&eacute;putation de votre cabinet.</p>
-        </div>
-      </div>
-      <div class="services-cta">
-        <Button variant="primary" href={`${base}/contact`}>&Eacute;changer 30 minutes avec l'&eacute;quipe</Button>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 4 — CE QUI NOUS DISTINGUE -->
-  <section class="section">
+  <!-- 2. POUR QUI ? -->
+  <section class="hp-block hp-sec" id="pour-qui" data-reveal-clip>
     <div class="container">
-      <span class="kicker">03 — Notre diff&eacute;rence</span>
-      <h2 class="section-title">Con&ccedil;ue par quelqu'un du m&eacute;tier.</h2>
-      <div class="distinguish">
-        <div class="distinguish__photo-wrap">
-          <img src={`${base}/images/kevin.webp`} alt="Kevin Zounias" class="distinguish__photo" loading="lazy" />
-        </div>
-        <div class="distinguish__content">
-          <p>Kevin est designer graphique de formation. Avant de cofonder WOOP, il a pass&eacute; plusieurs ann&eacute;es &agrave; piloter le marketing au sein d'un cabinet de recrutement sp&eacute;cialis&eacute; en sant&eacute;.</p>
-          <p>L&agrave;, il vivait au quotidien les d&eacute;fis que vous connaissez aujourd'hui : d&eacute;crocher des mandats, construire une marque qui se distingue, attirer des candidats qualifi&eacute;s, g&eacute;rer la r&eacute;putation du cabinet.</p>
-          <p>Cette double exp&eacute;rience (la cr&eacute;ation graphique et le marketing en cabinet de recrutement) change tout.</p>
-          <p>Quand on con&ccedil;oit votre strat&eacute;gie, on ne devine pas vos probl&egrave;mes.<br>On les a d&eacute;j&agrave; v&eacute;cus.</p>
-          <p class="distinguish__statement">Aucune autre agence marketing au Qu&eacute;bec ne peut dire &ccedil;a.</p>
-        </div>
+      <div class="hp-head">
+        <p class="md-over" data-reveal="left">01 · Pour qui{NB}?</p>
+        <h2 class="section-title hp-title" data-reveal="left">Vous vous <span class="gradient-accent">reconnaissez</span>{NB}?</h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Trouvez votre situation{NB}: d'abord ce que vous vivez, puis ce qu'on change pour vous. Vous cochez au moins une case{NB}? La suite est pour vous.</p>
       </div>
-      <div class="distinguish-cta">
-        <Button variant="primary" href={`${base}/contact?personne=kevin`}>Parler &agrave; Kevin</Button>
+
+      <div class="md-prs">
+        {profiles.map((p) => (
+          <article class:list={['md-pr', 'md-glass', { 'md-pr--wide': p.wide }]} data-reveal={p.reveal} data-reveal-step={p.step}>
+            <div class:list={['md-pr__vis', `md-pr__vis--${p.key}`]} aria-hidden="true">
+              {p.key === 'mandat' && (
+                <div class="md-rq">
+                  <div class="md-rq__card">
+                    <div class="md-rq__head"><b>Mandat</b><span>Signé</span></div>
+                    <i class="md-rq__ln"></i>
+                    <i class="md-rq__ln md-rq__ln--sh"></i>
+                    <div class="md-rq__sig"><svg viewBox="0 0 120 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 22c10-14 16-14 18-4s8 6 14-6 10 8 18 4 12-10 20-2 14 6 30-2"/></svg></div>
+                  </div>
+                </div>
+              )}
+              {p.key === 'cand' && (
+                <div class="md-cl">
+                  <div class="md-cl__row is-on"><span class="md-cl__av"></span><div><b></b><i></i></div><em>Qualifié</em></div>
+                  <div class="md-cl__row is-on"><span class="md-cl__av"></span><div><b></b><i></i></div><em>Qualifié</em></div>
+                  <div class="md-cl__row"><span class="md-cl__av"></span><div><b></b><i></i></div><em>En attente</em></div>
+                </div>
+              )}
+              {p.key === 'niche' && (
+                <div class="md-crowd">
+                  <span></span><span></span><span class="md-crowd__me"><b>Vous</b></span><span></span><span></span><span></span>
+                  <span class="md-crowd__lens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></span>
+                </div>
+              )}
+              {p.key === 'grow' && (
+                <div class="md-ba">
+                  <div class="md-ba__bl md-ba__bl--old"><span></span><small>Avant</small></div>
+                  <span class="md-ba__arr">→</span>
+                  <div class="md-ba__bl md-ba__bl--new"><span></span><small>Après</small></div>
+                </div>
+              )}
+              {p.key === 'solo' && (
+                <div class="md-solo">
+                  <div class="md-pc"><span class="md-pc__av"></span><div><b>Votre nom</b><small>Consultant RH indépendant</small></div><span class="md-pc__ver">✓</span></div>
+                  <div class="md-nt"><span>+</span><div><b>Nouvelle demande</b><small>Une entreprise vous contacte</small></div></div>
+                </div>
+              )}
+            </div>
+            <div class="md-pr__body">
+              <h3>{p.title}</h3>
+              <p class="md-pr__lived">{p.lived}</p>
+              <p class="md-pr__change">{p.change}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <a class="hp-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
+        <span class="hp-teaser__dot" aria-hidden="true"></span>
+        <span><strong>Nouveau :</strong> testez votre visibilité en 2 minutes</span>
+        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 3. NOS SERVICES (cible du bouton « Nos services ») -->
+  <section class="hp-block hp-sec hp-sec--services" id="services" data-reveal-clip>
+    <div class="container">
+      <div class="hp-head">
+        <p class="md-over" data-reveal="left">02 · Nos services</p>
+        <h2 class="section-title hp-title" data-reveal="left">Une offre pensée pour le secteur du <span class="gradient-accent">recrutement</span>.</h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">En clair{NB}: tout ce que ferait une équipe marketing dans vos murs, sans avoir à l'embaucher. Côté clients comme côté candidats.</p>
+      </div>
+
+      <div class="md-svs">
+        {services.map((t) => {
+          const Tag = t.href ? 'a' : 'article';
+          const feat = t.shape === 'feat';
+          const icon = (
+            <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true">
+              {t.key === 'mandats' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l4-4 3 2 4-4 7 7"/><path d="M8 16l2 2 4-4"/></svg>)}
+              {t.key === 'cand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>)}
+              {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
+              {t.key === 'social' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-3.8M8.2 13l7.6 3.8"/></svg>)}
+              {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>)}
+              {t.key === 'rep' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
+            </span>
+          );
+          return (
+            <Tag
+              href={t.href}
+              class:list={['md-sv', `md-sv--${t.shape}`, `md-sv--${t.key}`, { 'md-glass': !feat, 'hp-tile--link': t.href }]}
+              data-reveal={t.reveal}
+              data-reveal-step={t.step}
+            >
+              {t.href && (
+                <span class="hp-tile__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg></span>
+              )}
+              {feat ? (
+                <>
+                  <div class="md-sv__txt">
+                    {icon}
+                    <h3>{t.title}</h3>
+                    {t.text.map((line) => <p>{line}</p>)}
+                  </div>
+                  <div class="md-jy" aria-hidden="true">
+                    {pipeline.map((s, i) => (
+                      <>
+                        {i > 0 && <span class="md-jy__link"></span>}
+                        <div class:list={[{ 'is-on': s.on }]}><b>{s.title}</b><small>{s.text}</small></div>
+                      </>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div class="md-sv__head">
+                    {icon}
+                    <h3>{t.title}</h3>
+                  </div>
+                  <div class="md-sv__text">
+                    {t.text.map((line) => <p>{line}</p>)}
+                  </div>
+                  <div class:list={['md-mui', `md-mui--${t.key}`]} aria-hidden="true">
+                  {t.key === 'cand' && (
+                    <div class="md-pool">
+                      {pool.map((on) => <span class:list={['md-pool__p', { 'is-on': on }]}></span>)}
+                      <em>Votre bassin de candidats</em>
+                    </div>
+                  )}
+                  {t.key === 'brand' && (
+                    <>
+                      <span class="md-lg"><i></i></span>
+                      <span class="md-pal"><span class="md-pal--o"></span><span class="md-pal--p"></span><span class="md-pal--b"></span></span>
+                      <b class="md-aa">Aa</b>
+                    </>
+                  )}
+                  {t.key === 'social' && (
+                    <>
+                      <div class="md-li__h"><span class="md-li__av"></span><div><b>Votre cabinet</b><small>Publication</small></div><span class="md-li__in">in</span></div>
+                      <div class="md-li__b"><span>On recrute</span><i></i></div>
+                      <div class="md-li__f">
+                        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11v9H4v-9z"/><path d="M7 11l4-7c1.7 0 2.6 1 2.3 2.6L12.8 10H19a2 2 0 012 2.3l-1.2 6A2 2 0 0117.8 20H7"/></svg>J'aime</span>
+                        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.7 7.1L4 20l.9-4.3A8 8 0 1120 12z"/></svg>Commenter</span>
+                      </div>
+                    </>
+                  )}
+                  {t.key === 'web' && (
+                    <>
+                      <div class="md-brw"><span></span><span></span><span></span></div>
+                      <div class="md-pg"><i class="md-pg__h"></i><i class="md-pg__t"></i><span class="md-pg__cta">Voir les postes</span></div>
+                      <div class="md-phn"><i></i><span></span></div>
+                    </>
+                  )}
+                  {t.key === 'rep' && (
+                    <>
+                      <div class="md-rc"><span class="md-rc__av"></span><div><span class="md-rc__stars">★★★★★</span><i></i></div></div>
+                      <div class="md-rp"><i></i><i></i></div>
+                    </>
+                  )}
+                </div>
+                </>
+              )}
+            </Tag>
+          );
+        })}
+      </div>
+
+      <div class="md-svc-cta" data-reveal="up">
+        <a class="cta" href={`${base}/contact`}>Échanger 30 minutes avec l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        <p class="hp-team__more">
+          <a href={`${base}/blog/recrutement/`}>Lire nos articles sur le marketing recrutement <span aria-hidden="true">›</span></a>
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 5 — CTA FINAL -->
-  <section class="section cta-final-section">
+  <!-- 4. NOTRE DIFFÉRENCE -->
+  <section class="hp-block hp-sec" id="difference" data-reveal-clip>
     <div class="container">
-      <div class="cta-final">
-        <h2 class="cta-final__title">Envie de faire grandir votre activit&eacute; de recrutement ?</h2>
-        <Button variant="primary" href={`${base}/contact`}>Parlons de votre cabinet</Button>
+      <div class="hp-head">
+        <p class="md-over" data-reveal="left">03 · Notre différence</p>
+        <h2 class="section-title hp-title" data-reveal="left">Conçue par quelqu'un du <span class="gradient-accent">métier</span>.</h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Ce qui nous rend différents de toutes les autres agences.</p>
+      </div>
+
+      <div class="md-gau md-glass">
+        <div class="md-gau__ph" data-reveal="left">
+          <img class="md-gau__img" src={`${base}/images/kevin.webp`} alt="Kevin" width="671" height="822" loading="lazy" decoding="async" />
+        </div>
+        <div class="md-gau__txt" data-reveal="right" data-reveal-step="1">
+          <p class="md-gau__lead">Kevin est designer graphique de formation. Avant de cofonder WOOP, il a passé plusieurs années à piloter le marketing au sein d'un <a class="md-inl" href={`${base}/services-medical/`}>cabinet de recrutement spécialisé en santé</a>.</p>
+          <p>Là, il vivait au quotidien les défis que vous connaissez aujourd'hui{NB}: décrocher des mandats, construire une marque qui se distingue, attirer des candidats qualifiés, gérer la réputation du cabinet.</p>
+          <p>Cette double expérience, la création graphique et le marketing en cabinet de recrutement, change tout. Quand on conçoit votre stratégie, on ne devine pas vos problèmes{NB}: <strong>on les a déjà vécus.</strong> Aucune autre agence marketing au Québec ne peut en dire autant.</p>
+          <div class="md-gau__foot">
+            <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.2 14.6c2.6.1 4.3 2 4.8 4.9"/></svg></span><span>Une stratégie pour vos deux marchés{NB}: clients et candidats</span></p>
+            <a class="cta" href={`${base}/contact?personne=kevin`}>Parler à Kevin<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- 5. COMMENT ÇA SE PASSE -->
+  <section class="hp-block hp-sec" data-reveal-clip>
+    <div class="container">
+      <div class="hp-head">
+        <p class="md-over" data-reveal="left">04 · Comment ça se passe</p>
+        <h2 class="section-title hp-title" data-reveal="left">Simple et <span class="gradient-accent">sans engagement</span>.</h2>
+        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Voici exactement ce qui se passe après votre premier appel.</p>
+      </div>
+
+      <ol class="md-steps">
+        {steps.map((s) => (
+          <li class="md-st md-glass" data-reveal={s.reveal} data-reveal-step={s.step}>
+            <span class:list={['md-st__d', { 'is-on': s.hot }]} aria-hidden="true">{s.n}</span>
+            <h3><span class="visually-hidden">{s.n} </span>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 6. BANDEAU FINAL (identique à celui de l'accueil) -->
+  <section class="hp-block hp-block--last hp-sec--final" data-hp-final>
+    <div class="container">
+      <div class="hp-final" data-reveal="up">
+        <div class="hp-avs hp-avs--final" aria-hidden="true">
+          {team.map((m) => (
+            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+          ))}
+        </div>
+        <h2>Envie de faire grandir votre activité de recrutement{NB}?</h2>
+        <p>Votre équipe marketing recrutement commence par un appel de 30 minutes.</p>
+        <div class="hp-acts hp-acts--center">
+          <a class="cta cta--light" href={`${base}/contact?personne=kevin`}>Parlons de votre cabinet<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
+  <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
+    <span class="hp-avs hp-avs--sm" aria-hidden="true">
+      {team.map((m) => (
+        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width="671" height="822" loading="lazy" decoding="async" /></span>
+      ))}
+    </span>
+    <span class="hp-pop__txt">Votre équipe marketing recrutement, <strong>sans l'embaucher</strong></span>
+    <a class="cta cta--sm" href={`${base}/contact`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+  </aside>
 
 </Layout>
 
 <style>
-  /* ===== HERO ===== */
-  .rh-hero {
-    position: relative;
-    padding: 120px 0 48px;
-    overflow: hidden;
+  /* =====================================================================
+     PAGE RH & RECRUTEMENT : styles locaux (scopés).
+     Les classes hp-* reprennent à l'identique celles de la page d'accueil
+     (mêmes noms, mêmes valeurs). Les classes md-* reprennent celles de la page
+     Santé & Médical (même structure), complétées par les illustrations propres
+     à cette page.
+     Couleurs : uniquement les jetons de global.css, leurs mélanges
+     (color-mix) et des rgba() dérivées de #FA6244 et #E62B7F.
+     ===================================================================== */
+
+  /* ===== ESPACEMENTS DE RÉFÉRENCE (mêmes valeurs que l'accueil) ===== */
+  .hp-hero,
+  .hp-block {
+    /* entre deux sections : 80 px mobile, 100 px tablette, 120 px ordinateur */
+    --home-section-gap: 80px;
+    /* dans une section : titre → sous-texte, puis titre ou sous-texte → contenu */
+    --home-head-gap: 16px;
+    --home-head-content: 36px;
   }
 
   @media (min-width: 768px) {
-    .rh-hero { padding: 140px 0 64px; }
+    .hp-hero,
+    .hp-block { --home-section-gap: 100px; }
   }
 
-  .rh-hero__watermark {
-    position: absolute;
-    font-family: var(--font-display);
-    font-size: 14vw;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.12);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: -1;
-  }
-
-  .rh-hero__title {
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 1.2;
-    color: var(--text-primary);
-    max-width: 1100px;
-    margin-bottom: 20px;
-  }
-
-  @media (min-width: 768px) {
-    .rh-hero__title { font-size: 40px; }
+  @media (min-width: 900px) {
+    .hp-hero,
+    .hp-block {
+      --home-head-gap: 20px;
+      --home-head-content: 46px;
+    }
   }
 
   @media (min-width: 1024px) {
-    .rh-hero__title { font-size: 44px; line-height: 1.15; }
+    .hp-hero,
+    .hp-block { --home-section-gap: 120px; }
   }
 
-  .rh-hero__subtitle {
+  /* Jetons locaux, dérivés de la charte (mêmes valeurs que l'accueil) */
+  .hp-hero,
+  .hp-block,
+  .hp-pop {
+    --hp-ink: var(--text-primary);
+    --hp-dark: var(--bg-deep);
+    /* Petits textes, libellés et flèches posés sur le dégradé ou l'orange de la charte */
+    --hp-on-grad: var(--bg-deep);
+    --hp-light: var(--text-primary);
+    --hp-blush: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
+    --hp-pinklight: color-mix(in srgb, var(--woop-pink) 45%, var(--text-primary));
+    --hp-plum: color-mix(in srgb, var(--woop-pink) 20%, var(--bg-deep));
+    --hp-card: var(--bg-elevated);
+    --hp-line: color-mix(in srgb, var(--text-primary) 14%, transparent);
+    --hp-skel: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
+    --hp-skel-2: color-mix(in srgb, var(--text-muted) 12%, var(--text-primary));
+    --hp-shadow: color-mix(in srgb, var(--bg-deep) 55%, transparent);
+    --hp-grad-band: linear-gradient(120deg, var(--woop-orange) 25%, var(--woop-pink));
+    /* Propres à cette page */
+    --md-pink-soft: color-mix(in srgb, var(--woop-pink) 70%, var(--text-primary));
+    --md-pink-deep: color-mix(in srgb, var(--woop-pink) 80%, var(--bg-deep));
+  }
+
+  /* ===== BOUTONS (identiques à l'accueil) ===== */
+  .hp-acts {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 12px;
-    font-size: 16px;
-    line-height: 1.65;
+  }
+
+  .hp-acts--center { justify-content: center; }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 100%;
+    padding: 7px 7px 7px 24px;
+    border-radius: var(--radius-button);
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+
+  .cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
+  }
+
+  .cta:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 3px;
+  }
+
+  .cta--light:hover {
+    box-shadow: 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
+  }
+
+  .cta--light:focus-visible,
+  .cta--on-grad:focus-visible {
+    outline-color: var(--text-primary);
+  }
+
+  .cta__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    color: var(--hp-on-grad);
+  }
+
+  .cta__ico svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .cta--light {
+    background: var(--hp-light);
+    color: var(--hp-dark);
+  }
+
+  .cta--light .cta__ico,
+  .cta--line .cta__ico {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  .cta--line {
+    color: var(--text-primary);
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+  }
+
+  .cta--line:hover {
+    box-shadow: inset 0 0 0 1.5px var(--hp-line), 0 10px 40px rgba(230, 43, 127, 0.45);
+  }
+
+  .cta--on-grad {
+    color: var(--hp-on-grad);
+    box-shadow: inset 0 0 0 1.5px var(--hp-light);
+  }
+
+  .cta--on-grad:hover {
+    box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
+  }
+
+  .cta--on-grad .cta__ico {
+    background: var(--hp-light);
+    color: var(--hp-on-grad);
+  }
+
+  .cta--sm {
+    gap: 10px;
+    padding: 5px 5px 5px 18px;
+    font-size: 14px;
+  }
+
+  .cta--sm .cta__ico {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* ===== TITRES DE SECTION (identiques à l'accueil) ===== */
+  .hp-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--home-head-gap);
+    margin-bottom: var(--home-head-content);
+  }
+
+  .hp-title {
+    margin-bottom: 0;
+    line-height: 1.02;
+    color: var(--text-primary);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .hp-head__intro {
+    max-width: 760px;
     color: var(--text-secondary);
-    max-width: 640px;
-    margin-bottom: 32px;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 1024px) {
+    .hp-head__intro { font-size: 19px; }
+  }
+
+  /* Surtitre numéroté (01 · Pour qui ?) : rose éclairci, comme l'accroche du hero de l'accueil */
+  .md-over {
+    margin-bottom: -4px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+  }
+
+  /* Pas de mot seul en fin de paragraphe */
+  p,
+  .hp-pop__txt {
+    text-wrap: pretty;
+  }
+
+  /* Pastille rose (hero) */
+  .md-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    max-width: 100%;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+    background: rgba(230, 43, 127, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.4);
+  }
+
+  .md-pill i {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+  }
+
+  /* Cartes vitrées à filet dégradé (cartes, tuiles, bloc Kevin, étapes) */
+  .md-glass {
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--woop-pink) 8%, color-mix(in srgb, var(--bg-elevated) 80%, transparent)),
+      color-mix(in srgb, var(--bg-elevated) 75%, transparent)
+    );
+  }
+
+  .md-glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(230, 43, 127, 0.4), color-mix(in srgb, var(--text-primary) 6%, transparent) 40%, rgba(250, 98, 68, 0.3));
+    -webkit-mask: linear-gradient(var(--bg-deep) 0 0) content-box, linear-gradient(var(--bg-deep) 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ===== SECTIONS ===== */
+  /* Une seule règle d'espacement entre deux sections consécutives (voir --home-section-gap). */
+  .hp-hero + .hp-block,
+  .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  .hp-block--last { padding-bottom: var(--home-section-gap); }
+
+  .hp-sec--services { scroll-margin-top: 90px; }
+
+  /* ===== 1. HERO ===== */
+  .hp-hero {
+    position: relative;
+    padding: 40px 0 0;
+    overflow-x: clip;
   }
 
   @media (min-width: 768px) {
-    .rh-hero__subtitle { font-size: 18px; }
+    .hp-hero { padding: 64px 0 0; }
   }
 
-  @media (min-width: 1024px) {
-    .rh-hero__subtitle { font-size: 20px; }
+  /* Halo rose derrière le titre */
+  .md-hero::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -60px;
+    width: 900px;
+    max-width: 140%;
+    height: 520px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(230, 43, 127, 0.22), transparent 65%);
+    pointer-events: none;
   }
 
-  /* ===== CAS (POUR QUI) — 3 BENTOS ===== */
-  .cas-layout {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-bento);
-    margin-top: 32px;
-  }
+  .md-hero .container { position: relative; }
 
-  .cas-photo-bento { order: 1; }
-  .cas-list-bento  { order: 2; }
-  .cas-cta-bento   { order: 3; }
-
-  @media (min-width: 1024px) {
-    .cas-layout {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      grid-template-rows: 1fr auto;
-      align-items: stretch;
-    }
-
-    .cas-photo-bento {
-      grid-column: 1;
-      grid-row: 1;
-      order: unset;
-      min-height: 0;
-    }
-
-    .cas-cta-bento {
-      grid-column: 1;
-      grid-row: 2;
-      order: unset;
-    }
-
-    .cas-list-bento {
-      grid-column: 2;
-      grid-row: 1 / 3;
-      order: unset;
-    }
-
-    .cas-photo-bento__img {
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-    }
-  }
-
-  .cas-photo-bento {
-    border-radius: var(--radius-bento);
-    overflow: hidden;
-  }
-
-  .cas-photo-bento__img {
-    width: 100%;
-    display: block;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    object-position: center top;
-  }
-
-  .cas-cta-bento {
+  .md-hero__text {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
     text-align: center;
-    background: linear-gradient(135deg, #FA6244 0%, #E62B7F 100%);
-    border-radius: var(--radius-bento);
-    padding: 28px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform 200ms ease;
   }
 
-  @media (min-width: 768px) {
-    .cas-cta-bento { padding: 40px; }
-  }
-
-  @media (min-width: 1024px) {
-    .cas-cta-bento { padding: 44px; }
-  }
-
-  .cas-cta-bento:hover {
-    transform: translateY(-2px);
-  }
-
-  .cas-cta-bento__text {
-    font-family: var(--font-display);
-    font-size: 22px;
-    text-transform: uppercase;
-    line-height: 1.15;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  @media (max-width: 767px) {
-    .cas-cta-bento__text { gap: 12px; }
-  }
-
-  @media (min-width: 768px) {
-    .cas-cta-bento__text { font-size: 26px; }
-  }
-
-  @media (min-width: 1024px) {
-    .cas-cta-bento__text { font-size: 30px; }
-  }
-
-  .cas-cta-bento__chevron {
-    color: #fff;
-    opacity: 0.7;
-  }
-
-  .cas-list-bento {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  @media (min-width: 768px) {
-    .cas-list-bento { gap: 28px; padding: 32px; }
-  }
-
-  @media (min-width: 1024px) {
-    .cas-list-bento { gap: 36px; padding: 36px; }
-  }
-
-  .cas-item__title {
-    font-family: var(--font-display);
-    font-size: 22px;
-    text-transform: uppercase;
-    line-height: 1.1;
+  .md-hero__title {
+    max-width: 960px;
+    margin-top: 26px;
+    font-family: var(--font-body);
     font-weight: 700;
+    font-size: 36px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
     color: var(--text-primary);
-    margin-bottom: 12px;
-  }
-
-  @media (min-width: 768px) {
-    .cas-item__title { font-size: 26px; }
-  }
-
-  @media (min-width: 1024px) {
-    .cas-item__title { font-size: 32px; }
-  }
-
-  .cas-item__text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-  }
-
-  @media (min-width: 1024px) {
-    .cas-item__text { font-size: 16px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cas-cta-bento { transition: none; }
-  }
-
-  /* ===== SERVICES ===== */
-  .services-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--gap-bento);
-    margin-top: 32px;
+    text-wrap: balance;
   }
 
   @media (min-width: 600px) {
-    .services-grid { grid-template-columns: 1fr 1fr; }
+    .md-hero__title { font-size: 48px; }
   }
 
   @media (min-width: 1024px) {
-    .services-grid { grid-template-columns: repeat(4, 1fr); }
-
-    .svc-card--mandats   { grid-column: 1 / 3; }
-    .svc-card--candidats { grid-column: 3 / 5; }
-    .svc-card--branding  { grid-column: 1 / 2; }
-    .svc-card--reseaux   { grid-column: 2 / 3; }
-    .svc-card--siteweb   { grid-column: 3 / 4; }
-    .svc-card--reputation { grid-column: 4 / 5; }
+    .md-hero__title { font-size: 56px; }
   }
 
-  .svc-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    position: relative;
-    overflow: hidden;
+  @media (min-width: 1280px) {
+    .md-hero__title { font-size: 62px; }
   }
 
-  .svc-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--woop-gradient);
+  .hp-kw {
+    letter-spacing: 1px;
+    padding: 0 0.04em;
   }
 
-  .svc-card--signature {
-    background: var(--woop-gradient);
-    border: none;
-    padding: 32px;
-  }
-
-  .svc-card--signature::before { display: none; }
-
-  .svc-card--signature .svc-card__title,
-  .svc-card--signature .svc-card__text {
-    color: #fff;
-  }
-
-  .svc-card--signature .svc-card__text { opacity: 0.92; }
-
-  .svc-card__icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: var(--woop-gradient);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 599px) {
-    .svc-card__icon { width: 64px; height: 64px; }
-  }
-
-  .svc-card__icon-img {
-    width: 56px;
-    height: 56px;
-    display: block;
-  }
-
-  @media (max-width: 599px) {
-    .svc-card__icon-img { width: 45px; height: 45px; }
-  }
-
-  .svc-card--signature .svc-card__icon {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .svc-card__title {
-    font-family: var(--font-display);
-    font-size: 24px;
-    text-transform: uppercase;
-    line-height: 1.05;
-    color: var(--text-primary);
-  }
-
-  @media (min-width: 768px) {
-    .svc-card__title { font-size: 28px; }
-  }
-
-  .svc-card__text {
-    font-size: 14px;
+  .md-hero__sub {
+    max-width: 680px;
+    margin-top: 24px;
+    font-size: 17px;
     line-height: 1.6;
     color: var(--text-secondary);
   }
 
   @media (min-width: 1024px) {
-    .svc-card__text { font-size: 16px; }
+    .md-hero__sub { font-size: 18px; }
   }
 
-  .services-cta {
-    margin-top: 40px;
-    text-align: center;
+  .md-hero__strong {
+    margin-top: 14px;
+    font-size: 17px;
+    line-height: 1.5;
   }
 
-  /* ===== DISTINGUISH ===== */
-  .distinguish {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    overflow: hidden;
-    margin-top: 32px;
-  }
-
-  @media (min-width: 768px) {
-    .distinguish {
-      flex-direction: row;
-      align-items: stretch;
-    }
-  }
-
-  .distinguish__photo-wrap {
-    flex-shrink: 0;
-    overflow: hidden;
-  }
-
-  @media (min-width: 768px) {
-    .distinguish__photo-wrap { width: 280px; }
-  }
-
-  .distinguish__photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    min-height: 240px;
-  }
-
-  .distinguish__content {
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--text-secondary);
-    justify-content: center;
+  .md-hero__strong strong {
+    color: var(--text-primary);
+    font-weight: 700;
   }
 
   @media (min-width: 1024px) {
-    .distinguish__content { font-size: 17px; }
+    .md-hero__strong { font-size: 18px; }
   }
 
-  .distinguish__statement {
+  .md-hero__acts { margin-top: 32px; }
+
+  /* Écran incliné qui contient le parcours du prochain mandat */
+  .md-dev-w {
+    position: relative;
+    max-width: 1100px;
+    margin: 50px auto 0;
+    perspective: 1600px;
+  }
+
+  @media (min-width: 621px) {
+    .md-dev-w { margin-top: 80px; }
+  }
+
+  .md-dev-glow {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: -10%;
+    background: radial-gradient(ellipse at center, rgba(230, 43, 127, 0.45), rgba(250, 98, 68, 0.15) 45%, transparent 70%);
+    filter: blur(40px);
+  }
+
+  .md-dev {
+    position: relative;
+    padding: 12px;
+    border-radius: 28px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--woop-pink) 12%, color-mix(in srgb, var(--bg-elevated) 92%, transparent)),
+      color-mix(in srgb, var(--woop-pink) 5%, color-mix(in srgb, var(--bg-deep) 95%, transparent))
+    );
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent),
+      0 60px 120px color-mix(in srgb, var(--bg-deep) 60%, transparent),
+      inset 0 1px 0 color-mix(in srgb, var(--text-primary) 8%, transparent);
+  }
+
+  /* Ordinateur et tablette : écran incliné qui se redresse à l'arrivée */
+  @media (min-width: 621px) {
+    .md-dev {
+      padding: 18px 22px 26px;
+      transform: rotateX(4deg);
+      transform-origin: center bottom;
+      animation: md-devin 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+  }
+
+  @keyframes md-devin {
+    from { opacity: 0; transform: rotateX(18deg) translateY(40px); }
+    to { opacity: 1; transform: rotateX(4deg); }
+  }
+
+  .md-dev__bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid color-mix(in srgb, var(--text-primary) 7%, transparent);
+  }
+
+  .md-dev__bar span {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text-primary) 15%, transparent);
+  }
+
+  .md-dev__bar span:first-child { background: var(--woop-orange); }
+  .md-dev__bar span:nth-child(2) { background: var(--woop-pink); }
+
+  .md-dev__bar em {
+    display: none;
+    margin: 0 auto;
+    padding: 5px 40px;
+    border-radius: 8px;
+    font-style: normal;
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  }
+
+  @media (min-width: 621px) {
+    .md-dev__bar em { display: block; }
+  }
+
+  .md-dev__cap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 26px 0 24px;
+    text-align: center;
+  }
+
+  .md-dev__cap b {
+    font-size: 19px;
     font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+
+  .md-dev__cap span {
+    font-size: 15px;
+    color: var(--text-secondary);
+  }
+
+  @media (min-width: 621px) {
+    .md-dev__cap b { font-size: 22px; }
+  }
+
+  /* Les 4 étapes : 4 colonnes reliées, 2 × 2 sur tablette, empilées sur téléphone */
+  .md-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: left;
+  }
+
+  @media (min-width: 1101px) {
+    .md-flow { flex-wrap: nowrap; gap: 0; }
+  }
+
+  .md-xf {
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: column;
+    gap: 9px;
+    min-height: 150px;
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--bg-deep) 30%, transparent);
+    transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 500ms, opacity 500ms;
+  }
+
+  @media (min-width: 621px) {
+    .md-xf { flex-basis: 40%; }
+  }
+
+  @media (min-width: 1101px) {
+    .md-xf { flex: 1; max-width: 250px; }
+  }
+
+  .md-flow__link {
+    display: none;
+    position: relative;
+    flex: none;
+    width: 34px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--woop-orange), var(--woop-pink));
+    transition: opacity 400ms;
+  }
+
+  .md-flow__link::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+  }
+
+  @media (min-width: 1101px) {
+    .md-flow__link { display: block; }
+  }
+
+  /* Allumage progressif : uniquement quand le script tourne (sinon état final, tout allumé) */
+  .md-flow.is-live .md-xf { opacity: 0.55; }
+  .md-flow.is-live .md-flow__link { opacity: 0.3; }
+  .md-flow.is-live .md-xf.is-done,
+  .md-flow.is-live .md-flow__link.is-on { opacity: 1; }
+
+  .md-flow.is-live .md-xf.is-act {
+    opacity: 1;
+    transform: translateY(-10px);
+    box-shadow: 0 22px 44px rgba(230, 43, 127, 0.35), 0 0 0 2px rgba(230, 43, 127, 0.6);
+  }
+
+  .md-xf__label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .md-xf__ln {
+    display: block;
+    height: 7px;
+    border-radius: 4px;
+    background: var(--hp-skel-2);
+  }
+
+  .md-w70 { width: 70%; }
+  .md-w60 { width: 60%; }
+  .md-w50 { width: 50%; }
+
+  .md-sbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1.5px var(--hp-skel);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .md-sbar svg {
+    flex: none;
+    width: 15px;
+    height: 15px;
     color: var(--woop-pink);
+  }
+
+  .md-xres {
+    padding: 11px 12px;
+    border-radius: 13px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  .md-xres small {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .md-xres b {
+    display: block;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .md-xres em {
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .md-slotx {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-radius: 12px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 12px;
+  }
+
+  .md-slotx em {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  .md-slotx b { flex: 1; }
+
+  .md-slotx i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  .md-slotx--dim {
+    background: var(--hp-skel-2);
+    color: var(--hp-dark);
+  }
+
+  .md-slotx--dim em { color: var(--text-muted); }
+  .md-slotx--dim i { background: var(--hp-blush); }
+
+  /* Étape 4 : carte claire en barres de gabarit (pas de témoignage) */
+  .md-xrv {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 13px;
+    background: color-mix(in srgb, var(--woop-pink) 6%, var(--text-primary));
+  }
+
+  .md-xrv__h {
+    display: block;
+    width: 60%;
+    height: 9px;
+    border-radius: 5px;
+    background: var(--hp-plum);
+  }
+
+  /* ===== 2. POUR QUI ? ===== */
+  .md-prs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  @media (min-width: 720px) {
+    .md-prs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .md-pr {
+    overflow: hidden;
+    border-radius: 28px;
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .md-pr:hover { transform: translateY(-5px); }
+
+  .md-pr__vis {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 190px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 621px) {
+    .md-pr__vis { height: 210px; }
+  }
+
+  .md-pr__vis > * { transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .md-pr:hover .md-pr__vis > * { transform: scale(1.06) rotate(-2deg); }
+
+  .md-pr__vis--mandat { background: var(--woop-gradient); }
+  .md-pr__vis--cand { background: var(--hp-blush); }
+  .md-pr__vis--niche { background: var(--hp-plum); }
+  .md-pr__vis--grow { background: linear-gradient(140deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-orange)); }
+  .md-pr__vis--solo { background: linear-gradient(120deg, var(--hp-plum), var(--woop-pink)); }
+
+  /* 5e carte (consultant indépendant) : sur toute la largeur, illustration à gauche et texte
+     à droite dès que la grille passe à 2 colonnes. À la verticale sur téléphone. */
+  @media (min-width: 720px) {
+    .md-pr--wide {
+      grid-column: 1 / -1;
+      display: grid;
+      /* L'illustration a la largeur d'une carte de la rangée du dessus (gouttière de 22 px comprise) */
+      grid-template-columns: minmax(0, calc((100% - 22px) / 2)) minmax(0, 1fr);
+    }
+    .md-pr--wide .md-pr__vis {
+      height: auto;
+      min-height: 240px;
+    }
+    .md-pr--wide .md-pr__body { justify-content: center; }
+  }
+
+  .md-pr__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    /* Le titre ouvre la carte : même écart sous l'illustration dans les 5 cartes */
+    padding: 28px 24px 30px;
+  }
+
+  @media (min-width: 768px) {
+    .md-pr__body { padding: 30px 30px 32px; }
+  }
+
+  .md-pr__body h3 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .md-pr__body h3 { font-size: 24px; }
+  }
+
+  .md-pr__body p {
     font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* Ce qu'on change : coche dégradée, filet au-dessus */
+  .md-pr__body p.md-pr__change {
+    position: relative;
+    align-self: stretch;
+    margin-top: 4px;
+    padding: 14px 0 0 28px;
+    border-top: 1px solid var(--hp-line);
+    color: var(--text-primary);
+  }
+
+  .md-pr__change::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  /* Illustrations des cartes */
+  /* 1. Mandat signé */
+  .md-rq__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 220px;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+    box-shadow: 0 18px 36px var(--hp-shadow);
+    transform: rotate(-3deg);
+  }
+
+  .md-rq__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .md-rq__head b { font-size: 14px; font-weight: 700; }
+
+  .md-rq__head span {
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .md-rq__ln { display: block; height: 7px; border-radius: 4px; background: var(--hp-skel-2); }
+  .md-rq__ln--sh { width: 65%; }
+
+  .md-rq__sig {
+    padding-top: 6px;
+    border-top: 1.5px dashed var(--hp-skel);
+    color: var(--woop-pink);
+  }
+
+  .md-rq__sig svg { display: block; width: 120px; height: 30px; }
+
+  /* 2. Candidats qualifiés */
+  .md-cl {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 240px;
+  }
+
+  .md-cl__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+    box-shadow: 0 10px 24px rgba(230, 43, 127, 0.15);
+  }
+
+  .md-cl__row:not(.is-on) { opacity: 0.7; }
+
+  .md-cl__av { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--hp-skel-2); }
+  .md-cl__row.is-on .md-cl__av { background: var(--woop-gradient); }
+
+  .md-cl__row div { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .md-cl__row b { display: block; width: 75%; height: 7px; border-radius: 4px; background: var(--hp-plum); }
+  .md-cl__row i { display: block; width: 50%; height: 6px; border-radius: 3px; background: var(--hp-skel); }
+
+  .md-cl__row em {
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .md-cl__row:not(.is-on) em { background: var(--hp-skel-2); color: var(--hp-dark); }
+
+  /* 3. Se différencier : « Vous » dans la foule */
+  .md-crowd {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 64px);
+    gap: 10px;
+  }
+
+  .md-crowd > span {
+    height: 64px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent);
+  }
+
+  .md-crowd > .md-crowd__me {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--woop-gradient);
+    box-shadow: 0 10px 26px rgba(230, 43, 127, 0.5);
+    transform: scale(1.08);
+  }
+
+  .md-crowd__me b { font-size: 13px; font-weight: 700; color: var(--hp-on-grad); }
+
+  .md-crowd > .md-crowd__lens {
+    position: absolute;
+    right: -22px;
+    bottom: -18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    color: var(--woop-pink);
+    box-shadow: 0 12px 28px var(--hp-shadow);
+  }
+
+  .md-crowd__lens svg { width: 26px; height: 26px; }
+
+  /* 4. Grandir : avant / après */
+  .md-ba {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--hp-on-grad);
+  }
+
+  .md-ba__bl {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .md-ba__bl span { display: block; width: 84px; height: 84px; border-radius: 22px; }
+
+  .md-ba__bl small {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .md-ba__bl--old span {
+    background: color-mix(in srgb, var(--text-primary) 35%, transparent);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--text-primary) 50%, transparent);
+  }
+
+  .md-ba__bl--new span {
+    position: relative;
+    background: var(--hp-light);
+    box-shadow: 0 14px 30px var(--hp-shadow);
+  }
+
+  .md-ba__bl--new span::after {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+  }
+
+  .md-ba__arr { font-size: 26px; font-weight: 700; }
+
+  /* 5. Consultant indépendant : profil et nouvelle demande */
+  .md-solo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .md-pc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 260px;
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--hp-light);
+    color: var(--hp-dark);
+    box-shadow: 0 18px 36px var(--hp-shadow);
+  }
+
+  .md-pc__av {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--woop-gradient);
+  }
+
+  .md-pc__av::before,
+  .md-pc__av::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    border-radius: 50%;
+    background: var(--hp-light);
+    transform: translateX(-50%);
+  }
+
+  .md-pc__av::before { top: 8px; width: 14px; height: 14px; }
+  .md-pc__av::after { bottom: -9px; width: 26px; height: 19px; }
+
+  .md-pc div { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .md-pc b { font-size: 13px; font-weight: 700; line-height: 1.3; }
+  .md-pc small { font-size: 10.5px; font-weight: 600; line-height: 1.3; color: var(--text-muted); }
+
+  .md-pc__ver {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .md-nt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 40px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--bg-deep) 85%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent);
+    color: var(--text-primary);
+  }
+
+  .md-nt > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-weight: 700;
+  }
+
+  .md-nt b { display: block; font-size: 13px; line-height: 1.3; }
+  .md-nt small { font-size: 11px; line-height: 1.3; color: var(--text-secondary); }
+
+  /* Bandeau « Nouveau » (identique à l'accueil) */
+  .hp-teaser {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding: 14px 14px 14px 22px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--hp-on-grad);
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+
+  .hp-teaser:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
+  }
+
+  .hp-teaser:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .hp-teaser strong { color: var(--hp-on-grad); }
+
+  .hp-teaser__dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--hp-on-grad);
+  }
+
+  .hp-go {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-left: auto;
+    border-radius: 50%;
+    background: var(--text-primary);
+    color: var(--hp-on-grad);
+    transition: transform 250ms ease;
+  }
+
+  .hp-go svg { width: 18px; height: 18px; }
+
+  .hp-teaser:hover .hp-go { transform: translateX(3px); }
+
+  /* ===== 3. NOS SERVICES ===== */
+  /* Grille bento : 1 colonne sur téléphone, 2 sur tablette (600 à 1099 px), 3 sur ordinateur.
+     L'ordre du HTML est l'ordre de lecture ; sur ordinateur, chaque tuile est placée explicitement. */
+  .md-svs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .md-svs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .md-sv--feat,
+    .md-sv--wide { grid-column: span 2; }
+  }
+
+  @media (min-width: 1100px) {
+    .md-svs {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .md-sv--mandats { grid-column: 1 / -1; grid-row: 1; }
+    .md-sv--cand { grid-column: 1 / span 2; grid-row: 2; }
+    .md-sv--brand { grid-column: 3; grid-row: 2; }
+    .md-sv--social { grid-column: 1; grid-row: 3; }
+    .md-sv--web { grid-column: 2; grid-row: 3; }
+    .md-sv--rep { grid-column: 3; grid-row: 3; }
+  }
+
+  .md-sv {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px 24px;
+    border-radius: 26px;
+    overflow: hidden;
+    color: var(--hp-ink);
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
+  }
+
+  @media (min-width: 768px) {
+    .md-sv { padding: 30px; }
+  }
+
+  .md-sv h3 {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .md-sv p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* Tuiles foncées : icône et titre sur la même ligne (le titre peut passer sur 2 lignes) */
+  .md-sv__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Texte d'une tuile (un ou deux paragraphes) */
+  .md-sv__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* En-tête, texte, puis illustration en bas : Branding, Site web */
+  .md-sv--brand .md-mui,
+  .md-sv--web .md-mui { margin-top: auto; }
+
+  /* En-tête, illustration, puis texte : Réseaux sociaux, Réputation */
+  .md-sv--social .md-sv__text,
+  .md-sv--rep .md-sv__text { order: 1; }
+
+  /* Tuile large (Attraction de candidats) : en-tête et texte à gauche, illustration à droite,
+     centrés verticalement. À la verticale sur téléphone. */
+  @media (min-width: 600px) {
+    .md-sv--wide {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: 1fr auto auto 1fr;
+      grid-template-areas:
+        '. ill'
+        'head ill'
+        'text ill'
+        '. ill';
+      column-gap: 28px;
+      row-gap: 0;
+    }
+    .md-sv--wide .md-sv__head { grid-area: head; }
+    .md-sv--wide .md-sv__text { grid-area: text; margin-top: 16px; }
+    .md-sv--wide .md-mui {
+      grid-area: ill;
+      align-self: center;
+      height: 150px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .md-sv--wide { column-gap: 36px; }
+    .md-sv--wide .md-mui { height: 170px; }
+  }
+
+  /* Tuile-lien (href défini) : survol, focus et chevron, comme sur l'accueil */
+  .hp-tile--link { cursor: pointer; }
+
+  .hp-tile--link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px var(--hp-shadow), inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent);
+  }
+
+  .hp-tile--link:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 3px;
+  }
+
+  .hp-tile__go {
+    position: absolute;
+    top: 28px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px currentColor;
+    transition: transform 250ms ease, background 250ms ease;
+  }
+
+  .hp-tile__go svg { width: 18px; height: 18px; }
+
+  .hp-tile--link:hover .hp-tile__go {
+    transform: translateX(4px);
+    background: color-mix(in srgb, var(--text-primary) 18%, transparent);
+  }
+
+  .md-xi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+    transition: transform 350ms ease;
+  }
+
+  .md-xi svg { width: 26px; height: 26px; }
+
+  .hp-tile--link:hover .md-xi { transform: rotate(-6deg) scale(1.06); }
+
+  /* Tuile dégradée : Acquisition de mandats, sur toute la largeur.
+     À l'horizontale dès la tablette : texte à gauche, étapes à droite. */
+  .md-sv--feat {
+    gap: 30px;
+    background: var(--woop-gradient);
+    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.25);
+  }
+
+  @media (min-width: 600px) {
+    .md-sv--feat {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .md-sv--feat {
+      gap: 40px;
+      padding: 40px;
+    }
+  }
+
+  .md-sv__txt {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .md-sv--feat h3 {
+    margin-top: 6px;
+    font-size: 26px;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .md-sv--feat h3 { font-size: 30px; }
+  }
+
+  .md-sv--feat p {
+    max-width: 580px;
+    font-size: 16px;
+    color: var(--hp-on-grad);
+  }
+
+  .md-xi--w {
+    background: color-mix(in srgb, var(--text-primary) 22%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 40%, transparent);
+  }
+
+  /* Décideur RH · Rencontre · Mandat : 3 étapes identiques (même taille, même alignement),
+     seul le fond de « Mandat » change. Empilées sur téléphone et tablette, en ligne sur ordinateur. */
+  .md-jy {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+  }
+
+  /* Empilées : rangées de même hauteur, même si un texte passe sur 2 lignes */
+  @media (max-width: 1099px) {
+    .md-jy {
+      display: grid;
+      grid-auto-rows: 1fr;
+    }
+  }
+
+  @media (min-width: 600px) {
+    .md-jy { width: 180px; }
+  }
+
+  @media (min-width: 1100px) {
+    .md-jy {
+      flex-direction: row;
+      /* Même hauteur pour les 3 étapes, même si un texte passe sur 2 lignes */
+      align-items: stretch;
+      width: auto;
+    }
+  }
+
+  .md-jy div {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 16px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--text-primary) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 35%, transparent);
+  }
+
+  @media (min-width: 1100px) {
+    .md-jy div { width: 130px; }
+  }
+
+  .md-jy b {
+    font-size: 15px;
+    line-height: 1.2;
+    color: var(--hp-on-grad);
+  }
+
+  .md-jy small {
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--hp-on-grad);
+  }
+
+  .md-jy div.is-on {
+    background: var(--hp-light);
+    box-shadow: 0 14px 30px color-mix(in srgb, var(--bg-deep) 18%, transparent);
+  }
+
+  .md-jy div.is-on b { color: var(--md-pink-deep); }
+  .md-jy div.is-on small { color: var(--hp-dark); }
+
+  .md-jy__link {
+    display: none;
+    flex: none;
+    align-self: center;
+    width: 14px;
+    height: 2px;
+    background: color-mix(in srgb, var(--text-primary) 60%, transparent);
+  }
+
+  @media (min-width: 1100px) {
+    .md-jy__link { display: block; }
+  }
+
+  /* Mini-illustrations des tuiles (même dessin, redimensionné selon le format de la tuile) */
+  .md-mui {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 9px;
+    align-self: stretch;
+    height: 126px;
+    padding: 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 7%, transparent);
+  }
+
+  /* Attraction de candidats : bassin de candidats */
+  .md-mui--cand {
+    height: auto;
+    min-height: 126px;
+    background: var(--woop-gradient);
+    box-shadow: none;
+  }
+
+  /* 8 profils sur 2 rangées de 4, quelle que soit la largeur de la tuile */
+  .md-pool {
+    display: grid;
+    grid-template-columns: repeat(4, 40px);
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .md-pool__p {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  }
+
+  .md-pool__p::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text-primary) 70%, transparent);
+    box-shadow: 0 16px 0 6px color-mix(in srgb, var(--text-primary) 70%, transparent);
+    transform: translateX(-50%);
+  }
+
+  .md-pool__p.is-on {
+    background: var(--hp-light);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--text-primary) 40%, transparent);
+  }
+
+  .md-pool__p.is-on::after {
+    background: var(--woop-pink);
+    box-shadow: 0 16px 0 6px var(--woop-pink);
+  }
+
+  .md-pool em {
+    grid-column: 1 / -1;
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: right;
+    color: var(--hp-on-grad);
+  }
+
+  /* Branding : logo, palette, « Aa » */
+  .md-mui--brand {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(135deg, var(--hp-plum), color-mix(in srgb, var(--woop-pink) 10%, var(--bg-deep)));
+  }
+
+  .md-lg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    box-shadow: 0 8px 20px rgba(230, 43, 127, 0.35);
+  }
+
+  .md-lg i { width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 4px var(--hp-light); }
+
+  .md-pal { display: flex; flex: none; }
+
+  .md-pal span {
+    width: 26px;
+    height: 26px;
+    margin-left: -6px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--hp-plum);
+  }
+
+  .md-pal span:first-child { margin-left: 0; }
+  .md-pal--o { background: var(--woop-orange); }
+  .md-pal--p { background: var(--woop-pink); }
+  .md-pal--b { background: var(--hp-blush); }
+
+  .md-aa {
+    margin-left: auto;
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Réseaux sociaux : publication LinkedIn */
+  .md-mui--social {
+    height: auto;
+    min-height: 126px;
+    gap: 8px;
+    background: var(--hp-light);
+    box-shadow: none;
+    color: var(--hp-dark);
+  }
+
+  .md-li__h {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .md-li__av { flex: none; width: 26px; height: 26px; border-radius: 8px; background: var(--woop-gradient); }
+
+  .md-li__h div { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .md-li__h b { font-size: 12px; font-weight: 700; line-height: 1.3; }
+  .md-li__h small { font-size: 10px; line-height: 1.3; color: var(--text-muted); }
+
+  .md-li__in {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .md-li__b {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 10px;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--woop-orange) 14%, var(--text-primary)), var(--hp-blush));
+  }
+
+  .md-li__b span {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .md-li__b i { display: block; width: 70%; height: 9px; border-radius: 5px; background: var(--hp-plum); }
+
+  .md-li__f {
+    display: flex;
+    gap: 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .md-li__f span { display: inline-flex; align-items: center; gap: 4px; }
+  .md-li__f svg { width: 12px; height: 12px; }
+
+  /* Site web : page et téléphone */
+  .md-mui--web {
+    position: relative;
+    overflow: hidden;
+    padding: 12px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-pink));
+    box-shadow: none;
+  }
+
+  .md-brw { display: flex; gap: 4px; }
+  .md-brw span { width: 6px; height: 6px; border-radius: 50%; background: color-mix(in srgb, var(--text-primary) 70%, transparent); }
+
+  .md-pg {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 72%;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--hp-light);
+  }
+
+  .md-pg__h { display: block; width: 70%; height: 8px; border-radius: 4px; background: var(--hp-plum); }
+  .md-pg__t { display: block; width: 90%; height: 6px; border-radius: 3px; background: var(--hp-skel-2); }
+  .md-pg__cta {
+    align-self: flex-start;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 9.5px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .md-phn {
+    position: absolute;
+    right: 12px;
+    bottom: -14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 54px;
+    height: 96px;
+    padding: 8px 6px;
+    border-radius: 12px;
+    background: var(--bg-deep);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--text-primary) 40%, transparent);
+  }
+
+  .md-phn i { display: block; height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 40%, transparent); }
+  .md-phn span { display: block; height: 18px; border-radius: 6px; background: var(--woop-gradient); }
+
+  /* Réputation : avis et réponse */
+  .md-mui--rep {
+    gap: 8px;
+    background: var(--hp-blush);
+    box-shadow: none;
+  }
+
+  .md-rc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 12px;
+    background: var(--hp-light);
+  }
+
+  .md-rc__av { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--woop-gradient); }
+  .md-rc div { display: flex; flex-direction: column; gap: 5px; }
+  .md-rc__stars { font-size: 12px; letter-spacing: 1px; line-height: 1; color: var(--woop-orange); }
+  .md-rc div i { display: block; width: 90px; height: 6px; border-radius: 3px; background: var(--hp-skel); }
+
+  .md-rp {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-self: flex-end;
+    width: 120px;
+    padding: 10px 12px;
+    border-radius: 12px 12px 4px 12px;
+    background: var(--woop-gradient);
+  }
+
+  .md-rp i { display: block; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 70%, transparent); }
+  .md-rp i:last-child { width: 60%; }
+
+  /* Bouton et lien sous les services */
+  .md-svc-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 34px;
+  }
+
+  .hp-team__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 22px;
+  }
+
+  .hp-team__more a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 2px;
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: color 200ms ease, text-decoration-color 200ms ease;
+  }
+
+  .hp-team__more a:hover,
+  .hp-team__more a:focus-visible {
+    color: var(--text-primary);
+    text-decoration-color: var(--woop-pink);
+  }
+
+  .hp-team__more a:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ===== 4. NOTRE DIFFÉRENCE ===== */
+  .md-gau {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+    border-radius: 30px;
+  }
+
+  @media (min-width: 768px) {
+    .md-gau { grid-template-columns: 300px minmax(0, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .md-gau { grid-template-columns: 360px minmax(0, 1fr); }
+  }
+
+  /* Portrait de Kevin : photo non détourée (fond dégradé dans l'image), qui remplit tout le panneau.
+     Téléphone et tablette : panneau au-dessus, carré (420 px de haut au plus). */
+  .md-gau__ph {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    max-height: 420px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-orange) 40%, var(--woop-pink));
+  }
+
+  .md-gau__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    /* Visage dans le tiers supérieur du panneau carré (la tête de Kevin est haute dans la photo :
+       recadrage propre à cette page) */
+    object-position: 50% 52%;
+  }
+
+  /* Tablette : panneau plus large que haut, recadrage plus haut pour garder la tête entière */
+  @media (min-width: 600px) and (max-width: 767px) {
+    .md-gau__img { object-position: 50% 45%; }
+  }
+
+  /* À partir de 768 px : panneau à gauche, sur toute la hauteur du bloc. Le panneau étant plus
+     étroit que la photo, cover la cadre en hauteur ; un léger agrandissement ancré en bas
+     (plus faible que pour Gauthier) remonte le visage dans le tiers supérieur. */
+  @media (min-width: 768px) {
+    .md-gau__ph {
+      aspect-ratio: auto;
+      max-height: none;
+      min-height: 480px;
+    }
+    .md-gau__img {
+      object-position: 49% 100%;
+      transform: scale(1.1);
+      transform-origin: 49% 100%;
+    }
+  }
+
+  .md-gau__txt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    padding: 32px 24px;
+  }
+
+  @media (min-width: 900px) {
+    .md-gau__txt { padding: 46px 50px; }
+  }
+
+  .md-gau__txt p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .md-gau__txt .md-gau__lead {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  /* « on les a déjà vécus. » : rose et gras */
+  .md-gau__txt p strong {
+    font-weight: 700;
+    color: var(--md-pink-soft);
+  }
+
+  /* Lien discret dans le texte (vers la page Santé & Médical) */
+  .md-gau__txt .md-inl {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--woop-pink) 60%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color 200ms ease, text-decoration-color 200ms ease;
+  }
+
+  .md-gau__txt .md-inl:hover,
+  .md-gau__txt .md-inl:focus-visible {
+    color: var(--md-pink-soft);
+    text-decoration-color: var(--woop-pink);
+  }
+
+  .md-gau__txt .md-inl:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Badge « deux marchés » : pilule sombre, filet dégradé fin, texte blanc semi-gras */
+  .md-gau__txt .md-gau__badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 100%;
+    padding: 8px 18px 8px 8px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background:
+      linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
+      var(--woop-gradient) border-box;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: left;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 600px) {
+    .md-gau__txt .md-gau__badge { border-radius: 999px; }
+  }
+
+  .md-gau__badge-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
+  }
+
+  .md-gau__badge-ico svg { width: 17px; height: 17px; }
+
+  /* Badge à gauche, bouton « Parler à Kevin » à droite, centrés verticalement.
+     Téléphone : empilés, alignés à gauche. Le badge peut passer sur 2 lignes pour rester
+     à côté du bouton ; si la colonne de texte est trop étroite même ainsi (tablette),
+     le bouton passe sous le badge, aligné à gauche. */
+  .md-gau__foot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
     margin-top: 8px;
   }
 
-  .distinguish-cta {
-    margin-top: 32px;
-    text-align: center;
+  .md-gau__foot .cta { flex: none; }
+
+  @media (min-width: 600px) {
+    .md-gau__foot {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    /* Base de 308 px (2 lignes) pour le calcul du retour à la ligne, puis le badge
+       s'élargit jusqu'à sa largeur naturelle (1 ligne) quand la place le permet. */
+    .md-gau__foot .md-gau__badge {
+      flex: 1 1 308px;
+      max-width: max-content;
+    }
   }
 
-  /* ===== CTA FINAL ===== */
-  .cta-final {
+  /* ===== 5. COMMENT ÇA SE PASSE ===== */
+  .md-steps {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    list-style: none;
+  }
+
+  @media (min-width: 768px) {
+    .md-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .md-st {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px 24px;
+    border-radius: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    .md-st { padding: 30px; }
+  }
+
+  .md-st__d {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-weight: 700;
+    color: var(--md-pink-soft);
+    box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.55);
+  }
+
+  .md-st__d.is-on {
     background: var(--woop-gradient);
-    border-radius: var(--radius-bento);
-    padding: 56px 32px;
+    color: var(--hp-on-grad);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.35);
+  }
+
+  .md-st h3 {
+    margin-top: 6px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .md-st p {
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* ===== 6. BANDEAU FINAL (identique à l'accueil) ===== */
+  .hp-final {
+    padding: 52px 22px;
+    border-radius: 28px;
+    background: var(--hp-grad-band);
     text-align: center;
   }
 
   @media (min-width: 768px) {
-    .cta-final { padding: 72px 48px; }
+    .hp-final { padding: 80px 40px; border-radius: 40px; }
   }
 
-  .cta-final__title {
-    font-family: var(--font-display);
-    font-size: 28px;
-    text-transform: uppercase;
-    color: #fff;
-    margin-bottom: 28px;
-    line-height: 1.1;
+  .hp-final h2 {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
   }
 
   @media (min-width: 768px) {
-    .cta-final__title { font-size: 40px; }
+    .hp-final h2 { font-size: 46px; }
   }
 
-  .cta-final :global(.btn--primary) {
-    background: #fff;
-    color: var(--woop-pink);
+  @media (min-width: 1280px) {
+    .hp-final h2 { font-size: 56px; }
   }
 
-  .cta-final :global(.btn--primary:hover) {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  .hp-final p {
+    margin: 18px auto 36px;
+    max-width: 620px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--hp-on-grad);
+  }
+
+  .hp-avs { display: flex; }
+
+  .hp-avs > span {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 62px;
+    height: 62px;
+    margin-left: -14px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    box-shadow: 0 0 0 4px var(--woop-orange);
+  }
+
+  .hp-avs > span:first-child { margin-left: 0; }
+
+  .hp-avs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0;
+    transform: scale(1.55);
+    transform-origin: var(--fx, 50%) var(--fy, 30%);
+  }
+
+  .hp-avs .is-framed img {
+    object-position: var(--obj-pos, center);
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--obj-pos, center);
+  }
+
+  .hp-avs--final {
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+
+  .hp-avs--final > span {
+    width: 104px;
+    height: 104px;
+    margin-left: -22px;
+    box-shadow: 0 0 0 4px var(--text-primary);
+  }
+
+  .hp-avs--final > span:first-child { margin-left: 0; }
+
+  .hp-avs--sm > span {
+    width: 36px;
+    height: 36px;
+    margin-left: -10px;
+    box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* ===== BANDEAU COLLANT (identique à l'accueil) ===== */
+  .hp-pop {
+    --pop-left: 12px;
+    --pop-right: 12px;
+    position: fixed;
+    left: var(--pop-left);
+    right: var(--pop-right);
+    bottom: 12px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 6px 6px 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 43, 127, 0.45),
+      0 20px 50px var(--hp-shadow),
+      0 0 40px rgba(230, 43, 127, 0.2);
+    transform: translateY(calc(100% + 40px));
+    visibility: hidden;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s linear 600ms;
+  }
+
+  .hp-pop.is-shown {
+    transform: none;
+    visibility: visible;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s;
+  }
+
+  .hp-pop__txt {
+    display: none;
+    font-size: 15px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
+
+  @media (min-width: 520px) {
+    .hp-pop__txt {
+      display: block;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 13px;
+      line-height: 1.3;
+      white-space: normal;
+    }
+  }
+
+  @media (min-width: 720px) {
+    .hp-pop {
+      left: 50%;
+      right: auto;
+      bottom: 20px;
+      gap: 16px;
+      max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
+      padding: 8px 8px 8px 12px;
+      transform: translate(-50%, calc(100% + 40px));
+    }
+    .hp-pop.is-shown { transform: translate(-50%, 0); }
+    .hp-pop__txt { display: inline; flex: none; font-size: 15px; white-space: nowrap; }
+  }
+
+  /* ===== MOUVEMENT RÉDUIT ===== */
+  @media (prefers-reduced-motion: reduce) {
+    /* Parcours du hero : état final, immobile */
+    .md-dev { animation: none; }
+    .md-xf,
+    .md-flow__link { transition: none; }
+
+    .cta,
+    .md-pr,
+    .md-pr__vis > *,
+    .md-sv,
+    .md-xi,
+    .hp-pop,
+    .hp-pop.is-shown { transition: none; }
+
+    .cta:hover,
+    .hp-tile--link:hover,
+    .hp-tile--link:hover .hp-tile__go,
+    .hp-tile--link:hover .md-xi,
+    .hp-teaser:hover,
+    .hp-teaser:hover .hp-go,
+    .md-pr:hover,
+    .md-pr:hover .md-pr__vis > * { transform: none; }
   }
 </style>
+
+<script>
+  // Parcours du hero (reprise de la maquette) : les étapes s'allument l'une après
+  // l'autre (étape active soulevée, étapes passées allumées, liaisons allumées), puis tout
+  // reste allumé un instant avant de recommencer. Sans JavaScript ou avec moins d'animations :
+  // état final, tout est allumé et immobile.
+  (function () {
+    const flow = document.querySelector<HTMLElement>('[data-md-flow]');
+    if (!flow) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const cards = Array.from(flow.querySelectorAll<HTMLElement>('[data-md-flow-step]'));
+    const links = Array.from(flow.querySelectorAll<HTMLElement>('[data-md-flow-link]'));
+    if (!cards.length) return;
+
+    flow.classList.add('is-live');
+    let i = 0;
+
+    const step = () => {
+      cards.forEach((el, k) => {
+        el.classList.toggle('is-act', k === i);
+        el.classList.toggle('is-done', k < i);
+      });
+      links.forEach((el, k) => el.classList.toggle('is-on', k < i));
+      i = (i + 1) % (cards.length + 1);
+      window.setTimeout(step, i === 0 ? 1400 : 1300);
+    };
+
+    window.setTimeout(step, 1400);
+  })();
+</script>
+
+<script>
+  // Bandeau collant (même script que la page d'accueil) : visible une fois le hero dépassé,
+  // masqué dès que le bandeau final entre à l'écran (et au-delà). Il ne recouvre jamais la
+  // bannière de consentement CookieYes : il se retire tant qu'elle (ou sa fenêtre de
+  // préférences) est affichée, et s'écarte du bouton flottant « préférences » de CookieYes
+  // s'il est présent dans le bas de l'écran.
+  (function () {
+    const pop = document.querySelector<HTMLElement>('[data-hp-pop]');
+    const hero = document.querySelector<HTMLElement>('[data-hp-hero]');
+    const finalBand = document.querySelector<HTMLElement>('[data-hp-final]');
+    if (!pop || !hero || !finalBand) return;
+
+    const isShown = (el: Element | null): el is HTMLElement => {
+      if (!el) return false;
+      const r = (el as HTMLElement).getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) return false;
+      const cs = window.getComputedStyle(el);
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && Number(cs.opacity) > 0;
+    };
+
+    // Bannière ou fenêtre de préférences CookieYes ouverte.
+    const consentOpen = () => {
+      const banner = document.querySelector('.cky-consent-container');
+      if (banner && !banner.classList.contains('cky-hide') && isShown(banner)) return true;
+      const modal = document.querySelector('.cky-modal.cky-modal-open');
+      if (modal && isShown(modal)) return true;
+      return false;
+    };
+
+    let lastLeft = 12;
+    let lastRight = 12;
+
+    // Bouton flottant CookieYes : on réserve sa place sur le côté où il se trouve.
+    const avoidRevisit = () => {
+      const btn = document.querySelector('.cky-btn-revisit-wrapper');
+      let left = 12;
+      let right = 12;
+      if (btn && isShown(btn)) {
+        const r = btn.getBoundingClientRect();
+        if (r.bottom > window.innerHeight - 120) {
+          if (r.left + r.width / 2 < window.innerWidth / 2) left = Math.max(left, Math.ceil(r.right) + 10);
+          else right = Math.max(right, Math.ceil(window.innerWidth - r.left) + 10);
+        }
+      }
+      if (left !== lastLeft) pop.style.setProperty('--pop-left', `${left}px`);
+      if (right !== lastRight) pop.style.setProperty('--pop-right', `${right}px`);
+      lastLeft = left;
+      lastRight = right;
+    };
+
+    let shown = false;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      const pastHero = hero.getBoundingClientRect().bottom < 0;
+      const finalReached = finalBand.getBoundingClientRect().top < vh;
+      const next = pastHero && !finalReached && !consentOpen();
+      avoidRevisit();
+      if (next === shown) return;
+      shown = next;
+      pop.classList.toggle('is-shown', shown);
+      if (shown) pop.removeAttribute('inert');
+      else pop.setAttribute('inert', '');
+    };
+
+    const schedule = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    document.addEventListener('cookieyes_banner_load', schedule);
+    document.addEventListener('cookieyes_consent_update', schedule);
+
+    // CookieYes insère et masque ses éléments par classes : on suit ces changements.
+    new MutationObserver(schedule).observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    update();
+  })();
+</script>
