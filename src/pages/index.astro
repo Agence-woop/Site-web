@@ -84,6 +84,12 @@ const framing = (m: TeamMember) =>
     : `--fx: ${m.fx ?? '50%'}; --fy: ${m.fy ?? '30%'};`;
 const isFramed = (m: TeamMember) => m.objectPosition !== undefined || m.zoom !== undefined;
 
+// Ordre des photos de la barre collante seulement : Gauthier, Kevin, Ludo, Emma.
+// Chaque photo passe au-dessus de celle de gauche (ordre du HTML), donc Emma, en dernier,
+// est entièrement visible. Le bandeau final et les autres blocs gardent l'ordre de `team`.
+const POP_ORDER = ['gauthier', 'kevin', 'ludo', 'emma'];
+const popTeam = POP_ORDER.map((img) => team.find((m) => m.img === img)).filter((m): m is TeamMember => m !== undefined);
+
 const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 
 // Tuiles de Nos services. Si `href` est défini, toute la tuile devient un lien
@@ -635,7 +641,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
   <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
     <span class="hp-avs hp-avs--sm" aria-hidden="true">
-      {team.map((m) => (
+      {popTeam.map((m) => (
         <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
       ))}
     </span>
@@ -2565,18 +2571,25 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     border-radius: 4px;
   }
 
-  /* 4 photos : chevauchement un peu plus fort pour ne presque pas élargir la barre */
+  /* 4 photos : chevauchement de 25 % du diamètre au maximum, pour que chaque visage
+     reste visible aux trois quarts (36 px, chevauchement de 9 px) */
   .hp-avs--sm > span {
     width: 36px;
     height: 36px;
-    margin-left: -14px;
+    margin-left: -9px;
     box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* Vers 360 px : photos un peu plus petites (même proportion de chevauchement)
+     pour que le bouton reste entier */
+  @media (max-width: 374px) {
+    .hp-avs--sm > span { width: 34px; height: 34px; margin-left: -8px; }
   }
 
   /* Très petits écrans : photos et espacements réduits pour que le bouton reste entier */
   @media (max-width: 359px) {
     .hp-pop[data-hp-pop] { gap: 8px; }
-    .hp-avs--sm > span { width: 30px; height: 30px; margin-left: -13px; }
+    .hp-avs--sm > span { width: 25px; height: 25px; margin-left: -6px; }
     .hp-pop .cta { padding-left: 14px; }
   }
 
