@@ -434,17 +434,14 @@ const steps = [
       <div class="md-gau md-glass">
         <div class="md-gau__ph" data-reveal="left">
           <img class="md-gau__img" src={`${base}/images/gauthier.webp`} alt="Gauthier" width="671" height="822" loading="lazy" decoding="async" />
-          <p class="md-gau__tag">Infirmier clinicien</p>
         </div>
         <div class="md-gau__txt" data-reveal="right" data-reveal-step="1">
           <p class="md-gau__lead">Gauthier est infirmier clinicien de formation et détenteur d'un MBA. Il dirige aujourd'hui les opérations médicales dans l'aéromédical, expert des soins en communauté et en régions éloignées.</p>
           <p>Avant ça, il était directeur de cliniques privées, où il vivait au quotidien les défis que vous connaissez aujourd'hui{NB}: remplir l'agenda, structurer l'équipe, gérer la réputation, comprendre ce qui fait revenir un patient.</p>
-          <p>Cette double expérience, la pratique clinique et la direction de clinique, change tout.</p>
+          <p>Cette double expérience, la pratique clinique et la direction de clinique, change tout. Quand on conçoit votre stratégie, on ne devine pas vos problèmes{NB}: <strong>on les a déjà résolus.</strong> Aucune autre agence marketing au Québec ne peut en dire autant.</p>
           <p>Elle nous donne aussi un réflexe que peu d'agences ont{NB}: connaître les règles qui encadrent votre profession. Pas de promesse abusive{NB}: chaque message respecte le code de déontologie de votre ordre.</p>
-          <p class="md-gau__quote">Quand on conçoit votre stratégie, on ne devine pas vos problèmes. <strong>On les a déjà résolus.</strong></p>
-          <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span>Marketing conforme aux règles de votre ordre professionnel</span></p>
           <div class="md-gau__foot">
-            <p class="md-gau__hl">Aucune autre agence marketing au Québec ne peut dire ça.</p>
+            <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span>Marketing conforme aux règles de votre ordre professionnel</span></p>
             <a class="cta" href={`${base}/contact?personne=gauthier`}>Parler à Gauthier<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
           </div>
         </div>
@@ -2191,36 +2188,6 @@ const steps = [
     }
   }
 
-  /* Léger voile sombre, uniquement derrière la pastille */
-  .md-gau__ph::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 40%;
-    background: radial-gradient(70% 60% at 50% 100%, color-mix(in srgb, var(--bg-deep) 50%, transparent), transparent 75%);
-    pointer-events: none;
-  }
-
-  .md-gau__tag {
-    position: absolute;
-    left: 50%;
-    bottom: 20px;
-    z-index: 1;
-    transform: translateX(-50%);
-    padding: 12px 20px;
-    border-radius: 18px;
-    background: color-mix(in srgb, var(--bg-deep) 82%, transparent);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.3;
-    white-space: nowrap;
-    color: var(--text-primary);
-  }
-
   .md-gau__txt {
     display: flex;
     flex-direction: column;
@@ -2246,17 +2213,8 @@ const steps = [
     color: var(--text-primary);
   }
 
-  .md-gau__txt .md-gau__quote {
-    margin-top: 6px;
-    padding: 18px 22px;
-    border-radius: 18px;
-    background: linear-gradient(120deg, rgba(250, 98, 68, 0.14), rgba(230, 43, 127, 0.16));
-    font-size: 17px;
-    line-height: 1.55;
-    color: var(--text-primary);
-  }
-
-  .md-gau__quote strong {
+  /* « on les a déjà résolus. » : rose et gras */
+  .md-gau__txt p strong {
     font-weight: 700;
     color: var(--md-pink-soft);
   }
@@ -2265,10 +2223,8 @@ const steps = [
   .md-gau__txt .md-gau__badge {
     display: flex;
     align-items: center;
-    align-self: flex-start;
     gap: 12px;
     max-width: 100%;
-    margin-top: 4px;
     padding: 8px 18px 8px 8px;
     border: 1px solid transparent;
     border-radius: 18px;
@@ -2302,20 +2258,33 @@ const steps = [
 
   .md-gau__badge-ico svg { width: 17px; height: 17px; }
 
+  /* Badge à gauche, bouton « Parler à Gauthier » à droite, centrés verticalement.
+     Téléphone : empilés, alignés à gauche. Le badge peut passer sur 2 lignes pour rester
+     à côté du bouton ; si la colonne de texte est trop étroite même ainsi (tablette),
+     le bouton passe sous le badge, aligné à gauche. */
   .md-gau__foot {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
     margin-top: 8px;
   }
 
-  .md-gau__txt .md-gau__hl {
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.45;
-    color: var(--md-pink-soft);
+  .md-gau__foot .cta { flex: none; }
+
+  @media (min-width: 600px) {
+    .md-gau__foot {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    /* Base de 308 px (2 lignes) pour le calcul du retour à la ligne, puis le badge
+       s'élargit jusqu'à sa largeur naturelle (1 ligne) quand la place le permet. */
+    .md-gau__foot .md-gau__badge {
+      flex: 1 1 308px;
+      max-width: max-content;
+    }
   }
 
   /* ===== 5. COMMENT ÇA SE PASSE ===== */
