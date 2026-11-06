@@ -289,13 +289,14 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   }
 
   /* ===== Illustration « un article, partout » =====
-     Scène de 560 × 440 px mise à l'échelle selon la largeur (même principe que l'accueil). */
+     Scène de 560 × 460 px mise à l'échelle selon la largeur (même principe que l'accueil).
+     Les appareils commencent 26 px plus bas pour laisser la place aux étiquettes au-dessus. */
   .bh {
     --bh-scale: 0.72;
     display: none;
     position: relative;
     width: calc(560px * var(--bh-scale));
-    height: calc(440px * var(--bh-scale));
+    height: calc(460px * var(--bh-scale));
     justify-self: center;
   }
 
@@ -308,7 +309,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     left: 0;
     top: 0;
     width: 560px;
-    height: 440px;
+    height: 460px;
     transform: scale(var(--bh-scale));
     transform-origin: top left;
   }
@@ -327,7 +328,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   .bh__glow {
     position: absolute;
     left: 90px;
-    top: 10px;
+    top: 36px;
     width: 420px;
     height: 420px;
     border-radius: 50%;
@@ -339,7 +340,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   .bh-lap {
     position: absolute;
     left: 20px;
-    top: 38px;
+    top: 64px;
     width: 400px;
     transform: perspective(1400px) rotateY(16deg) rotateX(6deg) rotate(-3deg);
     /* Même centre de rotation qu'avec l'ancienne base (60 % de 300 px) : même position exacte */
@@ -431,7 +432,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   .bh-phone {
     position: absolute;
     right: 34px;
-    top: 128px;
+    top: 154px;
     z-index: 2;
     width: 156px;
     height: 300px;
@@ -549,7 +550,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
   .bh-float {
     position: absolute;
     left: 0;
-    top: 334px;
+    top: 396px;
     z-index: 3;
     display: flex;
     align-items: center;
@@ -602,14 +603,14 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
     animation-delay: -5s;
   }
 
-  /* « Santé & Médical » au-dessus de l'ordinateur, « Recrutement & RH » au-dessus du téléphone :
-     aucune ne recouvre la page affichée par l'ordinateur ni l'écran du téléphone */
-  .bh-tag--sante { left: 40px; top: 0; }
-  .bh-tag--rh { right: 0; top: 88px; animation-delay: -1s; }
+  /* « Santé & Médical » au-dessus de la tablette, « Recrutement & RH » au-dessus du téléphone,
+     « 6 min de lecture » sous la tablette : au moins 16 px des appareils à tout moment du flottement */
+  .bh-tag--sante { left: 40px; top: 8px; }
+  .bh-tag--rh { right: 0; top: 8px; animation-delay: -1s; }
 
   @keyframes bh-float-phone {
-    0%, 100% { transform: translateY(0) rotate(-4deg); }
-    50% { transform: translateY(-10px) rotate(-4deg); }
+    0%, 100% { transform: translateY(0) rotate(4deg); }
+    50% { transform: translateY(-10px) rotate(4deg); }
   }
 
   @keyframes bh-float-tag {
@@ -867,7 +868,7 @@ const categoryEntries: { key: CategoryKey; label: string; description: string; h
 
   @media (prefers-reduced-motion: reduce) {
     /* Illustration immobile */
-    .bh-phone { animation: none; transform: rotate(-4deg); }
+    .bh-phone { animation: none; transform: rotate(4deg); }
     .bh-float,
     .bh-tag { animation: none; }
 
