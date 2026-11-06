@@ -312,8 +312,6 @@ const steps = [
         ))}
       </div>
 
-      <p class="md-cross" data-reveal="up">Vous dirigez un cabinet de recrutement spécialisé en santé{NB}? Découvrez <a class="md-inl" href={`${base}/services-recrutement/`}>notre marketing pour cabinets de recrutement</a>.</p>
-
       <a class="hp-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
         <span class="hp-teaser__dot" aria-hidden="true"></span>
         <span><strong>Nouveau&nbsp;:</strong> testez votre visibilité en 2 minutes</span>
@@ -1549,31 +1547,6 @@ const steps = [
   .md-pbt i { display: block; width: 70px; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 70%, transparent); }
 
   /* Bandeau « Nouveau » (identique à l'accueil) */
-  /* Lien retour vers la page RH : même couleur et même graisse que le texte, souligné au survol seulement */
-  .md-cross {
-    max-width: 760px;
-    margin: 28px 0 0;
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-  }
-
-  .md-cross .md-inl {
-    color: inherit;
-    font-weight: inherit;
-    text-decoration: none;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 4px;
-  }
-
-  .md-cross .md-inl:hover,
-  .md-cross .md-inl:focus-visible {
-    text-decoration: underline;
-    text-decoration-color: var(--woop-pink);
-    text-decoration-thickness: 1.5px;
-    outline: none;
-  }
-
   .hp-teaser {
     display: flex;
     align-items: center;
