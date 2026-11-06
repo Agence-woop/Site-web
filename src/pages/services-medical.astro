@@ -62,6 +62,12 @@ const framing = (m: TeamMember) =>
     : `--fx: ${m.fx ?? '50%'}; --fy: ${m.fy ?? '30%'};`;
 const isFramed = (m: TeamMember) => m.objectPosition !== undefined || m.zoom !== undefined;
 
+// Ordre des photos de la barre collante seulement : Gauthier, Kevin, Ludo, Emma.
+// Chaque photo passe au-dessus de celle de gauche (ordre du HTML), donc Emma, en dernier,
+// est entièrement visible. Le bandeau final et les autres blocs gardent l'ordre de `team`.
+const POP_ORDER = ['gauthier', 'kevin', 'ludo', 'emma'];
+const popTeam = POP_ORDER.map((img) => team.find((m) => m.img === img)).filter((m): m is TeamMember => m !== undefined);
+
 // Parcours patient du hero (illustration animée)
 const journey = [
   { key: 'search', label: '01 · Il cherche' },
@@ -497,7 +503,7 @@ const steps = [
   <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
   <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
     <span class="hp-avs hp-avs--sm" aria-hidden="true">
-      {team.map((m) => (
+      {popTeam.map((m) => (
         <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
       ))}
     </span>
