@@ -1,3 +1,8 @@
+// Signatures des articles du blog : vue dérivée de src/data/team.ts (source unique de l'équipe).
+// Mêmes exports et mêmes valeurs qu'auparavant ; le schéma de contenu (auteur: gauthier, kevin
+// ou emma) et les articles ne changent pas.
+import { team, photoPath } from './team';
+
 export type AuthorKey = 'gauthier' | 'kevin' | 'emma';
 
 export interface Author {
@@ -8,26 +13,17 @@ export interface Author {
   linkedin: string;
 }
 
-export const authors: Record<AuthorKey, Author> = {
-  gauthier: {
-    nom: 'Gauthier Figueres',
-    role: 'Cofondateur, stratégie et comptes Santé',
-    bio: "Infirmier clinicien de formation, ancien directeur de clinique privée, il pilote chez WOOP la stratégie et les comptes Santé.",
-    photo: '/images/gauthier.webp',
-    linkedin: 'https://www.linkedin.com/in/gauthier-f-00561b203/',
-  },
-  kevin: {
-    nom: 'Kevin Zounias',
-    role: 'Cofondateur, création',
-    bio: "Designer graphique de formation, il pilote l'identité de marque de chaque projet et accompagne les comptes Recrutement.",
-    photo: '/images/kevin.webp',
-    linkedin: 'https://www.linkedin.com/in/k%C3%A9vin-zounias/',
-  },
-  emma: {
-    nom: 'Emma Despujols',
-    role: 'Spécialiste Paid Media',
-    bio: "Elle pilote la performance publicitaire sur Google Ads et Meta Ads et conçoit les pages de conversion.",
-    photo: '/images/emma.webp',
-    linkedin: 'https://www.linkedin.com/in/emma-despujols-161235211/',
-  },
+const AUTHOR_KEYS: AuthorKey[] = ['gauthier', 'kevin', 'emma'];
+
+const authorOf = (key: AuthorKey): Author => {
+  const m = team[key];
+  return {
+    nom: m.fullName,
+    role: m.roles.author ?? m.roles.card,
+    bio: m.authorBio ?? '',
+    photo: photoPath(m),
+    linkedin: m.linkedin ?? '',
+  };
 };
+
+export const authors = Object.fromEntries(AUTHOR_KEYS.map((k) => [k, authorOf(k)])) as Record<AuthorKey, Author>;
