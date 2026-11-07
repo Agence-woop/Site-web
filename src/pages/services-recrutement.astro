@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import TeamAvatar from '../components/team/TeamAvatar.astro';
+import { membersIn, ORDER_STACK } from '../data/team';
+import { NB } from '../utils/typo';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -26,45 +29,6 @@ const jsonLd = [
     ],
   },
 ];
-
-// Espace insécable devant « : » et « ? » (typographie française, sans changer le texte)
-// Espace insécable (écrite en échappement pour ne pas se perdre au copier-coller)
-const NB = '\u00a0';
-
-// Photos rondes de l'équipe : mêmes données et même cadrage que la page d'accueil.
-// - fx / fy : cadrage d'origine (photo calée en haut, agrandie autour de ce point).
-// - objectPosition / zoom : cadrage propre à une photo (remplace le cadrage d'origine).
-type TeamMember = {
-  name: string;
-  img: string;
-  fx?: string;
-  fy?: string;
-  objectPosition?: string;
-  zoom?: number;
-  w?: number;
-  h?: number;
-};
-
-const team: TeamMember[] = [
-  { name: 'Gauthier', img: 'gauthier', objectPosition: '57.8% 30.6%', zoom: 1.7 },
-  { name: 'Kevin', img: 'kevin', fx: '50%', fy: '31%' },
-  { name: 'Emma', img: 'emma', fx: '55%', fy: '31%' },
-  // Ludo : photo plus large (928 × 1137, même format) où le visage est plus petit ; cadrage réglé
-  // pour aligner la ligne des yeux et la taille du visage sur Kevin.
-  { name: 'Ludo', img: 'ludo', w: 928, h: 1137, objectPosition: '50.4% 21.7%', zoom: 1.9 },
-];
-
-const framing = (m: TeamMember) =>
-  m.objectPosition !== undefined || m.zoom !== undefined
-    ? `--obj-pos: ${m.objectPosition ?? 'center'}; --zoom: ${m.zoom ?? 1};`
-    : `--fx: ${m.fx ?? '50%'}; --fy: ${m.fy ?? '30%'};`;
-const isFramed = (m: TeamMember) => m.objectPosition !== undefined || m.zoom !== undefined;
-
-// Ordre des photos de la barre collante et du bandeau final : Gauthier, Kevin, Ludo, Emma.
-// Chaque photo passe au-dessus de celle de gauche (ordre du HTML), donc Emma, en dernier,
-// est entièrement visible. Les autres blocs (vignettes de l'accueil, schéma de l'Équipe) gardent l'ordre de `team`.
-const POP_ORDER = ['gauthier', 'kevin', 'ludo', 'emma'];
-const popTeam = POP_ORDER.map((img) => team.find((m) => m.img === img)).filter((m): m is TeamMember => m !== undefined);
 
 // Parcours du prochain mandat (illustration animée du hero)
 const journey = [
@@ -518,8 +482,8 @@ const steps = [
     <div class="container">
       <div class="hp-final" data-reveal="up">
         <div class="hp-avs hp-avs--final" aria-hidden="true">
-          {popTeam.map((m) => (
-            <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
+          {membersIn(ORDER_STACK).map((m) => (
+            <TeamAvatar member={m} />
           ))}
         </div>
         <h2>Envie de faire grandir votre activité de recrutement{NB}?</h2>
@@ -535,8 +499,8 @@ const steps = [
   <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
   <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
     <span class="hp-avs hp-avs--sm" aria-hidden="true">
-      {popTeam.map((m) => (
-        <span class:list={[{ 'is-framed': isFramed(m) }]} style={framing(m)}><img src={`${base}/images/${m.img}.webp`} alt="" width={m.w ?? 671} height={m.h ?? 822} loading="lazy" decoding="async" /></span>
+      {membersIn(ORDER_STACK).map((m) => (
+        <TeamAvatar member={m} />
       ))}
     </span>
     <span class="hp-pop__txt">Votre équipe marketing recrutement, <strong>sans l'embaucher</strong></span>
