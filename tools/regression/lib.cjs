@@ -128,6 +128,10 @@ async function settle(page) {
     // Défilement instantané : le site a « scroll-behavior: smooth », qui rendrait la position finale aléatoire
     for (let y = 0; y < document.documentElement.scrollHeight; y += step) { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); await new Promise((r) => requestAnimationFrame(() => r())); }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // États qui dépendent du défilement (en-tête « header--scrolled »…) : recalculés en haut de
+    // page, sinon le relevé peut garder l'état d'une position précédente.
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+    window.dispatchEvent(new Event('scroll'));
   });
   await page.waitForLoadState('networkidle').catch(() => {});
   await page.waitForFunction(() => [...document.images].every((i) => i.complete && (i.naturalWidth > 0 || !i.currentSrc)), null, { timeout: 15000 }).catch(() => {});
