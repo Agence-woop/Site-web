@@ -613,8 +613,27 @@ const breadcrumbLd: Record<string, unknown> = {
   }
 
   .article-body :global(img) {
+    max-width: 100%;
+    height: auto;
     border-radius: 12px;
     margin: 24px 0;
+  }
+
+  /* Tableaux plus larges que la colonne : défilement horizontal dans le tableau, pas dans la page */
+  .article-body :global(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Téléphone et tablette : un mot ou une URL plus long que la colonne (sources citées en
+     toutes lettres, par exemple) est coupé au lieu de faire déborder la page. break-word ne coupe
+     que ce qui ne tient sur aucune ligne : les autres lignes ne changent pas.
+     Les blocs de code (pre) gardent leurs lignes et défilent à l'intérieur du bloc. */
+  @media (max-width: 1023px) {
+    .article-body {
+      overflow-wrap: break-word;
+    }
   }
 
   /* Barre de partage */
