@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Tests de comportement du site compilé : page Contact, quiz du Test de visibilité, barre
-// collante, carrousel de l'Équipe, pagination du blog, ancres et liens internes.
+// collante, parcours animé du hero (Santé, RH), carrousel de l'Équipe, pagination du blog,
+// ancres et liens internes.
 // Les envois vers Formspree sont simulés (aucune donnée n'est envoyée) et GA4 / Meta sont
 // remplacés par des espions qui notent les événements.
 //
@@ -101,6 +102,44 @@ async function stickyBar(browser, base) {
   }
 }
 
+// Parcours animé du hero (Santé, RH) : étapes allumées l'une après l'autre, puis tout allumé, puis
+// reprise ; avec le mouvement réduit, aucune animation (état final immobile).
+async function heroFlow(browser, base) {
+  const state = (pg) => pg.evaluate(() => {
+    const f = document.querySelector('[data-md-flow]');
+    const cards = [...f.querySelectorAll('[data-md-flow-step]')], links = [...f.querySelectorAll('[data-md-flow-link]')];
+    return {
+      live: f.classList.contains('is-live'),
+      key: cards.map((c) => (c.classList.contains('is-act') ? 'A' : c.classList.contains('is-done') ? 'D' : '-')).join('') + '/' + links.filter((l) => l.classList.contains('is-on')).length,
+      lift: cards.map((c) => getComputedStyle(c).transform),
+    };
+  });
+  for (const url of ['/services-medical/', '/services-recrutement/']) {
+    let ctx = await L.newContext(browser, base, { width: 1440, height: 900, reducedMotion: 'no-preference' });
+    let pg = await ctx.newPage();
+    await pg.goto(base + url);
+    const seq = []; const t0 = Date.now(); let lifted = false, live = false;
+    while (Date.now() - t0 < 9000) {
+      const s = await state(pg);
+      live = live || s.live;
+      if (seq[seq.length - 1] !== s.key) seq.push(s.key);
+      const i = s.key.indexOf('A');
+      if (i >= 0 && s.lift[i] !== 'none' && s.lift.filter((x, k) => k !== i && x === s.lift[i]).length === 0) lifted = true;
+      await pg.waitForTimeout(100);
+    }
+    const want = ['----/0', 'A---/0', 'DA--/1', 'DDA-/2', 'DDDA/3', 'DDDD/3', 'A---/0'];
+    const okSeq = want.every((k, i) => seq[i] === k);
+    await ctx.close();
+    ctx = await L.newContext(browser, base, { width: 1440, height: 900, reducedMotion: 'reduce' });
+    pg = await ctx.newPage();
+    await pg.goto(base + url); await pg.waitForTimeout(2000);
+    const r = await state(pg);
+    await ctx.close();
+    ok(live && okSeq && lifted && !r.live && r.key === '----/0',
+      `Parcours du hero ${url} : étapes allumées l'une après l'autre (${seq.slice(0, 7).join(' → ')}), étape active soulevée, puis reprise ; immobile avec le mouvement réduit`);
+  }
+}
+
 async function teamCarousel(browser, base) {
   const state = (pg) => pg.evaluate(() => { const r = document.querySelector('[data-eq-sp]'); const run = document.querySelector('.eq-sp__tab.is-run'); return { sel: document.querySelector('.eq-sp__tab[aria-selected=true]').id, panel: document.querySelector('.eq-sp__panel.is-active').id, run: run && run.id, play: run && getComputedStyle(run.querySelector('.eq-sp__prog'), '::after').animationPlayState, paused: r.classList.contains('is-paused'), stopped: r.classList.contains('is-stopped'), user: r.classList.contains('is-user-paused'), label: document.querySelector('[data-eq-pause]').getAttribute('aria-label'), btn: !document.querySelector('[data-eq-pause]').hidden }; });
   let ctx = await L.newContext(browser, base, { reducedMotion: 'no-preference' });
@@ -191,6 +230,7 @@ function anchorsAndLinks(dist) {
     await contact(browser, server.url);
     await quiz(browser, server.url);
     await stickyBar(browser, server.url);
+    await heroFlow(browser, server.url);
     await teamCarousel(browser, server.url);
     await blogPager(browser, server.url);
   } finally {

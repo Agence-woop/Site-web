@@ -20,7 +20,14 @@ lance pas.
 |---|---|---|
 | `snapshot.cjs` | Compile le site et relève : fichiers de `dist/` (empreintes SHA-256), HTML normalisé, title, meta, canonique et JSON-LD, styles calculés de chaque élément (et `::before`, `::after`) à 1440 et 390 px, captures pleine page des 30 pages à 1440, 1100, 900, 390 et 360 px | ~5 min |
 | `compare.cjs` | Compare deux relevés et écrit `rapport.md` (et des images `diff/` pour les captures qui diffèrent). Code de sortie 1 s'il y a une différence | ~10 s |
-| `behavior.cjs` | Tests de comportement (47) : page Contact (`?personne=`, `?source=quiz&score=`, `sessionStorage`, Formspree simulé, `generate_lead`, Meta `Contact`), quiz complet du Test de visibilité, barre collante sur les 4 pages (hero, bandeau final, bannière CookieYes, 1440, 390 et 360 px), carrousel de l'Équipe (10 s, onglets, survol, bouton, clavier, toucher, mouvement réduit, sans JavaScript, hauteur fixe), pagination du blog, ancres et barres finales des liens | ~1 min 30 |
+| `behavior.cjs` | Tests de comportement (49) : page Contact (`?personne=`, `?source=quiz&score=`, `sessionStorage`, Formspree simulé, `generate_lead`, Meta `Contact`), quiz complet du Test de visibilité, barre collante sur les 4 pages (hero, bandeau final, bannière CookieYes, 1440, 390 et 360 px), parcours animé du hero de Santé et RH (étapes allumées une à une, puis reprise ; immobile avec le mouvement réduit), carrousel de l'Équipe (10 s, onglets, survol, bouton, clavier, toucher, mouvement réduit, sans JavaScript, hauteur fixe), pagination du blog, ancres et barres finales des liens | ~1 min 30 |
+
+Deux contrôles complémentaires, pour les PR qui déplacent du CSS dans des composants :
+
+| Script | Rôle | Durée |
+|---|---|---|
+| `states.cjs` | Compare deux `dist/` sur les styles calculés que le relevé ne voit pas : **mouvement normal** (valeurs de transition), **survol** et **focus clavier** de chaque bouton, teaser, lien discret, carte et tuile (l'élément et tout son contenu), à 1440 et 390 px. Code de sortie 1 s'il y a une différence | ~5 min (6 pages) |
+| `ties.cjs` | Cherche les **règles à égalité** : sur un même élément, une même propriété déclarée par la page et par un composant (ou deux composants) avec la même spécificité, dont le résultat dépendrait de l'ordre de chargement du CSS. À 1440, 900 et 390 px. Code de sortie 1 s'il en trouve | ~2 min (4 pages) |
 
 ## Utilisation pour une PR de refactor
 
@@ -38,6 +45,10 @@ node tools/regression/compare.cjs tools/regression/out/reference tools/regressio
 
 # 4. Tests de comportement sur la branche
 node tools/regression/behavior.cjs
+
+# 5. Contrôles complémentaires (dist/ de main et de la branche déjà compilés)
+node tools/regression/states.cjs <dist-main> <dist-branche>
+node tools/regression/ties.cjs <dist-branche>
 ```
 
 Options utiles :

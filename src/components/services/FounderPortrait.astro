@@ -1,0 +1,202 @@
+---
+// Bloc « Notre différence » d'une page Services : portrait d'un fondateur (Gauthier, Kevin…) et
+// son texte, avec un badge et le bouton « Parler à … ».
+//
+// Props
+// - member : la personne (src/data/team.ts) : photo, prénom et lien de contact
+// - badge : texte du badge (texte simple, les apostrophes et NB restent tels quels dans le HTML)
+// Emplacements
+// - par défaut : les paragraphes ; le premier porte la classe md-gau__lead (chapeau)
+// - badge-icon : le SVG de l'icône du badge
+// Cadrage de la photo, propre à chaque page, par 4 variables CSS posées par la page sur .md-gau :
+//   --gau-pos (téléphone), --gau-pos-sm (600 à 767 px), --gau-pos-md (dès 768 px, photo calée
+//   en bas) et --gau-zoom (agrandissement dès 768 px, autour de --gau-pos-md).
+//   Exemple : .md-gau { --gau-pos: 51% 60%; --gau-pos-sm: 51% 36%; --gau-pos-md: 51% 100%; --gau-zoom: 1.15; }
+//   (des variables plutôt qu'une prop : un attribut style changerait le HTML de la page).
+// Le bloc porte aussi l'attribut de portée de la page (voir src/utils/scope.ts) pour ce cadrage.
+import CtaIcon from '../CtaIcon.astro';
+import { text } from '../../utils/html';
+import { parentScope } from '../../utils/scope';
+import type { TeamMember } from '../../data/team';
+
+interface Props {
+  member: TeamMember;
+  badge: string;
+  [key: string]: unknown;
+}
+
+const { member, badge, ...rest } = Astro.props;
+const scope = parentScope(rest);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<div class="md-gau md-glass" {...scope}>
+  <div class="md-gau__ph" data-reveal="left">
+    <img class="md-gau__img" src={`${base}/images/${member.img}.webp`} alt={member.firstName} width={member.width} height={member.height} loading="lazy" decoding="async" />
+  </div>
+  <div class="md-gau__txt" data-reveal="right" data-reveal-step="1">
+    <slot />
+    <div class="md-gau__foot">
+      <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><slot name="badge-icon" /></span><span set:html={text(badge)} /></p>
+      <a class="cta" href={`${base}${member.contact}`}>Parler à {member.firstName}<CtaIcon /></a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .md-gau {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+    border-radius: 30px;
+  }
+
+  @media (min-width: 768px) {
+    .md-gau { grid-template-columns: 300px minmax(0, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .md-gau { grid-template-columns: 360px minmax(0, 1fr); }
+  }
+
+  /* Portrait : photo non détourée (fond dégradé dans l'image), qui remplit tout le panneau.
+     Téléphone et tablette : panneau au-dessus, carré (420 px de haut au plus). */
+  .md-gau__ph {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    max-height: 420px;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-orange) 40%, var(--woop-pink));
+  }
+
+  .md-gau__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    /* Visage dans le tiers supérieur du panneau carré */
+    object-position: var(--gau-pos, 50% 50%);
+  }
+
+  @media (min-width: 600px) and (max-width: 767px) {
+    .md-gau__img { object-position: var(--gau-pos-sm, var(--gau-pos, 50% 50%)); }
+  }
+
+  @media (min-width: 768px) {
+    .md-gau__ph {
+      aspect-ratio: auto;
+      max-height: none;
+      min-height: 480px;
+    }
+
+    .md-gau__img {
+      object-position: var(--gau-pos-md, 50% 100%);
+      transform: scale(var(--gau-zoom, 1));
+      transform-origin: var(--gau-pos-md, 50% 100%);
+    }
+  }
+
+  .md-gau__txt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    padding: 32px 24px;
+  }
+
+  @media (min-width: 900px) {
+    .md-gau__txt { padding: 46px 50px; }
+  }
+
+  /* Paragraphes (emplacement par défaut) et badge */
+  .md-gau__txt :global(p) {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .md-gau__txt :global(.md-gau__lead) {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  /* Passage en gras (« on les a déjà résolus. ») : rose et gras */
+  .md-gau__txt :global(p strong) {
+    font-weight: 700;
+    color: var(--md-pink-soft);
+  }
+
+  /* Badge : pilule sombre, filet dégradé fin, texte blanc semi-gras */
+  .md-gau__txt .md-gau__badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 100%;
+    padding: 8px 18px 8px 8px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background:
+      linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
+      var(--woop-gradient) border-box;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: left;
+    color: var(--text-primary);
+    /* Pas de mot seul en fin de ligne */
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 600px) {
+    .md-gau__txt .md-gau__badge { border-radius: 999px; }
+  }
+
+  .md-gau__badge-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
+  }
+
+  .md-gau__badge-ico :global(svg) { width: 17px; height: 17px; }
+
+  /* Badge à gauche, bouton « Parler à … » à droite, centrés verticalement.
+     Téléphone : empilés, alignés à gauche. Le badge peut passer sur 2 lignes pour rester
+     à côté du bouton ; si la colonne de texte est trop étroite même ainsi (tablette),
+     le bouton passe sous le badge, aligné à gauche. */
+  .md-gau__foot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 8px;
+  }
+
+  .md-gau__foot .cta { flex: none; }
+
+  @media (min-width: 600px) {
+    .md-gau__foot {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Base de 308 px (2 lignes) pour le calcul du retour à la ligne, puis le badge
+       s'élargit jusqu'à sa largeur naturelle (1 ligne) quand la place le permet. */
+    .md-gau__foot .md-gau__badge {
+      flex: 1 1 308px;
+      max-width: max-content;
+    }
+  }
+</style>

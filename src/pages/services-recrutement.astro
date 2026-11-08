@@ -2,11 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import CtaIcon from '../components/CtaIcon.astro';
-import HeroPill from '../components/HeroPill.astro';
 import SectionHead from '../components/SectionHead.astro';
 import VisibilityTeaser from '../components/VisibilityTeaser.astro';
 import FinalBand from '../components/FinalBand.astro';
 import StickyBar from '../components/StickyBar.astro';
+import ServiceHero from '../components/services/ServiceHero.astro';
+import AudienceCard from '../components/services/AudienceCard.astro';
+import ServiceTile from '../components/services/ServiceTile.astro';
+import FounderPortrait from '../components/services/FounderPortrait.astro';
+import Steps from '../components/services/Steps.astro';
+import { team } from '../data/team';
 import { NB } from '../utils/typo';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -199,61 +204,58 @@ const steps = [
   <ScrollReveal />
 
   <!-- 1. HERO (sans data-reveal) -->
-  <section class="hp-hero md-hero" data-hp-hero>
-    <div class="container">
-      <div class="md-hero__text">
-        <HeroPill label="RH & Recrutement" />
-        <h1 class="md-hero__title">Le marketing pour cabinets de recrutement, pensé par quelqu'un qui <span class="gradient-accent hp-kw">les a connus de l'intérieur.</span></h1>
-        <p class="md-hero__sub">Stratégie, branding, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats.</p>
-        <p class="md-hero__strong"><strong>Votre équipe marketing recrutement, sans avoir à l'embaucher.</strong></p>
-        <div class="hp-acts hp-acts--center md-hero__acts">
-          <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<CtaIcon /></a>
-          <a class="cta cta--line" href="#services">Nos services<CtaIcon dir="right" /></a>
-        </div>
-      </div>
+  <ServiceHero
+    pill="RH & Recrutement"
+    sub="Stratégie, branding, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats."
+    strong="Votre équipe marketing recrutement, sans avoir à l'embaucher."
+    primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+    secondary={{ href: '#services', label: 'Nos services' }}
+  >
+    <Fragment slot="title">Le marketing pour cabinets de recrutement, pensé par quelqu'un qui <span class="gradient-accent hp-kw">les a connus de l'intérieur.</span></Fragment>
 
-      <!-- Illustration : le parcours de votre prochain mandat, étapes allumées l'une après l'autre -->
-      <div class="md-dev-w" aria-hidden="true">
-        <div class="md-dev-glow"></div>
-        <div class="md-dev">
-          <div class="md-dev__bar"><span></span><span></span><span></span><em>Le parcours de votre prochain mandat</em></div>
-          <div class="md-dev__cap"><b>Comment les entreprises vous trouvent, avec WOOP</b><span>4 étapes, on s'occupe de chacune.</span></div>
-          <div class="md-flow" data-md-flow>
-            {journey.map((j, i) => (
-              <>
-                {i > 0 && <span class="md-flow__link" data-md-flow-link></span>}
-                <div class="md-xf" data-md-flow-step>
-                  <span class="md-xf__label">{j.label}</span>
-                  {j.key === 'search' && (
-                    <>
-                      <div class="md-sbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><span>cabinet recrutement Montréal</span></div>
-                      <i class="md-xf__ln md-w70"></i>
-                      <i class="md-xf__ln md-w50"></i>
-                    </>
-                  )}
-                  {j.key === 'chosen' && (
-                    <>
-                      <div class="md-xres"><small>En premier</small><b>Votre cabinet</b><em>Spécialiste de votre niche</em></div>
-                      <i class="md-xf__ln md-w60"></i>
-                    </>
-                  )}
-                  {j.key === 'signed' && (
-                    <>
-                      <div class="md-slotx"><em>Lun.</em><b>Nouveau mandat</b><i>+</i></div>
-                      <div class="md-slotx md-slotx--dim"><em>Mar.</em><b>Candidat qualifié</b><i>✓</i></div>
-                    </>
-                  )}
-                  {j.key === 'filled' && (
-                    <div class="md-xrv"><i class="md-xrv__h"></i><i class="md-xf__ln md-w70"></i><i class="md-xf__ln md-w50"></i></div>
-                  )}
-                </div>
-              </>
-            ))}
-          </div>
+    <Fragment slot="visual">
+    <Fragment set:html={"<!-- Illustration : le parcours de votre prochain mandat, étapes allumées l'une après l'autre -->"} />
+    <div class="md-dev-w" aria-hidden="true">
+      <div class="md-dev-glow"></div>
+      <div class="md-dev">
+        <div class="md-dev__bar"><span></span><span></span><span></span><em>Le parcours de votre prochain mandat</em></div>
+        <div class="md-dev__cap"><b>Comment les entreprises vous trouvent, avec WOOP</b><span>4 étapes, on s'occupe de chacune.</span></div>
+        <div class="md-flow" data-md-flow>
+          {journey.map((j, i) => (
+            <>
+              {i > 0 && <span class="md-flow__link" data-md-flow-link></span>}
+              <div class="md-xf" data-md-flow-step>
+                <span class="md-xf__label">{j.label}</span>
+                {j.key === 'search' && (
+                  <>
+                    <div class="md-sbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><span>cabinet recrutement Montréal</span></div>
+                    <i class="md-xf__ln md-w70"></i>
+                    <i class="md-xf__ln md-w50"></i>
+                  </>
+                )}
+                {j.key === 'chosen' && (
+                  <>
+                    <div class="md-xres"><small>En premier</small><b>Votre cabinet</b><em>Spécialiste de votre niche</em></div>
+                    <i class="md-xf__ln md-w60"></i>
+                  </>
+                )}
+                {j.key === 'signed' && (
+                  <>
+                    <div class="md-slotx"><em>Lun.</em><b>Nouveau mandat</b><i>+</i></div>
+                    <div class="md-slotx md-slotx--dim"><em>Mar.</em><b>Candidat qualifié</b><i>✓</i></div>
+                  </>
+                )}
+                {j.key === 'filled' && (
+                  <div class="md-xrv"><i class="md-xrv__h"></i><i class="md-xf__ln md-w70"></i><i class="md-xf__ln md-w50"></i></div>
+                )}
+              </div>
+            </>
+          ))}
         </div>
       </div>
     </div>
-  </section>
+    </Fragment>
+  </ServiceHero>
 
   <!-- 2. POUR QUI ? -->
   <section class="hp-block hp-sec" id="pour-qui" data-reveal-clip>
@@ -262,51 +264,44 @@ const steps = [
 
       <div class="md-prs">
         {profiles.map((p) => (
-          <article class:list={['md-pr', 'md-glass', { 'md-pr--wide': p.wide }]} data-reveal={p.reveal} data-reveal-step={p.step}>
-            <div class:list={['md-pr__vis', `md-pr__vis--${p.key}`]} aria-hidden="true">
-              {p.key === 'mandat' && (
-                <div class="md-rq">
-                  <div class="md-rq__card">
-                    <div class="md-rq__head"><b>Mandat</b><span>Signé</span></div>
-                    <i class="md-rq__ln"></i>
-                    <i class="md-rq__ln md-rq__ln--sh"></i>
-                    <div class="md-rq__sig"><svg viewBox="0 0 120 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 22c10-14 16-14 18-4s8 6 14-6 10 8 18 4 12-10 20-2 14 6 30-2"/></svg></div>
-                  </div>
+          <AudienceCard kind={p.key} title={p.title} lived={p.lived} change={p.change} reveal={p.reveal} step={p.step} wide={p.wide}>
+            {p.key === 'mandat' && (
+              <div class="md-rq">
+                <div class="md-rq__card">
+                  <div class="md-rq__head"><b>Mandat</b><span>Signé</span></div>
+                  <i class="md-rq__ln"></i>
+                  <i class="md-rq__ln md-rq__ln--sh"></i>
+                  <div class="md-rq__sig"><svg viewBox="0 0 120 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 22c10-14 16-14 18-4s8 6 14-6 10 8 18 4 12-10 20-2 14 6 30-2"/></svg></div>
                 </div>
-              )}
-              {p.key === 'cand' && (
-                <div class="md-cl">
-                  <div class="md-cl__row is-on"><span class="md-cl__av"></span><div><b></b><i></i></div><em>Qualifié</em></div>
-                  <div class="md-cl__row is-on"><span class="md-cl__av"></span><div><b></b><i></i></div><em>Qualifié</em></div>
-                  <div class="md-cl__row"><span class="md-cl__av"></span><div><b></b><i></i></div><em>En attente</em></div>
-                </div>
-              )}
-              {p.key === 'niche' && (
-                <div class="md-crowd">
-                  <span></span><span></span><span class="md-crowd__me"><b>Vous</b></span><span></span><span></span><span></span>
-                  <span class="md-crowd__lens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></span>
-                </div>
-              )}
-              {p.key === 'grow' && (
-                <div class="md-ba">
-                  <div class="md-ba__bl md-ba__bl--old"><span></span><small>Avant</small></div>
-                  <span class="md-ba__arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
-                  <div class="md-ba__bl md-ba__bl--new"><span></span><small>Après</small></div>
-                </div>
-              )}
-              {p.key === 'solo' && (
-                <div class="md-solo">
-                  <div class="md-pc"><span class="md-pc__av"></span><div><b>Votre nom</b><small>Consultant RH indépendant</small></div><span class="md-pc__ver">✓</span></div>
-                  <div class="md-nt"><span>+</span><div><b>Nouvelle demande</b><small>Une entreprise vous contacte</small></div></div>
-                </div>
-              )}
-            </div>
-            <div class="md-pr__body">
-              <h3>{p.title}</h3>
-              <p class="md-pr__lived">{p.lived}</p>
-              <p class="md-pr__change">{p.change}</p>
-            </div>
-          </article>
+              </div>
+            )}
+            {p.key === 'cand' && (
+              <div class="md-cl">
+                <div class="md-cl__row is-on"><span class="md-cl__av"></span><div><b></b><i></i></div><em>Qualifié</em></div>
+                <div class="md-cl__row is-on"><span class="md-cl__av"></span><div><b></b><i></i></div><em>Qualifié</em></div>
+                <div class="md-cl__row"><span class="md-cl__av"></span><div><b></b><i></i></div><em>En attente</em></div>
+              </div>
+            )}
+            {p.key === 'niche' && (
+              <div class="md-crowd">
+                <span></span><span></span><span class="md-crowd__me"><b>Vous</b></span><span></span><span></span><span></span>
+                <span class="md-crowd__lens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></span>
+              </div>
+            )}
+            {p.key === 'grow' && (
+              <div class="md-ba">
+                <div class="md-ba__bl md-ba__bl--old"><span></span><small>Avant</small></div>
+                <span class="md-ba__arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span>
+                <div class="md-ba__bl md-ba__bl--new"><span></span><small>Après</small></div>
+              </div>
+            )}
+            {p.key === 'solo' && (
+              <div class="md-solo">
+                <div class="md-pc"><span class="md-pc__av"></span><div><b>Votre nom</b><small>Consultant RH indépendant</small></div><span class="md-pc__ver">✓</span></div>
+                <div class="md-nt"><span>+</span><div><b>Nouvelle demande</b><small>Une entreprise vous contacte</small></div></div>
+              </div>
+            )}
+          </AudienceCard>
         ))}
       </div>
 
@@ -320,55 +315,28 @@ const steps = [
       <SectionHead over="02 · Nos services" intro={`En clair${NB}: tout ce que ferait une équipe marketing dans vos murs, sans avoir à l'embaucher. Côté clients comme côté candidats.`}>Une offre pensée pour le secteur du <span class="gradient-accent">recrutement</span>.</SectionHead>
 
       <div class="md-svs">
-        {services.map((t) => {
-          const Tag = t.href ? 'a' : 'article';
-          const feat = t.shape === 'feat';
-          const icon = (
-            <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true">
+        {services.map((t) => (
+          <ServiceTile kind={t.key} shape={t.shape} title={t.title} text={t.text} reveal={t.reveal} step={t.step} href={t.href}>
+            <Fragment slot="icon">
               {t.key === 'mandats' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m18 5-2.414-2.414A2 2 0 0 0 14.172 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2"/><path d="M21.378 12.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><path d="M8 18h1"/></svg>)}
               {t.key === 'cand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>)}
               {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
               {t.key === 'social' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-3.8M8.2 13l7.6 3.8"/></svg>)}
               {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>)}
               {t.key === 'rep' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
-            </span>
-          );
-          return (
-            <Tag
-              href={t.href}
-              class:list={['md-sv', `md-sv--${t.shape}`, `md-sv--${t.key}`, { 'md-glass': !feat, 'hp-tile--link': t.href }]}
-              data-reveal={t.reveal}
-              data-reveal-step={t.step}
-            >
-              {t.href && (
-                <span class="hp-tile__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg></span>
-              )}
-              {feat ? (
-                <>
-                  <div class="md-sv__txt">
-                    {icon}
-                    <h3>{t.title}</h3>
-                    {t.text.map((line) => <p>{line}</p>)}
-                  </div>
-                  <div class="md-jy" aria-hidden="true">
-                    {pipeline.map((s, i) => (
-                      <>
-                        {i > 0 && <span class="md-jy__link"></span>}
-                        <div class:list={[{ 'is-on': s.on }]}><b>{s.title}</b><small>{s.text}</small></div>
-                      </>
-                    ))}
-                  </div>
-                </>
+            </Fragment>
+            <Fragment slot="illustration">
+              {t.shape === 'feat' ? (
+                <div class="md-jy" aria-hidden="true">
+                  {pipeline.map((s, i) => (
+                    <>
+                      {i > 0 && <span class="md-jy__link"></span>}
+                      <div class:list={[{ 'is-on': s.on }]}><b>{s.title}</b><small>{s.text}</small></div>
+                    </>
+                  ))}
+                </div>
               ) : (
-                <>
-                  <div class="md-sv__head">
-                    {icon}
-                    <h3>{t.title}</h3>
-                  </div>
-                  <div class="md-sv__text">
-                    {t.text.map((line) => <p>{line}</p>)}
-                  </div>
-                  <div class:list={['md-mui', `md-mui--${t.key}`]} aria-hidden="true">
+                <div class:list={['md-mui', `md-mui--${t.key}`]} aria-hidden="true">
                   {t.key === 'cand' && (
                     <div class="md-pool">
                       {pool.map((on) => <span class:list={['md-pool__p', { 'is-on': on }]}></span>)}
@@ -405,12 +373,12 @@ const steps = [
                       <div class="md-rp"><i></i><i></i></div>
                     </>
                   )}
+                
                 </div>
-                </>
               )}
-            </Tag>
-          );
-        })}
+            </Fragment>
+          </ServiceTile>
+        ))}
       </div>
 
       <div class="md-svc-cta" data-reveal="up">
@@ -427,20 +395,12 @@ const steps = [
     <div class="container">
       <SectionHead over="03 · Notre différence" intro="Ce qui nous rend différents de toutes les autres agences.">Conçue par quelqu'un du <span class="gradient-accent">métier</span>.</SectionHead>
 
-      <div class="md-gau md-glass">
-        <div class="md-gau__ph" data-reveal="left">
-          <img class="md-gau__img" src={`${base}/images/kevin.webp`} alt="Kevin" width="671" height="822" loading="lazy" decoding="async" />
-        </div>
-        <div class="md-gau__txt" data-reveal="right" data-reveal-step="1">
-          <p class="md-gau__lead">Kevin est designer graphique de formation. Avant de cofonder WOOP, il a passé plusieurs années à piloter le marketing au sein d'un <a class="link-inline" href={`${base}/services-medical/`}>cabinet de recrutement spécialisé en santé</a>.</p>
-          <p>Là, il vivait au quotidien les défis que vous connaissez aujourd'hui{NB}: décrocher des mandats, construire une marque qui se distingue, attirer des candidats qualifiés, gérer la réputation du cabinet.</p>
-          <p>Cette double expérience, la création graphique et le marketing en cabinet de recrutement, change tout. Quand on conçoit votre stratégie, on ne devine pas vos problèmes{NB}: <strong>on les a déjà vécus.</strong> Aucune autre agence marketing au Québec ne peut en dire autant.</p>
-          <div class="md-gau__foot">
-            <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.2 14.6c2.6.1 4.3 2 4.8 4.9"/></svg></span><span>Une stratégie pour vos deux marchés{NB}: clients et candidats</span></p>
-            <a class="cta" href={`${base}/contact/?personne=kevin`}>Parler à Kevin<CtaIcon /></a>
-          </div>
-        </div>
-      </div>
+      <FounderPortrait member={team.kevin} badge={`Une stratégie pour vos deux marchés${NB}: clients et candidats`}>
+        <p class="md-gau__lead">Kevin est designer graphique de formation. Avant de cofonder WOOP, il a passé plusieurs années à piloter le marketing au sein d'un <a class="link-inline" href={`${base}/services-medical/`}>cabinet de recrutement spécialisé en santé</a>.</p>
+        <p>Là, il vivait au quotidien les défis que vous connaissez aujourd'hui{NB}: décrocher des mandats, construire une marque qui se distingue, attirer des candidats qualifiés, gérer la réputation du cabinet.</p>
+        <p>Cette double expérience, la création graphique et le marketing en cabinet de recrutement, change tout. Quand on conçoit votre stratégie, on ne devine pas vos problèmes{NB}: <strong>on les a déjà vécus.</strong> Aucune autre agence marketing au Québec ne peut en dire autant.</p>
+        <Fragment slot="badge-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.2 14.6c2.6.1 4.3 2 4.8 4.9"/></svg></Fragment>
+      </FounderPortrait>
     </div>
   </section>
 
@@ -449,15 +409,7 @@ const steps = [
     <div class="container">
       <SectionHead over="04 · Comment ça se passe" intro="Voici exactement ce qui se passe après votre premier appel.">Simple et <span class="gradient-accent">sans engagement</span>.</SectionHead>
 
-      <ol class="md-steps">
-        {steps.map((s) => (
-          <li class="md-st md-glass" data-reveal={s.reveal} data-reveal-step={s.step}>
-            <span class:list={['md-st__d', { 'is-on': s.hot }]} aria-hidden="true">{s.n}</span>
-            <h3><span class="visually-hidden">{s.n} </span>{s.title}</h3>
-            <p>{s.text}</p>
-          </li>
-        ))}
-      </ol>
+      <Steps steps={steps} />
     </div>
   </section>
 
@@ -512,15 +464,6 @@ const steps = [
     .hp-block { --home-section-gap: 120px; }
   }
 
-  /* ===== RANGÉES DE BOUTONS (boutons .cta : global.css, icône : CtaIcon) ===== */
-  .hp-acts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .hp-acts--center { justify-content: center; }
-
   /* Pas de mot seul en fin de paragraphe */
   p {
     text-wrap: pretty;
@@ -534,103 +477,6 @@ const steps = [
   .hp-block--last { padding-bottom: var(--home-section-gap); }
 
   .hp-sec--services { scroll-margin-top: 90px; }
-
-  /* ===== 1. HERO ===== */
-  .hp-hero {
-    position: relative;
-    padding: 40px 0 0;
-    overflow-x: clip;
-  }
-
-  @media (min-width: 768px) {
-    .hp-hero { padding: 64px 0 0; }
-  }
-
-  /* Halo rose derrière le titre */
-  .md-hero::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: -60px;
-    width: 900px;
-    max-width: 140%;
-    height: 520px;
-    transform: translateX(-50%);
-    background: radial-gradient(ellipse, rgba(230, 43, 127, 0.22), transparent 65%);
-    pointer-events: none;
-  }
-
-  .md-hero .container { position: relative; }
-
-  .md-hero__text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .md-hero__title {
-    max-width: 960px;
-    margin-top: 26px;
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    text-wrap: balance;
-  }
-
-  @media (min-width: 600px) {
-    .md-hero__title { font-size: 48px; }
-  }
-
-  @media (min-width: 1024px) {
-    .md-hero__title { font-size: 56px; }
-  }
-
-  @media (min-width: 1280px) {
-    .md-hero__title { font-size: 62px; }
-  }
-
-  .hp-kw {
-    letter-spacing: 1px;
-    padding: 0 0.04em;
-  }
-
-  .md-hero__sub {
-    max-width: 680px;
-    margin-top: 24px;
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-  }
-
-  /* Ordinateur : élargi pour tenir en 3 lignes au plus à 1440 px (3 lignes dès 920 px de large ;
-     2 lignes demanderaient environ 1450 px, plus que le H1), sans dépasser le cadre du H1 (960 px). */
-  @media (min-width: 1024px) {
-    .md-hero__sub {
-      max-width: 940px;
-      font-size: 18px;
-    }
-  }
-
-  .md-hero__strong {
-    margin-top: 14px;
-    font-size: 17px;
-    line-height: 1.5;
-  }
-
-  .md-hero__strong strong {
-    color: var(--text-primary);
-    font-weight: 700;
-  }
-
-  @media (min-width: 1024px) {
-    .md-hero__strong { font-size: 18px; }
-  }
-
-  .md-hero__acts { margin-top: 32px; }
 
   /* Écran incliné qui contient le parcours du prochain mandat */
   .md-dev-w {
@@ -952,109 +798,11 @@ const steps = [
     .md-prs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
-  .md-pr {
-    overflow: hidden;
-    border-radius: 28px;
-    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  .md-pr:hover { transform: translateY(-5px); }
-
-  .md-pr__vis {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 190px;
-    overflow: hidden;
-  }
-
-  @media (min-width: 621px) {
-    .md-pr__vis { height: 210px; }
-  }
-
-  .md-pr__vis > * { transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .md-pr:hover .md-pr__vis > * { transform: scale(1.06) rotate(-2deg); }
-
   .md-pr__vis--mandat { background: var(--woop-gradient); }
   .md-pr__vis--cand { background: var(--hp-blush); }
   .md-pr__vis--niche { background: var(--hp-plum); }
   .md-pr__vis--grow { background: linear-gradient(140deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-orange)); }
   .md-pr__vis--solo { background: linear-gradient(120deg, var(--hp-plum), var(--woop-pink)); }
-
-  /* 5e carte (consultant indépendant) : sur toute la largeur, illustration à gauche et texte
-     à droite dès que la grille passe à 2 colonnes. À la verticale sur téléphone. */
-  @media (min-width: 720px) {
-    .md-pr--wide {
-      grid-column: 1 / -1;
-      display: grid;
-      /* L'illustration a la largeur d'une carte de la rangée du dessus (gouttière de 22 px comprise) */
-      grid-template-columns: minmax(0, calc((100% - 22px) / 2)) minmax(0, 1fr);
-    }
-    .md-pr--wide .md-pr__vis {
-      height: auto;
-      min-height: 240px;
-    }
-    .md-pr--wide .md-pr__body { justify-content: center; }
-  }
-
-  .md-pr__body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    /* Le titre ouvre la carte : même écart sous l'illustration dans les 5 cartes */
-    padding: 28px 24px 30px;
-  }
-
-  @media (min-width: 768px) {
-    .md-pr__body { padding: 30px 30px 32px; }
-  }
-
-  .md-pr__body h3 {
-    font-size: 22px;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--text-primary);
-    text-wrap: balance;
-  }
-
-  @media (min-width: 768px) {
-    .md-pr__body h3 { font-size: 24px; }
-  }
-
-  .md-pr__body p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-  }
-
-  /* Ce qu'on change : coche dégradée, filet au-dessus */
-  .md-pr__body p.md-pr__change {
-    position: relative;
-    align-self: stretch;
-    margin-top: 4px;
-    padding: 14px 0 0 28px;
-    border-top: 1px solid var(--hp-line);
-    color: var(--text-primary);
-  }
-
-  .md-pr__change::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    top: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--woop-gradient);
-    color: var(--hp-on-grad);
-    font-size: 10px;
-    font-weight: 700;
-  }
 
   /* Illustrations des cartes */
   /* 1. Mandat signé */
@@ -1357,49 +1105,6 @@ const steps = [
     .md-sv--rep { grid-column: 3; grid-row: 3; }
   }
 
-  .md-sv {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 28px 24px;
-    border-radius: 26px;
-    overflow: hidden;
-    color: var(--hp-ink);
-    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
-  }
-
-  @media (min-width: 768px) {
-    .md-sv { padding: 30px; }
-  }
-
-  .md-sv h3 {
-    font-size: 21px;
-    font-weight: 700;
-    line-height: 1.2;
-    text-wrap: balance;
-  }
-
-  .md-sv p {
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--text-secondary);
-  }
-
-  /* Tuiles foncées : icône et titre sur la même ligne (le titre peut passer sur 2 lignes) */
-  .md-sv__head {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  /* Texte d'une tuile (un ou deux paragraphes) */
-  .md-sv__text {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
   /* En-tête, texte, puis illustration en bas : Branding, Site web */
   .md-sv--brand .md-mui,
   .md-sv--web .md-mui { margin-top: auto; }
@@ -1407,140 +1112,6 @@ const steps = [
   /* En-tête, illustration, puis texte : Réseaux sociaux, Réputation */
   .md-sv--social .md-sv__text,
   .md-sv--rep .md-sv__text { order: 1; }
-
-  /* Tuile large (Attraction de candidats) : en-tête et texte à gauche, illustration à droite,
-     centrés verticalement. À la verticale sur téléphone. */
-  @media (min-width: 600px) {
-    .md-sv--wide {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      grid-template-rows: 1fr auto auto 1fr;
-      grid-template-areas:
-        '. ill'
-        'head ill'
-        'text ill'
-        '. ill';
-      column-gap: 28px;
-      row-gap: 0;
-    }
-    .md-sv--wide .md-sv__head { grid-area: head; }
-    .md-sv--wide .md-sv__text { grid-area: text; margin-top: 16px; }
-    .md-sv--wide .md-mui {
-      grid-area: ill;
-      align-self: center;
-      height: 150px;
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .md-sv--wide { column-gap: 36px; }
-    .md-sv--wide .md-mui { height: 170px; }
-  }
-
-  /* Tuile-lien (href défini) : survol, focus et chevron, comme sur l'accueil */
-  .hp-tile--link { cursor: pointer; }
-
-  .hp-tile--link:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 30px 60px var(--hp-shadow), inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent);
-  }
-
-  .hp-tile--link:focus-visible {
-    outline: 2px solid var(--text-primary);
-    outline-offset: 3px;
-  }
-
-  .hp-tile__go {
-    position: absolute;
-    top: 28px;
-    right: 24px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1.5px currentColor;
-    transition: transform 250ms ease, background 250ms ease;
-  }
-
-  .hp-tile__go svg { width: 18px; height: 18px; }
-
-  .hp-tile--link:hover .hp-tile__go {
-    transform: translateX(4px);
-    background: color-mix(in srgb, var(--text-primary) 18%, transparent);
-  }
-
-  .md-xi {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 52px;
-    height: 52px;
-    border-radius: 15px;
-    background: var(--woop-gradient);
-    color: var(--hp-ink);
-    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
-    transition: transform 350ms ease;
-  }
-
-  .md-xi svg { width: 26px; height: 26px; }
-
-  .hp-tile--link:hover .md-xi { transform: rotate(-6deg) scale(1.06); }
-
-  /* Tuile dégradée : Acquisition de mandats, sur toute la largeur.
-     À l'horizontale dès la tablette : texte à gauche, étapes à droite. */
-  .md-sv--feat {
-    gap: 30px;
-    background: var(--woop-gradient);
-    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.25);
-  }
-
-  @media (min-width: 600px) {
-    .md-sv--feat {
-      flex-direction: row;
-      align-items: center;
-      gap: 32px;
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .md-sv--feat {
-      gap: 40px;
-      padding: 40px;
-    }
-  }
-
-  .md-sv__txt {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    min-width: 0;
-  }
-
-  .md-sv--feat h3 {
-    margin-top: 6px;
-    font-size: 26px;
-    color: var(--text-primary);
-  }
-
-  @media (min-width: 768px) {
-    .md-sv--feat h3 { font-size: 30px; }
-  }
-
-  .md-sv--feat p {
-    max-width: 580px;
-    font-size: 16px;
-    color: var(--hp-on-grad);
-  }
-
-  .md-xi--w {
-    background: color-mix(in srgb, var(--text-primary) 22%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 40%, transparent);
-  }
 
   /* Décideur RH · Rencontre · Mandat : 3 étapes identiques (même taille, même alignement),
      seul le fond de « Mandat » change. Empilées sur téléphone et tablette, en ligne sur ordinateur. */
@@ -1949,217 +1520,14 @@ const steps = [
     border-radius: 4px;
   }
 
-  /* ===== 4. NOTRE DIFFÉRENCE ===== */
+  /* ===== 4. NOTRE DIFFÉRENCE (FounderPortrait) =====
+     Cadrage de la photo : téléphone, tablette (600 à 767 px), puis dès 768 px photo calée en bas
+     et agrandie autour de ce point. */
   .md-gau {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    overflow: hidden;
-    border-radius: 30px;
-  }
-
-  @media (min-width: 768px) {
-    .md-gau { grid-template-columns: 300px minmax(0, 1fr); }
-  }
-
-  @media (min-width: 1024px) {
-    .md-gau { grid-template-columns: 360px minmax(0, 1fr); }
-  }
-
-  /* Portrait de Kevin : photo non détourée (fond dégradé dans l'image), qui remplit tout le panneau.
-     Téléphone et tablette : panneau au-dessus, carré (420 px de haut au plus). */
-  .md-gau__ph {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 1 / 1;
-    max-height: 420px;
-    background: linear-gradient(160deg, color-mix(in srgb, var(--woop-orange) 80%, var(--text-primary)), var(--woop-orange) 40%, var(--woop-pink));
-  }
-
-  .md-gau__img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
-    /* Visage dans le tiers supérieur du panneau carré (la tête de Kevin est haute dans la photo :
-       recadrage propre à cette page) */
-    object-position: 50% 52%;
-  }
-
-  /* Tablette : panneau plus large que haut, recadrage plus haut pour garder la tête entière */
-  @media (min-width: 600px) and (max-width: 767px) {
-    .md-gau__img { object-position: 50% 45%; }
-  }
-
-  /* À partir de 768 px : panneau à gauche, sur toute la hauteur du bloc. Le panneau étant plus
-     étroit que la photo, cover la cadre en hauteur ; un léger agrandissement ancré en bas
-     (plus faible que pour Gauthier) remonte le visage dans le tiers supérieur. */
-  @media (min-width: 768px) {
-    .md-gau__ph {
-      aspect-ratio: auto;
-      max-height: none;
-      min-height: 480px;
-    }
-    .md-gau__img {
-      object-position: 49% 100%;
-      transform: scale(1.1);
-      transform-origin: 49% 100%;
-    }
-  }
-
-  .md-gau__txt {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 14px;
-    padding: 32px 24px;
-  }
-
-  @media (min-width: 900px) {
-    .md-gau__txt { padding: 46px 50px; }
-  }
-
-  .md-gau__txt p {
-    font-size: 16px;
-    line-height: 1.7;
-    color: var(--text-secondary);
-  }
-
-  .md-gau__txt .md-gau__lead {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.6;
-    color: var(--text-primary);
-  }
-
-  /* « on les a déjà vécus. » : rose et gras */
-  .md-gau__txt p strong {
-    font-weight: 700;
-    color: var(--md-pink-soft);
-  }
-
-  /* Badge « deux marchés » : pilule sombre, filet dégradé fin, texte blanc semi-gras */
-  .md-gau__txt .md-gau__badge {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-width: 100%;
-    padding: 8px 18px 8px 8px;
-    border: 1px solid transparent;
-    border-radius: 18px;
-    background:
-      linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
-      var(--woop-gradient) border-box;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.35;
-    text-align: left;
-    color: var(--text-primary);
-  }
-
-  @media (min-width: 600px) {
-    .md-gau__txt .md-gau__badge { border-radius: 999px; }
-  }
-
-  .md-gau__badge-ico {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    background: var(--woop-gradient);
-    color: var(--text-primary);
-    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
-  }
-
-  .md-gau__badge-ico svg { width: 17px; height: 17px; }
-
-  /* Badge à gauche, bouton « Parler à Kevin » à droite, centrés verticalement.
-     Téléphone : empilés, alignés à gauche. Le badge peut passer sur 2 lignes pour rester
-     à côté du bouton ; si la colonne de texte est trop étroite même ainsi (tablette),
-     le bouton passe sous le badge, aligné à gauche. */
-  .md-gau__foot {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-    margin-top: 8px;
-  }
-
-  .md-gau__foot .cta { flex: none; }
-
-  @media (min-width: 600px) {
-    .md-gau__foot {
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-    }
-    /* Base de 308 px (2 lignes) pour le calcul du retour à la ligne, puis le badge
-       s'élargit jusqu'à sa largeur naturelle (1 ligne) quand la place le permet. */
-    .md-gau__foot .md-gau__badge {
-      flex: 1 1 308px;
-      max-width: max-content;
-    }
-  }
-
-  /* ===== 5. COMMENT ÇA SE PASSE ===== */
-  .md-steps {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
-    list-style: none;
-  }
-
-  @media (min-width: 768px) {
-    .md-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  }
-
-  .md-st {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 28px 24px;
-    border-radius: 24px;
-  }
-
-  @media (min-width: 1024px) {
-    .md-st { padding: 30px; }
-  }
-
-  .md-st__d {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    font-weight: 700;
-    color: var(--md-pink-soft);
-    box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.55);
-  }
-
-  .md-st__d.is-on {
-    background: var(--woop-gradient);
-    color: var(--hp-on-grad);
-    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.35);
-  }
-
-  .md-st h3 {
-    margin-top: 6px;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1.25;
-    color: var(--text-primary);
-  }
-
-  .md-st p {
-    line-height: 1.55;
-    color: var(--text-secondary);
+    --gau-pos: 50% 52%;
+    --gau-pos-sm: 50% 45%;
+    --gau-pos-md: 49% 100%;
+    --gau-zoom: 1.1;
   }
 
   /* ===== MOUVEMENT RÉDUIT ===== */
@@ -2168,47 +1536,6 @@ const steps = [
     .md-dev { animation: none; }
     .md-xf,
     .md-flow__link { transition: none; }
-
-    .md-pr,
-    .md-pr__vis > *,
-    .md-sv,
-    .md-xi { transition: none; }
-
-    .hp-tile--link:hover,
-    .hp-tile--link:hover .hp-tile__go,
-    .hp-tile--link:hover .md-xi,
-    .md-pr:hover,
-    .md-pr:hover .md-pr__vis > * { transform: none; }
   }
 </style>
-
-<script>
-  // Parcours du hero (reprise de la maquette) : les étapes s'allument l'une après
-  // l'autre (étape active soulevée, étapes passées allumées, liaisons allumées), puis tout
-  // reste allumé un instant avant de recommencer. Sans JavaScript ou avec moins d'animations :
-  // état final, tout est allumé et immobile.
-  (function () {
-    const flow = document.querySelector<HTMLElement>('[data-md-flow]');
-    if (!flow) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const cards = Array.from(flow.querySelectorAll<HTMLElement>('[data-md-flow-step]'));
-    const links = Array.from(flow.querySelectorAll<HTMLElement>('[data-md-flow-link]'));
-    if (!cards.length) return;
-
-    flow.classList.add('is-live');
-    let i = 0;
-
-    const step = () => {
-      cards.forEach((el, k) => {
-        el.classList.toggle('is-act', k === i);
-        el.classList.toggle('is-done', k < i);
-      });
-      links.forEach((el, k) => el.classList.toggle('is-on', k < i));
-      i = (i + 1) % (cards.length + 1);
-      window.setTimeout(step, i === 0 ? 1400 : 1300);
-    };
-
-    window.setTimeout(step, 1400);
-  })();
-</script>
 
