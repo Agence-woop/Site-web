@@ -61,7 +61,8 @@ Le dossier `tools/regression/out/` est ignoré par git.
   chaque capture, **un contexte de navigateur neuf par page** (sinon le lissage de petites
   images réduites peut varier de quelques pixels).
 - Le HTML est comparé après neutralisation des identifiants techniques d'Astro
-  (`data-astro-cid-*`) et des empreintes des fichiers `/_astro/*.css|js`, qui changent dès
+  (`data-astro-cid-*`, ignorés y compris leur nombre : un élément d'un composant peut porter
+  l'attribut de la page en plus du sien) et des empreintes des fichiers `/_astro/*.css|js`, qui changent dès
   que le CSS est réorganisé sans que le rendu change. Le JSON-LD, le title, les meta et la
   canonique sont comparés **octet par octet**.
 - Les styles calculés couvrent l'état normal des éléments ; les états au survol ou au focus

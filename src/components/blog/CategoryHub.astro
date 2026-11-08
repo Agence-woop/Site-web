@@ -53,7 +53,7 @@ const description = `${label}. ${tagline}`;
       <h1 class="hub-title">{label}</h1>
       <p class="hub-tagline">{tagline}</p>
       {serviceLink && (
-        <p class="hub-service">{serviceLink.lead} <a class="hub-service__link" href={`${base}${serviceLink.path}`}>{serviceLink.anchor}</a>.</p>
+        <p class="hub-service">{serviceLink.lead} <a class="link-inline" href={`${base}${serviceLink.path}`}>{serviceLink.anchor}</a>.</p>
       )}
     </div>
   </section>
@@ -229,22 +229,6 @@ const description = `${label}. ${tagline}`;
 
   @media (min-width: 768px) {
     .hub-service { font-size: 16px; }
-  }
-
-  .hub-service__link {
-    color: inherit;
-    font-weight: inherit;
-    text-decoration: none;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 4px;
-  }
-
-  .hub-service__link:hover,
-  .hub-service__link:focus-visible {
-    text-decoration: underline;
-    text-decoration-color: var(--woop-pink);
-    text-decoration-thickness: 1.5px;
-    outline: none;
   }
 
   /* ===== Filtre par thématique ===== */

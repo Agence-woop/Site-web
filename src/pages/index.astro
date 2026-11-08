@@ -1,8 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import CtaIcon from '../components/CtaIcon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import VisibilityTeaser from '../components/VisibilityTeaser.astro';
+import FinalBand from '../components/FinalBand.astro';
+import StickyBar from '../components/StickyBar.astro';
 import TeamAvatar from '../components/team/TeamAvatar.astro';
-import { membersIn, ORDER_GRID, ORDER_STACK } from '../data/team';
+import { membersIn, ORDER_GRID } from '../data/team';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -163,8 +168,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
         <h1 class="hp-hero__title">Le marketing <span class="gradient-accent hp-kw">santé</span> qui remplit votre agenda.</h1>
         <p class="hp-hero__sub">Une équipe marketing complète, <strong>sans avoir à en embaucher une.</strong> Un clinicien, un créatif et une experte en acquisition, dédiés aux cliniques, pharmacies, professionnels de la santé et cabinets de recrutement au Québec.</p>
         <div class="hp-acts">
-          <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-          <a class="cta cta--line" href="#services">Voir nos services<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+          <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<CtaIcon /></a>
+          <a class="cta cta--line" href="#services">Voir nos services<CtaIcon dir="right" /></a>
         </div>
       </div>
 
@@ -237,10 +242,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <!-- 3. NOS SERVICES -->
   <section class="hp-block hp-sec hp-sec--services" id="services" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Nos <span class="gradient-accent">services</span></h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Tout ce que ferait une équipe marketing interne. Sans recruter, sans former, sans gérer.</p>
-      </div>
+      <SectionHead intro="Tout ce que ferait une équipe marketing interne. Sans recruter, sans former, sans gérer.">Nos <span class="gradient-accent">services</span></SectionHead>
 
       <div class="hp-bento">
         {services.map((t) => {
@@ -314,7 +316,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
       <div class="hp-inl" data-reveal="up">
         <p>Vous avez besoin de tout ça&nbsp;? <strong>C'est exactement ce que fait WOOP.</strong></p>
-        <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<CtaIcon /></a>
       </div>
     </div>
   </section>
@@ -322,10 +324,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <!-- 4. MARQUE + PERFORMANCE -->
   <section class="hp-block hp-sec" id="approche" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <h2 class="section-title hp-title hp-title--plus" data-reveal="left"><span class="gradient-accent">Marque</span> <span class="hp-plus"><span class="gradient-accent">+</span></span> <span class="gradient-accent">performance</span></h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Une marque solide fait baisser le coût d'acquisition. L'un ne va pas sans l'autre.</p>
-      </div>
+      <SectionHead intro="Une marque solide fait baisser le coût d'acquisition. L'un ne va pas sans l'autre." plus><span class="gradient-accent">Marque</span> <span class="hp-plus"><span class="gradient-accent">+</span></span> <span class="gradient-accent">performance</span></SectionHead>
 
       <ol class="hp-spi">
         <li class="hp-st" data-reveal="left">
@@ -345,21 +344,14 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
         </li>
       </ol>
 
-      <a class="hp-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
-        <span class="hp-teaser__dot" aria-hidden="true"></span>
-        <span><strong>Nouveau&nbsp;:</strong> testez votre visibilité en 2 minutes</span>
-        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
-      </a>
+      <VisibilityTeaser />
     </div>
   </section>
 
   <!-- 5. UNE ÉQUIPE, SANS EMBAUCHE -->
   <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left"><span class="gradient-accent">Une équipe</span>, sans embauche</h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Tout le savoir-faire d'un service marketing, sans les postes à pourvoir.</p>
-      </div>
+      <SectionHead intro="Tout le savoir-faire d'un service marketing, sans les postes à pourvoir."><span class="gradient-accent">Une équipe</span>, sans embauche</SectionHead>
 
       <div class="hp-cmp">
         <div class="hp-cx hp-cx--off" data-reveal="left">
@@ -407,7 +399,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
             <li>Un seul interlocuteur</li>
             <li>Opérationnelle rapidement</li>
           </ul>
-          <a class="cta cta--light" href={`${base}/contact/`}>Avoir mon équipe marketing<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--light" href={`${base}/contact/`}>Avoir mon équipe marketing<CtaIcon /></a>
         </div>
       </div>
     </div>
@@ -416,10 +408,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <!-- 6. DEUX SECTEURS, UNE MÉTHODE -->
   <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Deux secteurs, <span class="gradient-accent">une méthode</span></h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">On ne fait que ça. C'est pour ça qu'on le fait bien.</p>
-      </div>
+      <SectionHead intro="On ne fait que ça. C'est pour ça qu'on le fait bien.">Deux secteurs, <span class="gradient-accent">une méthode</span></SectionHead>
 
       <div class="hp-sect">
         <article class="hp-s hp-s--sante" data-reveal="left">
@@ -431,8 +420,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
             <h3>Cliniques, pharmacies, cabinets dentaires, médico-esthétique, professionnels de la santé, bien-être.</h3>
           </div>
           <div class="hp-acts hp-s__acts">
-            <a class="cta cta--light" href={`${base}/services-medical/`}>Nos services santé<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-            <a class="cta cta--line cta--on-grad" href={`${base}/contact/?personne=gauthier`}>Parler à Gauthier<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+            <a class="cta cta--light" href={`${base}/services-medical/`}>Nos services santé<CtaIcon dir="right" /></a>
+            <a class="cta cta--line cta--on-grad" href={`${base}/contact/?personne=gauthier`}>Parler à Gauthier<CtaIcon /></a>
           </div>
         </article>
 
@@ -453,8 +442,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
             <h3>Cabinets de recrutement spécialisés, firmes et consultants RH.</h3>
           </div>
           <div class="hp-acts hp-s__acts">
-            <a class="cta" href={`${base}/services-recrutement/`}>Nos services recrutement<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
-            <a class="cta cta--line" href={`${base}/contact/?personne=kevin`}>Parler à Kevin<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+            <a class="cta" href={`${base}/services-recrutement/`}>Nos services recrutement<CtaIcon dir="right" /></a>
+            <a class="cta cta--line" href={`${base}/contact/?personne=kevin`}>Parler à Kevin<CtaIcon /></a>
           </div>
         </article>
       </div>
@@ -479,10 +468,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <!-- 8. L'ÉQUIPE -->
   <section class="hp-block hp-sec" id="equipe" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Les visages de <span class="gradient-accent">votre équipe</span></h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Des experts qui travaillent pour vous comme s'ils étaient dans vos murs.</p>
-      </div>
+      <SectionHead intro="Des experts qui travaillent pour vous comme s'ils étaient dans vos murs.">Les visages de <span class="gradient-accent">votre équipe</span></SectionHead>
 
       <ul class="hp-team">
         {gridMembers.map((m, i) => (
@@ -515,8 +501,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
           <p>Un appel de 30 minutes pour la rencontrer et voir ce qu'elle peut faire pour vous.</p>
         </div>
         <div class="hp-acts">
-          <a class="cta cta--light" href={`${base}/contact/`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+          <a class="cta cta--light" href={`${base}/contact/`}>Réserver un appel<CtaIcon /></a>
+          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<CtaIcon /></a>
         </div>
       </div>
     </div>
@@ -525,9 +511,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   <!-- 10. TÉMOIGNAGES -->
   <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <h2 class="section-title hp-title" data-reveal="left">Ce qu'en disent <span class="gradient-accent">nos clients</span></h2>
-      </div>
+      <SectionHead>Ce qu'en disent <span class="gradient-accent">nos clients</span></SectionHead>
 
       <div
         class="hp-tcar"
@@ -586,34 +570,14 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   </section>
 
   <!-- 11. BANDEAU FINAL -->
-  <section class="hp-block hp-block--last hp-sec--final" data-hp-final>
-    <div class="container">
-      <div class="hp-final" data-reveal="up">
-        <div class="hp-avs hp-avs--final" aria-hidden="true">
-          {membersIn(ORDER_STACK).map((m) => (
-            <TeamAvatar member={m} />
-          ))}
-        </div>
-        <h2>Votre équipe marketing commence par un appel.</h2>
-        <p>Un appel de 30 minutes pour voir où vous en êtes et ce qu'on peut faire.</p>
-        <div class="hp-acts hp-acts--center">
-          <a class="cta cta--light" href={`${base}/contact/`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <FinalBand
+    title="Votre équipe marketing commence par un appel."
+    text="Un appel de 30 minutes pour voir où vous en êtes et ce qu'on peut faire."
+    cta={{ href: `${base}/contact/`, label: 'Réserver un appel' }}
+  />
 
-  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
-  <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
-    <span class="hp-avs hp-avs--sm" aria-hidden="true">
-      {membersIn(ORDER_STACK).map((m) => (
-        <TeamAvatar member={m} />
-      ))}
-    </span>
-    <span class="hp-pop__txt">Votre équipe marketing, <strong>sans l'embaucher</strong></span>
-    <a class="cta cta--sm" href={`${base}/contact/`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-  </aside>
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script du composant StickyBar -->
+  <StickyBar lead="Votre équipe marketing," />
 
 </Layout>
 
@@ -656,27 +620,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-block { --home-section-gap: 120px; }
   }
 
-  /* Jetons locaux, dérivés de la charte */
-  .hp-hero,
-  .hp-mq,
-  .hp-block,
-  .hp-pop {
-    --hp-ink: var(--text-primary);
-    --hp-dark: var(--bg-deep);
-    /* Petits textes, libellés et flèches posés sur le dégradé ou l'orange de la charte */
-    --hp-on-grad: var(--bg-deep);
-    --hp-light: var(--text-primary);
-    --hp-blush: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
-    --hp-pinklight: color-mix(in srgb, var(--woop-pink) 45%, var(--text-primary));
-    --hp-plum: color-mix(in srgb, var(--woop-pink) 20%, var(--bg-deep));
-    --hp-card: var(--bg-elevated);
-    --hp-line: color-mix(in srgb, var(--text-primary) 14%, transparent);
-    --hp-skel: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
-    --hp-skel-2: color-mix(in srgb, var(--text-muted) 12%, var(--text-primary));
-    --hp-shadow: color-mix(in srgb, var(--bg-deep) 55%, transparent);
-    --hp-grad-band: linear-gradient(120deg, var(--woop-orange) 25%, var(--woop-pink));
-  }
-
   /* Remplissages et traits SVG */
   .stop-orange { stop-color: var(--woop-orange); }
   .stop-pink { stop-color: var(--woop-pink); }
@@ -712,7 +655,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     height: 11px;
   }
 
-  /* ===== BOUTONS ===== */
+  /* ===== RANGÉES DE BOUTONS (boutons .cta : global.css, icône : CtaIcon) ===== */
   .hp-acts {
     display: flex;
     flex-wrap: wrap;
@@ -721,138 +664,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-acts--center { justify-content: center; }
 
-  /* Boutons : même comportement que ceux de /acquisition-client
-     (repos sans ombre, survol = soulèvement de 2 px + halo, transition 200 ms,
-     pas d'état :active particulier, contour au focus clavier). */
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    max-width: 100%;
-    padding: 7px 7px 7px 24px;
-    border-radius: var(--radius-button);
-    background: var(--woop-gradient);
-    color: var(--hp-on-grad);
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 1.2;
-    text-decoration: none;
-    transition: box-shadow 200ms ease, transform 200ms ease;
-  }
-
-  .cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
-  }
-
-  .cta:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
-    outline-offset: 3px;
-  }
-
-  /* Boutons posés sur un fond dégradé : halo et contour de focus du bandeau final de /acquisition-client */
-  .cta--light:hover {
-    box-shadow: 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
-  }
-
-  .cta--light:focus-visible,
-  .cta--on-grad:focus-visible {
-    outline-color: var(--text-primary);
-  }
-
-  .cta__ico {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--hp-light);
-    color: var(--hp-on-grad);
-  }
-
-  .cta__ico svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .cta--light {
-    background: var(--hp-light);
-    color: var(--hp-dark);
-  }
-
-  .cta--light .cta__ico,
-  .cta--line .cta__ico {
-    background: var(--woop-gradient);
-    color: var(--hp-on-grad);
-  }
-
-  .cta--line {
-    color: var(--text-primary);
-    background: transparent;
-    box-shadow: inset 0 0 0 1.5px var(--hp-line);
-  }
-
-  .cta--line:hover {
-    box-shadow: inset 0 0 0 1.5px var(--hp-line), 0 10px 40px rgba(230, 43, 127, 0.45);
-  }
-
-  .cta--on-grad {
-    color: var(--hp-on-grad);
-    box-shadow: inset 0 0 0 1.5px var(--hp-light);
-  }
-
-  .cta--on-grad:hover {
-    box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
-  }
-
-  .cta--on-grad .cta__ico {
-    background: var(--hp-light);
-    color: var(--hp-on-grad);
-  }
-
-  .cta--sm {
-    gap: 10px;
-    padding: 5px 5px 5px 18px;
-    font-size: 14px;
-  }
-
-  .cta--sm .cta__ico {
-    width: 34px;
-    height: 34px;
-  }
-
-  /* ===== TITRES DE SECTION ===== */
-  /* Titre puis sous-texte, l'un sous l'autre, alignés à gauche */
-  .hp-head {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--home-head-gap);
-    margin-bottom: var(--home-head-content);
-  }
-
-  /* Titres Ganky : blanc, un ou deux mots en dégradé (.gradient-accent) */
-  .hp-title {
-    margin-bottom: 0;
-    line-height: 1.02;
-    color: var(--text-primary);
-    text-wrap: balance;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-
-  /* « Marque + performance » : le + dans un cercle blanc plein, centré sur la hauteur du titre */
-  .hp-title--plus {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    column-gap: 0.28em;
-    row-gap: 0.08em;
-  }
-
+  /* « Marque + performance » (SectionHead plus) : le + dans un cercle blanc plein */
   .hp-plus {
     display: inline-flex;
     align-items: center;
@@ -872,22 +684,10 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     letter-spacing: 0;
   }
 
-  .hp-head__intro {
-    max-width: 760px;
-    color: var(--text-secondary);
-    font-size: 17px;
-    line-height: 1.6;
-  }
-
-  @media (min-width: 1024px) {
-    .hp-head__intro { font-size: 19px; }
-  }
-
   /* Pas de mot seul en fin de paragraphe */
   p,
   .hp-m__role,
-  .hp-pgrid span,
-  .hp-pop__txt {
+  .hp-pgrid span {
     text-wrap: pretty;
   }
 
@@ -1830,60 +1630,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   .hp-st--hot .hp-st__idx,
   .hp-st--hot p { color: var(--hp-on-grad); }
 
-  /* Bandeau « Nouveau » : fond dégradé de la charte, texte et pastille foncés */
-  .hp-teaser {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 22px;
-    padding: 14px 14px 14px 22px;
-    border-radius: 999px;
-    background: var(--woop-gradient);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.4;
-    color: var(--hp-on-grad);
-    transition: transform 250ms ease, box-shadow 250ms ease;
-  }
-
-  .hp-teaser:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
-  }
-
-  .hp-teaser:focus-visible {
-    outline: 2px solid var(--woop-pink);
-    outline-offset: 3px;
-  }
-
-  .hp-teaser strong { color: var(--hp-on-grad); }
-
-  .hp-teaser__dot {
-    flex: none;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--hp-on-grad);
-  }
-
-  .hp-go {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    margin-left: auto;
-    border-radius: 50%;
-    background: var(--text-primary);
-    color: var(--hp-on-grad);
-    transition: transform 250ms ease;
-  }
-
-  .hp-go svg { width: 18px; height: 18px; }
-
-  .hp-teaser:hover .hp-go { transform: translateX(3px); }
-
   /* ===== 5. UNE ÉQUIPE, SANS EMBAUCHE ===== */
   .hp-cmp {
     display: grid;
@@ -2338,8 +2084,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
   .hp-m:hover { transform: translateY(-5px); }
 
-  .hp-m__ph,
-  .hp-avs > span {
+  .hp-m__ph {
     position: relative;
     overflow: hidden;
     flex: none;
@@ -2359,8 +2104,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-m__ph { width: 200px; height: 200px; }
   }
 
-  .hp-m__ph img,
-  .hp-avs img {
+  .hp-m__ph img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -2370,8 +2114,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   }
 
   /* Cadrage propre à une photo (objectPosition / zoom dans les données de l'équipe) */
-  .hp-m__ph.is-framed img,
-  .hp-avs .is-framed img {
+  .hp-m__ph.is-framed img {
     object-position: var(--obj-pos, center);
     transform: scale(var(--zoom, 1));
     transform-origin: var(--obj-pos, center);
@@ -2459,50 +2202,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     color: var(--hp-on-grad);
   }
 
-  .hp-avs {
-    display: flex;
-  }
-
-  .hp-avs > span {
-    width: 62px;
-    height: 62px;
-    margin-left: -14px;
-    box-shadow: 0 0 0 4px var(--woop-orange);
-  }
-
-  .hp-avs > span:first-child { margin-left: 0; }
-
-  .hp-avs--final {
-    justify-content: center;
-    margin-bottom: 26px;
-  }
-
-  /* 4 photos : plus petites sur téléphone pour tenir dans le bandeau sans déborder */
-  .hp-avs--final > span {
-    width: 80px;
-    height: 80px;
-    margin-left: -18px;
-    box-shadow: 0 0 0 4px var(--text-primary);
-  }
-
-  @media (max-width: 359px) {
-    .hp-avs--final > span {
-      width: 68px;
-      height: 68px;
-      margin-left: -16px;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .hp-avs--final > span {
-      width: 104px;
-      height: 104px;
-      margin-left: -22px;
-    }
-  }
-
-  .hp-avs--final > span:first-child { margin-left: 0; }
-
   .hp-team__more {
     display: flex;
     justify-content: center;
@@ -2534,28 +2233,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     outline: 2px solid var(--woop-pink);
     outline-offset: 3px;
     border-radius: 4px;
-  }
-
-  /* 4 photos : chevauchement de 25 % du diamètre au maximum, pour que chaque visage
-     reste visible aux trois quarts (36 px, chevauchement de 9 px) */
-  .hp-avs--sm > span {
-    width: 36px;
-    height: 36px;
-    margin-left: -9px;
-    box-shadow: 0 0 0 3px var(--bg-elevated);
-  }
-
-  /* Vers 360 px : photos un peu plus petites (même proportion de chevauchement)
-     pour que le bouton reste entier */
-  @media (max-width: 374px) {
-    .hp-avs--sm > span { width: 34px; height: 34px; margin-left: -8px; }
-  }
-
-  /* Très petits écrans : photos et espacements réduits pour que le bouton reste entier */
-  @media (max-width: 359px) {
-    .hp-pop[data-hp-pop] { gap: 8px; }
-    .hp-avs--sm > span { width: 25px; height: 25px; margin-left: -6px; }
-    .hp-pop .cta { padding-left: 14px; }
   }
 
   /* ===== 10. TÉMOIGNAGES ===== */
@@ -2749,118 +2426,6 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     color: var(--text-secondary);
   }
 
-  /* ===== 11. BANDEAU FINAL ===== */
-  .hp-final {
-    padding: 52px 22px;
-    border-radius: 28px;
-    background: var(--hp-grad-band);
-    text-align: center;
-  }
-
-  @media (min-width: 768px) {
-    .hp-final { padding: 80px 40px; border-radius: 40px; }
-  }
-
-  .hp-final h2 {
-    max-width: 900px;
-    margin: 0 auto;
-    font-size: 34px;
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    text-wrap: balance;
-  }
-
-  @media (min-width: 768px) {
-    .hp-final h2 { font-size: 46px; }
-  }
-
-  @media (min-width: 1280px) {
-    .hp-final h2 { font-size: 56px; }
-  }
-
-  .hp-final p {
-    margin: 18px auto 36px;
-    max-width: 620px;
-    font-size: 18px;
-    line-height: 1.5;
-    color: var(--hp-on-grad);
-  }
-
-  /* ===== BANDEAU COLLANT ===== */
-  .hp-pop {
-    --pop-left: 12px;
-    --pop-right: 12px;
-    position: fixed;
-    left: var(--pop-left);
-    right: var(--pop-right);
-    bottom: 12px;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 6px 6px 6px 10px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    box-shadow:
-      inset 0 0 0 1px rgba(230, 43, 127, 0.45),
-      0 20px 50px var(--hp-shadow),
-      0 0 40px rgba(230, 43, 127, 0.2);
-    transform: translateY(calc(100% + 40px));
-    visibility: hidden;
-    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s linear 600ms;
-  }
-
-  .hp-pop.is-shown {
-    transform: none;
-    visibility: visible;
-    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s;
-  }
-
-  .hp-pop__txt {
-    display: none;
-    font-size: 15px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
-
-  .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
-
-  /* Le bouton garde toujours son texte sur une ligne : c'est le texte de la barre qui passe à la ligne */
-  .hp-pop .cta { flex: none; white-space: nowrap; }
-
-  @media (min-width: 520px) {
-    .hp-pop__txt {
-      display: block;
-      flex: 1 1 auto;
-      min-width: 0;
-      font-size: 13px;
-      line-height: 1.3;
-      white-space: normal;
-    }
-  }
-
-  @media (min-width: 720px) {
-    .hp-pop {
-      left: 50%;
-      right: auto;
-      bottom: 20px;
-      gap: 16px;
-      /* Largeur du contenu : sans cela, left: 50% limite la barre à la moitié de l'écran
-         et le bouton passe sur 2 lignes quand le texte est long */
-      width: max-content;
-      max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
-      padding: 8px 8px 8px 12px;
-      transform: translate(-50%, calc(100% + 40px));
-    }
-    .hp-pop.is-shown { transform: translate(-50%, 0); }
-    .hp-pop__txt { display: inline; flex: 0 1 auto; min-width: 0; font-size: 15px; white-space: normal; }
-  }
-
   /* ===== MOUVEMENT RÉDUIT ===== */
   @media (prefers-reduced-motion: reduce) {
     .hp-mq__track { animation: none; width: auto; }
@@ -2868,22 +2433,16 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-mq__list--dup { display: none; }
     .hp-mq { -webkit-mask: none; mask: none; }
 
-    .cta,
     .hp-tile,
     .hp-ico,
     .hp-s,
     .hp-m,
     .hp-tcar__track,
     .hp-tcar__nav,
-    .hp-tcard__paragraphs,
-    .hp-pop,
-    .hp-pop.is-shown { transition: none; }
+    .hp-tcard__paragraphs { transition: none; }
 
-    .cta:hover,
     .hp-tile--link:hover,
     .hp-tile--link:hover .hp-tile__go,
-    .hp-teaser:hover,
-    .hp-teaser:hover .hp-go,
     .hp-s:hover,
     .hp-m:hover,
     .hp-tcar__nav:hover,
@@ -3122,92 +2681,3 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
   })();
 </script>
 
-<script>
-  // Bandeau collant : visible une fois le hero dépassé, masqué dès que le
-  // bandeau final entre à l'écran (et au-delà). Il ne recouvre jamais la
-  // bannière de consentement CookieYes : il se retire tant qu'elle (ou sa
-  // fenêtre de préférences) est affichée, et s'écarte du bouton flottant
-  // « préférences » de CookieYes s'il est présent dans le bas de l'écran.
-  (function () {
-    const pop = document.querySelector<HTMLElement>('[data-hp-pop]');
-    const hero = document.querySelector<HTMLElement>('[data-hp-hero]');
-    const finalBand = document.querySelector<HTMLElement>('[data-hp-final]');
-    if (!pop || !hero || !finalBand) return;
-
-    const isShown = (el: Element | null): el is HTMLElement => {
-      if (!el) return false;
-      const r = (el as HTMLElement).getBoundingClientRect();
-      if (r.width === 0 || r.height === 0) return false;
-      const cs = window.getComputedStyle(el);
-      return cs.display !== 'none' && cs.visibility !== 'hidden' && Number(cs.opacity) > 0;
-    };
-
-    // Bannière ou fenêtre de préférences CookieYes ouverte.
-    const consentOpen = () => {
-      const banner = document.querySelector('.cky-consent-container');
-      if (banner && !banner.classList.contains('cky-hide') && isShown(banner)) return true;
-      const modal = document.querySelector('.cky-modal.cky-modal-open');
-      if (modal && isShown(modal)) return true;
-      return false;
-    };
-
-    let lastLeft = 12;
-    let lastRight = 12;
-
-    // Bouton flottant CookieYes : on réserve sa place sur le côté où il se trouve.
-    const avoidRevisit = () => {
-      const btn = document.querySelector('.cky-btn-revisit-wrapper');
-      let left = 12;
-      let right = 12;
-      if (btn && isShown(btn)) {
-        const r = btn.getBoundingClientRect();
-        if (r.bottom > window.innerHeight - 120) {
-          if (r.left + r.width / 2 < window.innerWidth / 2) left = Math.max(left, Math.ceil(r.right) + 10);
-          else right = Math.max(right, Math.ceil(window.innerWidth - r.left) + 10);
-        }
-      }
-      if (left !== lastLeft) pop.style.setProperty('--pop-left', `${left}px`);
-      if (right !== lastRight) pop.style.setProperty('--pop-right', `${right}px`);
-      lastLeft = left;
-      lastRight = right;
-    };
-
-    let shown = false;
-    let ticking = false;
-
-    const update = () => {
-      ticking = false;
-      const vh = window.innerHeight;
-      const pastHero = hero.getBoundingClientRect().bottom < 0;
-      const finalReached = finalBand.getBoundingClientRect().top < vh;
-      const next = pastHero && !finalReached && !consentOpen();
-      avoidRevisit();
-      if (next === shown) return;
-      shown = next;
-      pop.classList.toggle('is-shown', shown);
-      if (shown) pop.removeAttribute('inert');
-      else pop.setAttribute('inert', '');
-    };
-
-    const schedule = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(update);
-    };
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    document.addEventListener('cookieyes_banner_load', schedule);
-    document.addEventListener('cookieyes_consent_update', schedule);
-
-    // CookieYes insère et masque ses éléments par classes : on suit ces changements.
-    new MutationObserver(schedule).observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    update();
-  })();
-</script>

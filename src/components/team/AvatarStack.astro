@@ -1,0 +1,115 @@
+---
+// Rangée de photos rondes qui se chevauchent : bandeau final (size="final") et barre collante
+// (size="sm"). Ordre par défaut : ORDER_STACK (chaque photo passe au-dessus de celle de gauche,
+// donc la dernière est entièrement visible).
+import TeamAvatar from './TeamAvatar.astro';
+import { membersIn, ORDER_STACK, type MemberKey } from '../../data/team';
+
+interface Props {
+  size: 'final' | 'sm';
+  order?: MemberKey[];
+}
+
+const { size, order = ORDER_STACK } = Astro.props;
+const members = membersIn(order);
+---
+{size === 'final' ? (
+  <div class="hp-avs hp-avs--final" aria-hidden="true">
+    {members.map((m) => (
+      <TeamAvatar member={m} />
+    ))}
+  </div>
+) : (
+  <span class="hp-avs hp-avs--sm" aria-hidden="true">
+    {members.map((m) => (
+      <TeamAvatar member={m} />
+    ))}
+  </span>
+)}
+
+<style>
+  .hp-avs { display: flex; }
+
+  .hp-avs > span {
+    position: relative;
+    overflow: hidden;
+    flex: none;
+    width: 62px;
+    height: 62px;
+    margin-left: -14px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    box-shadow: 0 0 0 4px var(--woop-orange);
+  }
+
+  .hp-avs > span:first-child { margin-left: 0; }
+
+  .hp-avs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 0;
+    transform: scale(1.55);
+    transform-origin: var(--fx, 50%) var(--fy, 30%);
+  }
+
+  /* Cadrage propre à une photo (src/data/team.ts : objectPosition / zoom) */
+  .hp-avs .is-framed img {
+    object-position: var(--obj-pos, center);
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--obj-pos, center);
+  }
+
+  /* ===== Bandeau final ===== */
+  .hp-avs--final {
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+
+  /* 4 photos : plus petites sur téléphone pour tenir dans le bandeau sans déborder */
+  .hp-avs--final > span {
+    width: 80px;
+    height: 80px;
+    margin-left: -18px;
+    box-shadow: 0 0 0 4px var(--text-primary);
+  }
+
+  @media (max-width: 359px) {
+    .hp-avs--final > span {
+      width: 68px;
+      height: 68px;
+      margin-left: -16px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hp-avs--final > span {
+      width: 104px;
+      height: 104px;
+      margin-left: -22px;
+    }
+  }
+
+  .hp-avs--final > span:first-child { margin-left: 0; }
+
+  /* ===== Barre collante =====
+     4 photos : chevauchement de 25 % du diamètre au maximum, pour que chaque visage
+     reste visible aux trois quarts (36 px, chevauchement de 9 px) */
+  .hp-avs--sm > span {
+    width: 36px;
+    height: 36px;
+    margin-left: -9px;
+    box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  /* Vers 360 px : photos un peu plus petites (même proportion de chevauchement)
+     pour que le bouton reste entier */
+  @media (max-width: 374px) {
+    .hp-avs--sm > span { width: 34px; height: 34px; margin-left: -8px; }
+  }
+
+  /* Très petits écrans : photos réduites pour que le bouton reste entier */
+  @media (max-width: 359px) {
+    .hp-avs--sm > span { width: 25px; height: 25px; margin-left: -6px; }
+  }
+</style>

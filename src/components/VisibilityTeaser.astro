@@ -1,0 +1,80 @@
+---
+// Bandeau « Nouveau : testez votre visibilité en 2 minutes », vers le Test de visibilité.
+// variant="equipe" : espacement plus grand au-dessus (page Équipe), classe eq-teaser.
+interface Props {
+  variant?: 'equipe';
+  /** Animation d'apparition (data-reveal) ; false pour aucune */
+  reveal?: 'up' | 'left' | 'right' | false;
+}
+
+const { variant, reveal = 'up' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<a class:list={['hp-teaser', { 'eq-teaser': variant === 'equipe' }]} href={`${base}/acquisition-client/`} data-reveal={reveal || undefined}>
+  <span class="hp-teaser__dot" aria-hidden="true"></span>
+  <span><strong>Nouveau&nbsp;:</strong> testez votre visibilité en 2 minutes</span>
+  <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+</a>
+
+<style>
+  .hp-teaser {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding: 14px 14px 14px 22px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--hp-on-grad);
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+
+  /* Page Équipe */
+  .hp-teaser.eq-teaser { margin-top: 34px; }
+
+  .hp-teaser:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
+  }
+
+  .hp-teaser:focus-visible {
+    outline: 2px solid var(--woop-pink);
+    outline-offset: 3px;
+  }
+
+  .hp-teaser strong { color: var(--hp-on-grad); }
+
+  .hp-teaser__dot {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--hp-on-grad);
+  }
+
+  .hp-go {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-left: auto;
+    border-radius: 50%;
+    background: var(--text-primary);
+    color: var(--hp-on-grad);
+    transition: transform 250ms ease;
+  }
+
+  .hp-go svg { width: 18px; height: 18px; }
+
+  .hp-teaser:hover .hp-go { transform: translateX(3px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hp-teaser:hover,
+    .hp-teaser:hover .hp-go { transform: none; }
+  }
+</style>

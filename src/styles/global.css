@@ -166,3 +166,180 @@ ul {
   white-space: nowrap;
   border: 0;
 }
+
+/* =====================================================================
+   BLOCS PARTAGÉS DES PAGES (accueil, Santé, RH, Équipe)
+   Classes globales : boutons .cta, carte vitrée .md-glass, lien discret
+   .link-inline. Les blocs plus complets sont des composants
+   (src/components : StickyBar, FinalBand, SectionHead…).
+   ===================================================================== */
+
+/* Jetons des pages, dérivés de la charte */
+.hp-hero,
+.hp-mq,
+.hp-block,
+.hp-pop {
+  --hp-ink: var(--text-primary);
+  --hp-dark: var(--bg-deep);
+  /* Petits textes, libellés et flèches posés sur le dégradé ou l'orange de la charte */
+  --hp-on-grad: var(--bg-deep);
+  --hp-light: var(--text-primary);
+  --hp-blush: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
+  --hp-pinklight: color-mix(in srgb, var(--woop-pink) 45%, var(--text-primary));
+  --hp-plum: color-mix(in srgb, var(--woop-pink) 20%, var(--bg-deep));
+  --hp-card: var(--bg-elevated);
+  --hp-line: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  --hp-skel: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
+  --hp-skel-2: color-mix(in srgb, var(--text-muted) 12%, var(--text-primary));
+  --hp-shadow: color-mix(in srgb, var(--bg-deep) 55%, transparent);
+  --hp-grad-band: linear-gradient(120deg, var(--woop-orange) 25%, var(--woop-pink));
+  /* Roses éclairci et foncé (surtitres, pastille du hero, pages de services et Équipe) */
+  --md-pink-soft: color-mix(in srgb, var(--woop-pink) 70%, var(--text-primary));
+  --md-pink-deep: color-mix(in srgb, var(--woop-pink) 80%, var(--bg-deep));
+}
+
+/* ----- Boutons .cta (icône : composant CtaIcon) ----- */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 100%;
+  padding: 7px 7px 7px 24px;
+  border-radius: var(--radius-button);
+  background: var(--woop-gradient);
+  color: var(--hp-on-grad);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
+}
+
+.cta:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+  outline-offset: 3px;
+}
+
+.cta--light:hover {
+  box-shadow: 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
+}
+
+.cta--light:focus-visible,
+.cta--on-grad:focus-visible {
+  outline-color: var(--text-primary);
+}
+
+.cta__ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--hp-light);
+  color: var(--hp-on-grad);
+}
+
+.cta__ico svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cta--light {
+  background: var(--hp-light);
+  color: var(--hp-dark);
+}
+
+.cta--light .cta__ico,
+.cta--line .cta__ico {
+  background: var(--woop-gradient);
+  color: var(--hp-on-grad);
+}
+
+.cta--line {
+  color: var(--text-primary);
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--hp-line);
+}
+
+.cta--line:hover {
+  box-shadow: inset 0 0 0 1.5px var(--hp-line), 0 10px 40px rgba(230, 43, 127, 0.45);
+}
+
+.cta--on-grad {
+  color: var(--hp-on-grad);
+  box-shadow: inset 0 0 0 1.5px var(--hp-light);
+}
+
+.cta--on-grad:hover {
+  box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
+}
+
+.cta--on-grad .cta__ico {
+  background: var(--hp-light);
+  color: var(--hp-on-grad);
+}
+
+.cta--sm {
+  gap: 10px;
+  padding: 5px 5px 5px 18px;
+  font-size: 14px;
+}
+
+.cta--sm .cta__ico {
+  width: 34px;
+  height: 34px;
+}
+
+/* ----- Cartes vitrées à filet dégradé (cartes, tuiles, bloc portrait, étapes) ----- */
+.md-glass {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--woop-pink) 8%, color-mix(in srgb, var(--bg-elevated) 80%, transparent)),
+    color-mix(in srgb, var(--bg-elevated) 75%, transparent)
+  );
+}
+
+.md-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(160deg, rgba(230, 43, 127, 0.4), color-mix(in srgb, var(--text-primary) 6%, transparent) 40%, rgba(250, 98, 68, 0.3));
+  -webkit-mask: linear-gradient(var(--bg-deep) 0 0) content-box, linear-gradient(var(--bg-deep) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ----- Lien discret dans un texte : même couleur et même graisse que le texte, souligné
+   en rose au survol et au clavier ----- */
+.link-inline {
+  color: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+.link-inline:hover,
+.link-inline:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: var(--woop-pink);
+  text-decoration-thickness: 1.5px;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+  .cta:hover { transform: none; }
+}
