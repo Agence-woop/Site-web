@@ -71,7 +71,8 @@ Le dossier `tools/regression/out/` est ignoré par git.
 ## Tolérance de lissage des captures
 
 Même sans aucun changement du site, Chromium lisse parfois de façon différente le bord des
-petites photos rondes réduites (l'avatar de l'auteur des articles, sur mobile) : 1 à 4 pixels
+petites photos rondes réduites (l'avatar de l'auteur des articles, sur mobile) ou le bord gauche
+du grand titre des articles (texte en dégradé, à 390 et 360 px) : 1 à 4 pixels
 avec un écart de **1 sur 255** sur un canal, invisible à l'œil. `compare.cjs` les signale
 comme « bruit de lissage » sans échec, tant qu'aucun pixel ne varie de plus de 2/255 et
 qu'il y en a au plus 50 par capture. Tout autre écart est un échec. Un vrai changement,
