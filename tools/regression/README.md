@@ -68,7 +68,8 @@ Le dossier `tools/regression/out/` est ignoré par git.
 - **Toutes les requêtes externes bloquées** : polices Google, CookieYes, GA4, Meta et
   Formspree. Les deux relevés sont donc faits dans les mêmes conditions. Les captures
   utilisent la police de repli au lieu d'Inter, ce qui ne gêne pas la comparaison.
-- Images chargées et décodées, défilement instantané, transitions coupées juste avant
+- Images chargées et décodées, défilement instantané, états liés au défilement (en-tête
+  « défilé ») recalculés une fois revenu en haut de page, transitions coupées juste avant
   chaque capture, **un contexte de navigateur neuf par page** (sinon le lissage de petites
   images réduites peut varier de quelques pixels).
 - Le HTML est comparé après neutralisation des identifiants techniques d'Astro
