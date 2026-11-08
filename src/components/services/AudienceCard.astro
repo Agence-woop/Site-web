@@ -1,0 +1,150 @@
+---
+// Carte « Pour qui ? » d'une page Services : illustration en haut, puis titre, ce que vous vivez
+// et ce qu'on change (avec une coche). Les cartes se placent dans la grille .md-prs de la page.
+//
+// Props
+// - kind : suffixe de la classe du visuel (md-pr__vis--{kind}), dont le fond est réglé par la page
+// - title, lived, change : textes de la carte
+// - reveal, step : apparition au défilement (data-reveal, data-reveal-step)
+// - wide : carte sur toute la largeur de la grille, illustration à côté du texte (dès 720 px)
+// Emplacement par défaut : contenu de l'illustration (propre à chaque page, stylé par la page).
+// Le conteneur du visuel porte aussi l'attribut de portée de la page (voir src/utils/scope.ts).
+import { parentScope } from '../../utils/scope';
+
+interface Props {
+  kind: string;
+  title: string;
+  lived: string;
+  change: string;
+  reveal?: 'left' | 'right' | 'up';
+  step?: string;
+  wide?: boolean;
+  [key: string]: unknown;
+}
+
+const { kind, title, lived, change, reveal, step, wide = false, ...rest } = Astro.props;
+const scope = parentScope(rest);
+---
+<article class:list={['md-pr', 'md-glass', { 'md-pr--wide': wide }]} data-reveal={reveal} data-reveal-step={step}>
+  <div class:list={['md-pr__vis', `md-pr__vis--${kind}`]} aria-hidden="true" {...scope}>
+    <slot />
+  </div>
+  <div class="md-pr__body">
+    <h3>{title}</h3>
+    <p class="md-pr__lived">{lived}</p>
+    <p class="md-pr__change">{change}</p>
+  </div>
+</article>
+
+<style>
+  .md-pr {
+    overflow: hidden;
+    border-radius: 28px;
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .md-pr:hover { transform: translateY(-5px); }
+
+  .md-pr__vis {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 190px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 621px) {
+    .md-pr__vis { height: 210px; }
+  }
+
+  /* Illustration (emplacement) : légèrement agrandie et inclinée au survol de la carte */
+  .md-pr__vis > :global(*) { transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+  .md-pr:hover .md-pr__vis > :global(*) { transform: scale(1.06) rotate(-2deg); }
+
+  .md-pr__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    /* Le titre ouvre la carte : même écart sous l'illustration dans toutes les cartes */
+    padding: 28px 24px 30px;
+  }
+
+  @media (min-width: 768px) {
+    .md-pr__body { padding: 30px 30px 32px; }
+  }
+
+  .md-pr__body h3 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .md-pr__body h3 { font-size: 24px; }
+  }
+
+  .md-pr__body p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    /* Pas de mot seul en fin de paragraphe */
+    text-wrap: pretty;
+  }
+
+  /* Ce qu'on change : coche dégradée, filet au-dessus */
+  .md-pr__body p.md-pr__change {
+    position: relative;
+    align-self: stretch;
+    margin-top: 4px;
+    padding: 14px 0 0 28px;
+    border-top: 1px solid var(--hp-line);
+    color: var(--text-primary);
+  }
+
+  .md-pr__change::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  /* Carte large : sur toute la largeur de la grille, illustration à côté du texte */
+  @media (min-width: 720px) {
+    .md-pr--wide {
+      grid-column: 1 / -1;
+      display: grid;
+      /* L'illustration a la largeur d'une carte de la rangée du dessus (gouttière de 22 px comprise) */
+      grid-template-columns: minmax(0, calc((100% - 22px) / 2)) minmax(0, 1fr);
+    }
+
+    .md-pr--wide .md-pr__vis {
+      height: auto;
+      min-height: 240px;
+    }
+
+    .md-pr--wide .md-pr__body { justify-content: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .md-pr,
+    .md-pr__vis > :global(*) { transition: none; }
+
+    .md-pr:hover,
+    .md-pr:hover .md-pr__vis > :global(*) { transform: none; }
+  }
+</style>

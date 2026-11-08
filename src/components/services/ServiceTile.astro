@@ -1,0 +1,282 @@
+---
+// Tuile de la grille « Nos services » d'une page Services. La grille (.md-svs) et la place de
+// chaque tuile (.md-sv--{kind}) restent réglées par la page.
+//
+// Props
+// - kind : suffixe de classe propre à la tuile (md-sv--{kind}), pour la placer dans la grille
+// - shape : feat (bandeau dégradé, pleine largeur, texte à gauche et illustration à droite),
+//   wide (2 colonnes, en-tête et texte à gauche, illustration à droite) ou sq (1 colonne)
+// - title ; text : un texte (un seul paragraphe) ou une liste de paragraphes
+// - badge : pastille au-dessus du titre (tuile feat seulement)
+// - reveal, step : apparition au défilement (data-reveal, data-reveal-step)
+// - href : toute la tuile devient un lien (survol, focus et chevron)
+// Emplacements
+// - icon : le SVG de l'icône (dans la pastille .md-xi)
+// - illustration : l'illustration (.md-mui pour wide et sq, .md-jy pour feat), propre à chaque
+//   page et stylée par la page
+// La tuile et son texte portent aussi l'attribut de portée de la page (voir src/utils/scope.ts) :
+// la page y règle la grille et les ajustements propres à une tuile (ordre du texte, etc.).
+import { parentScope } from '../../utils/scope';
+
+interface Props {
+  kind: string;
+  shape: 'feat' | 'wide' | 'sq';
+  title: string;
+  text: string | string[];
+  badge?: string;
+  reveal?: 'left' | 'right' | 'up';
+  step?: string;
+  href?: string;
+  [key: string]: unknown;
+}
+
+const { kind, shape, title, text, badge, reveal, step, href, ...rest } = Astro.props;
+const scope = parentScope(rest);
+const Tag = href ? 'a' : 'article';
+const feat = shape === 'feat';
+const lines = Array.isArray(text) ? text : null;
+---
+<Tag
+  href={href}
+  class:list={['md-sv', `md-sv--${shape}`, `md-sv--${kind}`, { 'md-glass': !feat, 'hp-tile--link': href }]}
+  data-reveal={reveal}
+  data-reveal-step={step}
+  {...scope}
+>
+  {href && (
+    <span class="hp-tile__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg></span>
+  )}
+  {feat ? (
+    <>
+      <div class="md-sv__txt">
+        <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true"><slot name="icon" /></span>
+        {badge && <span class="md-hs">{badge}</span>}
+        <h3>{title}</h3>
+        {lines ? lines.map((line) => <p>{line}</p>) : <p>{text}</p>}
+      </div>
+      <slot name="illustration" />
+    </>
+  ) : (
+    <>
+      <div class="md-sv__head">
+        <span class:list={['md-xi', { 'md-xi--w': feat }]} aria-hidden="true"><slot name="icon" /></span>
+        <h3>{title}</h3>
+      </div>
+      {lines ? (
+        <div class="md-sv__text" {...scope}>
+          {lines.map((line) => <p>{line}</p>)}
+        </div>
+      ) : (
+        <p class="md-sv__text" {...scope}>{text}</p>
+      )}
+      <slot name="illustration" />
+    </>
+  )}
+</Tag>
+
+<style>
+  .md-sv {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px 24px;
+    border-radius: 26px;
+    overflow: hidden;
+    color: var(--hp-ink);
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
+  }
+
+  @media (min-width: 768px) {
+    .md-sv { padding: 30px; }
+  }
+
+  .md-sv h3 {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .md-sv p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    /* Pas de mot seul en fin de paragraphe */
+    text-wrap: pretty;
+  }
+
+  /* Tuiles foncées : icône et titre sur la même ligne (le titre peut passer sur 2 lignes) */
+  .md-sv__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Texte en plusieurs paragraphes */
+  div.md-sv__text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Tuile large : en-tête et texte à gauche, illustration à droite */
+  @media (min-width: 600px) {
+    .md-sv--wide {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: 1fr auto auto 1fr;
+      grid-template-areas:
+        '. ill'
+        'head ill'
+        'text ill'
+        '. ill';
+      column-gap: 28px;
+      row-gap: 0;
+    }
+
+    .md-sv--wide .md-sv__head { grid-area: head; }
+
+    .md-sv--wide .md-sv__text { grid-area: text; margin-top: 16px; }
+
+    .md-sv.md-sv--wide :global(.md-mui) {
+      grid-area: ill;
+      align-self: center;
+      height: 150px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .md-sv--wide { column-gap: 36px; }
+
+    .md-sv.md-sv--wide :global(.md-mui) { height: 170px; }
+  }
+
+  /* Tuile-lien (href défini) : survol, focus et chevron, comme sur l'accueil */
+  .hp-tile--link { cursor: pointer; }
+
+  .hp-tile--link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px var(--hp-shadow), inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 15%, transparent);
+  }
+
+  .hp-tile--link:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 3px;
+  }
+
+  .hp-tile__go {
+    position: absolute;
+    top: 28px;
+    right: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px currentColor;
+    transition: transform 250ms ease, background 250ms ease;
+  }
+
+  .hp-tile__go svg { width: 18px; height: 18px; }
+
+  .hp-tile--link:hover .hp-tile__go {
+    transform: translateX(4px);
+    background: color-mix(in srgb, var(--text-primary) 18%, transparent);
+  }
+
+  /* Pastille de l'icône (SVG : emplacement icon) */
+  .md-xi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+    transition: transform 350ms ease;
+  }
+
+  .md-xi :global(svg) { width: 26px; height: 26px; }
+
+  .hp-tile--link:hover .md-xi { transform: rotate(-6deg) scale(1.06); }
+
+  /* Tuile dégradée, sur toute la largeur.
+     À l'horizontale dès la tablette : texte à gauche, illustration à droite. */
+  .md-sv--feat {
+    gap: 30px;
+    background: var(--woop-gradient);
+    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.25);
+  }
+
+  @media (min-width: 600px) {
+    .md-sv--feat {
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .md-sv--feat {
+      gap: 40px;
+      padding: 40px;
+    }
+  }
+
+  .md-sv__txt {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .md-sv--feat h3 {
+    margin-top: 6px;
+    font-size: 26px;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 768px) {
+    .md-sv--feat h3 { font-size: 30px; }
+  }
+
+  .md-sv--feat p {
+    max-width: 580px;
+    font-size: 16px;
+    color: var(--hp-on-grad);
+  }
+
+  .md-xi--w {
+    background: color-mix(in srgb, var(--text-primary) 22%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 40%, transparent);
+  }
+
+  /* Pastille au-dessus du titre (badge) */
+  .md-hs {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .md-sv,
+    .md-xi { transition: none; }
+
+    .hp-tile--link:hover,
+    .hp-tile--link:hover .hp-tile__go,
+    .hp-tile--link:hover .md-xi { transform: none; }
+  }
+</style>

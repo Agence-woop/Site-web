@@ -1,0 +1,198 @@
+---
+// Hero d'une page Services (sans data-reveal : le hero n'est jamais animé).
+//
+// Props
+// - pill : libellé de la pastille (« Santé & Médical »), texte simple
+// - sub : sous-titre ; strong : ligne en gras sous le sous-titre (textes simples, les apostrophes
+//   et l'espace insécable NB restent tels quels dans le HTML)
+// - primary : bouton principal { href, label } (flèche en diagonale)
+// - secondary : 2e bouton, en contour { href, label } (flèche vers la droite), par ex. #services
+// Emplacements
+// - title : contenu du h1, avec le mot en dégradé (<span class="gradient-accent hp-kw">…</span>)
+// - visual : illustration de droite (propre à chaque page, stylée par la page)
+// Script : anime le parcours du visuel s'il contient [data-md-flow] (étapes [data-md-flow-step],
+// liaisons [data-md-flow-link]) ; sans parcours, il ne fait rien.
+// La section porte aussi l'attribut de portée de la page (voir src/utils/scope.ts) : l'espacement
+// entre sections (.hp-hero + .hp-block, --home-section-gap) reste réglé par la page.
+import HeroPill from '../HeroPill.astro';
+import CtaIcon from '../CtaIcon.astro';
+import { text } from '../../utils/html';
+import { parentScope } from '../../utils/scope';
+
+interface Link {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  pill: string;
+  sub: string;
+  strong: string;
+  primary: Link;
+  secondary: Link;
+  [key: string]: unknown;
+}
+
+const { pill, sub, strong, primary, secondary, ...rest } = Astro.props;
+const scope = parentScope(rest);
+---
+<section class="hp-hero md-hero" data-hp-hero {...scope}>
+  <div class="container">
+    <div class="md-hero__text">
+      <HeroPill label={pill} />
+      <h1 class="md-hero__title"><slot name="title" /></h1>
+      <p class="md-hero__sub" set:html={text(sub)} />
+      <p class="md-hero__strong"><strong set:html={text(strong)} /></p>
+      <div class="hp-acts hp-acts--center md-hero__acts">
+        <a class="cta" href={primary.href}><Fragment set:html={text(primary.label)} /><CtaIcon /></a>
+        <a class="cta cta--line" href={secondary.href}><Fragment set:html={text(secondary.label)} /><CtaIcon dir="right" /></a>
+      </div>
+    </div>
+
+    <slot name="visual" />
+  </div>
+
+  <script>
+    // Script écrit dans la section : à l'extérieur, Astro le placerait entre le hero et la
+    // section suivante, et la règle d'espacement .hp-hero + .hp-block de la page ne s'appliquerait plus.
+    //
+    // Parcours du hero (reprise de la maquette) : les étapes s'allument l'une après
+    // l'autre (étape active soulevée, étapes passées allumées, liaisons allumées), puis tout
+    // reste allumé un instant avant de recommencer. Sans JavaScript ou avec moins d'animations :
+    // état final, tout est allumé et immobile.
+    (function () {
+      // Aucun parcours dans le visuel de la page : rien à faire.
+      const flow = document.querySelector<HTMLElement>('[data-md-flow]');
+      if (!flow) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const cards = Array.from(flow.querySelectorAll<HTMLElement>('[data-md-flow-step]'));
+      const links = Array.from(flow.querySelectorAll<HTMLElement>('[data-md-flow-link]'));
+      if (!cards.length) return;
+
+      flow.classList.add('is-live');
+      let i = 0;
+
+      const step = () => {
+        cards.forEach((el, k) => {
+          el.classList.toggle('is-act', k === i);
+          el.classList.toggle('is-done', k < i);
+        });
+        links.forEach((el, k) => el.classList.toggle('is-on', k < i));
+        i = (i + 1) % (cards.length + 1);
+        window.setTimeout(step, i === 0 ? 1400 : 1300);
+      };
+
+      window.setTimeout(step, 1400);
+    })();
+  </script>
+</section>
+
+<style>
+  .hp-hero {
+    position: relative;
+    padding: 40px 0 0;
+    overflow-x: clip;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero { padding: 64px 0 0; }
+  }
+
+  /* Halo rose derrière le titre */
+  .md-hero::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -60px;
+    width: 900px;
+    max-width: 140%;
+    height: 520px;
+    transform: translateX(-50%);
+    background: radial-gradient(ellipse, rgba(230, 43, 127, 0.22), transparent 65%);
+    pointer-events: none;
+  }
+
+  .md-hero .container { position: relative; }
+
+  .md-hero__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .md-hero__title {
+    max-width: 960px;
+    margin-top: 26px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 600px) {
+    .md-hero__title { font-size: 48px; }
+  }
+
+  @media (min-width: 1024px) {
+    .md-hero__title { font-size: 56px; }
+  }
+
+  @media (min-width: 1280px) {
+    .md-hero__title { font-size: 62px; }
+  }
+
+  /* Mot en dégradé du titre (emplacement title) */
+  .md-hero__title :global(.hp-kw) {
+    letter-spacing: 1px;
+    padding: 0 0.04em;
+  }
+
+  .md-hero__sub {
+    max-width: 680px;
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    /* Pas de mot seul en fin de paragraphe */
+    text-wrap: pretty;
+  }
+
+  /* Ordinateur : élargi pour tenir en 3 lignes au plus à 1440 px, sans dépasser le cadre du H1
+     (960 px). Mobile et tablette inchangés. */
+  @media (min-width: 1024px) {
+    .md-hero__sub {
+      max-width: 940px;
+      font-size: 18px;
+    }
+  }
+
+  .md-hero__strong {
+    margin-top: 14px;
+    font-size: 17px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .md-hero__strong strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  @media (min-width: 1024px) {
+    .md-hero__strong { font-size: 18px; }
+  }
+
+  .hp-acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hp-acts--center { justify-content: center; }
+
+  .md-hero__acts { margin-top: 32px; }
+</style>

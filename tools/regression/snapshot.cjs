@@ -20,28 +20,8 @@ const OUT = path.resolve(args.out || path.join(__dirname, 'out', 'snapshot'));
 const WIDTHS = args.widths ? String(args.widths).split(',').map(Number) : L.DEFAULT_WIDTHS;
 const STYLE_WIDTHS = args['style-widths'] ? String(args['style-widths']).split(',').map(Number) : L.STYLE_WIDTHS;
 
-// Propriétés relevées (mise en page, boîte, typographie, couleurs, effets, animations)
-const PROPS = [
-  'display', 'position', 'top', 'right', 'bottom', 'left', 'z-index', 'float', 'box-sizing',
-  'width', 'height', 'min-width', 'min-height', 'max-width', 'max-height', 'aspect-ratio',
-  'margin-top', 'margin-right', 'margin-bottom', 'margin-left', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-  'border-top-width', 'border-right-width', 'border-bottom-width', 'border-left-width', 'border-top-style', 'border-top-color',
-  'border-right-color', 'border-bottom-color', 'border-left-color', 'border-top-left-radius', 'border-top-right-radius',
-  'border-bottom-right-radius', 'border-bottom-left-radius', 'outline-style', 'outline-width', 'outline-color', 'outline-offset',
-  'flex-direction', 'flex-wrap', 'flex-grow', 'flex-shrink', 'flex-basis', 'order', 'justify-content', 'align-items', 'align-self',
-  'align-content', 'row-gap', 'column-gap', 'grid-template-columns', 'grid-template-rows', 'grid-template-areas', 'grid-column-start',
-  'grid-column-end', 'grid-row-start', 'grid-row-end', 'grid-auto-rows', 'grid-auto-flow', 'place-items',
-  'color', 'background-color', 'background-image', 'background-size', 'background-position', 'background-clip', '-webkit-background-clip',
-  '-webkit-text-fill-color', 'opacity', 'visibility', 'box-shadow', 'filter', 'backdrop-filter', 'mix-blend-mode',
-  'mask-image', '-webkit-mask-image', 'clip-path', 'transform', 'transform-origin', 'perspective', 'overflow-x', 'overflow-y',
-  'font-family', 'font-size', 'font-weight', 'font-style', 'line-height', 'letter-spacing', 'word-spacing', 'text-align',
-  'text-transform', 'text-decoration-line', 'text-decoration-color', 'text-decoration-thickness', 'text-underline-offset',
-  'text-wrap', 'white-space', 'word-break', 'overflow-wrap', 'text-overflow', '-webkit-line-clamp', 'list-style-type',
-  'vertical-align', 'object-fit', 'object-position', 'cursor', 'pointer-events', 'user-select', 'content',
-  'transition-property', 'transition-duration', 'transition-timing-function', 'transition-delay',
-  'animation-name', 'animation-duration', 'animation-timing-function', 'animation-delay', 'animation-iteration-count',
-  'animation-direction', 'animation-fill-mode', 'scroll-margin-top', 'fill', 'stroke', 'stroke-width', 'stroke-dasharray',
-];
+// Propriétés relevées : voir PROPS dans lib.cjs
+const PROPS = L.PROPS;
 
 /** HTML normalisé : identifiants de style d'Astro et empreintes des fichiers /_astro/ neutralisés. */
 function normalizeHtml(html) {
