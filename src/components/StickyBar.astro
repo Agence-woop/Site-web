@@ -1,0 +1,212 @@
+---
+// Barre collante « Réserver un appel » (bas d'écran), avec son script.
+// - Le script cherche [data-hp-pop] (cette barre), [data-hp-hero] (le hero de la page) et
+//   [data-hp-final] (le bandeau final, composant FinalBand) : la barre apparaît une fois le hero
+//   dépassé et disparaît dès que le bandeau final entre à l'écran, ou tant que la bannière
+//   CookieYes est ouverte.
+// - Hors data-reveal : elle est pilotée uniquement par ce script.
+// - Les textes sont des textes simples (les apostrophes restent telles quelles dans le HTML).
+import AvatarStack from './team/AvatarStack.astro';
+import CtaIcon from './CtaIcon.astro';
+import { text } from '../utils/html';
+import type { MemberKey } from '../data/team';
+
+interface Props {
+  /** Début du texte, avant la partie en gras (ex. « Votre équipe marketing santé, ») */
+  lead: string;
+  /** Partie en gras */
+  strong?: string;
+  /** Lien du bouton (avec le préfixe base) ; /contact/ par défaut */
+  href?: string;
+  /** Libellé du bouton, repris comme nom accessible de la barre */
+  label?: string;
+  /** Ordre des photos ; ORDER_STACK par défaut */
+  order?: MemberKey[];
+}
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { lead, strong = "sans l'embaucher", href = `${base}/contact/`, label = 'Réserver un appel', order } = Astro.props;
+---
+<aside class="hp-pop" aria-label={label} data-hp-pop inert>
+  <AvatarStack size="sm" order={order} />
+  <span class="hp-pop__txt"><Fragment set:html={text(lead)} /> <strong set:html={text(strong)} /></span>
+  <a class="cta cta--sm" href={href}><Fragment set:html={text(label)} /><CtaIcon /></a>
+</aside>
+
+<style>
+  /* Pas de mot seul en fin de ligne (déclaré avant les règles de white-space ci-dessous) */
+  .hp-pop__txt { text-wrap: pretty; }
+
+  /* Très petits écrans : espacements réduits pour que le bouton reste entier */
+  @media (max-width: 359px) {
+    .hp-pop[data-hp-pop] { gap: 8px; }
+    .hp-pop .cta { padding-left: 14px; }
+  }
+
+  .hp-pop {
+    --pop-left: 12px;
+    --pop-right: 12px;
+    position: fixed;
+    left: var(--pop-left);
+    right: var(--pop-right);
+    bottom: 12px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 6px 6px 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 43, 127, 0.45),
+      0 20px 50px var(--hp-shadow),
+      0 0 40px rgba(230, 43, 127, 0.2);
+    transform: translateY(calc(100% + 40px));
+    visibility: hidden;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s linear 600ms;
+  }
+
+  .hp-pop.is-shown {
+    transform: none;
+    visibility: visible;
+    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s;
+  }
+
+  .hp-pop__txt {
+    display: none;
+    font-size: 15px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
+
+  /* Le bouton garde toujours son texte sur une ligne : c'est le texte de la barre qui passe à la ligne */
+  .hp-pop .cta { flex: none; white-space: nowrap; }
+
+  @media (min-width: 520px) {
+    .hp-pop__txt {
+      display: block;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 13px;
+      line-height: 1.3;
+      white-space: normal;
+    }
+  }
+
+  @media (min-width: 720px) {
+    .hp-pop {
+      left: 50%;
+      right: auto;
+      bottom: 20px;
+      gap: 16px;
+      /* Largeur du contenu : sans cela, left: 50% limite la barre à la moitié de l'écran
+         et le bouton passe sur 2 lignes quand le texte est long */
+      width: max-content;
+      max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
+      padding: 8px 8px 8px 12px;
+      transform: translate(-50%, calc(100% + 40px));
+    }
+    .hp-pop.is-shown { transform: translate(-50%, 0); }
+    .hp-pop__txt { display: inline; flex: 0 1 auto; min-width: 0; font-size: 15px; white-space: normal; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hp-pop,
+    .hp-pop.is-shown { transition: none; }
+  }
+</style>
+
+<script>
+  // Barre collante : visible une fois le hero ([data-hp-hero]) dépassé, masquée dès que le
+  // bandeau final ([data-hp-final]) entre à l'écran (et au-delà). Elle ne recouvre jamais la
+  // bannière de consentement CookieYes : elle se retire tant que celle-ci (ou sa fenêtre de
+  // préférences) est affichée, et s'écarte du bouton flottant « préférences » de CookieYes
+  // s'il est présent dans le bas de l'écran.
+  (function () {
+    const pop = document.querySelector<HTMLElement>('[data-hp-pop]');
+    const hero = document.querySelector<HTMLElement>('[data-hp-hero]');
+    const finalBand = document.querySelector<HTMLElement>('[data-hp-final]');
+    if (!pop || !hero || !finalBand) return;
+
+    const isShown = (el: Element | null): el is HTMLElement => {
+      if (!el) return false;
+      const r = (el as HTMLElement).getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) return false;
+      const cs = window.getComputedStyle(el);
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && Number(cs.opacity) > 0;
+    };
+
+    // Bannière ou fenêtre de préférences CookieYes ouverte.
+    const consentOpen = () => {
+      const banner = document.querySelector('.cky-consent-container');
+      if (banner && !banner.classList.contains('cky-hide') && isShown(banner)) return true;
+      const modal = document.querySelector('.cky-modal.cky-modal-open');
+      if (modal && isShown(modal)) return true;
+      return false;
+    };
+
+    let lastLeft = 12;
+    let lastRight = 12;
+
+    // Bouton flottant CookieYes : on réserve sa place sur le côté où il se trouve.
+    const avoidRevisit = () => {
+      const btn = document.querySelector('.cky-btn-revisit-wrapper');
+      let left = 12;
+      let right = 12;
+      if (btn && isShown(btn)) {
+        const r = btn.getBoundingClientRect();
+        if (r.bottom > window.innerHeight - 120) {
+          if (r.left + r.width / 2 < window.innerWidth / 2) left = Math.max(left, Math.ceil(r.right) + 10);
+          else right = Math.max(right, Math.ceil(window.innerWidth - r.left) + 10);
+        }
+      }
+      if (left !== lastLeft) pop.style.setProperty('--pop-left', `${left}px`);
+      if (right !== lastRight) pop.style.setProperty('--pop-right', `${right}px`);
+      lastLeft = left;
+      lastRight = right;
+    };
+
+    let shown = false;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      const pastHero = hero.getBoundingClientRect().bottom < 0;
+      const finalReached = finalBand.getBoundingClientRect().top < vh;
+      const next = pastHero && !finalReached && !consentOpen();
+      avoidRevisit();
+      if (next === shown) return;
+      shown = next;
+      pop.classList.toggle('is-shown', shown);
+      if (shown) pop.removeAttribute('inert');
+      else pop.setAttribute('inert', '');
+    };
+
+    const schedule = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    document.addEventListener('cookieyes_banner_load', schedule);
+    document.addEventListener('cookieyes_consent_update', schedule);
+
+    // CookieYes insère et masque ses éléments par classes : on suit ces changements.
+    new MutationObserver(schedule).observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    update();
+  })();
+</script>

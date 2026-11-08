@@ -1,0 +1,42 @@
+---
+// Pastille rose du hero des pages de services et de l'Équipe (classe md-pill).
+// Le libellé est un texte simple (& écrit &amp;, apostrophes telles quelles).
+import { text } from '../utils/html';
+
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+<p class="md-pill"><i aria-hidden="true"></i><Fragment set:html={text(label)} /></p>
+
+<style>
+  /* Pas de mot seul en fin de paragraphe */
+  p { text-wrap: pretty; }
+
+  .md-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    max-width: 100%;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+    background: rgba(230, 43, 127, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.4);
+  }
+
+  .md-pill i {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--woop-pink);
+  }
+</style>

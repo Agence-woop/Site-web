@@ -1,8 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
-import TeamAvatar from '../components/team/TeamAvatar.astro';
-import { membersIn, ORDER_STACK } from '../data/team';
+import CtaIcon from '../components/CtaIcon.astro';
+import HeroPill from '../components/HeroPill.astro';
+import SectionHead from '../components/SectionHead.astro';
+import VisibilityTeaser from '../components/VisibilityTeaser.astro';
+import FinalBand from '../components/FinalBand.astro';
+import StickyBar from '../components/StickyBar.astro';
 import { NB } from '../utils/typo';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -166,13 +170,13 @@ const steps = [
   <section class="hp-hero md-hero" data-hp-hero>
     <div class="container">
       <div class="md-hero__text">
-        <p class="md-pill"><i aria-hidden="true"></i>Santé &amp; Médical</p>
+        <HeroPill label="Santé & Médical" />
         <h1 class="md-hero__title">Le marketing médical, pensé par quelqu'un qui a <span class="gradient-accent hp-kw">dirigé des cliniques privées au Québec.</span></h1>
         <p class="md-hero__sub">Stratégie, image de marque, acquisition de patients et expérience patient. Pour les cliniques privées, les cabinets dentaires, les centres médico-esthétiques et les professionnels de la santé qui veulent attirer les bons patients, et les fidéliser.</p>
         <p class="md-hero__strong"><strong>Votre équipe marketing santé, sans avoir à l'embaucher.</strong></p>
         <div class="hp-acts hp-acts--center md-hero__acts">
-          <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-          <a class="cta cta--line" href="#services">Nos services<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
+          <a class="cta" href={`${base}/contact/`}>Réserver un appel découverte<CtaIcon /></a>
+          <a class="cta cta--line" href="#services">Nos services<CtaIcon dir="right" /></a>
         </div>
       </div>
 
@@ -222,11 +226,7 @@ const steps = [
   <!-- 2. POUR QUI ? -->
   <section class="hp-block hp-sec" id="pour-qui" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <p class="md-over" data-reveal="left">01 · Pour qui{NB}?</p>
-        <h2 class="section-title hp-title" data-reveal="left">Vous vous <span class="gradient-accent">reconnaissez</span>{NB}?</h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Trouvez votre situation{NB}: d'abord ce que vous vivez, puis ce qu'on change pour vous.</p>
-      </div>
+      <SectionHead over={`01 · Pour qui${NB}?`} intro={`Trouvez votre situation${NB}: d'abord ce que vous vivez, puis ce qu'on change pour vous.`}>Vous vous <span class="gradient-accent">reconnaissez</span>{NB}?</SectionHead>
 
       <div class="md-prs">
         {profiles.map((p) => (
@@ -277,22 +277,14 @@ const steps = [
         ))}
       </div>
 
-      <a class="hp-teaser" href={`${base}/acquisition-client/`} data-reveal="up">
-        <span class="hp-teaser__dot" aria-hidden="true"></span>
-        <span><strong>Nouveau&nbsp;:</strong> testez votre visibilité en 2 minutes</span>
-        <span class="hp-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
-      </a>
+      <VisibilityTeaser />
     </div>
   </section>
 
   <!-- 3. NOS SERVICES (cible du bouton « Nos services ») -->
   <section class="hp-block hp-sec hp-sec--services" id="services" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <p class="md-over" data-reveal="left">02 · Nos services</p>
-        <h2 class="section-title hp-title" data-reveal="left">Une offre pensée pour le <span class="gradient-accent">secteur médical</span>.</h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">En clair{NB}: tout ce que ferait une équipe marketing dans vos murs, sans avoir à l'embaucher. Et elle connaît le milieu clinique.</p>
-      </div>
+      <SectionHead over="02 · Nos services" intro={`En clair${NB}: tout ce que ferait une équipe marketing dans vos murs, sans avoir à l'embaucher. Et elle connaît le milieu clinique.`}>Une offre pensée pour le <span class="gradient-accent">secteur médical</span>.</SectionHead>
 
       <div class="md-svs">
         {services.map((t) => {
@@ -387,7 +379,7 @@ const steps = [
       </div>
 
       <div class="md-svc-cta" data-reveal="up">
-        <a class="cta" href={`${base}/contact/`}>Échanger 30 minutes avec l'équipe<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+        <a class="cta" href={`${base}/contact/`}>Échanger 30 minutes avec l'équipe<CtaIcon /></a>
         <p class="hp-team__more">
           <a href={`${base}/blog/sante/`}>Lire nos articles sur le marketing santé <span aria-hidden="true">›</span></a>
         </p>
@@ -398,11 +390,7 @@ const steps = [
   <!-- 4. NOTRE DIFFÉRENCE -->
   <section class="hp-block hp-sec" id="difference" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <p class="md-over" data-reveal="left">03 · Notre différence</p>
-        <h2 class="section-title hp-title" data-reveal="left">Pensée par un <span class="gradient-accent">clinicien</span>.</h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Ce qui nous rend différents de toutes les autres agences.</p>
-      </div>
+      <SectionHead over="03 · Notre différence" intro="Ce qui nous rend différents de toutes les autres agences.">Pensée par un <span class="gradient-accent">clinicien</span>.</SectionHead>
 
       <div class="md-gau md-glass">
         <div class="md-gau__ph" data-reveal="left">
@@ -415,7 +403,7 @@ const steps = [
           <p>Elle nous donne aussi un réflexe que peu d'agences ont{NB}: connaître les règles qui encadrent votre profession. Pas de promesse abusive{NB}: chaque message respecte le code de déontologie de votre ordre.</p>
           <div class="md-gau__foot">
             <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span>Marketing conforme aux règles de votre ordre professionnel</span></p>
-            <a class="cta" href={`${base}/contact/?personne=gauthier`}>Parler à Gauthier<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
+            <a class="cta" href={`${base}/contact/?personne=gauthier`}>Parler à Gauthier<CtaIcon /></a>
           </div>
         </div>
       </div>
@@ -425,11 +413,7 @@ const steps = [
   <!-- 5. COMMENT ÇA SE PASSE -->
   <section class="hp-block hp-sec" data-reveal-clip>
     <div class="container">
-      <div class="hp-head">
-        <p class="md-over" data-reveal="left">04 · Comment ça se passe</p>
-        <h2 class="section-title hp-title" data-reveal="left">Simple et <span class="gradient-accent">sans engagement</span>.</h2>
-        <p class="hp-head__intro" data-reveal="left" data-reveal-step="1">Trois étapes, de notre premier échange au lancement de votre projet.</p>
-      </div>
+      <SectionHead over="04 · Comment ça se passe" intro="Trois étapes, de notre premier échange au lancement de votre projet.">Simple et <span class="gradient-accent">sans engagement</span>.</SectionHead>
 
       <ol class="md-steps">
         {steps.map((s) => (
@@ -444,34 +428,14 @@ const steps = [
   </section>
 
   <!-- 6. BANDEAU FINAL (identique à celui de l'accueil) -->
-  <section class="hp-block hp-block--last hp-sec--final" data-hp-final>
-    <div class="container">
-      <div class="hp-final" data-reveal="up">
-        <div class="hp-avs hp-avs--final" aria-hidden="true">
-          {membersIn(ORDER_STACK).map((m) => (
-            <TeamAvatar member={m} />
-          ))}
-        </div>
-        <h2>Envie de bâtir une clinique qui se démarque{NB}?</h2>
-        <p>Votre équipe marketing santé commence par un appel de 30 minutes.</p>
-        <div class="hp-acts hp-acts--center">
-          <a class="cta cta--light" href={`${base}/contact/`}>Parlons de votre clinique<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-          <a class="cta cta--line cta--on-grad" href="tel:+14388152295">(438) 815-2295<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <FinalBand
+    title={`Envie de bâtir une clinique qui se démarque${NB}?`}
+    text="Votre équipe marketing santé commence par un appel de 30 minutes."
+    cta={{ href: `${base}/contact/`, label: 'Parlons de votre clinique' }}
+  />
 
-  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script plus bas -->
-  <aside class="hp-pop" aria-label="Réserver un appel" data-hp-pop inert>
-    <span class="hp-avs hp-avs--sm" aria-hidden="true">
-      {membersIn(ORDER_STACK).map((m) => (
-        <TeamAvatar member={m} />
-      ))}
-    </span>
-    <span class="hp-pop__txt">Votre équipe marketing santé, <strong>sans l'embaucher</strong></span>
-    <a class="cta cta--sm" href={`${base}/contact/`}>Réserver un appel<span class="cta__ico" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg></span></a>
-  </aside>
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script du composant StickyBar -->
+  <StickyBar lead="Votre équipe marketing santé," />
 
 </Layout>
 
@@ -512,30 +476,7 @@ const steps = [
     .hp-block { --home-section-gap: 120px; }
   }
 
-  /* Jetons locaux, dérivés de la charte (mêmes valeurs que l'accueil) */
-  .hp-hero,
-  .hp-block,
-  .hp-pop {
-    --hp-ink: var(--text-primary);
-    --hp-dark: var(--bg-deep);
-    /* Petits textes, libellés et flèches posés sur le dégradé ou l'orange de la charte */
-    --hp-on-grad: var(--bg-deep);
-    --hp-light: var(--text-primary);
-    --hp-blush: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
-    --hp-pinklight: color-mix(in srgb, var(--woop-pink) 45%, var(--text-primary));
-    --hp-plum: color-mix(in srgb, var(--woop-pink) 20%, var(--bg-deep));
-    --hp-card: var(--bg-elevated);
-    --hp-line: color-mix(in srgb, var(--text-primary) 14%, transparent);
-    --hp-skel: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
-    --hp-skel-2: color-mix(in srgb, var(--text-muted) 12%, var(--text-primary));
-    --hp-shadow: color-mix(in srgb, var(--bg-deep) 55%, transparent);
-    --hp-grad-band: linear-gradient(120deg, var(--woop-orange) 25%, var(--woop-pink));
-    /* Propres à cette page */
-    --md-pink-soft: color-mix(in srgb, var(--woop-pink) 70%, var(--text-primary));
-    --md-pink-deep: color-mix(in srgb, var(--woop-pink) 80%, var(--bg-deep));
-  }
-
-  /* ===== BOUTONS (identiques à l'accueil) ===== */
+  /* ===== RANGÉES DE BOUTONS (boutons .cta : global.css, icône : CtaIcon) ===== */
   .hp-acts {
     display: flex;
     flex-wrap: wrap;
@@ -544,199 +485,9 @@ const steps = [
 
   .hp-acts--center { justify-content: center; }
 
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    max-width: 100%;
-    padding: 7px 7px 7px 24px;
-    border-radius: var(--radius-button);
-    background: var(--woop-gradient);
-    color: var(--hp-on-grad);
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 1.2;
-    text-decoration: none;
-    transition: box-shadow 200ms ease, transform 200ms ease;
-  }
-
-  .cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 40px rgba(230, 43, 127, 0.45);
-  }
-
-  .cta:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
-    outline-offset: 3px;
-  }
-
-  .cta--light:hover {
-    box-shadow: 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
-  }
-
-  .cta--light:focus-visible,
-  .cta--on-grad:focus-visible {
-    outline-color: var(--text-primary);
-  }
-
-  .cta__ico {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--hp-light);
-    color: var(--hp-on-grad);
-  }
-
-  .cta__ico svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .cta--light {
-    background: var(--hp-light);
-    color: var(--hp-dark);
-  }
-
-  .cta--light .cta__ico,
-  .cta--line .cta__ico {
-    background: var(--woop-gradient);
-    color: var(--hp-on-grad);
-  }
-
-  .cta--line {
-    color: var(--text-primary);
-    background: transparent;
-    box-shadow: inset 0 0 0 1.5px var(--hp-line);
-  }
-
-  .cta--line:hover {
-    box-shadow: inset 0 0 0 1.5px var(--hp-line), 0 10px 40px rgba(230, 43, 127, 0.45);
-  }
-
-  .cta--on-grad {
-    color: var(--hp-on-grad);
-    box-shadow: inset 0 0 0 1.5px var(--hp-light);
-  }
-
-  .cta--on-grad:hover {
-    box-shadow: inset 0 0 0 1.5px var(--hp-light), 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent);
-  }
-
-  .cta--on-grad .cta__ico {
-    background: var(--hp-light);
-    color: var(--hp-on-grad);
-  }
-
-  .cta--sm {
-    gap: 10px;
-    padding: 5px 5px 5px 18px;
-    font-size: 14px;
-  }
-
-  .cta--sm .cta__ico {
-    width: 34px;
-    height: 34px;
-  }
-
-  /* ===== TITRES DE SECTION (identiques à l'accueil) ===== */
-  .hp-head {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--home-head-gap);
-    margin-bottom: var(--home-head-content);
-  }
-
-  .hp-title {
-    margin-bottom: 0;
-    line-height: 1.02;
-    color: var(--text-primary);
-    text-wrap: balance;
-    overflow-wrap: break-word;
-    max-width: 100%;
-  }
-
-  .hp-head__intro {
-    max-width: 760px;
-    color: var(--text-secondary);
-    font-size: 17px;
-    line-height: 1.6;
-  }
-
-  @media (min-width: 1024px) {
-    .hp-head__intro { font-size: 19px; }
-  }
-
-  /* Surtitre numéroté (01 · Pour qui ?) : rose éclairci, comme l'accroche du hero de l'accueil */
-  .md-over {
-    margin-bottom: -4px;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--md-pink-soft);
-  }
-
   /* Pas de mot seul en fin de paragraphe */
-  p,
-  .hp-pop__txt {
+  p {
     text-wrap: pretty;
-  }
-
-  /* Pastille rose (hero) */
-  .md-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    max-width: 100%;
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--md-pink-soft);
-    background: rgba(230, 43, 127, 0.08);
-    box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.4);
-  }
-
-  .md-pill i {
-    flex: none;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--woop-pink);
-  }
-
-  /* Cartes vitrées à filet dégradé (cartes, tuiles, bloc Gauthier, étapes) */
-  .md-glass {
-    position: relative;
-    background: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--woop-pink) 8%, color-mix(in srgb, var(--bg-elevated) 80%, transparent)),
-      color-mix(in srgb, var(--bg-elevated) 75%, transparent)
-    );
-  }
-
-  .md-glass::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(160deg, rgba(230, 43, 127, 0.4), color-mix(in srgb, var(--text-primary) 6%, transparent) 40%, rgba(250, 98, 68, 0.3));
-    -webkit-mask: linear-gradient(var(--bg-deep) 0 0) content-box, linear-gradient(var(--bg-deep) 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
   }
 
   /* ===== SECTIONS ===== */
@@ -1516,60 +1267,6 @@ const steps = [
   .md-pbt svg { width: 14px; height: 14px; }
   .md-pbt i { display: block; width: 70px; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 70%, transparent); }
 
-  /* Bandeau « Nouveau » (identique à l'accueil) */
-  .hp-teaser {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 22px;
-    padding: 14px 14px 14px 22px;
-    border-radius: 999px;
-    background: var(--woop-gradient);
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.4;
-    color: var(--hp-on-grad);
-    transition: transform 250ms ease, box-shadow 250ms ease;
-  }
-
-  .hp-teaser:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 36px rgba(230, 43, 127, 0.4);
-  }
-
-  .hp-teaser:focus-visible {
-    outline: 2px solid var(--woop-pink);
-    outline-offset: 3px;
-  }
-
-  .hp-teaser strong { color: var(--hp-on-grad); }
-
-  .hp-teaser__dot {
-    flex: none;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--hp-on-grad);
-  }
-
-  .hp-go {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    margin-left: auto;
-    border-radius: 50%;
-    background: var(--text-primary);
-    color: var(--hp-on-grad);
-    transition: transform 250ms ease;
-  }
-
-  .hp-go svg { width: 18px; height: 18px; }
-
-  .hp-teaser:hover .hp-go { transform: translateX(3px); }
-
   /* ===== 3. NOS SERVICES ===== */
   /* Grille bento : 1 colonne sur téléphone, 2 sur tablette (600 à 1099 px), 3 sur ordinateur.
      L'ordre du HTML est l'ordre de lecture ; sur ordinateur, chaque tuile est placée explicitement. */
@@ -2320,202 +2017,6 @@ const steps = [
     color: var(--text-secondary);
   }
 
-  /* ===== 6. BANDEAU FINAL (identique à l'accueil) ===== */
-  .hp-final {
-    padding: 52px 22px;
-    border-radius: 28px;
-    background: var(--hp-grad-band);
-    text-align: center;
-  }
-
-  @media (min-width: 768px) {
-    .hp-final { padding: 80px 40px; border-radius: 40px; }
-  }
-
-  .hp-final h2 {
-    max-width: 900px;
-    margin: 0 auto;
-    font-size: 34px;
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    text-wrap: balance;
-  }
-
-  @media (min-width: 768px) {
-    .hp-final h2 { font-size: 46px; }
-  }
-
-  @media (min-width: 1280px) {
-    .hp-final h2 { font-size: 56px; }
-  }
-
-  .hp-final p {
-    margin: 18px auto 36px;
-    max-width: 620px;
-    font-size: 18px;
-    line-height: 1.5;
-    color: var(--hp-on-grad);
-  }
-
-  .hp-avs { display: flex; }
-
-  .hp-avs > span {
-    position: relative;
-    overflow: hidden;
-    flex: none;
-    width: 62px;
-    height: 62px;
-    margin-left: -14px;
-    border-radius: 50%;
-    background: var(--woop-gradient);
-    box-shadow: 0 0 0 4px var(--woop-orange);
-  }
-
-  .hp-avs > span:first-child { margin-left: 0; }
-
-  .hp-avs img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 50% 0;
-    transform: scale(1.55);
-    transform-origin: var(--fx, 50%) var(--fy, 30%);
-  }
-
-  .hp-avs .is-framed img {
-    object-position: var(--obj-pos, center);
-    transform: scale(var(--zoom, 1));
-    transform-origin: var(--obj-pos, center);
-  }
-
-  .hp-avs--final {
-    justify-content: center;
-    margin-bottom: 26px;
-  }
-
-  /* 4 photos : plus petites sur téléphone pour tenir dans le bandeau sans déborder */
-  .hp-avs--final > span {
-    width: 80px;
-    height: 80px;
-    margin-left: -18px;
-    box-shadow: 0 0 0 4px var(--text-primary);
-  }
-
-  @media (max-width: 359px) {
-    .hp-avs--final > span {
-      width: 68px;
-      height: 68px;
-      margin-left: -16px;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .hp-avs--final > span {
-      width: 104px;
-      height: 104px;
-      margin-left: -22px;
-    }
-  }
-
-  .hp-avs--final > span:first-child { margin-left: 0; }
-
-  /* 4 photos : chevauchement de 25 % du diamètre au maximum, pour que chaque visage
-     reste visible aux trois quarts (36 px, chevauchement de 9 px) */
-  .hp-avs--sm > span {
-    width: 36px;
-    height: 36px;
-    margin-left: -9px;
-    box-shadow: 0 0 0 3px var(--bg-elevated);
-  }
-
-  /* Vers 360 px : photos un peu plus petites (même proportion de chevauchement)
-     pour que le bouton reste entier */
-  @media (max-width: 374px) {
-    .hp-avs--sm > span { width: 34px; height: 34px; margin-left: -8px; }
-  }
-
-  /* Très petits écrans : photos et espacements réduits pour que le bouton reste entier */
-  @media (max-width: 359px) {
-    .hp-pop[data-hp-pop] { gap: 8px; }
-    .hp-avs--sm > span { width: 25px; height: 25px; margin-left: -6px; }
-    .hp-pop .cta { padding-left: 14px; }
-  }
-
-  /* ===== BANDEAU COLLANT (identique à l'accueil) ===== */
-  .hp-pop {
-    --pop-left: 12px;
-    --pop-right: 12px;
-    position: fixed;
-    left: var(--pop-left);
-    right: var(--pop-right);
-    bottom: 12px;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 6px 6px 6px 10px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    box-shadow:
-      inset 0 0 0 1px rgba(230, 43, 127, 0.45),
-      0 20px 50px var(--hp-shadow),
-      0 0 40px rgba(230, 43, 127, 0.2);
-    transform: translateY(calc(100% + 40px));
-    visibility: hidden;
-    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s linear 600ms;
-  }
-
-  .hp-pop.is-shown {
-    transform: none;
-    visibility: visible;
-    transition: transform 600ms cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0s;
-  }
-
-  .hp-pop__txt {
-    display: none;
-    font-size: 15px;
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
-
-  .hp-pop__txt strong { color: var(--text-primary); font-weight: 600; }
-
-  /* Le bouton garde toujours son texte sur une ligne : c'est le texte de la barre qui passe à la ligne */
-  .hp-pop .cta { flex: none; white-space: nowrap; }
-
-  @media (min-width: 520px) {
-    .hp-pop__txt {
-      display: block;
-      flex: 1 1 auto;
-      min-width: 0;
-      font-size: 13px;
-      line-height: 1.3;
-      white-space: normal;
-    }
-  }
-
-  @media (min-width: 720px) {
-    .hp-pop {
-      left: 50%;
-      right: auto;
-      bottom: 20px;
-      gap: 16px;
-      /* Largeur du contenu : sans cela, left: 50% limite la barre à la moitié de l'écran
-         et le bouton passe sur 2 lignes quand le texte est long */
-      width: max-content;
-      max-width: calc(100vw - 2 * max(var(--pop-left), var(--pop-right)));
-      padding: 8px 8px 8px 12px;
-      transform: translate(-50%, calc(100% + 40px));
-    }
-    .hp-pop.is-shown { transform: translate(-50%, 0); }
-    .hp-pop__txt { display: inline; flex: 0 1 auto; min-width: 0; font-size: 15px; white-space: normal; }
-  }
-
   /* ===== MOUVEMENT RÉDUIT ===== */
   @media (prefers-reduced-motion: reduce) {
     /* Parcours patient : état final, immobile */
@@ -2523,20 +2024,14 @@ const steps = [
     .md-xf,
     .md-flow__link { transition: none; }
 
-    .cta,
     .md-pr,
     .md-pr__vis > *,
     .md-sv,
-    .md-xi,
-    .hp-pop,
-    .hp-pop.is-shown { transition: none; }
+    .md-xi { transition: none; }
 
-    .cta:hover,
     .hp-tile--link:hover,
     .hp-tile--link:hover .hp-tile__go,
     .hp-tile--link:hover .md-xi,
-    .hp-teaser:hover,
-    .hp-teaser:hover .hp-go,
     .md-pr:hover,
     .md-pr:hover .md-pr__vis > * { transform: none; }
   }
@@ -2572,92 +2067,3 @@ const steps = [
   })();
 </script>
 
-<script>
-  // Bandeau collant (même script que la page d'accueil) : visible une fois le hero dépassé,
-  // masqué dès que le bandeau final entre à l'écran (et au-delà). Il ne recouvre jamais la
-  // bannière de consentement CookieYes : il se retire tant qu'elle (ou sa fenêtre de
-  // préférences) est affichée, et s'écarte du bouton flottant « préférences » de CookieYes
-  // s'il est présent dans le bas de l'écran.
-  (function () {
-    const pop = document.querySelector<HTMLElement>('[data-hp-pop]');
-    const hero = document.querySelector<HTMLElement>('[data-hp-hero]');
-    const finalBand = document.querySelector<HTMLElement>('[data-hp-final]');
-    if (!pop || !hero || !finalBand) return;
-
-    const isShown = (el: Element | null): el is HTMLElement => {
-      if (!el) return false;
-      const r = (el as HTMLElement).getBoundingClientRect();
-      if (r.width === 0 || r.height === 0) return false;
-      const cs = window.getComputedStyle(el);
-      return cs.display !== 'none' && cs.visibility !== 'hidden' && Number(cs.opacity) > 0;
-    };
-
-    // Bannière ou fenêtre de préférences CookieYes ouverte.
-    const consentOpen = () => {
-      const banner = document.querySelector('.cky-consent-container');
-      if (banner && !banner.classList.contains('cky-hide') && isShown(banner)) return true;
-      const modal = document.querySelector('.cky-modal.cky-modal-open');
-      if (modal && isShown(modal)) return true;
-      return false;
-    };
-
-    let lastLeft = 12;
-    let lastRight = 12;
-
-    // Bouton flottant CookieYes : on réserve sa place sur le côté où il se trouve.
-    const avoidRevisit = () => {
-      const btn = document.querySelector('.cky-btn-revisit-wrapper');
-      let left = 12;
-      let right = 12;
-      if (btn && isShown(btn)) {
-        const r = btn.getBoundingClientRect();
-        if (r.bottom > window.innerHeight - 120) {
-          if (r.left + r.width / 2 < window.innerWidth / 2) left = Math.max(left, Math.ceil(r.right) + 10);
-          else right = Math.max(right, Math.ceil(window.innerWidth - r.left) + 10);
-        }
-      }
-      if (left !== lastLeft) pop.style.setProperty('--pop-left', `${left}px`);
-      if (right !== lastRight) pop.style.setProperty('--pop-right', `${right}px`);
-      lastLeft = left;
-      lastRight = right;
-    };
-
-    let shown = false;
-    let ticking = false;
-
-    const update = () => {
-      ticking = false;
-      const vh = window.innerHeight;
-      const pastHero = hero.getBoundingClientRect().bottom < 0;
-      const finalReached = finalBand.getBoundingClientRect().top < vh;
-      const next = pastHero && !finalReached && !consentOpen();
-      avoidRevisit();
-      if (next === shown) return;
-      shown = next;
-      pop.classList.toggle('is-shown', shown);
-      if (shown) pop.removeAttribute('inert');
-      else pop.setAttribute('inert', '');
-    };
-
-    const schedule = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(update);
-    };
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    document.addEventListener('cookieyes_banner_load', schedule);
-    document.addEventListener('cookieyes_consent_update', schedule);
-
-    // CookieYes insère et masque ses éléments par classes : on suit ces changements.
-    new MutationObserver(schedule).observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-
-    update();
-  })();
-</script>

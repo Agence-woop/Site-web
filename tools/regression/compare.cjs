@@ -63,7 +63,10 @@ function compareHtmlAndMeta() {
   let same = 0;
   for (const f of pages) {
     if (!exists(NEW, 'html/' + f)) { fail(`${f} : page absente du nouveau relevé`); continue; }
-    const x = read(REF, 'html/' + f).toString(), y = read(NEW, 'html/' + f).toString();
+    // Attributs de portée d'Astro ignorés, y compris leur nombre : un élément d'un composant peut
+    // porter celui de la page (reposé par le composant) en plus du sien.
+    const noScope = (s) => s.replace(/ data-astro-cid/g, '');
+    const x = noScope(read(REF, 'html/' + f).toString()), y = noScope(read(NEW, 'html/' + f).toString());
     if (x === y) same++; else fail(`${f} : HTML différent (${firstDiff(x, y)})`);
     const m = f.replace(/\.html$/, '.json');
     const ma = JSON.parse(read(REF, 'meta/' + m)), mb = JSON.parse(read(NEW, 'meta/' + m));

@@ -61,7 +61,8 @@ Le dossier `tools/regression/out/` est ignoré par git.
   chaque capture, **un contexte de navigateur neuf par page** (sinon le lissage de petites
   images réduites peut varier de quelques pixels).
 - Le HTML est comparé après neutralisation des identifiants techniques d'Astro
-  (`data-astro-cid-*`) et des empreintes des fichiers `/_astro/*.css|js`, qui changent dès
+  (`data-astro-cid-*`, ignorés y compris leur nombre : un élément d'un composant peut porter
+  l'attribut de la page en plus du sien) et des empreintes des fichiers `/_astro/*.css|js`, qui changent dès
   que le CSS est réorganisé sans que le rendu change. Le JSON-LD, le title, les meta et la
   canonique sont comparés **octet par octet**.
 - Les styles calculés couvrent l'état normal des éléments ; les états au survol ou au focus
@@ -70,7 +71,8 @@ Le dossier `tools/regression/out/` est ignoré par git.
 ## Tolérance de lissage des captures
 
 Même sans aucun changement du site, Chromium lisse parfois de façon différente le bord des
-petites photos rondes réduites (l'avatar de l'auteur des articles, sur mobile) : 1 à 4 pixels
+petites photos rondes réduites (l'avatar de l'auteur des articles, sur mobile) ou le bord gauche
+du grand titre des articles (texte en dégradé, à 390 et 360 px) : 1 à 4 pixels
 avec un écart de **1 sur 255** sur un canal, invisible à l'œil. `compare.cjs` les signale
 comme « bruit de lissage » sans échec, tant qu'aucun pixel ne varie de plus de 2/255 et
 qu'il y en a au plus 50 par capture. Tout autre écart est un échec. Un vrai changement,

@@ -1,0 +1,105 @@
+---
+// Bandeau final « Réserver un appel » avec la rangée de photos de l'équipe.
+// - La section garde ses classes de page (hp-block hp-block--last hp-sec--final) : son espacement
+//   suit le rythme propre à chaque page, d'où l'attribut de portée de la page reposé sur la
+//   section et le conteneur (voir src/utils/scope.ts). Le contenu (.hp-final) est stylé ici.
+// - data-hp-final : repère lu par le script de la barre collante (StickyBar).
+// - Les textes sont des textes simples (les apostrophes restent telles quelles dans le HTML).
+import AvatarStack from './team/AvatarStack.astro';
+import CtaIcon from './CtaIcon.astro';
+import { text } from '../utils/html';
+import { parentScope } from '../utils/scope';
+import type { MemberKey } from '../data/team';
+
+interface Link {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  title: string;
+  text: string;
+  /** Bouton principal (lien avec le préfixe base) */
+  cta: Link;
+  /** Bouton téléphone ; (438) 815-2295 par défaut */
+  phone?: Link;
+  /** Ordre des photos ; ORDER_STACK par défaut */
+  order?: MemberKey[];
+  [key: string]: unknown;
+}
+
+const {
+  title,
+  text: lead,
+  cta,
+  phone = { href: 'tel:+14388152295', label: '(438) 815-2295' },
+  order,
+  ...rest
+} = Astro.props;
+const scope = parentScope(rest);
+---
+<section class="hp-block hp-block--last hp-sec--final" data-hp-final {...scope}>
+  <div class="container" {...scope}>
+    <div class="hp-final" data-reveal="up">
+      <AvatarStack size="final" order={order} />
+      <h2 set:html={text(title)} />
+      <p set:html={text(lead)} />
+      <div class="hp-acts hp-acts--center">
+        <a class="cta cta--light" href={cta.href}><Fragment set:html={text(cta.label)} /><CtaIcon /></a>
+        <a class="cta cta--line cta--on-grad" href={phone.href}><Fragment set:html={text(phone.label)} /><CtaIcon /></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Pas de mot seul en fin de paragraphe */
+  p { text-wrap: pretty; }
+
+  .hp-final {
+    padding: 52px 22px;
+    border-radius: 28px;
+    background: var(--hp-grad-band);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .hp-final { padding: 80px 40px; border-radius: 40px; }
+  }
+
+  .hp-final h2 {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .hp-final h2 { font-size: 46px; }
+  }
+
+  @media (min-width: 1280px) {
+    .hp-final h2 { font-size: 56px; }
+  }
+
+  .hp-final p {
+    margin: 18px auto 36px;
+    max-width: 620px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--hp-on-grad);
+  }
+
+  /* Boutons (mêmes règles que .hp-acts dans les pages) */
+  .hp-acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .hp-acts--center { justify-content: center; }
+</style>
