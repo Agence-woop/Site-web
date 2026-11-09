@@ -1,0 +1,66 @@
+---
+// Badge des blocs portrait (FounderPortrait : Santé, RH ; SpecialistCard : Publicité), à côté du
+// bouton « Parler à … ». Un seul style pour les 3 pages :
+// - pilule sombre, filet dégradé fin, texte blanc semi-gras (coins de 18 px sur téléphone,
+//   pilule entière dès 600 px) ;
+// - même hauteur que le bouton .cta à côté (54 px : 7 + 40 + 7) : padding vertical de 11 px
+//   (1 + 11 + 30 + 11 + 1) ; sur plusieurs lignes, jamais moins haut que le bouton ;
+// - icône dans un rond en dégradé (30 px).
+// Élément div (et non p) : les règles de paragraphe des blocs portrait ne s'y appliquent pas.
+//
+// Props
+// - text : texte du badge (texte simple, les apostrophes et NB restent tels quels dans le HTML)
+// Emplacement par défaut : le SVG de l'icône
+import { text as html } from '../../utils/html';
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+<div class="md-badge"><span class="md-badge__ico" aria-hidden="true"><slot /></span><span set:html={html(text)} /></div>
+
+<style>
+  .md-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 100%;
+    /* Hauteur du bouton .cta (54 px), même sur plusieurs lignes */
+    min-height: 54px;
+    padding: 11px 18px 11px 8px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background:
+      linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
+      var(--woop-gradient) border-box;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: left;
+    color: var(--text-primary);
+    /* Pas de mot seul en fin de ligne */
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 600px) {
+    .md-badge { border-radius: 999px; }
+  }
+
+  .md-badge__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
+  }
+
+  .md-badge__ico :global(svg) { width: 17px; height: 17px; }
+</style>

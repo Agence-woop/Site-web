@@ -15,7 +15,7 @@
 //   (des variables plutôt qu'une prop : un attribut style changerait le HTML de la page).
 // Le bloc porte aussi l'attribut de portée de la page (voir src/utils/scope.ts) pour ce cadrage.
 import CtaIcon from '../CtaIcon.astro';
-import { text } from '../../utils/html';
+import PortraitBadge from './PortraitBadge.astro';
 import { parentScope } from '../../utils/scope';
 import type { TeamMember } from '../../data/team';
 
@@ -36,7 +36,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <div class="md-gau__txt" data-reveal="right" data-reveal-step="1">
     <slot />
     <div class="md-gau__foot">
-      <p class="md-gau__badge"><span class="md-gau__badge-ico" aria-hidden="true"><slot name="badge-icon" /></span><span set:html={text(badge)} /></p>
+      <PortraitBadge text={badge}><slot name="badge-icon" /></PortraitBadge>
       <a class="cta" href={`${base}${member.contact}`}>Parler à {member.firstName}<CtaIcon /></a>
     </div>
   </div>
@@ -129,46 +129,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--md-pink-soft);
   }
 
-  /* Badge : pilule sombre, filet dégradé fin, texte blanc semi-gras */
-  .md-gau__txt .md-gau__badge {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-width: 100%;
-    padding: 8px 18px 8px 8px;
-    border: 1px solid transparent;
-    border-radius: 18px;
-    background:
-      linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
-      var(--woop-gradient) border-box;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.35;
-    text-align: left;
-    color: var(--text-primary);
-    /* Pas de mot seul en fin de ligne */
-    text-wrap: pretty;
-  }
-
-  @media (min-width: 600px) {
-    .md-gau__txt .md-gau__badge { border-radius: 999px; }
-  }
-
-  .md-gau__badge-ico {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    background: var(--woop-gradient);
-    color: var(--text-primary);
-    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
-  }
-
-  .md-gau__badge-ico :global(svg) { width: 17px; height: 17px; }
+  /* Badge : composant PortraitBadge (même style sur les 3 pages) */
 
   /* Badge à gauche, bouton « Parler à … » à droite, centrés verticalement.
      Téléphone : empilés, alignés à gauche. Le badge peut passer sur 2 lignes pour rester
@@ -194,7 +155,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     /* Base de 308 px (2 lignes) pour le calcul du retour à la ligne, puis le badge
        s'élargit jusqu'à sa largeur naturelle (1 ligne) quand la place le permet. */
-    .md-gau__foot .md-gau__badge {
+    .md-gau__foot :global(.md-badge) {
       flex: 1 1 308px;
       max-width: max-content;
     }

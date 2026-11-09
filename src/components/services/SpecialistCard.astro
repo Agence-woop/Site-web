@@ -12,7 +12,7 @@
 // - badge-icon : le SVG de l'icône du badge
 import TeamAvatar from '../team/TeamAvatar.astro';
 import CtaIcon from '../CtaIcon.astro';
-import { text } from '../../utils/html';
+import PortraitBadge from './PortraitBadge.astro';
 import type { TeamMember } from '../../data/team';
 
 interface Props {
@@ -31,7 +31,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <div class="md-spc__txt" data-reveal="right" data-reveal-step="1">
     <slot />
     <div class="md-spc__foot">
-      <p class="md-spc__badge"><span class="md-spc__badge-ico" aria-hidden="true"><slot name="badge-icon" /></span><span set:html={text(badge)} /></p>
+      <PortraitBadge text={badge}><slot name="badge-icon" /></PortraitBadge>
       <a class="cta" href={`${base}${member.contact}`}>Parler à {member.firstName}<CtaIcon /></a>
     </div>
   </div>
@@ -160,46 +160,5 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-top: 8px;
   }
 
-  /* Badge : même style que celui de FounderPortrait (« 03 · Notre différence » de Santé et RH) :
-     pilule sombre, filet dégradé fin, texte blanc semi-gras ; coins de 18 px sur téléphone,
-     pilule entière dès 600 px. */
-  .md-spc__txt .md-spc__badge {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-width: 100%;
-    padding: 8px 18px 8px 8px;
-    border: 1px solid transparent;
-    border-radius: 18px;
-    background:
-      linear-gradient(var(--bg-deep), var(--bg-deep)) padding-box,
-      var(--woop-gradient) border-box;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.35;
-    text-align: left;
-    color: var(--text-primary);
-    /* Pas de mot seul en fin de ligne */
-    text-wrap: pretty;
-  }
-
-  @media (min-width: 600px) {
-    .md-spc__txt .md-spc__badge { border-radius: 999px; }
-  }
-
-  .md-spc__badge-ico {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    background: var(--woop-gradient);
-    color: var(--text-primary);
-    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
-  }
-
-  .md-spc__badge-ico :global(svg) { width: 17px; height: 17px; }
+  /* Badge : composant PortraitBadge (même style que sur les pages Santé et RH) */
 </style>
