@@ -7,8 +7,9 @@ categoriePrincipale: "sante"
 thematiques: ["Marque employeur", "Recrutement", "Expérience employé"]
 auteur: "gauthier"
 datePublication: 2026-11-09
-imageEntete: "/images/blog/a-venir.webp"
-imageEnteteAlt: "Un poste de travail vide dans une clinique, signe d'une équipe incomplète faute de personnel."
+imageEntete: "/images/blog/marque-employeur-clinique-penurie-personnel.webp"
+imageEnteteAlt: "Deux cliniques voisines : l'une sombre que des employés quittent, l'autre éclairée où une équipe reste rassemblée."
+vignettePartage: "/images/blog/marque-employeur-clinique-penurie-personnel-og.jpg"
 brouillon: false
 ---
 
