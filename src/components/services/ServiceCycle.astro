@@ -13,9 +13,18 @@
 // - Liens : seules les cartes des pages en ligne (href défini dans src/data/services.ts) sont
 //   cliquables ; elles deviennent des liens d'elles-mêmes dès que leur page est publiée.
 // - « Service suivant » : affiché seulement quand la page du service suivant est en ligne.
+// - Flèches animées : au repos, flèches et ligne de retour grises. Quand le cycle est à l'écran,
+//   un remplissage en dégradé WOOP parcourt le cycle dans son sens, flèche après flèche : chaque
+//   segment se remplit pendant que le précédent se vide, et la pointe d'une flèche prend la
+//   couleur quand le remplissage l'atteint. Un tour complet dure --sc-loop (7,2 s).
+//   SVG (lignes tracées en pourcentage de leur boîte, pathLength 100) et stroke-dashoffset, sans
+//   bibliothèque. L'animation démarre quand le cycle est visible (IntersectionObserver), se met en
+//   pause hors de l'écran ; sans JavaScript ou avec prefers-reduced-motion, flèches grises
+//   statiques. Les dégradés ont des id fixes (sc-g-*) : un seul cycle par page.
 //
 // Props
 // - current : le service de la page
+// - over : surtitre (« L'écosystème » par défaut, par ex. « 08 · L'écosystème »)
 import SectionHead from '../SectionHead.astro';
 import CtaIcon from '../CtaIcon.astro';
 import { CYCLE, CYCLE_CORE, service, type ServiceKey, type Service } from '../../data/services';
@@ -23,9 +32,10 @@ import { NB } from '../../utils/typo';
 
 interface Props {
   current: ServiceKey;
+  over?: string;
 }
 
-const { current } = Astro.props;
+const { current, over = "L'écosystème" } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const core = service(CYCLE_CORE);
@@ -36,11 +46,21 @@ const next = at >= 0 ? service(CYCLE[(at + 1) % CYCLE.length]) : undefined;
 // Carte : lien si la page est en ligne (et n'est pas la page en cours), sinon simple bloc.
 const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}` : undefined);
 ---
-<SectionHead over="L'écosystème" intro={`L'ordre réel d'un patient${NB}: il vous découvre, il cherche, il réserve, il revient et il recommande. Votre image de marque nourrit chaque étape, et les avis relancent le cycle.`}>
+<SectionHead over={over} intro={`L'ordre réel d'un patient${NB}: il vous découvre, il cherche, il réserve, il revient et il recommande. Votre image de marque nourrit chaque étape, et les avis relancent le cycle.`}>
   Cinq services, <span class="gradient-accent">un seul cycle</span>.
 </SectionHead>
 
-<div class="sc" data-reveal="up">
+<div class="sc" data-sc data-reveal="up">
+  <!-- Dégradés WOOP dans le sens de chaque flèche (vers la droite, la gauche, le bas, le haut) -->
+  <svg class="sc-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="sc-g-r" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100%" y2="0"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
+      <linearGradient id="sc-g-l" gradientUnits="userSpaceOnUse" x1="100%" y1="0" x2="0" y2="0"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
+      <linearGradient id="sc-g-d" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100%"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
+      <linearGradient id="sc-g-u" gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
+    </defs>
+  </svg>
+
   {[core].map((s) => {
     const href = linkOf(s);
     const Tag = href ? 'a' : 'div';
@@ -70,11 +90,52 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
               </span>
             </Tag>
           </li>
-          {i < ring.length - 1 && <li class:list={['sc-arrow', `sc-a${i + 1}`]} aria-hidden="true"><i></i></li>}
+          {i < ring.length - 1 && (
+            <li class:list={['sc-arrow', `sc-a${i + 1}`]} aria-hidden="true">
+              <span class="sc-ln">
+                <svg class="sc-svg" focusable="false">
+                  {/* Horizontale (ordinateur, flèches du haut et du bas) : vers la droite en haut, vers la gauche en bas */}
+                  {i !== 1 && (
+                    <g class="sc-h">
+                      <line class="sc-base" x1={i === 0 ? '0' : '100%'} y1="50%" x2={i === 0 ? '100%' : '0'} y2="50%" />
+                      <line class="sc-fill" x1={i === 0 ? '0' : '100%'} y1="50%" x2={i === 0 ? '100%' : '0'} y2="50%" pathLength="100" stroke={i === 0 ? 'url(#sc-g-r)' : 'url(#sc-g-l)'} />
+                    </g>
+                  )}
+                  {/* Verticale vers le bas (téléphone et tablette ; flèche de droite sur ordinateur) */}
+                  <g class="sc-v">
+                    <line class="sc-base" x1="50%" y1="0" x2="50%" y2="100%" />
+                    <line class="sc-fill" x1="50%" y1="0" x2="50%" y2="100%" pathLength="100" stroke="url(#sc-g-d)" />
+                  </g>
+                </svg>
+                <i class="sc-head"></i>
+              </span>
+            </li>
+          )}
         </>
       );
     })}
-    <li class="sc-back"><span class="sc-back__line" aria-hidden="true"></span><span class="sc-back__lbl">Les avis relancent le cycle</span></li>
+    <li class="sc-back">
+      <span class="sc-ln" aria-hidden="true">
+        <svg class="sc-svg" focusable="false">
+          {/* Téléphone et tablette : crochet sur le côté, du dernier service (en bas) au premier (en haut) */}
+          <g class="sc-br">
+            <line class="sc-base" x1="100%" y1="100%" x2="0" y2="100%" />
+            <line class="sc-base" x1="0" y1="100%" x2="0" y2="0" />
+            <line class="sc-base" x1="0" y1="0" x2="100%" y2="0" />
+            <line class="sc-fill sc-fill--b" x1="100%" y1="100%" x2="0" y2="100%" pathLength="100" stroke="url(#sc-g-l)" />
+            <line class="sc-fill sc-fill--v" x1="0" y1="100%" x2="0" y2="0" pathLength="100" stroke="url(#sc-g-u)" />
+            <line class="sc-fill sc-fill--t" x1="0" y1="0" x2="100%" y2="0" pathLength="100" stroke="url(#sc-g-r)" />
+          </g>
+          {/* Ordinateur : verticale vers le haut, à gauche */}
+          <g class="sc-v">
+            <line class="sc-base" x1="50%" y1="100%" x2="50%" y2="0" />
+            <line class="sc-fill" x1="50%" y1="100%" x2="50%" y2="0" pathLength="100" stroke="url(#sc-g-u)" />
+          </g>
+        </svg>
+        <i class="sc-head"></i>
+      </span>
+      <span class="sc-back__lbl">Les avis relancent le cycle</span>
+    </li>
   </ol>
 </div>
 
@@ -83,6 +144,19 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     <a class="cta cta--line" href={`${base}${next.href}`}>Service suivant{NB}: {next.label}<CtaIcon dir="right" /></a>
   </p>
 )}
+
+<script>
+  // Flèches animées : démarrent quand le cycle est à l'écran, en pause hors de l'écran.
+  // Rien avec prefers-reduced-motion (flèches grises statiques), ni sans IntersectionObserver.
+  document.querySelectorAll<HTMLElement>('[data-sc]').forEach((sc) => {
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    sc.classList.add('is-live');
+    new IntersectionObserver((entries) => {
+      entries.forEach((e) => sc.classList.toggle('is-playing', e.isIntersecting));
+    }, { threshold: 0.25 }).observe(sc);
+  });
+</script>
 
 <style>
   /* ===== Téléphone et tablette : version verticale =====
@@ -211,66 +285,99 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     pointer-events: none;
   }
 
-  /* ----- Flèches entre deux cartes (verticales vers le bas sur téléphone et tablette) ----- */
-  .sc-arrow {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    height: 30px;
+  /* ----- Flèches (SVG) : base grise, remplissage en dégradé, pointe en chevron ----- */
+  .sc {
+    --sc-loop: 7.2s;
+    --sc-grey: color-mix(in srgb, var(--text-primary) 22%, transparent);
   }
 
-  .sc-arrow i,
-  .sc-back__line {
+  .sc-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .sc-stop-o { stop-color: var(--woop-orange); }
+  .sc-stop-p { stop-color: var(--woop-pink); }
+
+  .sc-arrow,
+  .sc-back {
+    position: relative;
+    list-style: none;
+  }
+
+  /* Boîte de tracé : les lignes du SVG y sont placées en pourcentage */
+  .sc-ln {
     position: absolute;
     display: block;
   }
 
-  .sc-arrow i {
-    top: 5px;
-    bottom: 5px;
-    left: 50%;
-    width: 2px;
-    margin-left: -1px;
-    background: linear-gradient(180deg, var(--woop-orange), var(--woop-pink));
+  .sc-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
   }
 
-  /* Pointe de flèche : chevron */
-  .sc-arrow i::after,
-  .sc-back__line::after {
-    content: '';
+  .sc-base,
+  .sc-fill {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: butt;
+  }
+
+  .sc-base { stroke: var(--sc-grey); }
+
+  /* Remplissage : invisible au repos (pointillé décalé d'une longueur entière) */
+  .sc-fill {
+    stroke-width: 2.5;
+    stroke-dasharray: 100 100;
+    stroke-dashoffset: 100;
+  }
+
+  /* Pointe de flèche : chevron, gris au repos */
+  .sc-head {
     position: absolute;
     width: 8px;
     height: 8px;
-    border-top: 2px solid var(--woop-pink);
-    border-right: 2px solid var(--woop-pink);
+    border-top: 2px solid var(--sc-grey);
+    border-right: 2px solid var(--sc-grey);
   }
 
-  .sc-arrow i::after {
+  /* Téléphone et tablette : flèches verticales vers le bas entre deux cartes */
+  .sc-arrow { height: 30px; }
+
+  .sc-arrow .sc-ln {
+    top: 5px;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+  }
+
+  .sc-arrow .sc-h { display: none; }
+
+  .sc-arrow .sc-head {
     left: 50%;
     bottom: 0;
     transform: translate(-50%, 0) rotate(135deg);
   }
 
-  /* ----- Flèche de retour : sur le côté, du dernier service au premier ----- */
-  .sc-back {
-    position: relative;
-    list-style: none;
-    margin: calc(var(--sc-card-h) / 2) 0;
-  }
+  /* Téléphone et tablette : flèche de retour en crochet, sur le côté */
+  .sc-back { margin: calc(var(--sc-card-h) / 2) 0; }
 
-  .sc-back__line {
+  .sc-back .sc-ln {
     top: 0;
     bottom: 0;
     right: 8px;
     width: 16px;
-    border: 2px solid var(--woop-pink);
-    border-right: 0;
-    border-radius: 12px 0 0 12px;
   }
 
-  /* Pointe vers la droite, en haut : retour au premier service */
-  .sc-back__line::after {
-    top: -1px;
+  .sc-back .sc-v { display: none; }
+
+  .sc-back .sc-head {
+    top: 0;
     right: -2px;
     transform: translateY(-50%) rotate(45deg);
   }
@@ -289,6 +396,66 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     line-height: 18px;
     letter-spacing: 0.04em;
     color: var(--md-pink-soft);
+  }
+
+  /* ----- Animation : un tour = --sc-loop, un quart par segment (a1, a2, a3, retour) -----
+     Chaque segment se remplit pendant son quart (0 → 25 %), puis se vide pendant le quart
+     suivant (25 → 50 %), pendant que le segment d'après se remplit. */
+  .sc-a1 { --sc-i: 0; }
+  .sc-a2 { --sc-i: 1; }
+  .sc-a3 { --sc-i: 2; }
+  .sc-back { --sc-i: 3; }
+
+  .sc.is-live .sc-fill,
+  .sc.is-live .sc-head {
+    animation-duration: var(--sc-loop);
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+    animation-delay: calc(var(--sc-i) * var(--sc-loop) / 4);
+    animation-play-state: paused;
+  }
+
+  .sc.is-live .sc-fill { animation-name: sc-seg; }
+  .sc.is-live .sc-head { animation-name: sc-head; animation-timing-function: linear; }
+
+  /* Crochet du retour (téléphone et tablette) : bas, montant, haut, l'un après l'autre */
+  .sc.is-live .sc-fill--b { animation-name: sc-seg-b; }
+  .sc.is-live .sc-fill--v { animation-name: sc-seg-v; }
+  .sc.is-live .sc-fill--t { animation-name: sc-seg-t; }
+
+  .sc.is-live.is-playing .sc-fill,
+  .sc.is-live.is-playing .sc-head { animation-play-state: running; }
+
+  @keyframes sc-seg {
+    0% { stroke-dashoffset: 100; }
+    25% { stroke-dashoffset: 0; }
+    50%, 100% { stroke-dashoffset: -100; }
+  }
+
+  @keyframes sc-seg-b {
+    0% { stroke-dashoffset: 100; }
+    2.5%, 25% { stroke-dashoffset: 0; }
+    27.5%, 100% { stroke-dashoffset: -100; }
+  }
+
+  @keyframes sc-seg-v {
+    0%, 2.5% { stroke-dashoffset: 100; }
+    22.5%, 27.5% { stroke-dashoffset: 0; }
+    47.5%, 100% { stroke-dashoffset: -100; }
+  }
+
+  @keyframes sc-seg-t {
+    0%, 22.5% { stroke-dashoffset: 100; }
+    25%, 47.5% { stroke-dashoffset: 0; }
+    50%, 100% { stroke-dashoffset: -100; }
+  }
+
+  /* La pointe prend la couleur quand le remplissage l'atteint, et la perd quand il est passé */
+  @keyframes sc-head {
+    0%, 22% { border-color: var(--sc-grey); }
+    25%, 47% { border-color: var(--woop-pink); }
+    50%, 100% { border-color: var(--sc-grey); }
   }
 
   /* ===== Ordinateur : cycle compact =====
@@ -324,28 +491,28 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 
     .sc-core::before { inset: -46px -36px; }
 
-    /* Flèches horizontales (en haut vers la droite, en bas vers la gauche) */
+    /* Flèches horizontales : en haut vers la droite, en bas vers la gauche */
     .sc-a1,
     .sc-a3 {
-      height: auto;
       align-self: center;
-      height: 2px;
-      margin: 0 18px;
+      height: 12px;
     }
 
-    .sc-a1 i,
-    .sc-a3 i {
+    .sc-a1 .sc-ln,
+    .sc-a3 .sc-ln {
       top: 0;
-      bottom: auto;
-      left: 0;
-      right: 0;
-      width: auto;
-      height: 2px;
-      margin: 0;
-      background: linear-gradient(90deg, var(--woop-orange), var(--woop-pink));
+      bottom: 0;
+      left: 18px;
+      right: 18px;
     }
 
-    .sc-a1 i::after {
+    .sc-a1 .sc-h,
+    .sc-a3 .sc-h { display: inline; }
+
+    .sc-a1 .sc-v,
+    .sc-a3 .sc-v { display: none; }
+
+    .sc-a1 .sc-head {
       left: auto;
       right: 0;
       bottom: auto;
@@ -353,9 +520,7 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
       transform: translate(0, -50%) rotate(45deg);
     }
 
-    .sc-a3 i { background: linear-gradient(270deg, var(--woop-orange), var(--woop-pink)); }
-
-    .sc-a3 i::after {
+    .sc-a3 .sc-head {
       left: 0;
       bottom: auto;
       top: 50%;
@@ -363,30 +528,27 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     }
 
     /* Flèche verticale à droite (vers le bas), sous la carte du haut */
-    .sc-a2 {
-      height: auto;
-      margin: 14px 0;
-    }
+    .sc-a2 { height: auto; }
 
-    .sc-a2 i { top: 0; bottom: 0; }
+    .sc-a2 .sc-ln {
+      top: 14px;
+      bottom: 14px;
+    }
 
     /* Flèche de retour à gauche (vers le haut), avec son étiquette à côté */
     .sc-back { margin: 14px 0; }
 
-    .sc-back__line {
-      top: 0;
-      bottom: 0;
-      left: 50%;
+    .sc-back .sc-ln {
       right: auto;
-      width: 2px;
-      margin-left: -1px;
-      border: 0;
-      border-radius: 0;
-      background: linear-gradient(0deg, var(--woop-orange), var(--woop-pink));
+      left: calc(50% - 6px);
+      width: 12px;
     }
 
-    .sc-back__line::after {
-      top: 0;
+    .sc-back .sc-br { display: none; }
+
+    .sc-back .sc-v { display: inline; }
+
+    .sc-back .sc-head {
       right: auto;
       left: 50%;
       transform: translate(-50%, 0) rotate(-45deg);
@@ -417,5 +579,9 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
   @media (prefers-reduced-motion: reduce) {
     .sc-card { transition: none; }
     .sc-card.is-link:hover { transform: none; }
+
+    /* Flèches grises statiques */
+    .sc .sc-fill,
+    .sc .sc-head { animation: none !important; }
   }
 </style>

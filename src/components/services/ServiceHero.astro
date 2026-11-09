@@ -7,6 +7,9 @@
 //   et l'espace insécable NB restent tels quels dans le HTML)
 // - primary : bouton principal { href, label } (flèche en diagonale)
 // - secondary : 2e bouton, en contour { href, label } (flèche vers la droite), par ex. #services
+// - layout : center (par défaut : texte centré, illustration en dessous, pages Santé et RH) ou
+//   split (2 colonnes dès 1024 px, comme le hero de l'accueil : texte aligné à gauche, illustration
+//   à droite ; sur téléphone et tablette, le texte puis l'illustration, texte aligné à gauche)
 // Emplacements
 // - title : contenu du h1, avec le mot en dégradé (<span class="gradient-accent hp-kw">…</span>)
 // - visual : illustration de droite (propre à chaque page, stylée par la page)
@@ -30,20 +33,22 @@ interface Props {
   strong: string;
   primary: Link;
   secondary: Link;
+  layout?: 'center' | 'split';
   [key: string]: unknown;
 }
 
-const { pill, sub, strong, primary, secondary, ...rest } = Astro.props;
+const { pill, sub, strong, primary, secondary, layout = 'center', ...rest } = Astro.props;
+const split = layout === 'split';
 const scope = parentScope(rest);
 ---
-<section class="hp-hero md-hero" data-hp-hero {...scope}>
+<section class:list={['hp-hero', 'md-hero', { 'md-hero--split': split }]} data-hp-hero {...scope}>
   <div class="container">
     <div class="md-hero__text">
       <HeroPill label={pill} />
       <h1 class="md-hero__title"><slot name="title" /></h1>
       <p class="md-hero__sub" set:html={text(sub)} />
       <p class="md-hero__strong"><strong set:html={text(strong)} /></p>
-      <div class="hp-acts hp-acts--center md-hero__acts">
+      <div class:list={['hp-acts', { 'hp-acts--center': !split }, 'md-hero__acts']}>
         <a class="cta" href={primary.href}><Fragment set:html={text(primary.label)} /><CtaIcon /></a>
         <a class="cta cta--line" href={secondary.href}><Fragment set:html={text(secondary.label)} /><CtaIcon dir="right" /></a>
       </div>
@@ -195,4 +200,70 @@ const scope = parentScope(rest);
   .hp-acts--center { justify-content: center; }
 
   .md-hero__acts { margin-top: 32px; }
+
+  /* ===== Variante split : 2 colonnes, comme le hero de l'accueil =====
+     Texte aligné à gauche, sur la marge du contenu ; illustration à droite dès 1024 px,
+     en dessous sur téléphone et tablette. */
+  .md-hero--split { padding-bottom: 48px; }
+
+  @media (min-width: 768px) {
+    .md-hero--split { padding-bottom: 72px; }
+  }
+
+  /* Halo derrière l'illustration plutôt que derrière le titre */
+  .md-hero--split::before {
+    left: auto;
+    right: -10%;
+    top: 0;
+    width: 760px;
+    transform: none;
+  }
+
+  .md-hero--split .container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .md-hero--split .container {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+      gap: 48px;
+    }
+  }
+
+  .md-hero--split .md-hero__text {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Titre lisible dans sa colonne : plus petit que le titre centré (pleine largeur) */
+  .md-hero--split .md-hero__title {
+    max-width: none;
+    font-size: 34px;
+    line-height: 1.1;
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 600px) {
+    .md-hero--split .md-hero__title { font-size: 44px; }
+  }
+
+  @media (min-width: 1024px) {
+    .md-hero--split .md-hero__title { font-size: 42px; }
+  }
+
+  @media (min-width: 1280px) {
+    .md-hero--split .md-hero__title { font-size: 50px; }
+  }
+
+  .md-hero--split .md-hero__sub,
+  .md-hero--split .md-hero__strong { max-width: 600px; }
+
+  @media (min-width: 1024px) {
+    .md-hero--split .md-hero__sub { font-size: 17px; }
+
+    .md-hero--split .md-hero__strong { font-size: 17px; }
+  }
 </style>
