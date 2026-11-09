@@ -89,7 +89,8 @@ const profiles: {
 ];
 
 // 02 · Nos services. Comme sur l'accueil : si `href` est défini, toute la tuile devient un lien
-// (effet au survol + chevron). Aucune tuile n'a de lien pour l'instant.
+// (effet au survol + chevron). Seule « Acquisition de patients » a un lien pour l'instant, vers la
+// page Publicité Google et Meta.
 // Ordre de lecture = ordre de la grille. Formats :
 // - feat : bandeau dégradé, pleine largeur ;
 // - wide : 2 colonnes, en-tête et texte à gauche, illustration à droite ;
@@ -120,6 +121,7 @@ const services: {
     title: 'Acquisition de patients',
     text: 'Campagnes Google et Meta, ciblage local précis, pages de conversion. On va chercher les patients dans votre rayon, là où ils cherchent déjà.',
     reveal: 'up',
+    href: `${base}/publicite-google-meta/`,
   },
   {
     key: 'brand',
@@ -357,7 +359,7 @@ const steps = [
     <div class="container">
       <SectionHead over="03 · Notre différence" intro="Ce qui nous rend différents de toutes les autres agences.">Pensée par un <span class="gradient-accent">clinicien</span>.</SectionHead>
 
-      <FounderPortrait member={team.gauthier} badge="Marketing conforme aux règles de votre ordre professionnel">
+      <FounderPortrait member={team.gauthier} badge="Marketing pensé selon les règles de votre ordre professionnel">
         <p class="md-gau__lead">Gauthier est infirmier clinicien de formation et détenteur d'un MBA. Il dirige aujourd'hui les opérations médicales dans l'aéromédical, expert des soins en communauté et en régions éloignées.</p>
         <p>Avant ça, il était directeur de cliniques privées, où il vivait au quotidien les défis que vous connaissez aujourd'hui{NB}: remplir l'agenda, structurer l'équipe, gérer la réputation, comprendre ce qui fait revenir un patient.</p>
         <p>Cette double expérience, la pratique clinique et la direction de clinique, change tout. Quand on conçoit votre stratégie, on ne devine pas vos problèmes{NB}: <strong>on les a déjà résolus.</strong> Aucune autre agence marketing au Québec ne peut en dire autant.</p>

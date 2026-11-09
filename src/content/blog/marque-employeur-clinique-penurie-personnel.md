@@ -53,7 +53,7 @@ Ensuite, et surtout, le salaire ne touche pas la cause de la plupart des départ
 
 C'est ici que le recrutement cesse d'être un problème de dotation pour devenir un problème de marque, et c'est la part que vous contrôlez vraiment.
 
-Une personne qui envisage un changement de clinique fait aujourd'hui ce que fait n'importe qui : elle vous cherche. Elle regarde votre site, votre page, vos publications. Elle lit vos avis, y compris ceux qui parlent de l'ambiance. Elle demande autour d'elle, parce que dans un milieu aussi petit que celui des cliniques, la réputation d'un employeur circule vite et franchement. Souvent, elle se fait une opinion de vous longtemps avant qu'un poste soit ouvert, exactement comme [les meilleurs candidats qui ne lisent jamais vos offres](/blog/candidat-passif-contenu-marque-employeur).
+Une personne qui envisage un changement de clinique fait aujourd'hui ce que fait n'importe qui : elle vous cherche. Elle regarde votre site, votre page, vos publications. Elle lit vos avis, y compris ceux qui parlent de l'ambiance. Elle demande autour d'elle, parce que dans un milieu aussi petit que celui des cliniques, la réputation d'un employeur circule vite et franchement. Souvent, elle se fait une opinion de vous longtemps avant qu'un poste soit ouvert, exactement comme [les meilleurs candidats qui ne lisent jamais vos offres](/blog/candidat-passif-contenu-marque-employeur/).
 
 Et voici ce qu'elle trouve, dans la quasi-totalité des cliniques : une image soignée, construite avec soin, mais entièrement destinée aux patients. Les services, les technologies, les horaires d'ouverture, le confort de la salle d'attente. Rien, nulle part, qui s'adresse à quelqu'un qui envisage d'y travailler. Vous avez investi des années à bâtir une marque pour ceux que vous soignez, et à peu près rien pour ceux qui soignent avec vous.
 
@@ -69,7 +69,7 @@ Dites ensuite honnêtement comment on travaille chez vous. Pas « équipe dynami
 
 Donnez-lui une place dans votre communication. Une section carrière sur votre site, qui existe même sans poste ouvert. Des publications qui montrent l'équipe, son ancienneté, ce qu'elle aime de son travail. La même identité visuelle et la même voix que pour vos patients, parce qu'une clinique qui se présente d'une façon aux patients et d'une autre aux candidats n'inspire confiance à ni l'un ni l'autre. La cohérence sur tous les points de contact est ce qui rend une marque crédible, côté employeur comme côté soins.
 
-Écrivez vos offres comme une proposition, pas comme une liste d'exigences. [Une offre d'emploi est une publicité](/blog/offre-emploi-publicite-candidat), et une liste de critères n'a jamais convaincu personne de changer d'emploi.
+Écrivez vos offres comme une proposition, pas comme une liste d'exigences. [Une offre d'emploi est une publicité](/blog/offre-emploi-publicite-candidat/), et une liste de critères n'a jamais convaincu personne de changer d'emploi.
 
 Traitez chaque départ comme une donnée. Une vraie conversation de départ, sans se défendre, vous apprendra plus sur votre rétention que n'importe quel sondage. Et si la même raison revient trois fois, ce n'est plus un cas isolé, c'est votre fonctionnement.
 
