@@ -23,13 +23,13 @@ Commençons par comprendre ce qui se passe, parce que le diagnostic change tout.
 
 L'été, vos patients vivent à un autre rythme. Ils sont en vacances, hors de leur routine, les enfants sont à la maison, et prendre rendez-vous chez le dentiste ou pour un suivi passe loin dans la liste des priorités. La demande baisse pour presque tous les services de santé non urgents, et avec elle, vos taux de conversion. Ce n'est pas propre à vous : l'été est une saison creuse pour la grande majorité des entreprises.
 
-Le point important, c'est que rien n'est cassé dans [vos campagnes](/publicite-google-meta/). Les mêmes annonces qui performaient en mai voient simplement moins de gens prêts à agir. C'est de la saisonnalité, pas une panne. Et on ne répare pas une saison, on s'y adapte.
+Le point important, c'est que rien n'est cassé dans vos campagnes. Les mêmes annonces qui performaient en mai voient simplement moins de gens prêts à agir. C'est de la saisonnalité, pas une panne. Et on ne répare pas une saison, on s'y adapte.
 
 ## Le piège que personne ne voit : l'algorithme s'affole
 
 Voici la partie que la plupart des cliniques ignorent, et qui explique pourquoi l'été semble parfois catastrophique plutôt que simplement plus lent.
 
-La majorité des campagnes tournent aujourd'hui avec des enchères automatiques, où l'algorithme de Google décide combien payer pour chaque clic afin d'obtenir des conversions. Or cet algorithme suit une logique simple : quand il constate que les conversions chutent, il suppose qu'il doit enchérir plus haut pour compenser. Traduction : au moment précis où vos résultats baissent, l'algorithme se met à payer plus cher chaque clic, pour de moins bons résultats, et vide votre budget plus vite que d'habitude.
+La majorité des campagnes tournent aujourd'hui avec des enchères automatiques, où [l'algorithme de Google](/publicite-google-meta/) décide combien payer pour chaque clic afin d'obtenir des conversions. Or cet algorithme suit une logique simple : quand il constate que les conversions chutent, il suppose qu'il doit enchérir plus haut pour compenser. Traduction : au moment précis où vos résultats baissent, l'algorithme se met à payer plus cher chaque clic, pour de moins bons résultats, et vide votre budget plus vite que d'habitude.
 
 C'est un cercle vicieux. La saison fait baisser vos conversions, et l'algorithme, en réagissant mal, transforme un ralentissement normal en gaspillage réel. Beaucoup de directeurs en concluent alors que « la publicité ne marche plus l'été » et coupent tout. Ils traitent le symptôme, jamais la cause.
 

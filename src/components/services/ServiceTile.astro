@@ -10,7 +10,8 @@
 // - badge : pastille au-dessus du titre (tuile feat seulement)
 // - reveal, step : apparition au défilement (data-reveal, data-reveal-step)
 // - href : toute la tuile devient un lien (survol, focus et chevron) ; au repos, elle garde
-//   l'apparence d'une tuile simple (le chevron n'apparaît qu'au survol et au focus clavier)
+//   l'apparence d'une tuile simple (le chevron n'apparaît qu'au survol et au focus clavier),
+//   sauf sur les écrans tactiles (hover: none), où le chevron reste visible
 // - accent : tuile wide ou sq sur fond dégradé (icône et titre restent sur la même ligne) ;
 //   petits textes en --hp-on-grad, titre en blanc (contraste hybride)
 // Emplacements
@@ -191,6 +192,12 @@ const lines = Array.isArray(text) ? text : null;
 
   .hp-tile--link:hover .hp-tile__go,
   .hp-tile--link:focus-visible .hp-tile__go { opacity: 1; }
+
+  /* Écrans tactiles (pas de survol) : chevron toujours visible, pour signaler que la tuile est
+     cliquable */
+  @media (hover: none) {
+    .hp-tile__go { opacity: 1; }
+  }
 
   .hp-tile--link:hover .hp-tile__go {
     transform: translateX(4px);
