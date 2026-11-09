@@ -1075,14 +1075,23 @@ const steps = [
     width: 100%;
   }
 
+  /* Empilées : rangées de même hauteur, même si un texte passe sur 2 lignes */
+  @media (max-width: 1099px) {
+    .md-jy {
+      display: grid;
+      grid-auto-rows: 1fr;
+    }
+  }
+
   @media (min-width: 600px) {
-    .md-jy { width: 150px; }
+    .md-jy { width: 180px; }
   }
 
   @media (min-width: 1100px) {
     .md-jy {
       flex-direction: row;
-      align-items: center;
+      /* Même hauteur pour les 3 étapes, même si un texte passe sur 2 lignes */
+      align-items: stretch;
       width: auto;
     }
   }
@@ -1126,6 +1135,7 @@ const steps = [
   .md-jy__link {
     display: none;
     flex: none;
+    align-self: center;
     width: 14px;
     height: 2px;
     background: color-mix(in srgb, var(--text-primary) 60%, transparent);
