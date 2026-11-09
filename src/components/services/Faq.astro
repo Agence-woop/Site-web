@@ -1,0 +1,189 @@
+---
+// Questions fréquentes d'une page Services : accordéon en 2 colonnes sur ordinateur (dès 900 px),
+// 1 colonne sur téléphone et tablette.
+//
+// - Chaque question est un <details> / <summary> natif : sans JavaScript, toutes les questions
+//   s'ouvrent et se ferment au clic et au clavier (Entrée, Espace).
+// - Accordéon exclusif : ouvrir une question ferme celle qui était ouverte. Les <details> portent
+//   le même attribut name (exclusivité native des navigateurs récents) et le script fait de même
+//   pour les autres navigateurs.
+// - Le script tient à jour aria-expanded sur chaque <summary> (posé seulement quand le script
+//   tourne, pour ne jamais annoncer un état faux).
+// - Colonnes : la 1re moitié des questions à gauche, la 2de à droite (ordre de lecture conservé
+//   en 1 colonne). Chaque colonne est une pile indépendante : ouvrir une question ne décale pas
+//   l'autre colonne.
+//
+// Props
+// - items : liste { q, a } (textes simples ; les apostrophes et NB restent tels quels)
+// - name : nom du groupe (attribut name des <details>), unique dans la page
+// - open : rang de la question ouverte au chargement (0 par défaut ; -1 pour aucune)
+import { text } from '../../utils/html';
+
+interface Item {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  items: Item[];
+  name: string;
+  open?: number;
+}
+
+const { items, name, open = 0 } = Astro.props;
+const half = Math.ceil(items.length / 2);
+const columns = [items.slice(0, half), items.slice(half)].map((col, c) => col.map((item, i) => ({ ...item, rank: c * half + i })));
+---
+<div class="md-faq" data-faq data-reveal="up">
+  {columns.map((col) => (
+    <div class="md-faq__col">
+      {col.map((item) => (
+        <details class="md-faq__item md-glass" name={name} open={item.rank === open}>
+          <summary class="md-faq__q"><span set:html={text(item.q)} /><span class="md-faq__pl" aria-hidden="true"></span></summary>
+          <div class="md-faq__a"><p set:html={text(item.a)} /></div>
+        </details>
+      ))}
+    </div>
+  ))}
+</div>
+
+<script>
+  // Accordéon exclusif et aria-expanded (voir l'en-tête du composant).
+  document.querySelectorAll<HTMLElement>('[data-faq]').forEach((faq) => {
+    const items = Array.from(faq.querySelectorAll<HTMLDetailsElement>('details'));
+    const sync = () => items.forEach((d) => d.querySelector('summary')?.setAttribute('aria-expanded', String(d.open)));
+    items.forEach((d) => {
+      d.addEventListener('toggle', () => {
+        if (d.open) items.forEach((o) => { if (o !== d && o.open) o.open = false; });
+        sync();
+      });
+    });
+    sync();
+  });
+</script>
+
+<style>
+  .md-faq {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .md-faq {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+
+  .md-faq__col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (min-width: 900px) {
+    .md-faq__col { gap: 16px; }
+  }
+
+  .md-faq__item {
+    border-radius: 22px;
+    transition: box-shadow 300ms ease;
+  }
+
+  .md-faq__item[open] { box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.45); }
+
+  .md-faq__q {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 22px;
+    border-radius: 22px;
+    list-style: none;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 768px) {
+    .md-faq__q { padding: 22px 26px; }
+  }
+
+  .md-faq__q::-webkit-details-marker { display: none; }
+
+  .md-faq__q:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 3px;
+  }
+
+  /* Signe + qui devient − à l'ouverture */
+  .md-faq__pl {
+    position: relative;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+    color: var(--text-primary);
+    transition: background 300ms ease, box-shadow 300ms ease, color 300ms ease;
+  }
+
+  .md-faq__pl::before,
+  .md-faq__pl::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform 300ms ease;
+  }
+
+  .md-faq__pl::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+  .md-faq__item[open] .md-faq__pl {
+    background: var(--woop-gradient);
+    box-shadow: none;
+    color: var(--hp-on-grad);
+  }
+
+  .md-faq__item[open] .md-faq__pl::after { transform: translate(-50%, -50%); }
+
+  .md-faq__q:hover .md-faq__pl { box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.6); }
+
+  .md-faq__item[open] .md-faq__q:hover .md-faq__pl { box-shadow: none; }
+
+  .md-faq__a {
+    position: relative;
+    z-index: 1;
+    padding: 0 22px 22px;
+  }
+
+  @media (min-width: 768px) {
+    .md-faq__a { padding: 0 26px 24px; }
+  }
+
+  .md-faq__a p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .md-faq__item,
+    .md-faq__pl,
+    .md-faq__pl::before,
+    .md-faq__pl::after { transition: none; }
+  }
+</style>

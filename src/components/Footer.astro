@@ -1,5 +1,9 @@
 ---
+import { liveServices } from '../data/services';
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+// Rubrique « Services » : les pages Services en ligne, dans l'ordre du menu de l'en-tête
+const services = liveServices();
 ---
 <footer class="footer">
   <div class="container">
@@ -22,6 +26,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         <h5 class="footer__heading">Secteurs d'activit&eacute;</h5>
         <a href={`${base}/services-medical/`} class="footer__link">Sant&eacute; & M&eacute;dical</a>
         <a href={`${base}/services-recrutement/`} class="footer__link">RH & Recrutement</a>
+      </div>
+      <div class="footer__col">
+        <h5 class="footer__heading">Services</h5>
+        {services.map((s) => (
+          <a href={`${base}${s.href}`} class="footer__link">{s.label}</a>
+        ))}
       </div>
       <div class="footer__col">
         <h5 class="footer__heading">Contact</h5>
@@ -76,11 +86,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-bottom: 48px;
   }
 
+  /* Tablette : présentation sur toute la largeur, puis les 4 rubriques côte à côte */
   @media (min-width: 768px) {
     .footer__grid {
-      grid-template-columns: 1.8fr 1fr 1fr 1fr;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 32px;
     }
+
+    .footer__brand { grid-column: 1 / -1; }
+  }
+
+  /* Ordinateur : présentation et 4 rubriques sur une ligne */
+  @media (min-width: 1200px) {
+    .footer__grid { grid-template-columns: 1.6fr repeat(4, minmax(0, 1fr)); }
+
+    .footer__brand { grid-column: auto; }
   }
 
   .footer__brand {
