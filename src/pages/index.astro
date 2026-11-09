@@ -66,7 +66,8 @@ const gridMembers = membersIn(ORDER_GRID);
 const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 
 // Tuiles de Nos services. Si `href` est défini, toute la tuile devient un lien
-// (effet au survol + chevron). Aucune tuile n'a de lien pour l'instant.
+// (effet au survol + chevron). Seule la tuile Publicité a un lien pour l'instant : ajouter
+// `href` aux autres dès que leur page est en ligne.
 const services: {
   key: 'ads' | 'cx' | 'brand' | 'web' | 'social';
   title: string;
@@ -78,7 +79,7 @@ const services: {
   icoGrad?: boolean;
   href?: string;
 }[] = [
-  { key: 'ads', title: 'Publicité Google et Meta', text: 'Être trouvé en premier, là où vos clients cherchent.', variant: 'grad', layout: 'ads', reveal: 'left' },
+  { key: 'ads', title: 'Publicité Google et Meta', text: 'Être trouvé en premier, là où vos clients cherchent.', variant: 'grad', layout: 'ads', reveal: 'left', href: `${base}/publicite-google-meta/` },
   { key: 'cx', title: 'Conseil en expérience client', text: 'Du premier clic au rendez-vous, on rend chaque étape plus simple pour vos patients.', variant: 'blush', layout: 'cx', reveal: 'right' },
   { key: 'brand', title: 'Image de marque', text: 'Logo, charte, système complet. Une identité cohérente qui inspire confiance dès le premier regard.', variant: 'plum', layout: 'sq', reveal: 'up', step: '1', icoGrad: true },
   { key: 'web', title: 'Sites web & pages de conversion', text: 'Un site clair et rapide, conçu pour inspirer confiance et donner envie de prendre rendez-vous.', variant: 'orange', layout: 'sq', reveal: 'right', step: '2' },
@@ -1186,7 +1187,18 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     height: 44px;
     border-radius: 50%;
     box-shadow: inset 0 0 0 1.5px currentColor;
-    transition: transform 250ms ease, background 250ms ease;
+    /* Au repos, la tuile-lien garde l'apparence d'une tuile simple : le chevron n'apparaît
+       qu'au survol et au focus clavier (même comportement que ServiceTile, pages Santé et RH) */
+    opacity: 0;
+    transition: transform 250ms ease, background 250ms ease, opacity 250ms ease;
+  }
+
+  .hp-tile--link:hover .hp-tile__go,
+  .hp-tile--link:focus-visible .hp-tile__go { opacity: 1; }
+
+  /* Écrans tactiles (pas de survol) : chevron toujours visible, pour signaler le lien */
+  @media (hover: none) {
+    .hp-tile__go { opacity: 1; }
   }
 
   .hp-tile__go svg { width: 18px; height: 18px; }
@@ -2435,6 +2447,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
 
     .hp-tile,
     .hp-ico,
+    .hp-tile__go,
     .hp-s,
     .hp-m,
     .hp-tcar__track,
