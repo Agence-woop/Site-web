@@ -18,20 +18,39 @@ export interface Service {
   hint?: string;
   /** Adresse de la page, sans le préfixe base ; absente tant que la page n'est pas en ligne */
   href?: string;
+  /** Icône au trait (contenu d'un SVG 24 × 24, trait 1,8) : cartes du cycle (ServiceCycle) */
+  icon: string;
 }
 
+// Icônes reprises de la grille « Nos services » de l'accueil (mégaphone, bulle avec un cœur,
+// fenêtre de navigateur, Instagram) et de la tuile « Image de marque clinique » de la page
+// Santé (palette de peintre).
+const ICONS = {
+  palette:
+    '<path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/>',
+  instagram: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/>',
+  megaphone: '<path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M8 16l1.5 4.5"/><path d="M19 9.5a4 4 0 010 5"/>',
+  browser: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 8h18"/><path d="M12 12l6 2.5-2.6 1-1 2.6z"/>',
+  heartBubble: '<path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/><path d="M12 15.5s-3.5-2-3.5-4.3a2 2 0 013.5-1.3 2 2 0 013.5 1.3c0 2.3-3.5 4.3-3.5 4.3z"/>',
+};
+
+/** SVG complet d'une icône de service, au style des icônes du site. */
+export const serviceIconSvg = (s: Service): string =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${s.icon}</svg>`;
+
 export const SERVICES: Service[] = [
-  { key: 'marque', label: 'Image de marque', role: 'La fondation' },
-  { key: 'reseaux', label: 'Réseaux sociaux', role: 'Fait connaître' },
+  { key: 'marque', label: 'Image de marque', role: 'La fondation', icon: ICONS.palette },
+  { key: 'reseaux', label: 'Réseaux sociaux', role: 'Fait connaître', icon: ICONS.instagram },
   {
     key: 'publicite',
     label: 'Publicité Google et Meta',
     role: 'Amène',
     hint: 'Amène le patient',
     href: '/publicite-google-meta/',
+    icon: ICONS.megaphone,
   },
-  { key: 'sites', label: 'Sites web', role: 'Fait réserver' },
-  { key: 'experience', label: 'Expérience client', role: 'Fait revenir et recommander' },
+  { key: 'sites', label: 'Sites web', role: 'Fait réserver', icon: ICONS.browser },
+  { key: 'experience', label: 'Expérience client', role: 'Fait revenir et recommander', icon: ICONS.heartBubble },
 ];
 
 /** Pages Services déjà en ligne, dans l'ordre du menu. */

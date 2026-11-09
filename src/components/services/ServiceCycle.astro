@@ -13,12 +13,16 @@
 // - Liens : seules les cartes des pages en ligne (href défini dans src/data/services.ts) sont
 //   cliquables ; elles deviennent des liens d'elles-mêmes dès que leur page est publiée.
 // - « Service suivant » : affiché seulement quand la page du service suivant est en ligne.
-// - Liaisons animées : sur chaque liaison et sur la ligne de retour, 4 chevrons (›››) dans le
+// - Icônes : chaque carte porte l'icône de son service (src/data/services.ts), dans le carré en
+//   dégradé des icônes du site, à gauche du titre (au-dessus pour l'image de marque, au centre) ;
+//   version claire sur la carte en dégradé (contraste hybride), plus petite sur mobile.
+// - Liaisons animées : sur chaque liaison et sur la ligne de retour, 6 chevrons (››››››) dans le
 //   sens du cycle, gris et discrets au repos. Quand le cycle est à l'écran, chaque chevron
-//   s'allume en dégradé WOOP puis s'éteint, l'un après l'autre (16 chevrons sur le tour, un tour
-//   complet = --sc-loop, 7,2 s) : un mouvement continu qui passe d'une liaison à la suivante,
-//   retour compris. Sur téléphone et tablette, la ligne de retour est une courbe sur le côté et
-//   ses chevrons suivent la courbe en s'orientant dans son sens.
+//   s'allume en dégradé WOOP puis s'éteint, l'un après l'autre (24 chevrons sur le tour, un tour
+//   complet = --sc-loop, 5 s) : un mouvement continu qui passe d'une liaison à la suivante,
+//   retour compris. Les chevrons sont placés en pourcentage de la longueur de leur liaison (ils ne
+//   se chevauchent jamais). Sur téléphone et tablette, la ligne de retour est une courbe sur le
+//   côté et ses chevrons suivent la courbe en s'orientant dans son sens.
 //   SVG et CSS, sans bibliothèque. L'animation démarre quand le cycle est visible
 //   (IntersectionObserver) et se met en pause hors de l'écran ; sans JavaScript ou avec
 //   prefers-reduced-motion, chevrons gris fixes. Le dégradé a un id fixe (sc-cv-g) : un seul
@@ -29,7 +33,7 @@
 // - over : surtitre (« L'écosystème » par défaut, par ex. « 08 · L'écosystème »)
 import SectionHead from '../SectionHead.astro';
 import CtaIcon from '../CtaIcon.astro';
-import { CYCLE, CYCLE_CORE, service, type ServiceKey, type Service } from '../../data/services';
+import { CYCLE, CYCLE_CORE, service, serviceIconSvg, type ServiceKey, type Service } from '../../data/services';
 import { NB } from '../../utils/typo';
 
 interface Props {
@@ -45,10 +49,10 @@ const ring = CYCLE.map((key, i) => ({ ...service(key), area: `s${i + 1}` }));
 const at = CYCLE.indexOf(current);
 const next = at >= 0 ? service(CYCLE[(at + 1) % CYCLE.length]) : undefined;
 
-// Chevron (pointe vers la droite ; orienté par le CSS selon la liaison). 4 par liaison : le rang
-// k (0 à 15) fixe l'ordre d'allumage sur le tour.
+// Chevron (pointe vers la droite ; orienté par le CSS selon la liaison). 6 par liaison : le rang
+// k (0 à 23) fixe l'ordre d'allumage sur le tour, j (0 à 5) la place sur la liaison.
 const CHEV = 'M6 3.5L10.5 8 6 12.5';
-const PER_LINK = 4;
+const PER_LINK = 6;
 const chevrons = (link: number) => Array.from({ length: PER_LINK }, (_, j) => link * PER_LINK + j);
 
 // Carte : lien si la page est en ligne (et n'est pas la page en cours), sinon simple bloc.
@@ -71,10 +75,13 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     const Tag = href ? 'a' : 'div';
     return (
       <Tag class:list={['sc-card', 'sc-core', { 'is-current': s.key === current, 'is-link': href }]} href={href} aria-current={s.key === current ? 'page' : undefined}>
-        <b class="sc-card__name">{s.label}</b>
-        <span class="sc-card__foot">
-          <span class="sc-card__role">{s.role}</span>
-          {s.key === current && <span class="sc-card__here">Vous êtes ici</span>}
+        <span class="sc-ico" set:html={serviceIconSvg(s)} />
+        <span class="sc-card__txt">
+          <b class="sc-card__name">{s.label}</b>
+          <span class="sc-card__foot">
+            <span class="sc-card__role">{s.role}</span>
+            {s.key === current && <span class="sc-card__here">Vous êtes ici</span>}
+          </span>
         </span>
       </Tag>
     );
@@ -88,18 +95,21 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
         <>
           <li class:list={['sc-cell', `sc-${s.area}`]}>
             <Tag class:list={['sc-card', { 'is-current': s.key === current, 'is-link': href }]} href={href} aria-current={s.key === current ? 'page' : undefined}>
-              <b class="sc-card__name">{s.label}</b>
-              <span class="sc-card__foot">
-                <span class="sc-card__role">{s.role}</span>
-                {s.key === current && <span class="sc-card__here">Vous êtes ici</span>}
+              <span class="sc-ico" set:html={serviceIconSvg(s)} />
+              <span class="sc-card__txt">
+                <b class="sc-card__name">{s.label}</b>
+                <span class="sc-card__foot">
+                  <span class="sc-card__role">{s.role}</span>
+                  {s.key === current && <span class="sc-card__here">Vous êtes ici</span>}
+                </span>
               </span>
             </Tag>
           </li>
           {i < ring.length - 1 && (
             <li class:list={['sc-arrow', `sc-a${i + 1}`]} aria-hidden="true">
               <span class="sc-chevs">
-                {chevrons(i).map((k) => (
-                  <svg class="sc-cv" viewBox="0 0 16 16" style={`--k: ${k}`} focusable="false"><path class="sc-cv__base" d={CHEV} /><path class="sc-cv__lit" d={CHEV} /></svg>
+                {chevrons(i).map((k, j) => (
+                  <svg class="sc-cv" viewBox="0 0 16 16" style={`--k: ${k}; --j: ${j}`} focusable="false"><path class="sc-cv__base" d={CHEV} /><path class="sc-cv__lit" d={CHEV} /></svg>
                 ))}
               </span>
             </li>
@@ -111,7 +121,7 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
       <span class="sc-back__curve" aria-hidden="true"></span>
       <span class="sc-chevs" aria-hidden="true">
         {chevrons(3).map((k, j) => (
-          <svg class:list={['sc-cv', `sc-cv--${j + 1}`]} viewBox="0 0 16 16" style={`--k: ${k}`} focusable="false"><path class="sc-cv__base" d={CHEV} /><path class="sc-cv__lit" d={CHEV} /></svg>
+          <svg class:list={['sc-cv', `sc-cv--${j + 1}`]} viewBox="0 0 16 16" style={`--k: ${k}; --j: ${j}`} focusable="false"><path class="sc-cv__base" d={CHEV} /><path class="sc-cv__lit" d={CHEV} /></svg>
         ))}
       </span>
       <span class="sc-back__lbl">Les avis relancent le cycle</span>
@@ -178,9 +188,8 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     position: relative;
     display: flex;
     flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
+    align-items: center;
+    gap: 12px;
     min-height: var(--sc-card-h);
     padding: 14px 18px;
     border-radius: 20px;
@@ -188,6 +197,39 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     box-shadow: inset 0 0 0 1.5px var(--hp-line);
     color: var(--text-primary);
     transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 300ms ease;
+  }
+
+  .sc-card__txt {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  /* Icône du service : carré en dégradé, trait blanc (comme les tuiles du site) ; plus petite
+     sur téléphone et tablette */
+  .sc-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 6px 16px rgba(230, 43, 127, 0.3);
+  }
+
+  .sc-ico :global(svg) { width: 18px; height: 18px; }
+
+  /* Carte en dégradé (service de la page) : version claire, icône en rose foncé */
+  .sc-card.is-current .sc-ico {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: none;
   }
 
   .sc-card__name {
@@ -253,6 +295,10 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.4);
   }
 
+  .sc-core { flex-direction: column; gap: 8px; }
+
+  .sc-core .sc-card__txt { align-items: center; }
+
   .sc-core .sc-card__foot { justify-content: center; }
 
   .sc-core::before {
@@ -265,10 +311,13 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     pointer-events: none;
   }
 
-  /* ----- Liaisons : 4 chevrons gris au repos, allumés l'un après l'autre en dégradé ----- */
+  /* ----- Liaisons : 6 chevrons gris au repos, allumés l'un après l'autre en dégradé ----- */
   .sc {
-    --sc-loop: 7.2s;
-    --sc-grey: color-mix(in srgb, var(--text-primary) 20%, transparent);
+    --sc-loop: 5s;
+    --sc-grey: color-mix(in srgb, var(--text-primary) 22%, transparent);
+    /* Taille d'un chevron : 16 px sur téléphone et tablette (espace entre les cartes),
+       27 px sur ordinateur (× 1,5) */
+    --cv: 16px;
   }
 
   .sc-defs {
@@ -287,24 +336,23 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     list-style: none;
   }
 
-  /* Rangée de chevrons d'une liaison, répartis sur sa longueur */
+  /* Boîte de la liaison ; chaque chevron y est centré à (j + 0,5) / 6 de sa longueur */
   .sc-chevs {
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+    display: block;
   }
 
   .sc-cv {
-    flex: none;
-    width: 14px;
-    height: 14px;
+    position: absolute;
+    width: var(--cv);
+    height: var(--cv);
+    margin: calc(var(--cv) / -2) 0 0 calc(var(--cv) / -2);
     overflow: visible;
   }
 
   .sc-cv path {
     fill: none;
-    stroke-width: 2.2;
+    stroke-width: 2.6;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
@@ -317,15 +365,18 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     opacity: 0;
   }
 
-  /* Téléphone et tablette : liaisons verticales vers le bas entre deux cartes */
-  .sc-arrow { height: 56px; }
+  /* Téléphone et tablette : liaisons verticales vers le bas entre deux cartes.
+     6 chevrons tous les 11 px (trait visible ~7 px de haut) : 4 px entre deux chevrons et
+     au moins 8 px avec les cartes. */
+  .sc-arrow { height: 80px; }
 
-  .sc-arrow .sc-chevs {
-    inset: 4px 0;
-    flex-direction: column;
+  .sc-arrow .sc-chevs { inset: 7px 0; }
+
+  .sc-arrow .sc-cv {
+    left: 50%;
+    top: calc((var(--j) + 0.5) * 100% / 6);
+    transform: rotate(90deg);
   }
-
-  .sc-arrow .sc-cv { transform: rotate(90deg); }
 
   /* Téléphone et tablette : ligne de retour courbe sur le côté, du dernier service (en bas)
      au premier (en haut) ; ses chevrons suivent la courbe et s'orientent dans son sens */
@@ -347,20 +398,16 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     bottom: 0;
     right: 8px;
     width: 18px;
-    display: block;
   }
 
-  .sc-back .sc-cv {
-    position: absolute;
-    margin: -7px 0 0 -7px;
-  }
-
-  /* Coin du bas (vers le haut à gauche), deux sur le montant (vers le haut), coin du haut (vers
-     le haut à droite) : centres posés sur la courbe (rayon 14 px, milieu du coin à ~4 px) */
+  /* Coin du bas (vers le haut à gauche), quatre sur le montant (vers le haut), coin du haut
+     (vers le haut à droite) : centres posés sur la courbe (rayon 14 px, milieu du coin à ~4 px) */
   .sc-back .sc-cv--1 { left: 4.8px; top: calc(100% - 4.8px); transform: rotate(-135deg); }
-  .sc-back .sc-cv--2 { left: 0.75px; top: 64%; transform: rotate(-90deg); }
-  .sc-back .sc-cv--3 { left: 0.75px; top: 36%; transform: rotate(-90deg); }
-  .sc-back .sc-cv--4 { left: 4.8px; top: 4.8px; transform: rotate(-45deg); }
+  .sc-back .sc-cv--2 { left: 0.75px; top: 78%; transform: rotate(-90deg); }
+  .sc-back .sc-cv--3 { left: 0.75px; top: 59%; transform: rotate(-90deg); }
+  .sc-back .sc-cv--4 { left: 0.75px; top: 41%; transform: rotate(-90deg); }
+  .sc-back .sc-cv--5 { left: 0.75px; top: 22%; transform: rotate(-90deg); }
+  .sc-back .sc-cv--6 { left: 4.8px; top: 4.8px; transform: rotate(-45deg); }
 
   /* Étiquette le long de la ligne de retour, lue de bas en haut (sens du cycle) */
   .sc-back__lbl {
@@ -378,12 +425,12 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     color: var(--md-pink-soft);
   }
 
-  /* ----- Animation : 16 chevrons sur le tour, un toutes les --sc-loop / 16 (0,45 s).
-     Chacun s'allume vite, reste un instant, puis s'éteint : 2 à 3 chevrons allumés à la fois,
+  /* ----- Animation : 24 chevrons sur le tour, un toutes les --sc-loop / 24 (~0,21 s).
+     Chacun s'allume vite, reste un instant, puis s'éteint : 3 à 4 chevrons allumés à la fois,
      qui avancent dans le sens du cycle. */
   .sc.is-live .sc-cv__lit {
     animation: sc-cv var(--sc-loop) ease-in-out infinite both;
-    animation-delay: calc(var(--k) * var(--sc-loop) / 16);
+    animation-delay: calc(var(--k) * var(--sc-loop) / 24);
     animation-play-state: paused;
   }
 
@@ -391,8 +438,8 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 
   @keyframes sc-cv {
     0% { opacity: 0; }
-    4%, 9% { opacity: 1; }
-    20%, 100% { opacity: 0; }
+    3%, 8% { opacity: 1; }
+    17%, 100% { opacity: 0; }
   }
 
   /* ===== Ordinateur : cycle compact =====
@@ -428,31 +475,39 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 
     .sc-core::before { inset: -46px -36px; }
 
-    /* Chevrons un peu plus grands sur ordinateur */
-    .sc-cv {
-      width: 18px;
-      height: 18px;
+    /* Chevrons × 1,5 et icônes plus grandes sur ordinateur */
+    .sc { --cv: 27px; }
+
+    .sc-ico {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
     }
+
+    .sc-ico :global(svg) { width: 22px; height: 22px; }
 
     /* Liaisons horizontales : en haut vers la droite, en bas vers la gauche */
     .sc-a1,
     .sc-a3 {
       align-self: center;
-      height: 14px;
+      height: 28px;
     }
 
     .sc-a1 .sc-chevs,
-    .sc-a3 .sc-chevs {
-      inset: 0 18px;
-      flex-direction: row;
+    .sc-a3 .sc-chevs { inset: 0 18px; }
+
+    .sc-a1 .sc-cv {
+      top: 50%;
+      left: calc((var(--j) + 0.5) * 100% / 6);
+      transform: none;
     }
 
-    .sc-a1 .sc-cv { transform: none; }
-
     /* En bas, de droite à gauche : le 1er chevron (allumé en premier) est à droite */
-    .sc-a3 .sc-chevs { flex-direction: row-reverse; }
-
-    .sc-a3 .sc-cv { transform: rotate(180deg); }
+    .sc-a3 .sc-cv {
+      top: 50%;
+      left: calc((5.5 - var(--j)) * 100% / 6);
+      transform: rotate(180deg);
+    }
 
     /* Liaison verticale à droite (vers le bas), sous la carte du haut */
     .sc-a2 { height: auto; }
@@ -467,24 +522,23 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     .sc-back .sc-chevs {
       inset: 0;
       width: auto;
-      display: flex;
-      flex-direction: column-reverse;
-    }
-
-    .sc-back .sc-cv {
-      position: static;
-      margin: 0;
     }
 
     .sc-back .sc-cv--1,
     .sc-back .sc-cv--2,
     .sc-back .sc-cv--3,
-    .sc-back .sc-cv--4 { transform: rotate(-90deg); }
+    .sc-back .sc-cv--4,
+    .sc-back .sc-cv--5,
+    .sc-back .sc-cv--6 {
+      left: 50%;
+      top: calc((5.5 - var(--j)) * 100% / 6);
+      transform: rotate(-90deg);
+    }
 
     .sc-back__lbl {
       top: 50%;
       left: auto;
-      right: calc(50% + 14px);
+      right: calc(50% + 22px);
       width: auto;
       max-width: 130px;
       transform: translateY(-50%);
