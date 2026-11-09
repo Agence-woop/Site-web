@@ -12,7 +12,8 @@ export interface Service {
   key: ServiceKey;
   /** Nom du service (menu, pied de page, carte du cycle) */
   label: string;
-  /** Rôle dans le cycle (« Amène », « Fait réserver »…), sous le nom dans la carte du cycle */
+  /** Rôle dans le cycle (« Fait venir », « Fait réserver »…), sous le nom dans la carte du cycle
+      (distinct du libellé court du menu, `hint`) */
   role: string;
   /** Libellé court sous le nom, dans le menu déroulant de l'en-tête (facultatif) */
   hint?: string;
@@ -44,7 +45,7 @@ export const SERVICES: Service[] = [
   {
     key: 'publicite',
     label: 'Publicité Google et Meta',
-    role: 'Amène',
+    role: 'Fait venir',
     hint: 'Amène le patient',
     href: '/publicite-google-meta/',
     icon: ICONS.megaphone,
