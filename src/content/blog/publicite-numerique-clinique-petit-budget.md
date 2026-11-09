@@ -36,7 +36,7 @@ Assurez-vous qu'un visiteur puisse, en deux ou trois clics, comprendre ce que vo
 
 Une fois ces deux bases en place, votre budget de publicité va travailler beaucoup plus fort. Et là encore, l'ordre compte.
 
-Commencez par la recherche payante locale, pas par les réseaux sociaux ni l'affichage. La différence est fondamentale. Les réseaux sociaux interrompent des gens qui ne pensaient pas à vous : c'est utile pour la notoriété, mais coûteux et lent à convertir. La recherche, elle, capte des gens qui cherchent déjà ce que vous offrez, à l'instant précis où ils le cherchent. Quand le budget est petit, vous voulez acheter de l'intention qui existe déjà, pas créer de la demande.
+Commencez par la [recherche payante locale](/publicite-google-meta/), pas par les réseaux sociaux ni l'affichage. La différence est fondamentale. Les réseaux sociaux interrompent des gens qui ne pensaient pas à vous : c'est utile pour la notoriété, mais coûteux et lent à convertir. La recherche, elle, capte des gens qui cherchent déjà ce que vous offrez, à l'instant précis où ils le cherchent. Quand le budget est petit, vous voulez acheter de l'intention qui existe déjà, pas créer de la demande.
 
 Concentrez ensuite ce budget sur l'essentiel : un seul service prioritaire, une seule zone géographique, un message clair. Mieux vaut dominer une recherche précise dans votre quartier que de saupoudrer vos dollars sur dix services et toute la ville. Un petit budget se gagne par la concentration, jamais par la dispersion.
 

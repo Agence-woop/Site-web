@@ -58,7 +58,7 @@ La publicité ne règle pas tout, et il m'arrive de déconseiller d'en faire. Si
 
 Un dernier point, propre à votre réalité. La publicité des professionnels de la santé au Québec est encadrée par les ordres professionnels, en vertu du Code des professions. Pour les médecins, le Code de déontologie du Collège des médecins du Québec exige que toute publicité soit factuelle, exacte et vérifiable, sans déclaration comparative ou superlative qui dénigre les autres. Les dentistes, les optométristes et les autres professions relèvent chacun de leur ordre, avec leurs propres règles.
 
-Une annonce qui promet « la meilleure clinique de Montréal » ou des « résultats garantis » peut placer un professionnel devant son ordre. Dans le secteur de la santé, la publicité doit donc être pensée pour convertir et pour respecter ces règles en même temps. Les deux ne sont pas contradictoires, mais ça ne s'improvise pas.
+Une annonce qui promet « la meilleure clinique de Montréal » ou des « résultats garantis » peut placer un professionnel devant son ordre. Dans le secteur de la santé, la publicité doit donc être [pensée pour convertir et pour respecter ces règles](/publicite-google-meta/) en même temps. Les deux ne sont pas contradictoires, mais ça ne s'improvise pas.
 
 ## La vraie question
 

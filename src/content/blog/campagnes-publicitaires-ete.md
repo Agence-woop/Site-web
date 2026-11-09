@@ -23,7 +23,7 @@ Commençons par comprendre ce qui se passe, parce que le diagnostic change tout.
 
 L'été, vos patients vivent à un autre rythme. Ils sont en vacances, hors de leur routine, les enfants sont à la maison, et prendre rendez-vous chez le dentiste ou pour un suivi passe loin dans la liste des priorités. La demande baisse pour presque tous les services de santé non urgents, et avec elle, vos taux de conversion. Ce n'est pas propre à vous : l'été est une saison creuse pour la grande majorité des entreprises.
 
-Le point important, c'est que rien n'est cassé dans vos campagnes. Les mêmes annonces qui performaient en mai voient simplement moins de gens prêts à agir. C'est de la saisonnalité, pas une panne. Et on ne répare pas une saison, on s'y adapte.
+Le point important, c'est que rien n'est cassé dans [vos campagnes](/publicite-google-meta/). Les mêmes annonces qui performaient en mai voient simplement moins de gens prêts à agir. C'est de la saisonnalité, pas une panne. Et on ne répare pas une saison, on s'y adapte.
 
 ## Le piège que personne ne voit : l'algorithme s'affole
 

@@ -99,7 +99,8 @@ const profiles: {
 ];
 
 // 02 · Nos services. Comme sur l'accueil : si `href` est défini, toute la tuile devient un lien
-// (effet au survol + chevron). Aucune tuile n'a de lien pour l'instant.
+// (effet au survol + chevron). Seules « Acquisition de mandats » et « Attraction de candidats » ont
+// un lien pour l'instant, vers la page Publicité Google et Meta.
 // Ordre de lecture = ordre de la grille. Formats :
 // - feat : bandeau dégradé, pleine largeur ;
 // - wide : 2 colonnes, en-tête et texte à gauche, illustration à droite ;
@@ -124,6 +125,7 @@ const services: {
       'On va chercher les entreprises qui ont besoin de vous, là où elles cherchent déjà.',
     ],
     reveal: 'up',
+    href: `${base}/publicite-google-meta/`,
   },
   {
     key: 'cand',
@@ -134,6 +136,7 @@ const services: {
       'On attire vers vous les bons profils, avant même qu\'ils cherchent activement.',
     ],
     reveal: 'up',
+    href: `${base}/publicite-google-meta/`,
   },
   {
     key: 'brand',
