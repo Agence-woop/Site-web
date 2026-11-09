@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
 import SectionHead from '../components/SectionHead.astro';
+import CtaIcon from '../components/CtaIcon.astro';
 import VisibilityTeaser from '../components/VisibilityTeaser.astro';
 import FinalBand from '../components/FinalBand.astro';
 import StickyBar from '../components/StickyBar.astro';
@@ -492,6 +493,10 @@ const faq = [
       <SectionHead over="05 · Comment on travaille" intro="Quatre étapes, et ce que vous recevez à chacune.">Comment on <span class="gradient-accent">travaille</span>.</SectionHead>
 
       <Steps steps={steps} columns={4} />
+
+      <div class="md-svc-cta" data-reveal="up">
+        <a class="cta cta--line" href={`${base}/contact/`}>Commencer par un appel découverte<CtaIcon dir="right" /></a>
+      </div>
     </div>
   </section>
 
@@ -1667,6 +1672,15 @@ const faq = [
   }
 
   .pu-dash__chart i:last-child { background: var(--woop-gradient); }
+
+  /* ===== 6. COMMENT ON TRAVAILLE : bouton sous les étapes (même espacement que le bouton
+     sous les tuiles de la page Santé) ===== */
+  .md-svc-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 34px;
+  }
 
   /* ===== 7. SANTÉ OU RECRUTEMENT ===== */
   .pu-srs {
