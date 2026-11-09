@@ -5,16 +5,17 @@
 // L'image de marque, au centre, est la fondation de chaque étape.
 //
 // Style repris de la section « L'écosystème » de la maquette d'Emma
-// (docs/maquettes/service-reseaux-sociaux.html) :
-// - Panneau sombre à filet dégradé qui contient toute la section (titre compris), comme chez
-//   Emma. Ordinateur (dès 900 px) : carte du cycle de 460 px de haut, 900 px de large au plus. Réseaux sociaux, Publicité et Sites web en haut, Expérience client en
-//   bas au centre, Image de marque au milieu. Les liaisons sont une boucle en rectangle arrondi
-//   (SVG 1000 × 460) : pointillés roses en dégradé (épaisseur 2,5, tirets 7 / 6) qui défilent en
-//   continu dans le sens du cycle (décalage de -26 en 1,4 s, linéaire), plus deux rayons
-//   pointillés fixes et discrets entre le centre et les cartes du haut et du bas.
-// - Cartes : fond foncé, titre blanc, libellé court en rose. Centre : carte blanche, « Au centre »
-//   en petit, titre foncé, « La fondation de tout le reste » en rose. Carte du service de la page :
-//   dégradé WOOP et halo lumineux, « Vous êtes ici ».
+// (docs/maquettes/service-reseaux-sociaux.html), sur le fond de la page (sans cadre) :
+// - Ordinateur (dès 900 px) : cycle sur toute la largeur du contenu, 460 px de haut, en carré :
+//   Réseaux sociaux en haut à gauche, Publicité en haut à droite, Sites web en bas à droite,
+//   Expérience client en bas à gauche, Image de marque au centre (reliée à aucune carte).
+//   Les liaisons suivent les 4 côtés d'un rectangle arrondi (SVG 1000 × 460), dans le sens des
+//   aiguilles d'une montre : pointillés roses en dégradé (épaisseur 2,5, tirets 7 / 6) qui
+//   défilent en continu (décalage de -26 en 1,4 s, linéaire), le côté gauche étant la ligne de
+//   retour. Cartes assez larges pour que chaque titre tienne sur une ligne.
+// - Cartes : fond foncé, titre blanc, libellé court en rose. Centre : carte blanche, titre foncé,
+//   « La fondation de tout le reste » en rose. Carte du service de la page : dégradé WOOP et halo
+//   lumineux, « Vous êtes ici ».
 // Gardé de la version précédente (différent de la maquette) :
 // - pas d'encadré flottant : la petite étiquette « Les avis relancent le cycle » est posée sur la
 //   ligne de retour (côté gauche de la boucle) ;
@@ -52,19 +53,20 @@ const ring = CYCLE.map((key, i) => ({ ...service(key), area: `s${i + 1}` }));
 const at = CYCLE.indexOf(current);
 const next = at >= 0 ? service(CYCLE[(at + 1) % CYCLE.length]) : undefined;
 
-// Boucle de la maquette (repère 1000 × 460), parcourue dans le sens du cycle : haut de gauche à
-// droite, côté droit vers le bas, bas de droite à gauche, côté gauche vers le haut.
-const LOOP = 'M160 83 H840 Q900 83 900 140 V330 Q900 386 840 386 H160 Q100 386 100 330 V140 Q100 83 160 83 Z';
-const SPOKES = 'M500 128 V180 M500 285 V345';
+// Boucle (repère 1000 × 460) passant par le centre des 4 cartes, aux points (18 %, 18 %),
+// (82 %, 18 %), (82 %, 82 %) et (18 %, 82 %), coins arrondis comme chez Emma (sous les cartes).
+// Parcourue dans le sens des aiguilles d'une montre : côté haut (Réseaux → Publicité), côté droit
+// (Publicité → Sites web), côté bas (Sites web → Expérience client), côté gauche (retour).
+const LOOP = 'M240 83 H760 Q820 83 820 143 V317 Q820 377 760 377 H240 Q180 377 180 317 V143 Q180 83 240 83 Z';
 
 // Carte : lien si la page est en ligne (et n'est pas la page en cours), sinon simple bloc.
 const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}` : undefined);
 ---
-<div class="sc-panel" data-reveal="up">
-  <SectionHead over={over} reveal={false} intro={`L'ordre réel d'un patient${NB}: il vous découvre, il cherche, il réserve, il revient et il recommande. Votre image de marque nourrit chaque étape, et les avis relancent le cycle.`}>
-    Cinq services, <span class="gradient-accent">un seul cycle</span>.
-  </SectionHead>
+<SectionHead over={over} intro={`L'ordre réel d'un patient${NB}: il vous découvre, il cherche, il réserve, il revient et il recommande. Votre image de marque nourrit chaque étape, et les avis relancent le cycle.`}>
+  Cinq services, <span class="gradient-accent">un seul cycle</span>.
+</SectionHead>
 
+<div class="sc-wrap" data-reveal="up">
   <div class="sc" data-sc>
     <!-- Dégradés des pointillés : horizontal pour la boucle (maquette), vertical pour les lignes
          du mobile (une ligne droite n'a pas de largeur : dégradé en coordonnées de la ligne) -->
@@ -75,10 +77,9 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
       </defs>
     </svg>
 
-    <!-- Ordinateur : la boucle des liaisons et les rayons du centre -->
+    <!-- Ordinateur : la boucle des liaisons (le centre n'est relié à aucune carte) -->
     <svg class="sc-map" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
       <path class="sc-dash sc-loop" d={LOOP} />
-      <path class="sc-spokes" d={SPOKES} />
     </svg>
 
     {[core].map((s) => {
@@ -88,7 +89,6 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
         <Tag class:list={['sc-card', 'sc-core', { 'is-current': s.key === current, 'is-link': href }]} href={href} aria-current={s.key === current ? 'page' : undefined}>
           <span class="sc-ico" set:html={serviceIconSvg(s)} />
           <span class="sc-card__txt">
-            <span class="sc-card__k">Au centre</span>
             <b class="sc-card__name">{s.label}</b>
             <span class="sc-card__role">{s.role}</span>
             {s.key === current && <span class="sc-card__here">Vous êtes ici</span>}
@@ -156,38 +156,11 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 </script>
 
 <style>
-  /* ===== Panneau (maquette : fond sombre, rayon 34 px, filet dégradé de 2 px) ===== */
-  .sc-panel {
-    position: relative;
-    padding: 28px 18px;
-    border-radius: 34px;
-    background: color-mix(in srgb, var(--woop-pink) 8%, color-mix(in srgb, var(--bg-elevated) 75%, transparent));
-  }
-
-  .sc-panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    padding: 2px;
-    border-radius: inherit;
-    background: var(--woop-gradient);
-    -webkit-mask: linear-gradient(var(--bg-deep) 0 0) content-box, linear-gradient(var(--bg-deep) 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  @media (min-width: 900px) {
-    .sc-panel { padding: 44px; }
-  }
-
   /* ===== Pointillés (maquette : 2,5 d'épaisseur, tirets 7 / 6, dégradé WOOP) ===== */
   .sc {
     --sc-card-h: 76px;
     --sc-rail: 44px;
     position: relative;
-    max-width: 900px;
-    margin: 0 auto;
     display: grid;
     grid-template-columns: var(--sc-rail) minmax(0, 1fr);
     grid-template-areas:
@@ -233,16 +206,8 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     to { stroke-dashoffset: -26; }
   }
 
-  /* La boucle et les rayons : ordinateur seulement */
+  /* La boucle : ordinateur seulement */
   .sc-map { display: none; }
-
-  .sc-spokes {
-    fill: none;
-    stroke: color-mix(in srgb, var(--text-primary) 18%, transparent);
-    stroke-width: 1.5;
-    stroke-dasharray: 3 5;
-    vector-effect: non-scaling-stroke;
-  }
 
   /* La liste ne crée pas de boîte : ses éléments se placent dans la grille du cycle */
   .sc-ring { display: contents; list-style: none; }
@@ -296,9 +261,8 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     color: var(--md-pink-soft);
   }
 
-  /* « Vous êtes ici » et « Au centre » : petites capitales */
-  .sc-card__here,
-  .sc-card__k {
+  /* « Vous êtes ici » : petites capitales */
+  .sc-card__here {
     font-size: 10px;
     font-weight: 700;
     line-height: 1.3;
@@ -338,8 +302,7 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     box-shadow: none;
   }
 
-  /* Centre : carte blanche (maquette), « Au centre » en petit, titre foncé, libellé en rose ;
-     icône en dégradé */
+  /* Centre : carte blanche (maquette), titre foncé, libellé en rose ; icône en dégradé */
   .sc-core {
     grid-area: core;
     flex-direction: column;
@@ -355,8 +318,6 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 
   .sc-core .sc-card__txt { align-items: center; }
 
-  .sc-core .sc-card__k { color: var(--text-muted); }
-
   .sc-core .sc-card__name {
     font-size: 19px;
     color: var(--bg-deep);
@@ -367,8 +328,6 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
   .sc-core.is-current { background: var(--woop-gradient); }
 
   .sc-core.is-current .sc-card__name { color: var(--text-primary); }
-
-  .sc-core.is-current .sc-card__k { color: var(--hp-on-grad); }
 
   /* Carte d'une page en ligne : lien (survol et clavier) */
   .sc-card.is-link:hover {
@@ -449,9 +408,9 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     color: var(--md-pink-soft);
   }
 
-  /* ===== Ordinateur : la carte du cycle de la maquette (460 px de haut) =====
-     Cartes centrées sur leurs points : Réseaux (16 %, 18 %), Publicité (50 %, 18 %),
-     Sites web (84 %, 18 %), Expérience client (50 %, 84 %), Image de marque (50 %, 51 %). */
+  /* ===== Ordinateur : cycle en carré sur toute la largeur du contenu (460 px de haut) =====
+     Cartes centrées sur leurs points : Réseaux (18 %, 18 %), Publicité (82 %, 18 %),
+     Sites web (82 %, 82 %), Expérience client (18 %, 82 %), Image de marque (50 %, 50 %). */
   @media (min-width: 900px) {
     .sc {
       display: block;
@@ -472,18 +431,20 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
       transform: translate(-50%, -50%);
     }
 
-    .sc-s1 { left: 16%; top: 18%; }
-    .sc-s2 { left: 50%; top: 18%; }
-    .sc-s3 { left: 84%; top: 18%; }
-    .sc-s4 { left: 50%; top: 84%; }
+    .sc-s1 { left: 18%; top: 18%; }
+    .sc-s2 { left: 82%; top: 18%; }
+    .sc-s3 { left: 82%; top: 82%; }
+    .sc-s4 { left: 18%; top: 82%; }
 
     .sc-card {
       gap: 12px;
       min-width: 200px;
-      max-width: 272px;
       min-height: 0;
       padding: 16px 20px 16px 16px;
     }
+
+    /* Chaque titre tient sur une ligne (la carte s'élargit à son titre) */
+    .sc-card__name { white-space: nowrap; }
 
     /* Centre : icône au-dessus, texte centré */
     .sc-core { flex-direction: column; gap: 10px; max-width: none; }
@@ -492,7 +453,7 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 
     .sc-core {
       left: 50%;
-      top: 51%;
+      top: 50%;
       width: auto;
       min-width: 240px;
       margin: 0;
@@ -523,8 +484,8 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     /* Étiquette posée sur le côté gauche de la boucle (la ligne de retour) */
     .sc-back {
       position: absolute;
-      left: 10%;
-      top: 51%;
+      left: 18%;
+      top: 50%;
       margin: 0;
       transform: translate(-50%, -50%);
       z-index: 2;
@@ -543,8 +504,8 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
       text-align: center;
       font-size: 12px;
       line-height: 1.3;
-      /* Même fond que le panneau : le pointillé passe derrière l'étiquette */
-      background: color-mix(in srgb, var(--woop-pink) 8%, var(--bg-elevated));
+      /* Fond de la page : le pointillé passe derrière l'étiquette */
+      background: var(--bg-deep);
     }
   }
 
