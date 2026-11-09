@@ -1,6 +1,7 @@
 ---
-// Questions fréquentes d'une page Services : accordéon en 2 colonnes sur ordinateur (dès 900 px),
-// 1 colonne sur téléphone et tablette.
+// Questions fréquentes (pages Services, Test de visibilité) : accordéon en 2 colonnes sur
+// ordinateur (dès 900 px), 1 colonne sur téléphone et tablette. Chevron vers le bas quand la
+// question est fermée, vers le haut quand elle est ouverte.
 //
 // - Chaque question est un <details> / <summary> natif : sans JavaScript, toutes les questions
 //   s'ouvrent et se ferment au clic et au clavier (Entrée, Espace).
@@ -123,41 +124,42 @@ const columns = [items.slice(0, half), items.slice(half)].map((col, c) => col.ma
     outline-offset: 3px;
   }
 
-  /* Signe + qui devient − à l'ouverture */
+  /* Chevron dans un cercle : vers le bas quand la question est fermée, vers le haut quand elle
+     est ouverte (petite rotation douce). Jetons --hp-* avec valeur de repli : le composant sert
+     aussi sur des pages qui ne les définissent pas (Test de visibilité). */
   .md-faq__pl {
     position: relative;
     flex: none;
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line, color-mix(in srgb, var(--text-primary) 14%, transparent));
     color: var(--text-primary);
     transition: background 300ms ease, box-shadow 300ms ease, color 300ms ease;
   }
 
-  .md-faq__pl::before,
-  .md-faq__pl::after {
+  .md-faq__pl::before {
     content: '';
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 12px;
-    height: 2px;
-    border-radius: 1px;
-    background: currentColor;
-    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    /* Vers le bas, recentré optiquement */
+    transform: translate(-50%, -70%) rotate(45deg);
     transition: transform 300ms ease;
   }
-
-  .md-faq__pl::after { transform: translate(-50%, -50%) rotate(90deg); }
 
   .md-faq__item[open] .md-faq__pl {
     background: var(--woop-gradient);
     box-shadow: none;
-    color: var(--hp-on-grad);
+    color: var(--hp-on-grad, var(--bg-deep));
   }
 
-  .md-faq__item[open] .md-faq__pl::after { transform: translate(-50%, -50%); }
+  /* Vers le haut */
+  .md-faq__item[open] .md-faq__pl::before { transform: translate(-50%, -30%) rotate(225deg); }
 
   .md-faq__q:hover .md-faq__pl { box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.6); }
 
@@ -183,7 +185,6 @@ const columns = [items.slice(0, half), items.slice(half)].map((col, c) => col.ma
   @media (prefers-reduced-motion: reduce) {
     .md-faq__item,
     .md-faq__pl,
-    .md-faq__pl::before,
-    .md-faq__pl::after { transition: none; }
+    .md-faq__pl::before { transition: none; }
   }
 </style>

@@ -13,14 +13,16 @@
 // - Liens : seules les cartes des pages en ligne (href défini dans src/data/services.ts) sont
 //   cliquables ; elles deviennent des liens d'elles-mêmes dès que leur page est publiée.
 // - « Service suivant » : affiché seulement quand la page du service suivant est en ligne.
-// - Flèches animées : au repos, flèches et ligne de retour grises. Quand le cycle est à l'écran,
-//   un remplissage en dégradé WOOP parcourt le cycle dans son sens, flèche après flèche : chaque
-//   segment se remplit pendant que le précédent se vide, et la pointe d'une flèche prend la
-//   couleur quand le remplissage l'atteint. Un tour complet dure --sc-loop (7,2 s).
-//   SVG (lignes tracées en pourcentage de leur boîte, pathLength 100) et stroke-dashoffset, sans
-//   bibliothèque. L'animation démarre quand le cycle est visible (IntersectionObserver), se met en
-//   pause hors de l'écran ; sans JavaScript ou avec prefers-reduced-motion, flèches grises
-//   statiques. Les dégradés ont des id fixes (sc-g-*) : un seul cycle par page.
+// - Liaisons animées : sur chaque liaison et sur la ligne de retour, 4 chevrons (›››) dans le
+//   sens du cycle, gris et discrets au repos. Quand le cycle est à l'écran, chaque chevron
+//   s'allume en dégradé WOOP puis s'éteint, l'un après l'autre (16 chevrons sur le tour, un tour
+//   complet = --sc-loop, 7,2 s) : un mouvement continu qui passe d'une liaison à la suivante,
+//   retour compris. Sur téléphone et tablette, la ligne de retour est une courbe sur le côté et
+//   ses chevrons suivent la courbe en s'orientant dans son sens.
+//   SVG et CSS, sans bibliothèque. L'animation démarre quand le cycle est visible
+//   (IntersectionObserver) et se met en pause hors de l'écran ; sans JavaScript ou avec
+//   prefers-reduced-motion, chevrons gris fixes. Le dégradé a un id fixe (sc-cv-g) : un seul
+//   cycle par page.
 //
 // Props
 // - current : le service de la page
@@ -43,6 +45,12 @@ const ring = CYCLE.map((key, i) => ({ ...service(key), area: `s${i + 1}` }));
 const at = CYCLE.indexOf(current);
 const next = at >= 0 ? service(CYCLE[(at + 1) % CYCLE.length]) : undefined;
 
+// Chevron (pointe vers la droite ; orienté par le CSS selon la liaison). 4 par liaison : le rang
+// k (0 à 15) fixe l'ordre d'allumage sur le tour.
+const CHEV = 'M6 3.5L10.5 8 6 12.5';
+const PER_LINK = 4;
+const chevrons = (link: number) => Array.from({ length: PER_LINK }, (_, j) => link * PER_LINK + j);
+
 // Carte : lien si la page est en ligne (et n'est pas la page en cours), sinon simple bloc.
 const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}` : undefined);
 ---
@@ -51,13 +59,10 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 </SectionHead>
 
 <div class="sc" data-sc data-reveal="up">
-  <!-- Dégradés WOOP dans le sens de chaque flèche (vers la droite, la gauche, le bas, le haut) -->
+  <!-- Dégradé WOOP des chevrons allumés -->
   <svg class="sc-defs" width="0" height="0" aria-hidden="true" focusable="false">
     <defs>
-      <linearGradient id="sc-g-r" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100%" y2="0"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
-      <linearGradient id="sc-g-l" gradientUnits="userSpaceOnUse" x1="100%" y1="0" x2="0" y2="0"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
-      <linearGradient id="sc-g-d" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100%"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
-      <linearGradient id="sc-g-u" gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
+      <linearGradient id="sc-cv-g" x1="0" y1="0" x2="1" y2="1"><stop class="sc-stop-o" offset="0" /><stop class="sc-stop-p" offset="1" /></linearGradient>
     </defs>
   </svg>
 
@@ -92,22 +97,10 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
           </li>
           {i < ring.length - 1 && (
             <li class:list={['sc-arrow', `sc-a${i + 1}`]} aria-hidden="true">
-              <span class="sc-ln">
-                <svg class="sc-svg" focusable="false">
-                  {/* Horizontale (ordinateur, flèches du haut et du bas) : vers la droite en haut, vers la gauche en bas */}
-                  {i !== 1 && (
-                    <g class="sc-h">
-                      <line class="sc-base" x1={i === 0 ? '0' : '100%'} y1="50%" x2={i === 0 ? '100%' : '0'} y2="50%" />
-                      <line class="sc-fill" x1={i === 0 ? '0' : '100%'} y1="50%" x2={i === 0 ? '100%' : '0'} y2="50%" pathLength="100" stroke={i === 0 ? 'url(#sc-g-r)' : 'url(#sc-g-l)'} />
-                    </g>
-                  )}
-                  {/* Verticale vers le bas (téléphone et tablette ; flèche de droite sur ordinateur) */}
-                  <g class="sc-v">
-                    <line class="sc-base" x1="50%" y1="0" x2="50%" y2="100%" />
-                    <line class="sc-fill" x1="50%" y1="0" x2="50%" y2="100%" pathLength="100" stroke="url(#sc-g-d)" />
-                  </g>
-                </svg>
-                <i class="sc-head"></i>
+              <span class="sc-chevs">
+                {chevrons(i).map((k) => (
+                  <svg class="sc-cv" viewBox="0 0 16 16" style={`--k: ${k}`} focusable="false"><path class="sc-cv__base" d={CHEV} /><path class="sc-cv__lit" d={CHEV} /></svg>
+                ))}
               </span>
             </li>
           )}
@@ -115,24 +108,11 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
       );
     })}
     <li class="sc-back">
-      <span class="sc-ln" aria-hidden="true">
-        <svg class="sc-svg" focusable="false">
-          {/* Téléphone et tablette : crochet sur le côté, du dernier service (en bas) au premier (en haut) */}
-          <g class="sc-br">
-            <line class="sc-base" x1="100%" y1="100%" x2="0" y2="100%" />
-            <line class="sc-base" x1="0" y1="100%" x2="0" y2="0" />
-            <line class="sc-base" x1="0" y1="0" x2="100%" y2="0" />
-            <line class="sc-fill sc-fill--b" x1="100%" y1="100%" x2="0" y2="100%" pathLength="100" stroke="url(#sc-g-l)" />
-            <line class="sc-fill sc-fill--v" x1="0" y1="100%" x2="0" y2="0" pathLength="100" stroke="url(#sc-g-u)" />
-            <line class="sc-fill sc-fill--t" x1="0" y1="0" x2="100%" y2="0" pathLength="100" stroke="url(#sc-g-r)" />
-          </g>
-          {/* Ordinateur : verticale vers le haut, à gauche */}
-          <g class="sc-v">
-            <line class="sc-base" x1="50%" y1="100%" x2="50%" y2="0" />
-            <line class="sc-fill" x1="50%" y1="100%" x2="50%" y2="0" pathLength="100" stroke="url(#sc-g-u)" />
-          </g>
-        </svg>
-        <i class="sc-head"></i>
+      <span class="sc-back__curve" aria-hidden="true"></span>
+      <span class="sc-chevs" aria-hidden="true">
+        {chevrons(3).map((k, j) => (
+          <svg class:list={['sc-cv', `sc-cv--${j + 1}`]} viewBox="0 0 16 16" style={`--k: ${k}`} focusable="false"><path class="sc-cv__base" d={CHEV} /><path class="sc-cv__lit" d={CHEV} /></svg>
+        ))}
       </span>
       <span class="sc-back__lbl">Les avis relancent le cycle</span>
     </li>
@@ -146,8 +126,8 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 )}
 
 <script>
-  // Flèches animées : démarrent quand le cycle est à l'écran, en pause hors de l'écran.
-  // Rien avec prefers-reduced-motion (flèches grises statiques), ni sans IntersectionObserver.
+  // Chevrons animés : démarrent quand le cycle est à l'écran, en pause hors de l'écran.
+  // Rien avec prefers-reduced-motion (chevrons gris fixes), ni sans IntersectionObserver.
   document.querySelectorAll<HTMLElement>('[data-sc]').forEach((sc) => {
     if (!('IntersectionObserver' in window)) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -285,10 +265,10 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     pointer-events: none;
   }
 
-  /* ----- Flèches (SVG) : base grise, remplissage en dégradé, pointe en chevron ----- */
+  /* ----- Liaisons : 4 chevrons gris au repos, allumés l'un après l'autre en dégradé ----- */
   .sc {
     --sc-loop: 7.2s;
-    --sc-grey: color-mix(in srgb, var(--text-primary) 22%, transparent);
+    --sc-grey: color-mix(in srgb, var(--text-primary) 20%, transparent);
   }
 
   .sc-defs {
@@ -307,82 +287,82 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     list-style: none;
   }
 
-  /* Boîte de tracé : les lignes du SVG y sont placées en pourcentage */
-  .sc-ln {
+  /* Rangée de chevrons d'une liaison, répartis sur sa longueur */
+  .sc-chevs {
     position: absolute;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
   }
 
-  .sc-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+  .sc-cv {
+    flex: none;
+    width: 14px;
+    height: 14px;
     overflow: visible;
   }
 
-  .sc-base,
-  .sc-fill {
+  .sc-cv path {
     fill: none;
-    stroke-width: 2;
-    stroke-linecap: butt;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
-  .sc-base { stroke: var(--sc-grey); }
+  .sc-cv__base { stroke: var(--sc-grey); }
 
-  /* Remplissage : invisible au repos (pointillé décalé d'une longueur entière) */
-  .sc-fill {
-    stroke-width: 2.5;
-    stroke-dasharray: 100 100;
-    stroke-dashoffset: 100;
+  /* Copie en dégradé par-dessus, éteinte au repos */
+  .sc-cv__lit {
+    stroke: url(#sc-cv-g);
+    opacity: 0;
   }
 
-  /* Pointe de flèche : chevron, gris au repos */
-  .sc-head {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-top: 2px solid var(--sc-grey);
-    border-right: 2px solid var(--sc-grey);
+  /* Téléphone et tablette : liaisons verticales vers le bas entre deux cartes */
+  .sc-arrow { height: 56px; }
+
+  .sc-arrow .sc-chevs {
+    inset: 4px 0;
+    flex-direction: column;
   }
 
-  /* Téléphone et tablette : flèches verticales vers le bas entre deux cartes */
-  .sc-arrow { height: 30px; }
+  .sc-arrow .sc-cv { transform: rotate(90deg); }
 
-  .sc-arrow .sc-ln {
-    top: 5px;
-    bottom: 5px;
-    left: 0;
-    right: 0;
-  }
-
-  .sc-arrow .sc-h { display: none; }
-
-  .sc-arrow .sc-head {
-    left: 50%;
-    bottom: 0;
-    transform: translate(-50%, 0) rotate(135deg);
-  }
-
-  /* Téléphone et tablette : flèche de retour en crochet, sur le côté */
+  /* Téléphone et tablette : ligne de retour courbe sur le côté, du dernier service (en bas)
+     au premier (en haut) ; ses chevrons suivent la courbe et s'orientent dans son sens */
   .sc-back { margin: calc(var(--sc-card-h) / 2) 0; }
 
-  .sc-back .sc-ln {
+  .sc-back__curve {
+    position: absolute;
     top: 0;
     bottom: 0;
     right: 8px;
-    width: 16px;
+    width: 18px;
+    border: 1.5px solid var(--sc-grey);
+    border-right: 0;
+    border-radius: 14px 0 0 14px;
   }
 
-  .sc-back .sc-v { display: none; }
-
-  .sc-back .sc-head {
+  .sc-back .sc-chevs {
     top: 0;
-    right: -2px;
-    transform: translateY(-50%) rotate(45deg);
+    bottom: 0;
+    right: 8px;
+    width: 18px;
+    display: block;
   }
 
-  /* Étiquette le long de la flèche, lue de bas en haut (sens de la flèche) */
+  .sc-back .sc-cv {
+    position: absolute;
+    margin: -7px 0 0 -7px;
+  }
+
+  /* Coin du bas (vers le haut à gauche), deux sur le montant (vers le haut), coin du haut (vers
+     le haut à droite) : centres posés sur la courbe (rayon 14 px, milieu du coin à ~4 px) */
+  .sc-back .sc-cv--1 { left: 4.8px; top: calc(100% - 4.8px); transform: rotate(-135deg); }
+  .sc-back .sc-cv--2 { left: 0.75px; top: 64%; transform: rotate(-90deg); }
+  .sc-back .sc-cv--3 { left: 0.75px; top: 36%; transform: rotate(-90deg); }
+  .sc-back .sc-cv--4 { left: 4.8px; top: 4.8px; transform: rotate(-45deg); }
+
+  /* Étiquette le long de la ligne de retour, lue de bas en haut (sens du cycle) */
   .sc-back__lbl {
     position: absolute;
     top: 50%;
@@ -398,64 +378,21 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     color: var(--md-pink-soft);
   }
 
-  /* ----- Animation : un tour = --sc-loop, un quart par segment (a1, a2, a3, retour) -----
-     Chaque segment se remplit pendant son quart (0 → 25 %), puis se vide pendant le quart
-     suivant (25 → 50 %), pendant que le segment d'après se remplit. */
-  .sc-a1 { --sc-i: 0; }
-  .sc-a2 { --sc-i: 1; }
-  .sc-a3 { --sc-i: 2; }
-  .sc-back { --sc-i: 3; }
-
-  .sc.is-live .sc-fill,
-  .sc.is-live .sc-head {
-    animation-duration: var(--sc-loop);
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-fill-mode: both;
-    animation-delay: calc(var(--sc-i) * var(--sc-loop) / 4);
+  /* ----- Animation : 16 chevrons sur le tour, un toutes les --sc-loop / 16 (0,45 s).
+     Chacun s'allume vite, reste un instant, puis s'éteint : 2 à 3 chevrons allumés à la fois,
+     qui avancent dans le sens du cycle. */
+  .sc.is-live .sc-cv__lit {
+    animation: sc-cv var(--sc-loop) ease-in-out infinite both;
+    animation-delay: calc(var(--k) * var(--sc-loop) / 16);
     animation-play-state: paused;
   }
 
-  .sc.is-live .sc-fill { animation-name: sc-seg; }
-  .sc.is-live .sc-head { animation-name: sc-head; animation-timing-function: linear; }
+  .sc.is-live.is-playing .sc-cv__lit { animation-play-state: running; }
 
-  /* Crochet du retour (téléphone et tablette) : bas, montant, haut, l'un après l'autre */
-  .sc.is-live .sc-fill--b { animation-name: sc-seg-b; }
-  .sc.is-live .sc-fill--v { animation-name: sc-seg-v; }
-  .sc.is-live .sc-fill--t { animation-name: sc-seg-t; }
-
-  .sc.is-live.is-playing .sc-fill,
-  .sc.is-live.is-playing .sc-head { animation-play-state: running; }
-
-  @keyframes sc-seg {
-    0% { stroke-dashoffset: 100; }
-    25% { stroke-dashoffset: 0; }
-    50%, 100% { stroke-dashoffset: -100; }
-  }
-
-  @keyframes sc-seg-b {
-    0% { stroke-dashoffset: 100; }
-    2.5%, 25% { stroke-dashoffset: 0; }
-    27.5%, 100% { stroke-dashoffset: -100; }
-  }
-
-  @keyframes sc-seg-v {
-    0%, 2.5% { stroke-dashoffset: 100; }
-    22.5%, 27.5% { stroke-dashoffset: 0; }
-    47.5%, 100% { stroke-dashoffset: -100; }
-  }
-
-  @keyframes sc-seg-t {
-    0%, 22.5% { stroke-dashoffset: 100; }
-    25%, 47.5% { stroke-dashoffset: 0; }
-    50%, 100% { stroke-dashoffset: -100; }
-  }
-
-  /* La pointe prend la couleur quand le remplissage l'atteint, et la perd quand il est passé */
-  @keyframes sc-head {
-    0%, 22% { border-color: var(--sc-grey); }
-    25%, 47% { border-color: var(--woop-pink); }
-    50%, 100% { border-color: var(--sc-grey); }
+  @keyframes sc-cv {
+    0% { opacity: 0; }
+    4%, 9% { opacity: 1; }
+    20%, 100% { opacity: 0; }
   }
 
   /* ===== Ordinateur : cycle compact =====
@@ -491,68 +428,58 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
 
     .sc-core::before { inset: -46px -36px; }
 
-    /* Flèches horizontales : en haut vers la droite, en bas vers la gauche */
+    /* Chevrons un peu plus grands sur ordinateur */
+    .sc-cv {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Liaisons horizontales : en haut vers la droite, en bas vers la gauche */
     .sc-a1,
     .sc-a3 {
       align-self: center;
-      height: 12px;
+      height: 14px;
     }
 
-    .sc-a1 .sc-ln,
-    .sc-a3 .sc-ln {
-      top: 0;
-      bottom: 0;
-      left: 18px;
-      right: 18px;
+    .sc-a1 .sc-chevs,
+    .sc-a3 .sc-chevs {
+      inset: 0 18px;
+      flex-direction: row;
     }
 
-    .sc-a1 .sc-h,
-    .sc-a3 .sc-h { display: inline; }
+    .sc-a1 .sc-cv { transform: none; }
 
-    .sc-a1 .sc-v,
-    .sc-a3 .sc-v { display: none; }
+    /* En bas, de droite à gauche : le 1er chevron (allumé en premier) est à droite */
+    .sc-a3 .sc-chevs { flex-direction: row-reverse; }
 
-    .sc-a1 .sc-head {
-      left: auto;
-      right: 0;
-      bottom: auto;
-      top: 50%;
-      transform: translate(0, -50%) rotate(45deg);
-    }
+    .sc-a3 .sc-cv { transform: rotate(180deg); }
 
-    .sc-a3 .sc-head {
-      left: 0;
-      bottom: auto;
-      top: 50%;
-      transform: translate(0, -50%) rotate(-135deg);
-    }
-
-    /* Flèche verticale à droite (vers le bas), sous la carte du haut */
+    /* Liaison verticale à droite (vers le bas), sous la carte du haut */
     .sc-a2 { height: auto; }
 
-    .sc-a2 .sc-ln {
-      top: 14px;
-      bottom: 14px;
-    }
+    .sc-a2 .sc-chevs { inset: 14px 0; }
 
-    /* Flèche de retour à gauche (vers le haut), avec son étiquette à côté */
+    /* Retour à gauche, droit et vers le haut, avec son étiquette à côté */
     .sc-back { margin: 14px 0; }
 
-    .sc-back .sc-ln {
-      right: auto;
-      left: calc(50% - 6px);
-      width: 12px;
+    .sc-back__curve { display: none; }
+
+    .sc-back .sc-chevs {
+      inset: 0;
+      width: auto;
+      display: flex;
+      flex-direction: column-reverse;
     }
 
-    .sc-back .sc-br { display: none; }
-
-    .sc-back .sc-v { display: inline; }
-
-    .sc-back .sc-head {
-      right: auto;
-      left: 50%;
-      transform: translate(-50%, 0) rotate(-45deg);
+    .sc-back .sc-cv {
+      position: static;
+      margin: 0;
     }
+
+    .sc-back .sc-cv--1,
+    .sc-back .sc-cv--2,
+    .sc-back .sc-cv--3,
+    .sc-back .sc-cv--4 { transform: rotate(-90deg); }
 
     .sc-back__lbl {
       top: 50%;
@@ -580,8 +507,7 @@ const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}`
     .sc-card { transition: none; }
     .sc-card.is-link:hover { transform: none; }
 
-    /* Flèches grises statiques */
-    .sc .sc-fill,
-    .sc .sc-head { animation: none !important; }
+    /* Chevrons gris fixes */
+    .sc .sc-cv__lit { animation: none !important; }
   }
 </style>
