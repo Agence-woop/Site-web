@@ -1,0 +1,81 @@
+---
+// « Pour aller plus loin » : ligne discrète de liens vers des articles du blog, sous la FAQ
+// d'une page Services. Le titre affiché est le titre réel de l'article (champ titre de la
+// collection blog) : il suit toute modification de l'article. Un article absent ou en brouillon
+// fait échouer la compilation, pour ne jamais publier de lien mort.
+//
+// Props
+// - slugs : identifiants des articles (nom du fichier .md sans extension)
+// - label : début de la ligne (« Pour aller plus loin » par défaut)
+import { getEntry } from 'astro:content';
+import { NB } from '../../utils/typo';
+
+interface Props {
+  slugs: string[];
+  label?: string;
+}
+
+const { slugs, label = 'Pour aller plus loin' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const articles = await Promise.all(
+  slugs.map(async (slug) => {
+    const entry = await getEntry('blog', slug);
+    if (!entry || entry.data.brouillon) throw new Error(`FurtherReading : article « ${slug} » introuvable ou en brouillon`);
+    return { href: `${base}/blog/${slug}/`, title: entry.data.titre };
+  }),
+);
+---
+<nav class="md-more" aria-label={label} data-reveal="up">
+  <p class="md-more__lbl">{label}{NB}:</p>
+  <ul class="md-more__list">
+    {articles.map((a) => (
+      <li><a class="link-inline" href={a.href}>{a.title}</a></li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .md-more {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 32px;
+    padding-top: 22px;
+    border-top: 1px solid var(--hp-line);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  @media (min-width: 900px) {
+    .md-more {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 18px;
+    }
+  }
+
+  .md-more__lbl {
+    flex: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+  }
+
+  .md-more__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+  }
+
+  /* Titres des articles : blancs (le lien discret garde la couleur de son texte), soulignés en
+     rose au survol et au clavier (.link-inline) */
+  .md-more__list li {
+    color: var(--text-primary);
+    font-weight: 600;
+    text-wrap: pretty;
+  }
+</style>

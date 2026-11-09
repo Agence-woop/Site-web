@@ -4,7 +4,8 @@
 //
 // Props
 // - kind : suffixe de la classe du visuel (md-pr__vis--{kind}), dont le fond est réglé par la page
-// - title, lived, change : textes de la carte
+// - title, lived, change : textes de la carte ; change est facultatif (sans lui, la carte n'a
+//   qu'un titre et un texte)
 // - reveal, step : apparition au défilement (data-reveal, data-reveal-step)
 // - wide : carte sur toute la largeur de la grille, illustration à côté du texte (dès 720 px)
 // Emplacement par défaut : contenu de l'illustration (propre à chaque page, stylé par la page).
@@ -15,7 +16,7 @@ interface Props {
   kind: string;
   title: string;
   lived: string;
-  change: string;
+  change?: string;
   reveal?: 'left' | 'right' | 'up';
   step?: string;
   wide?: boolean;
@@ -32,7 +33,7 @@ const scope = parentScope(rest);
   <div class="md-pr__body">
     <h3>{title}</h3>
     <p class="md-pr__lived">{lived}</p>
-    <p class="md-pr__change">{change}</p>
+    {change && <p class="md-pr__change">{change}</p>}
   </div>
 </article>
 

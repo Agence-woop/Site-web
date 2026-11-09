@@ -1,0 +1,421 @@
+---
+// « L'écosystème » : les 5 services WOOP dans l'ordre réel d'un patient, en cycle.
+// Réseaux sociaux (fait connaître) → Publicité Google et Meta (amène) → Sites web (fait réserver)
+// → Expérience client (fait revenir et recommander), puis les avis relancent le cycle.
+// L'image de marque, au centre, est la fondation de chaque étape (sans ligne vers les cartes).
+//
+// - Ordinateur (dès 900 px) : cycle compact (900 px de large au plus, centré), 4 cartes aux coins
+//   reliées par des flèches dans le sens du cycle, flèche de retour à gauche avec son étiquette.
+// - Téléphone et tablette : version verticale, l'image de marque en haut, les 4 services l'un sous
+//   l'autre reliés par des flèches, et la flèche de retour sur le côté avec son étiquette.
+// - La carte du service de la page (current) est en dégradé WOOP, avec « Vous êtes ici » ; les
+//   autres, et le centre, sont en version neutre.
+// - Liens : seules les cartes des pages en ligne (href défini dans src/data/services.ts) sont
+//   cliquables ; elles deviennent des liens d'elles-mêmes dès que leur page est publiée.
+// - « Service suivant » : affiché seulement quand la page du service suivant est en ligne.
+//
+// Props
+// - current : le service de la page
+import SectionHead from '../SectionHead.astro';
+import CtaIcon from '../CtaIcon.astro';
+import { CYCLE, CYCLE_CORE, service, type ServiceKey, type Service } from '../../data/services';
+import { NB } from '../../utils/typo';
+
+interface Props {
+  current: ServiceKey;
+}
+
+const { current } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const core = service(CYCLE_CORE);
+const ring = CYCLE.map((key, i) => ({ ...service(key), area: `s${i + 1}` }));
+const at = CYCLE.indexOf(current);
+const next = at >= 0 ? service(CYCLE[(at + 1) % CYCLE.length]) : undefined;
+
+// Carte : lien si la page est en ligne (et n'est pas la page en cours), sinon simple bloc.
+const linkOf = (s: Service) => (s.href && s.key !== current ? `${base}${s.href}` : undefined);
+---
+<SectionHead over="L'écosystème" intro={`L'ordre réel d'un patient${NB}: il vous découvre, il cherche, il réserve, il revient et il recommande. Votre image de marque nourrit chaque étape, et les avis relancent le cycle.`}>
+  Cinq services, <span class="gradient-accent">un seul cycle</span>.
+</SectionHead>
+
+<div class="sc" data-reveal="up">
+  {[core].map((s) => {
+    const href = linkOf(s);
+    const Tag = href ? 'a' : 'div';
+    return (
+      <Tag class:list={['sc-card', 'sc-core', { 'is-current': s.key === current, 'is-link': href }]} href={href} aria-current={s.key === current ? 'page' : undefined}>
+        <b class="sc-card__name">{s.label}</b>
+        <span class="sc-card__foot">
+          <span class="sc-card__role">{s.role}</span>
+          {s.key === current && <span class="sc-card__here">Vous êtes ici</span>}
+        </span>
+      </Tag>
+    );
+  })}
+
+  <ol class="sc-ring">
+    {ring.map((s, i) => {
+      const href = linkOf(s);
+      const Tag = href ? 'a' : 'div';
+      return (
+        <>
+          <li class:list={['sc-cell', `sc-${s.area}`]}>
+            <Tag class:list={['sc-card', { 'is-current': s.key === current, 'is-link': href }]} href={href} aria-current={s.key === current ? 'page' : undefined}>
+              <b class="sc-card__name">{s.label}</b>
+              <span class="sc-card__foot">
+                <span class="sc-card__role">{s.role}</span>
+                {s.key === current && <span class="sc-card__here">Vous êtes ici</span>}
+              </span>
+            </Tag>
+          </li>
+          {i < ring.length - 1 && <li class:list={['sc-arrow', `sc-a${i + 1}`]} aria-hidden="true"><i></i></li>}
+        </>
+      );
+    })}
+    <li class="sc-back"><span class="sc-back__line" aria-hidden="true"></span><span class="sc-back__lbl">Les avis relancent le cycle</span></li>
+  </ol>
+</div>
+
+{next?.href && (
+  <p class="sc-next" data-reveal="up">
+    <a class="cta cta--line" href={`${base}${next.href}`}>Service suivant{NB}: {next.label}<CtaIcon dir="right" /></a>
+  </p>
+)}
+
+<style>
+  /* ===== Téléphone et tablette : version verticale =====
+     Colonne de gauche : la flèche de retour (et son étiquette) ; à droite : les cartes. */
+  .sc {
+    --sc-card-h: 76px;
+    --sc-rail: 44px;
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--sc-rail) minmax(0, 1fr);
+    grid-template-areas:
+      'core core'
+      'back s1'
+      'back a1'
+      'back s2'
+      'back a2'
+      'back s3'
+      'back a3'
+      'back s4';
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* La liste ne crée pas de boîte : ses éléments se placent dans la grille du cycle */
+  .sc-ring { display: contents; list-style: none; }
+
+  .sc-s1 { grid-area: s1; }
+  .sc-s2 { grid-area: s2; }
+  .sc-s3 { grid-area: s3; }
+  .sc-s4 { grid-area: s4; }
+  .sc-a1 { grid-area: a1; }
+  .sc-a2 { grid-area: a2; }
+  .sc-a3 { grid-area: a3; }
+  .sc-back { grid-area: back; }
+  .sc-cell { display: flex; }
+
+  /* ----- Cartes ----- */
+  .sc-card {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-height: var(--sc-card-h);
+    padding: 14px 18px;
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
+    box-shadow: inset 0 0 0 1.5px var(--hp-line);
+    color: var(--text-primary);
+    transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 300ms ease;
+  }
+
+  .sc-card__name {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .sc-card__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 10px;
+  }
+
+  .sc-card__role {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--md-pink-soft);
+  }
+
+  /* Carte du service de la page : dégradé WOOP, titre blanc, petits textes en --bg-deep */
+  .sc-card.is-current {
+    background: var(--woop-gradient);
+    box-shadow: 0 18px 40px rgba(230, 43, 127, 0.35);
+  }
+
+  .sc-card.is-current .sc-card__role { color: var(--hp-on-grad); }
+
+  .sc-card__here {
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hp-on-grad);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bg-deep) 45%, transparent);
+  }
+
+  /* Carte d'une page en ligne : lien (survol et clavier) */
+  .sc-card.is-link:hover {
+    transform: translateY(-3px);
+    box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.6);
+  }
+
+  .sc-card.is-link:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 3px;
+  }
+
+  /* Centre : l'image de marque, la fondation, avec un léger halo */
+  .sc-core {
+    grid-area: core;
+    z-index: 0;
+    margin-bottom: 26px;
+    text-align: center;
+    align-items: center;
+    box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.4);
+  }
+
+  .sc-core .sc-card__foot { justify-content: center; }
+
+  .sc-core::before {
+    content: '';
+    position: absolute;
+    inset: -28px -10px;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(230, 43, 127, 0.28), rgba(250, 98, 68, 0.08) 60%, transparent);
+    pointer-events: none;
+  }
+
+  /* ----- Flèches entre deux cartes (verticales vers le bas sur téléphone et tablette) ----- */
+  .sc-arrow {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 30px;
+  }
+
+  .sc-arrow i,
+  .sc-back__line {
+    position: absolute;
+    display: block;
+  }
+
+  .sc-arrow i {
+    top: 5px;
+    bottom: 5px;
+    left: 50%;
+    width: 2px;
+    margin-left: -1px;
+    background: linear-gradient(180deg, var(--woop-orange), var(--woop-pink));
+  }
+
+  /* Pointe de flèche : chevron */
+  .sc-arrow i::after,
+  .sc-back__line::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--woop-pink);
+    border-right: 2px solid var(--woop-pink);
+  }
+
+  .sc-arrow i::after {
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 0) rotate(135deg);
+  }
+
+  /* ----- Flèche de retour : sur le côté, du dernier service au premier ----- */
+  .sc-back {
+    position: relative;
+    list-style: none;
+    margin: calc(var(--sc-card-h) / 2) 0;
+  }
+
+  .sc-back__line {
+    top: 0;
+    bottom: 0;
+    right: 8px;
+    width: 16px;
+    border: 2px solid var(--woop-pink);
+    border-right: 0;
+    border-radius: 12px 0 0 12px;
+  }
+
+  /* Pointe vers la droite, en haut : retour au premier service */
+  .sc-back__line::after {
+    top: -1px;
+    right: -2px;
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  /* Étiquette le long de la flèche, lue de bas en haut (sens de la flèche) */
+  .sc-back__lbl {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 18px;
+    transform: translateY(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
+    white-space: nowrap;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.04em;
+    color: var(--md-pink-soft);
+  }
+
+  /* ===== Ordinateur : cycle compact =====
+     Cartes aux 4 coins, image de marque au centre, flèches dans le sens du cycle :
+     s1 → s2 (en haut), s2 → s3 (à droite), s3 → s4 (en bas), s4 → s1 (à gauche, retour). */
+  @media (min-width: 900px) {
+    .sc {
+      --sc-card-h: 92px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: auto 150px auto;
+      grid-template-areas:
+        's1 a1 s2'
+        'back core a2'
+        's4 a3 s3';
+      max-width: 900px;
+    }
+
+    .sc-card {
+      padding: 18px 20px;
+      border-radius: 22px;
+    }
+
+    .sc-card__name { font-size: 18px; }
+
+    .sc-core {
+      align-self: center;
+      justify-self: center;
+      width: 100%;
+      max-width: 260px;
+      margin: 0;
+      padding: 22px 20px;
+    }
+
+    .sc-core::before { inset: -46px -36px; }
+
+    /* Flèches horizontales (en haut vers la droite, en bas vers la gauche) */
+    .sc-a1,
+    .sc-a3 {
+      height: auto;
+      align-self: center;
+      height: 2px;
+      margin: 0 18px;
+    }
+
+    .sc-a1 i,
+    .sc-a3 i {
+      top: 0;
+      bottom: auto;
+      left: 0;
+      right: 0;
+      width: auto;
+      height: 2px;
+      margin: 0;
+      background: linear-gradient(90deg, var(--woop-orange), var(--woop-pink));
+    }
+
+    .sc-a1 i::after {
+      left: auto;
+      right: 0;
+      bottom: auto;
+      top: 50%;
+      transform: translate(0, -50%) rotate(45deg);
+    }
+
+    .sc-a3 i { background: linear-gradient(270deg, var(--woop-orange), var(--woop-pink)); }
+
+    .sc-a3 i::after {
+      left: 0;
+      bottom: auto;
+      top: 50%;
+      transform: translate(0, -50%) rotate(-135deg);
+    }
+
+    /* Flèche verticale à droite (vers le bas), sous la carte du haut */
+    .sc-a2 {
+      height: auto;
+      margin: 14px 0;
+    }
+
+    .sc-a2 i { top: 0; bottom: 0; }
+
+    /* Flèche de retour à gauche (vers le haut), avec son étiquette à côté */
+    .sc-back { margin: 14px 0; }
+
+    .sc-back__line {
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      right: auto;
+      width: 2px;
+      margin-left: -1px;
+      border: 0;
+      border-radius: 0;
+      background: linear-gradient(0deg, var(--woop-orange), var(--woop-pink));
+    }
+
+    .sc-back__line::after {
+      top: 0;
+      right: auto;
+      left: 50%;
+      transform: translate(-50%, 0) rotate(-45deg);
+    }
+
+    .sc-back__lbl {
+      top: 50%;
+      left: auto;
+      right: calc(50% + 14px);
+      width: auto;
+      max-width: 130px;
+      transform: translateY(-50%);
+      writing-mode: horizontal-tb;
+      white-space: normal;
+      text-align: right;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+  }
+
+  /* ----- Service suivant ----- */
+  .sc-next {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sc-card { transition: none; }
+    .sc-card.is-link:hover { transform: none; }
+  }
+</style>

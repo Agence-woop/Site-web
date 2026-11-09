@@ -1,0 +1,1612 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import SectionHead from '../components/SectionHead.astro';
+import VisibilityTeaser from '../components/VisibilityTeaser.astro';
+import FinalBand from '../components/FinalBand.astro';
+import StickyBar from '../components/StickyBar.astro';
+import BrandLogo from '../components/BrandLogo.astro';
+import ServiceHero from '../components/services/ServiceHero.astro';
+import AudienceCard from '../components/services/AudienceCard.astro';
+import ServiceTile from '../components/services/ServiceTile.astro';
+import Steps from '../components/services/Steps.astro';
+import SpecialistCard from '../components/services/SpecialistCard.astro';
+import Faq from '../components/services/Faq.astro';
+import FurtherReading from '../components/services/FurtherReading.astro';
+import ServiceCycle from '../components/services/ServiceCycle.astro';
+import { team } from '../data/team';
+import { NB } from '../utils/typo';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SITE_URL = 'https://agence-woop.ca';
+const PAGE_URL = `${SITE_URL}/publicite-google-meta/`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Publicité Google et Meta pour cliniques et cabinets',
+    serviceType: 'Publicité Google et Meta pour cliniques et cabinets',
+    // Renvoie à la fiche de l'organisation publiée sur l'accueil
+    provider: { '@id': `${SITE_URL}/#organization`, name: 'Agence WOOP' },
+    areaServed: 'Québec',
+    url: PAGE_URL,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Publicité Google et Meta', item: PAGE_URL },
+    ],
+  },
+];
+
+// Icônes au trait (même style que le reste du site)
+const ICONS = {
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+  retarget: '<path d="M4 12a8 8 0 0114-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 01-14 5.3L4 15"/><path d="M4 20v-5h5"/>',
+  booked: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/><path d="M9 15l2 2 4-4"/>',
+  page: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 8h18"/><path d="M12 12l6 2.5-2.6 1-1 2.6z"/>',
+  chart: '<path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/>',
+  report: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  clinic: '<path d="M3 21V9h18v12"/><path d="M12 11v6M9 14h6"/><path d="M2 9h20"/>',
+  case: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2"/>',
+  phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/>',
+  tag: '<path d="M3 12V4a1 1 0 011-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+} as const;
+type IconKey = keyof typeof ICONS;
+const icon = (k: IconKey) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
+
+// Entonnoir du hero
+const funnel: { key: string; ic: IconKey; step: string; net: string; who: string }[] = [
+  { key: '1', ic: 'eye', step: 'Découvrir', net: 'Meta', who: 'Il ne cherche pas encore' },
+  { key: '2', ic: 'search', step: 'Chercher', net: 'Google', who: 'Il cherche maintenant' },
+  { key: '3', ic: 'retarget', step: 'Revenir', net: 'Reciblage', who: 'Il a vu, il revient' },
+];
+
+// 01 · Pour qui ?
+const profiles: { key: 'clicks' | 'new' | 'slots' | 'solo'; title: string; lived: string; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'clicks',
+    title: "Vous payez des publicités, sans savoir ce qu'elles rapportent.",
+    lived: `Des clics, des impressions, un rapport incompréhensible. Mais combien de demandes de rendez-vous${NB}?`,
+    reveal: 'left',
+  },
+  {
+    key: 'new',
+    title: 'Un nouveau praticien arrive, son agenda doit se remplir.',
+    lived: "Lancer un service ou un professionnel, c'est trouver ses premiers patients vite.",
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'slots',
+    title: 'Vos plages creuses vous coûtent cher.',
+    lived: 'Des créneaux vides le mardi matin, pleins le jeudi soir. Il faut viser les bons moments.',
+    reveal: 'up',
+    step: '2',
+  },
+  {
+    key: 'solo',
+    title: 'Vous avez essayé Google ou Meta seul, sans résultat.',
+    lived: 'Un réseau seul ne fait pas tout. Chacun a un rôle, ils doivent travailler ensemble.',
+    reveal: 'right',
+    step: '3',
+  },
+];
+
+// 02 · L'entonnoir
+const roles: { key: string; n: string; ic: IconKey; title: string; where: string; net: string; goal: string; kpi: string; reveal: 'left' | 'up' | 'right'; step?: string; hot?: boolean }[] = [
+  {
+    key: 'discover',
+    n: '01',
+    ic: 'eye',
+    title: 'Découvrir',
+    where: "Il ne cherche pas encore, mais il en aura besoin.",
+    net: 'Meta (Facebook, Instagram)',
+    goal: 'Faire connaître la clinique dans son quartier.',
+    kpi: 'Portée locale, visites du site',
+    reveal: 'left',
+  },
+  {
+    key: 'search',
+    n: '02',
+    ic: 'search',
+    title: 'Chercher',
+    where: 'Il a un besoin et cherche maintenant.',
+    net: 'Google (recherche et Maps)',
+    goal: 'Être trouvé en premier, au moment où il cherche.',
+    kpi: 'Appels, demandes de rendez-vous',
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'return',
+    n: '03',
+    ic: 'retarget',
+    title: 'Revenir',
+    where: "Il a vu la clinique, mais n'a pas encore réservé.",
+    net: 'Meta et Google (reciblage)',
+    goal: "Le faire revenir jusqu'à la réservation.",
+    kpi: 'Demandes de rendez-vous, coût par demande',
+    reveal: 'right',
+    step: '2',
+    hot: true,
+  },
+];
+
+// 03 · Les livrables (grille : 1 colonne sur téléphone, 2 sur tablette, 4 sur ordinateur)
+const deliverables: { key: 'gads' | 'meta' | 'lp' | 'rt' | 'measure' | 'report'; shape: 'wide' | 'sq'; title: string; text: string; accent?: boolean; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'gads',
+    shape: 'sq',
+    accent: true,
+    title: 'Campagnes Google, recherche et Maps',
+    text: 'Vos annonces apparaissent quand un patient cherche votre service dans votre secteur, sur la recherche comme sur Maps.',
+    reveal: 'left',
+  },
+  {
+    key: 'meta',
+    shape: 'sq',
+    title: 'Campagnes Meta',
+    text: 'Facebook et Instagram, pour faire connaître la clinique à ceux qui en auront besoin demain.',
+    reveal: 'right',
+    step: '1',
+  },
+  { key: 'lp', shape: 'sq', title: 'Pages de conversion', text: 'Une page par campagne, pensée pour réserver.', reveal: 'up', step: '1' },
+  { key: 'rt', shape: 'sq', title: 'Reciblage', text: 'On fait revenir ceux qui ont hésité.', reveal: 'up', step: '2' },
+  {
+    key: 'measure',
+    shape: 'wide',
+    title: "Mesure jusqu'à la demande de rendez-vous",
+    text: 'On suit chaque appel, formulaire ou réservation en ligne, pas seulement le clic.',
+    reveal: 'up',
+  },
+  {
+    key: 'report',
+    shape: 'wide',
+    title: 'Un rapport mensuel que vous comprenez',
+    text: `Expliqué par la personne qui gère vos campagnes${NB}: Emma. En demandes de rendez-vous et en coût par demande, pas en clics.`,
+    reveal: 'up',
+    step: '1',
+  },
+];
+
+// 05 · Comment on travaille
+const steps = [
+  {
+    n: '1',
+    when: 'Appel de lancement',
+    title: 'On fixe vos objectifs',
+    text: "Remplir l'agenda d'un nouveau praticien, lancer un service, combler les plages creuses. Une campagne par objectif, pas une campagne pour tout.",
+    get: 'Vos objectifs, par ordre de priorité.',
+    reveal: 'left' as const,
+  },
+  {
+    n: '2',
+    when: 'Semaine 1',
+    title: "On analyse l'existant",
+    text: `On ne repart pas de zéro${NB}: on garde ce qui marchait, on coupe ce qui coûtait sans rapporter.`,
+    get: "L'état des lieux de vos campagnes et de votre fiche Google, votre plan de campagnes et le budget conseillé.",
+    reveal: 'up' as const,
+    step: '1',
+  },
+  {
+    n: '3',
+    when: 'Chaque jour',
+    title: 'On lance et on suit',
+    text: "Chaque dollar a un rôle dans l'entonnoir, et on le déplace quand il ne le joue plus.",
+    get: 'Vos campagnes en ligne et vos pages de conversion.',
+    reveal: 'up' as const,
+    step: '2',
+  },
+  {
+    n: '4',
+    when: 'Chaque mois',
+    title: 'On vous rend des comptes',
+    text: "Un rapport clair, expliqué par Emma, avec ce qu'on garde et ce qu'on change.",
+    get: 'Vos demandes de rendez-vous et votre coût par demande de rendez-vous.',
+    reveal: 'right' as const,
+    step: '3',
+    hot: true,
+  },
+];
+
+// 08 · Vos questions
+const faq = [
+  {
+    q: `Quel budget publicitaire faut-il prévoir${NB}?`,
+    a: "Il dépend de votre secteur, de votre quartier et de vos objectifs. On vous recommande un montant précis lors de l'appel découverte, après avoir regardé votre situation.",
+  },
+  {
+    q: `Le budget publicitaire et vos honoraires, c'est la même chose${NB}?`,
+    a: 'Non. Le budget publicitaire est versé directement à Google et à Meta pour diffuser vos annonces. Les honoraires de WOOP rémunèrent la stratégie, la création, le suivi et les rapports. Les deux sont toujours présentés séparément.',
+  },
+  {
+    q: `Combien de temps avant les premiers résultats${NB}?`,
+    a: 'Les premières demandes peuvent arriver dès le lancement des campagnes. Il faut ensuite quelques semaines de données pour réduire le coût par demande de rendez-vous.',
+  },
+  {
+    q: `Est-ce que la publicité respecte les règles de mon ordre professionnel${NB}?`,
+    a: 'Nos annonces et notre ciblage sont pensés selon les règles de votre ordre professionnel et celles de Google et de Meta. Vous approuvez chaque annonce avant sa diffusion et restez responsable de sa conformité.',
+  },
+  {
+    q: `Qui s'occupe de mes campagnes${NB}?`,
+    a: "Emma, spécialiste Paid Media chez WOOP. C'est elle qui gère vos campagnes au quotidien et qui vous présente le rapport chaque mois, avec un fondateur toujours dans la boucle.",
+  },
+  {
+    q: `Y a-t-il un engagement${NB}?`,
+    a: "Les modalités d'engagement vous sont présentées lors de l'appel découverte, selon le plan choisi.",
+  },
+];
+---
+<Layout
+  title="Publicité Google et Meta pour cliniques et cabinets | WOOP"
+  description="Google trouve ceux qui vous cherchent, Meta ceux qui ne vous cherchent pas encore. Des campagnes suivies chaque jour et mesurées en demandes de rendez-vous."
+  ogImage="/images/og-image.jpg"
+  jsonLd={jsonLd}
+>
+
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Le hero n'est jamais animé. -->
+  <ScrollReveal />
+
+  <!-- 1. HERO (sans data-reveal) -->
+  <ServiceHero
+    pill="Publicité Google et Meta"
+    sub={`Google capte les patients qui vous cherchent déjà. Meta fait connaître votre clinique à ceux qui en auront besoin demain. On construit l'entonnoir complet, et on mesure ce qui compte${NB}: les demandes de rendez-vous.`}
+    strong="La publicité qui se mesure en demandes de rendez-vous, pas en clics."
+    primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+    secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
+  >
+    <Fragment slot="title">Publicité Google et Meta{NB}: Google trouve ceux qui vous cherchent, Meta ceux qui <span class="gradient-accent hp-kw">ne vous cherchent pas encore.</span></Fragment>
+
+    <Fragment slot="visual">
+    <Fragment set:html={"<!-- Illustration : l'entonnoir, de la découverte à la demande de rendez-vous -->"} />
+    <div class="pu-hv" aria-hidden="true">
+      <div class="pu-hv__glow"></div>
+      <div class="pu-fun">
+        {funnel.map((l) => (
+          <div class:list={['pu-lv', `pu-lv--${l.key}`]}>
+            <span class="pu-ic" set:html={icon(l.ic)} />
+            <div><small>{l.step}</small><b>{l.net}</b><em>{l.who}</em></div>
+          </div>
+        ))}
+        <div class="pu-out">
+          <span class="pu-ic pu-ic--w" set:html={icon('booked')} />
+          <div><b>Demande de rendez-vous reçue</b><small>Ce qu'on mesure</small></div>
+        </div>
+      </div>
+      <div class="pu-chip"><span class="pu-chip__plus">+</span><div><b>Nouvelle demande de rendez-vous</b><small>Via Google Maps</small></div></div>
+    </div>
+    </Fragment>
+  </ServiceHero>
+
+  <!-- 2. POUR QUI ? -->
+  <section class="hp-block hp-sec" id="pour-qui" data-reveal-clip>
+    <div class="container">
+      <SectionHead over={`01 · Pour qui${NB}?`}>Vous vous <span class="gradient-accent">reconnaissez</span>{NB}?</SectionHead>
+
+      <div class="pu-prs">
+        {profiles.map((p) => (
+          <AudienceCard kind={p.key} title={p.title} lived={p.lived} reveal={p.reveal} step={p.step}>
+            {p.key === 'clicks' && (
+              <div class="pu-av1">
+                <span class="pu-av1__q">?</span>
+                <div class="pu-av1__bars"><i style="height:40%"></i><i style="height:70%"></i><i style="height:55%"></i><i style="height:90%"></i></div>
+                <small>Clics… et ensuite{NB}?</small>
+              </div>
+            )}
+            {p.key === 'new' && (
+              <div class="pu-av2">
+                <b>Nouveau praticien</b>
+                <div class="pu-av2__grid">{[1, 1, 0, 1, 0, 0].map((on) => <i class:list={[{ 'is-on': on }]}></i>)}</div>
+              </div>
+            )}
+            {p.key === 'slots' && (
+              <div class="pu-av3">
+                <div class="pu-av3__wk">
+                  {[['L', 1], ['M', 0], ['M', 1], ['J', 1], ['V', 0]].map(([d, hi]) => <span class:list={[hi ? 'is-hi' : 'is-lo']}><small>{d}</small></span>)}
+                </div>
+                <small>Plages creuses ciblées</small>
+              </div>
+            )}
+            {p.key === 'solo' && (
+              <div class="pu-av4">
+                <span class="pu-av4__nd"><BrandLogo name="google" /></span>
+                <i></i>
+                <span class="pu-av4__nd"><BrandLogo name="meta" /></span>
+                <i></i>
+                <span class="pu-av4__nd pu-av4__nd--ok">✓</span>
+              </div>
+            )}
+          </AudienceCard>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. L'ENTONNOIR -->
+  <section class="hp-block hp-sec" id="entonnoir" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="02 · L'entonnoir" intro="Chaque réseau joue un rôle différent dans le parcours du patient. On les fait travailler ensemble, du premier contact à la demande de rendez-vous.">Un réseau, <span class="gradient-accent">un rôle</span>.</SectionHead>
+
+      <ol class="pu-fns">
+        {roles.map((r) => (
+          <li class:list={['pu-fn', { 'md-glass': !r.hot, 'pu-fn--hot': r.hot }]} data-reveal={r.reveal} data-reveal-step={r.step}>
+            <div class="pu-fn__head">
+              <span class="pu-fn__n" aria-hidden="true">{r.n}</span>
+              <span class="pu-ic" aria-hidden="true" set:html={icon(r.ic)} />
+              <h3><span class="visually-hidden">{r.n} </span>{r.title}</h3>
+            </div>
+            <p class="pu-fn__where">{r.where}</p>
+            <dl>
+              <dt>Réseau</dt><dd>{r.net}</dd>
+              <dt>Objectif</dt><dd>{r.goal}</dd>
+              <dt>Ce qu'on mesure</dt><dd class="pu-fn__kpi">{r.kpi}</dd>
+            </dl>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. LES LIVRABLES -->
+  <section class="hp-block hp-sec" id="livrables" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="03 · Les livrables" intro="Une campagne par objectif, pas une campagne pour tout.">Ce que vous <span class="gradient-accent">recevez</span>.</SectionHead>
+
+      <div class="pu-bento">
+        {deliverables.map((t) => (
+          <ServiceTile kind={t.key} shape={t.shape} title={t.title} text={t.text} accent={t.accent} reveal={t.reveal} step={t.step}>
+            <Fragment slot="icon">
+              {t.key === 'gads' && <Fragment set:html={icon('search')} />}
+              {t.key === 'meta' && <BrandLogo name="meta" class="pu-meta-ico" />}
+              {t.key === 'lp' && <Fragment set:html={icon('page')} />}
+              {t.key === 'rt' && <Fragment set:html={icon('retarget')} />}
+              {t.key === 'measure' && <Fragment set:html={icon('chart')} />}
+              {t.key === 'report' && <Fragment set:html={icon('report')} />}
+            </Fragment>
+            <Fragment slot="illustration">
+              <div class:list={['md-mui', `pu-mui--${t.key}`]} aria-hidden="true">
+                {t.key === 'gads' && (
+                  <>
+                    <div class="pu-g__sb"><Fragment set:html={icon('search')} /><span>physiothérapeute près de moi</span></div>
+                    <div class="pu-g__ad"><small>Commandité</small><b>Votre clinique</b><span>Prendre rendez-vous en ligne</span></div>
+                    <div class="pu-g__map"><span class="pu-g__pin"></span><span class="pu-g__pin pu-g__pin--3"></span><span class="pu-g__pin pu-g__pin--4"></span><span class="pu-g__me"><span class="pu-g__pin pu-g__pin--me"></span><b>Votre clinique</b></span></div>
+                  </>
+                )}
+                {t.key === 'meta' && (
+                  <div class="pu-m__ph">
+                    <div class="pu-m__head"><span></span><b>Votre clinique</b><small>Commandité</small></div>
+                    <div class="pu-m__img"></div>
+                    <div class="pu-m__cta">Réserver</div>
+                  </div>
+                )}
+                {t.key === 'lp' && (
+                  <div class="pu-lp"><i class="pu-lp__h"></i><i></i><i class="pu-lp__s"></i><span>Réserver</span></div>
+                )}
+                {t.key === 'rt' && (
+                  <div class="pu-flow pu-flow--col"><span>Vu</span><i></i><span>Revu</span><i></i><span class="is-ok">Demande</span></div>
+                )}
+                {t.key === 'measure' && (
+                  <div class="pu-flow pu-flow--col"><span>Clic</span><i></i><span>Visite</span><i></i><span>Appel ou formulaire</span><i></i><span class="is-ok">Demande de rendez-vous</span></div>
+                )}
+                {t.key === 'report' && (
+                  <div class="pu-rp">
+                    <div><small>Demandes de rendez-vous</small><b>Votre chiffre</b></div>
+                    <div><small>Coût par demande</small><b>Votre chiffre</b></div>
+                  </div>
+                )}
+              </div>
+            </Fragment>
+          </ServiceTile>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. LA MESURE -->
+  <section class="hp-block hp-sec" id="mesure" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="04 · La mesure" intro="Le coût par demande de rendez-vous, pas le nombre de clics.">Ce qu'on mesure <span class="gradient-accent">vraiment</span>.</SectionHead>
+
+      <div class="pu-mz">
+        <div class="pu-mo" data-reveal="left">
+          <p class="pu-mz__lbl">Ce qu'on vous montre souvent</p>
+          <ul><li>Impressions</li><li>Clics</li><li>Taux de clic</li></ul>
+          <p class="pu-mz__note">Utile pour optimiser, mais ça ne remplit pas un agenda.</p>
+        </div>
+        <span class="pu-vs" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+        <div class="pu-mw" data-reveal="right" data-reveal-step="1">
+          <div class="pu-mw__txt">
+            <p class="pu-mz__lbl">Ce qu'on vous montre en plus</p>
+            <ul><li>Appels et demandes reçus</li><li>Demandes de rendez-vous</li><li>Coût par demande de rendez-vous</li></ul>
+            <p class="pu-mz__note">Ce qui compte pour votre clinique, chaque mois.</p>
+          </div>
+          <div class="pu-dash" aria-hidden="true">
+            <div class="pu-dash__bar"><span></span><span></span><span></span><i></i></div>
+            <div class="pu-dash__kpis">
+              <div class="pu-dash__kpi"><span class="pu-dash__ico" set:html={icon('phone')} /><b></b><i></i></div>
+              <div class="pu-dash__kpi"><span class="pu-dash__ico" set:html={icon('booked')} /><b></b><i></i></div>
+              <div class="pu-dash__kpi"><span class="pu-dash__ico" set:html={icon('tag')} /><b></b><i></i></div>
+            </div>
+            <div class="pu-dash__chart"><i style="height:35%"></i><i style="height:50%"></i><i style="height:45%"></i><i style="height:70%"></i><i style="height:85%"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. COMMENT ON TRAVAILLE -->
+  <section class="hp-block hp-sec" id="methode" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="05 · Comment on travaille" intro="Quatre étapes, et ce que vous recevez à chacune.">Comment on <span class="gradient-accent">travaille</span>.</SectionHead>
+
+      <Steps steps={steps} columns={4} />
+    </div>
+  </section>
+
+  <!-- 7. SANTÉ OU RECRUTEMENT -->
+  <section class="hp-block hp-sec" id="secteurs" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="06 · Santé ou recrutement" intro="Le même principe, adapté à vos deux marchés.">Santé <span class="gradient-accent">ou recrutement</span>.</SectionHead>
+
+      <div class="pu-srs">
+        <ServiceTile kind="clinic" shape="sq" title="Pour une clinique" text={`Un entonnoir pour les patients${NB}: Meta fait connaître la clinique dans le quartier, Google capte ceux qui cherchent, le reciblage les ramène jusqu'à la réservation.`} reveal="left">
+          <Fragment slot="icon"><Fragment set:html={icon('clinic')} /></Fragment>
+          <Fragment slot="illustration">
+            <div class="pu-flow pu-flow--end" aria-hidden="true"><span>Meta</span><i></i><span>Google</span><i></i><span class="is-ok">Patient</span></div>
+          </Fragment>
+        </ServiceTile>
+        <ServiceTile kind="firm" shape="sq" title="Pour un cabinet de recrutement" text={`Un double entonnoir${NB}: Google pour les entreprises qui cherchent un cabinet, Meta pour les candidats qui ne cherchent pas encore.`} reveal="right" step="1">
+          <Fragment slot="icon"><Fragment set:html={icon('case')} /></Fragment>
+          <Fragment slot="illustration">
+            <div class="pu-flow-2 pu-flow--end" aria-hidden="true">
+              <div class="pu-flow"><span>Google</span><i></i><span class="is-ok">Mandat</span></div>
+              <div class="pu-flow"><span>Meta</span><i></i><span class="is-ok">Candidat</span></div>
+            </div>
+          </Fragment>
+        </ServiceTile>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. POURQUOI WOOP -->
+  <section class="hp-block hp-sec" id="pourquoi" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="07 · Pourquoi WOOP">Une personne <span class="gradient-accent">nommée</span>, pas un service anonyme.</SectionHead>
+
+      <SpecialistCard member={team.emma} badge="Marketing pensé selon les règles de votre ordre professionnel">
+        <p class="md-spc__lead">Emma gère vos campagnes Google et Meta au quotidien, et c'est elle qui vous présente vos résultats chaque mois.</p>
+        <p>Vos campagnes sont suivies chaque jour. Chaque dollar a un rôle dans l'entonnoir, et on le déplace quand il ne le joue plus. Un fondateur reste toujours dans la boucle.</p>
+        <Fragment slot="badge-icon"><Fragment set:html={icon('shield')} /></Fragment>
+      </SpecialistCard>
+    </div>
+  </section>
+
+  <!-- 9. VOS QUESTIONS, puis « Pour aller plus loin » -->
+  <section class="hp-block hp-sec" id="faq" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="08 · Vos questions">Vos <span class="gradient-accent">questions</span>.</SectionHead>
+
+      <Faq items={faq} name="faq-publicite" />
+
+      <FurtherReading slugs={['publicite-numerique-clinique-petit-budget', 'campagnes-publicitaires-ete', 'publicite-clinique-bouche-a-oreille']} />
+    </div>
+  </section>
+
+  <!-- 10. L'ÉCOSYSTÈME (cycle des 5 services), puis le Test de visibilité -->
+  <section class="hp-block hp-sec" id="ecosysteme" data-reveal-clip>
+    <div class="container">
+      <ServiceCycle current="publicite" />
+
+      <div class="pu-teaser">
+        <VisibilityTeaser />
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. BANDEAU FINAL -->
+  <FinalBand
+    title="Parlons de votre projet."
+    text="Un appel découverte de 30 minutes, sans engagement."
+    cta={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+  />
+
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script du composant StickyBar -->
+  <StickyBar lead="Une publicité mesurée en demandes de rendez-vous," strong="pas en clics" />
+
+</Layout>
+
+<style>
+  /* =====================================================================
+     PAGE PUBLICITÉ GOOGLE ET META : styles locaux (scopés).
+     Les classes hp-* et md-* reprennent celles des pages Santé et RH (mêmes noms, mêmes
+     valeurs). Les classes pu-* sont propres à cette page.
+     Couleurs : uniquement les jetons de global.css, leurs mélanges (color-mix) et des rgba()
+     dérivées de #FA6244 et #E62B7F. Contraste hybride : sur le dégradé, petits textes en
+     --hp-on-grad (--bg-deep), titres en blanc.
+     ===================================================================== */
+
+  /* ===== ESPACEMENTS DE RÉFÉRENCE (mêmes valeurs que l'accueil) ===== */
+  .hp-hero,
+  .hp-block {
+    --home-section-gap: 80px;
+    --home-head-gap: 16px;
+    --home-head-content: 36px;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 100px; }
+  }
+
+  @media (min-width: 900px) {
+    .hp-hero,
+    .hp-block {
+      --home-head-gap: 20px;
+      --home-head-content: 46px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 120px; }
+  }
+
+  /* Pas de mot seul en fin de paragraphe */
+  p { text-wrap: pretty; }
+
+  .hp-hero + .hp-block,
+  .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  .hp-block--last { padding-bottom: var(--home-section-gap); }
+
+  /* Pastille d'icône (entonnoir du hero et de la section 02) */
+  .pu-ic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 8px 20px rgba(230, 43, 127, 0.3);
+  }
+
+  .pu-ic :global(svg) { width: 22px; height: 22px; }
+
+  .pu-ic--w {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: none;
+  }
+
+  /* ===== 1. HERO : l'entonnoir ===== */
+  .pu-hv {
+    position: relative;
+    max-width: 760px;
+    margin: 50px auto 0;
+  }
+
+  @media (min-width: 621px) {
+    .pu-hv { margin-top: 72px; }
+  }
+
+  .pu-hv__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 560px;
+    max-width: 120%;
+    height: 520px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 43, 127, 0.32), rgba(250, 98, 68, 0.1) 45%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .pu-fun {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .pu-lv {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 22px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    text-align: left;
+    box-shadow: 0 18px 40px var(--hp-shadow);
+  }
+
+  @media (min-width: 621px) {
+    .pu-lv { padding: 16px 20px; }
+  }
+
+  .pu-lv--1 { width: 100%; }
+  .pu-lv--2 { width: 86%; }
+  .pu-lv--3 { width: 72%; }
+
+  .pu-lv small {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .pu-lv b {
+    display: block;
+    font-size: 17px;
+    line-height: 1.25;
+  }
+
+  .pu-lv em {
+    display: block;
+    font-style: normal;
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  .pu-out {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 72%;
+    margin-top: 6px;
+    padding: 14px 16px;
+    border-radius: 22px;
+    background: var(--woop-gradient);
+    text-align: left;
+    box-shadow: 0 24px 50px rgba(230, 43, 127, 0.45);
+  }
+
+  .pu-out b {
+    display: block;
+    font-size: 15px;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .pu-out small {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--hp-on-grad);
+  }
+
+  @media (max-width: 520px) {
+    .pu-lv--2 { width: 92%; }
+    .pu-lv--3 { width: 84%; }
+    .pu-out { width: 84%; }
+  }
+
+  /* Notification : à droite de l'entonnoir, sur ordinateur seulement */
+  .pu-chip { display: none; }
+
+  @media (min-width: 900px) {
+    .pu-chip {
+      position: absolute;
+      top: 28px;
+      left: calc(50% + 190px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px 12px 12px;
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+      text-align: left;
+      box-shadow: inset 0 0 0 1px var(--hp-line), 0 20px 44px var(--hp-shadow);
+    }
+  }
+
+  .pu-chip__plus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-weight: 700;
+  }
+
+  .pu-chip b {
+    display: block;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+
+  .pu-chip small {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+  }
+
+  /* ===== 2. POUR QUI ? ===== */
+  .pu-prs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .pu-prs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1200px) {
+    .pu-prs {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .md-pr__vis--clicks,
+  .md-pr__vis--new,
+  .md-pr__vis--slots,
+  .md-pr__vis--solo {
+    background:
+      radial-gradient(circle at 30% 20%, rgba(230, 43, 127, 0.3), transparent 65%),
+      var(--hp-plum);
+  }
+
+  /* Clics… et ensuite ? */
+  .pu-av1 {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pu-av1__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+    height: 70px;
+  }
+
+  .pu-av1__bars i {
+    display: block;
+    width: 18px;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--text-primary) 25%, transparent);
+  }
+
+  .pu-av1__q {
+    position: absolute;
+    right: -30px;
+    top: -12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-weight: 700;
+  }
+
+  .pu-av1 small,
+  .pu-av3 > small {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Agenda du nouveau praticien */
+  .pu-av2 {
+    width: 190px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--hp-light);
+    box-shadow: 0 18px 36px var(--hp-shadow);
+  }
+
+  .pu-av2 b {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 12px;
+    line-height: 1.2;
+    color: var(--bg-deep);
+  }
+
+  .pu-av2__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .pu-av2__grid i {
+    display: block;
+    height: 16px;
+    border-radius: 5px;
+    background: var(--hp-skel-2);
+  }
+
+  .pu-av2__grid i.is-on { background: var(--woop-gradient); }
+
+  /* Semaine : plages creuses ciblées */
+  .pu-av3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pu-av3__wk {
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+    height: 78px;
+  }
+
+  .pu-av3__wk span {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 26px;
+    padding-bottom: 4px;
+    border-radius: 7px;
+  }
+
+  .pu-av3__wk .is-hi {
+    height: 100%;
+    background: color-mix(in srgb, var(--text-primary) 20%, transparent);
+  }
+
+  .pu-av3__wk .is-lo {
+    height: 38%;
+    background: var(--woop-gradient);
+    box-shadow: 0 0 14px rgba(230, 43, 127, 0.6);
+  }
+
+  .pu-av3__wk small {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  .pu-av3__wk .is-lo small { color: var(--hp-on-grad); }
+
+  /* Google + Meta → résultat */
+  .pu-av4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pu-av4 > i {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  .pu-av4__nd {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: 0 12px 26px var(--hp-shadow);
+  }
+
+  .pu-av4__nd :global(svg) { width: 24px; height: 24px; }
+
+  .pu-av4__nd--ok {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  /* ===== 3. L'ENTONNOIR ===== */
+  .pu-fns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    list-style: none;
+  }
+
+  @media (min-width: 1100px) {
+    .pu-fns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .pu-fn {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px 24px;
+    border-radius: 26px;
+  }
+
+  @media (min-width: 1024px) {
+    .pu-fn { padding: 30px; }
+  }
+
+  .pu-fn--hot {
+    background: var(--woop-gradient);
+    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.28);
+  }
+
+  .pu-fn__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pu-fn__n {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--md-pink-soft);
+  }
+
+  .pu-fn h3 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .pu-fn__where {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  .pu-fn dl {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px 16px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--hp-line);
+  }
+
+  .pu-fn dt {
+    padding-top: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .pu-fn dd {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--text-primary);
+  }
+
+  .pu-fn dd.pu-fn__kpi { color: var(--md-pink-soft); }
+
+  /* Étape mise en avant, sur le dégradé : titre en blanc, petits textes en --hp-on-grad */
+  .pu-fn--hot .pu-ic {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: none;
+  }
+
+  .pu-fn--hot .pu-fn__n,
+  .pu-fn--hot .pu-fn__where,
+  .pu-fn--hot dt,
+  .pu-fn--hot dd,
+  .pu-fn--hot dd.pu-fn__kpi { color: var(--hp-on-grad); }
+
+  .pu-fn--hot dl { border-top-color: color-mix(in srgb, var(--bg-deep) 22%, transparent); }
+
+  /* ===== 4. LES LIVRABLES ===== */
+  .pu-bento {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .pu-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .md-sv--gads,
+    .md-sv--meta,
+    .md-sv--measure,
+    .md-sv--report { grid-column: span 2; }
+  }
+
+  @media (min-width: 1100px) {
+    .pu-bento {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .md-sv--gads { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+    .md-sv--meta { grid-column: 3 / span 2; grid-row: 1; }
+    .md-sv--lp { grid-column: 3; grid-row: 2; }
+    .md-sv--rt { grid-column: 4; grid-row: 2; }
+    .md-sv--measure { grid-column: 1 / span 2; grid-row: 3; }
+    .md-sv--report { grid-column: 3 / span 2; grid-row: 3; }
+  }
+
+  /* Symbole Meta officiel dans la pastille d'icône */
+  .pu-meta-ico { width: 28px; height: 28px; }
+
+  /* Mini-illustrations des tuiles : boîte commune, puis dessin propre à chaque tuile */
+  .md-mui {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 7%, transparent);
+  }
+
+  /* Google : recherche, annonce et carte (sur le dégradé, fiche blanche) */
+  .pu-mui--gads {
+    gap: 10px;
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--bg-deep) 25%, transparent);
+  }
+
+  .pu-g__sb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1.5px var(--hp-skel-2);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .pu-g__sb :global(svg) {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--md-pink-deep);
+  }
+
+  .pu-g__ad {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--woop-pink) 6%, var(--text-primary));
+    box-shadow: inset 0 0 0 1px var(--hp-blush);
+  }
+
+  .pu-g__ad small {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .pu-g__ad b {
+    display: block;
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .pu-g__ad span {
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+
+  .pu-g__map {
+    position: relative;
+    height: 120px;
+    border-radius: 14px;
+    background-color: color-mix(in srgb, var(--woop-pink) 4%, var(--text-primary));
+    background-image:
+      linear-gradient(90deg, var(--hp-skel-2) 1.5px, transparent 1.5px),
+      linear-gradient(var(--hp-skel-2) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+
+  /* Ordinateur : la carte occupe la hauteur restante de la grande tuile */
+  @media (min-width: 1100px) {
+    .pu-g__map { flex: 1; min-height: 120px; }
+  }
+
+  .pu-g__pin {
+    position: absolute;
+    left: 14%;
+    top: 26%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--hp-skel);
+    transform: rotate(-45deg);
+  }
+
+  .pu-g__pin--3 { left: 80%; top: 20%; }
+  .pu-g__pin--4 { left: 70%; top: 70%; }
+
+  /* Votre clinique : épingle en dégradé et son étiquette, au centre de la carte */
+  .pu-g__me {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translate(-50%, -50%);
+  }
+
+  .pu-g__me .pu-g__pin--me {
+    position: static;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    background: var(--woop-gradient);
+    box-shadow: 0 8px 18px rgba(230, 43, 127, 0.45);
+  }
+
+  .pu-g__me b {
+    padding: 6px 10px;
+    border-radius: 9px;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .md-sv--gads .md-mui { flex: 1; }
+
+  /* Meta : publication commanditée */
+  .pu-mui--meta {
+    align-items: center;
+    padding: 20px 14px 18px;
+  }
+
+  .pu-m__ph {
+    width: 230px;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 18px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    box-shadow: 0 18px 40px var(--hp-shadow);
+    transform: rotate(-3deg);
+  }
+
+  .pu-m__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+  }
+
+  .pu-m__head span {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+  }
+
+  .pu-m__head b { font-size: 11.5px; }
+
+  .pu-m__head small {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .pu-m__img {
+    height: 92px;
+    background: linear-gradient(135deg, var(--hp-blush), var(--hp-pinklight));
+  }
+
+  .pu-m__cta {
+    margin: 9px;
+    padding: 7px;
+    border-radius: 9px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  /* Page de conversion */
+  .pu-lp {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .pu-lp i {
+    display: block;
+    height: 7px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--text-primary) 15%, transparent);
+  }
+
+  .pu-lp i.pu-lp__h {
+    width: 72%;
+    height: 10px;
+    background: color-mix(in srgb, var(--text-primary) 40%, transparent);
+  }
+
+  .pu-lp i.pu-lp__s { width: 55%; }
+
+  .pu-lp span {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* Petits parcours en pastilles (reciblage, mesure, santé ou recrutement) */
+  .pu-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pu-flow span {
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text-primary) 9%, transparent);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+
+  .pu-flow span.is-ok {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-weight: 700;
+  }
+
+  .pu-flow i {
+    display: block;
+    flex: none;
+    width: 12px;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  /* Mesure : étapes l'une sous l'autre, reliées par un trait vertical */
+  .pu-flow--col {
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .pu-flow--col i {
+    width: 2px;
+    height: 8px;
+    margin-left: 18px;
+  }
+
+  .md-sv.md-sv--measure .md-mui,
+  .md-sv.md-sv--report .md-mui { height: auto; }
+
+  /* Rapport mensuel : 2 indicateurs */
+  .pu-rp {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pu-rp div {
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  }
+
+  .pu-rp small {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .pu-rp b {
+    font-size: 15px;
+    color: var(--md-pink-soft);
+  }
+
+  /* ===== 5. LA MESURE ===== */
+  .pu-mz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+  }
+
+  @media (min-width: 1100px) {
+    .pu-mz {
+      grid-template-columns: minmax(0, 0.85fr) auto minmax(0, 1.5fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+  }
+
+  .pu-mo,
+  .pu-mw {
+    padding: 28px 24px;
+    border-radius: 26px;
+  }
+
+  @media (min-width: 768px) {
+    .pu-mo,
+    .pu-mw { padding: 32px; }
+  }
+
+  .pu-mo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1.5px dashed color-mix(in srgb, var(--text-primary) 18%, transparent);
+    background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+  }
+
+  .pu-mw {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    background: var(--woop-gradient);
+    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.3);
+  }
+
+  @media (min-width: 600px) {
+    .pu-mw { grid-template-columns: minmax(0, 1fr) 230px; }
+  }
+
+  .pu-mz__lbl {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .pu-mz ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .pu-mz li {
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .pu-mo li { color: var(--text-secondary); }
+
+  .pu-mz__note {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  /* Colonne de droite, sur le dégradé : indicateurs en blanc, petits textes en --hp-on-grad */
+  .pu-mw .pu-mz__lbl,
+  .pu-mw .pu-mz__note {
+    color: var(--hp-on-grad);
+    font-weight: 700;
+  }
+
+  .pu-mw .pu-mz__note { font-weight: 600; }
+
+  .pu-mw li { color: var(--text-primary); }
+
+  .pu-mw li::before {
+    content: '✓';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    font-size: 12px;
+  }
+
+  .pu-vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    align-self: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--md-pink-soft);
+    box-shadow: inset 0 0 0 1.5px rgba(230, 43, 127, 0.5);
+    transform: rotate(90deg);
+  }
+
+  @media (min-width: 1100px) {
+    .pu-vs { transform: none; }
+  }
+
+  .pu-vs svg { width: 18px; height: 18px; }
+
+  /* Mini tableau de bord (dessin plat) : 3 indicateurs et une courbe de barres */
+  .pu-dash {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 260px;
+    justify-self: center;
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--hp-light);
+    box-shadow: 0 18px 36px color-mix(in srgb, var(--bg-deep) 25%, transparent);
+  }
+
+  .pu-dash__bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .pu-dash__bar span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--hp-skel);
+  }
+
+  .pu-dash__bar span:first-child { background: var(--woop-orange); }
+  .pu-dash__bar span:nth-child(2) { background: var(--woop-pink); }
+
+  .pu-dash__bar i {
+    display: block;
+    width: 64px;
+    height: 7px;
+    margin-left: auto;
+    border-radius: 4px;
+    background: var(--hp-skel-2);
+  }
+
+  .pu-dash__kpis {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .pu-dash__kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 9px 8px;
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--woop-pink) 6%, var(--text-primary));
+  }
+
+  .pu-dash__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: var(--woop-gradient);
+    color: var(--hp-light);
+  }
+
+  .pu-dash__ico :global(svg) { width: 14px; height: 14px; }
+
+  .pu-dash__kpi b {
+    display: block;
+    width: 80%;
+    height: 9px;
+    border-radius: 5px;
+    background: var(--hp-plum);
+  }
+
+  .pu-dash__kpi i {
+    display: block;
+    width: 55%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--hp-skel);
+  }
+
+  .pu-dash__chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 54px;
+    padding: 8px 10px 0;
+    border-radius: 11px;
+    background: color-mix(in srgb, var(--woop-pink) 6%, var(--text-primary));
+  }
+
+  .pu-dash__chart i {
+    display: block;
+    flex: 1;
+    border-radius: 4px 4px 0 0;
+    background: var(--hp-skel);
+  }
+
+  .pu-dash__chart i:last-child { background: var(--woop-gradient); }
+
+  /* ===== 7. SANTÉ OU RECRUTEMENT ===== */
+  .pu-srs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .pu-srs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .pu-flow--end { margin-top: auto; }
+
+  .pu-flow-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* ===== 10. L'ÉCOSYSTÈME : test de visibilité sous le cycle ===== */
+  /* Le bandeau a déjà 22 px de marge au-dessus */
+  .pu-teaser { margin-top: 34px; }
+
+  @media (min-width: 900px) {
+    .pu-teaser { margin-top: 50px; }
+  }
+</style>
