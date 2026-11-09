@@ -23,15 +23,15 @@ const services = liveServices();
         <a href={`${base}/contact/`} class="footer__link">Contact</a>
       </div>
       <div class="footer__col">
+        <h5 class="footer__heading">Secteurs d'activit&eacute;</h5>
+        <a href={`${base}/services-medical/`} class="footer__link">Sant&eacute; & M&eacute;dical</a>
+        <a href={`${base}/services-recrutement/`} class="footer__link">RH & Recrutement</a>
+      </div>
+      <div class="footer__col">
         <h5 class="footer__heading">Services</h5>
         {services.map((s) => (
           <a href={`${base}${s.href}`} class="footer__link">{s.label}</a>
         ))}
-      </div>
-      <div class="footer__col">
-        <h5 class="footer__heading">Secteurs d'activit&eacute;</h5>
-        <a href={`${base}/services-medical/`} class="footer__link">Sant&eacute; & M&eacute;dical</a>
-        <a href={`${base}/services-recrutement/`} class="footer__link">RH & Recrutement</a>
       </div>
       <div class="footer__col">
         <h5 class="footer__heading">Contact</h5>

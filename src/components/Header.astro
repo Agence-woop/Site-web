@@ -20,17 +20,17 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    // Pages Services en ligne (src/data/services.ts), dans l'ordre prévu : Image de marque,
-    // Réseaux sociaux, Publicité Google et Meta, Sites web, Expérience client.
-    label: 'Services',
-    children: liveServices().map((s) => ({ label: s.label, href: `${base}${s.href}`, hint: s.hint })),
-  },
-  {
     label: "Secteurs d'activité",
     children: [
       { label: 'Santé & Médical', href: `${base}/services-medical/` },
       { label: 'RH & Recrutement', href: `${base}/services-recrutement/` },
     ],
+  },
+  {
+    // Pages Services en ligne (src/data/services.ts), dans l'ordre prévu : Image de marque,
+    // Réseaux sociaux, Publicité Google et Meta, Sites web, Expérience client.
+    label: 'Services',
+    children: liveServices().map((s) => ({ label: s.label, href: `${base}${s.href}`, hint: s.hint })),
   },
   { label: 'Test de visibilité', href: `${base}/acquisition-client/` },
   { label: 'Équipe', href: `${base}/equipe/` },
