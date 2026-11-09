@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ChevronRight from '../components/ChevronRight.astro';
 import ScrollReveal from '../components/ScrollReveal.astro';
+import Faq from '../components/services/Faq.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -313,21 +314,8 @@ const jsonLd = [
   <section class="acq acq-faq" data-reveal-clip>
     <div class="container">
       <h2 class="acq-h2 acq-h2--faq" data-reveal="left">Questions <span class="gradient-accent acq-kw">fréquentes</span></h2>
-      <div class="faq" data-reveal="up">
-        {[faq.slice(0, 3), faq.slice(3)].map((column) => (
-          <div class="faq__col">
-            {column.map((item) => (
-              <details class="faq__item">
-                <summary class="faq__question">
-                  <span>{item.q}</span>
-                  <span class="faq__icon" aria-hidden="true"></span>
-                </summary>
-                <p class="faq__answer">{item.a}</p>
-              </details>
-            ))}
-          </div>
-        ))}
-      </div>
+      <!-- Même FAQ que les pages Services : chevrons, 2 colonnes, accordéon exclusif -->
+      <Faq items={faq} name="faq-test-visibilite" />
     </div>
   </section>
 
@@ -1848,97 +1836,6 @@ const jsonLd = [
 
   .acq-h2--faq { margin-bottom: 40px; }
 
-  .faq {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-
-  @media (min-width: 1024px) {
-    .faq {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-items: start;
-      gap: 16px;
-    }
-  }
-
-  .faq__col {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .faq__item {
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-bento);
-    background: var(--bg-card);
-    transition: border-color 200ms ease, background 200ms ease;
-  }
-
-  .faq__item[open] {
-    border-color: var(--border-accent);
-    background: linear-gradient(160deg, rgba(250, 98, 68, 0.06), rgba(230, 43, 127, 0.06)), var(--bg-card);
-  }
-
-  .faq__question {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 20px 24px;
-    cursor: pointer;
-    list-style: none;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.35;
-    color: var(--text-primary);
-    border-radius: var(--radius-bento);
-  }
-
-  .faq__question::-webkit-details-marker { display: none; }
-  .faq__question::marker { content: ''; }
-
-  .faq__question:hover { color: var(--acq-pink-soft); }
-
-  .faq__question:focus-visible {
-    outline: 2px solid var(--woop-pink);
-    outline-offset: 3px;
-  }
-
-  .faq__icon {
-    position: relative;
-    width: 28px;
-    height: 28px;
-    flex: none;
-    border-radius: 50%;
-    background: rgba(230, 43, 127, 0.14);
-  }
-
-  .faq__icon::before,
-  .faq__icon::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 12px;
-    height: 2px;
-    border-radius: 1px;
-    background: var(--woop-pink);
-    transform: translate(-50%, -50%);
-    transition: transform 200ms ease;
-  }
-
-  .faq__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
-
-  .faq__item[open] .faq__icon::after { transform: translate(-50%, -50%) rotate(0deg); }
-
-  .faq__answer {
-    padding: 0 24px 22px;
-    font-size: 16px;
-    line-height: 1.7;
-    color: var(--text-secondary);
-  }
-
   /* ===== BANDEAU FINAL ===== */
   .acq-band { padding: 0 0 var(--acq-section-gap); }
 
@@ -2014,9 +1911,6 @@ const jsonLd = [
     .quiz :global(*),
     .acq-midcta :global(.acq-btn),
     .tile,
-    .faq__item,
-    .faq__icon::before,
-    .faq__icon::after,
     .cta-band__btn {
       transition: none !important;
     }
