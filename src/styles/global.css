@@ -12,7 +12,6 @@
   --woop-gradient: linear-gradient(90deg, #FA6244 0%, #E62B7F 100%);
 
   --bg-deep: #0A0A0F;
-  --bg-base: #0f0f15;
   --bg-elevated: #16161e;
   --bg-card: rgba(255, 255, 255, 0.03);
 
@@ -28,7 +27,6 @@
 
   --radius-bento: 18px;
   --radius-button: 100px;
-  --gap-bento: 16px;
 }
 
 *,
@@ -88,16 +86,6 @@ ul {
   }
 }
 
-.section {
-  padding: 64px 0;
-}
-
-@media (min-width: 768px) {
-  .section {
-    padding: 100px 0;
-  }
-}
-
 .kicker {
   font-size: 11px;
   letter-spacing: 0.3em;
@@ -137,13 +125,6 @@ ul {
   .section-title {
     font-size: 64px;
   }
-}
-
-.gradient-text {
-  background: var(--woop-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .gradient-accent {
