@@ -183,7 +183,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
     secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
   >
-    <Fragment slot="title">Image de marque{NB}: votre marque commence avant votre logo, <span class="gradient-accent hp-kw">au premier regard, au premier appel.</span></Fragment>
+    <Fragment slot="title"><span class="im-ln">Image de marque{NB}:</span> <br /><span class="im-ln">votre marque commence</span> <br /><span class="im-ln">avant votre logo,</span> <br /><span class="gradient-accent hp-kw"><span class="im-ln">au premier regard,</span> <br /><span class="im-ln">au premier appel.</span></span></Fragment>
 
     <Fragment slot="visual">
     <Fragment set:html={"<!-- Illustration : le livre de marque et ses déclinaisons (immobile) -->"} />
@@ -252,9 +252,10 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   </section>
 
   <!-- 3. 02 · PARTOUT OÙ L'ON VOUS RENCONTRE : « Sans système » et « Avec WOOP » en alternance
-       (toutes les 5 s, seulement à l'écran ; pause au survol et au focus clavier de la section ;
-       mouvement réduit ou sans JavaScript : « Avec WOOP », sans alternance) -->
-  <section class="hp-block hp-sec" id="partout" data-reveal-clip data-im-zone>
+       (1er changement 1,5 s après l'arrivée à l'écran, puis toutes les 5 s ; bouton Pause/Lecture ;
+       pause au focus clavier dans la section ; arrêt hors de l'écran ; mouvement réduit ou sans
+       JavaScript : « Avec WOOP », sans alternance) -->
+  <section class="hp-block hp-sec" id="partout" data-reveal-clip>
     <div class="container">
       <SectionHead over="02 · Partout où l'on vous rencontre" intro="Ce que votre marque dit avant vous.">Une seule marque, <span class="gradient-accent">partout</span>.</SectionHead>
 
@@ -265,6 +266,14 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
           <span class="im-tg__knob" aria-hidden="true"></span>
         </div>
 
+        <!-- Pause / Lecture de l'alternance (affiché par le script : sans JavaScript, rien ne bouge).
+             Cellulaire et tablette : à droite de la pastille ; ordinateur : en bas à droite des cartes -->
+        <button type="button" class="im-play" data-im-pause aria-pressed="false" aria-label="Mettre en pause l'animation" hidden>
+          <svg class="im-play__i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2"/></svg>
+          <svg class="im-play__i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 001.5.86l10.2-6.4a1 1 0 000-1.72L9.5 4.74A1 1 0 008 5.6z"/></svg>
+        </button>
+
+        <div class="im-stage">
         <ul class="im-grid">
           {touchpoints.map((t) => (
             <li class="im-tile">
@@ -307,6 +316,8 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
             </li>
           ))}
         </ul>
+
+        </div>
 
         <div class="im-cap-box">
           <span class="im-cap__size" aria-hidden="true">{captions.off}</span>
@@ -492,23 +503,34 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
 
 <script>
   // 02 · Partout où l'on vous rencontre : alternance « Sans système » / « Avec WOOP ».
-  // - Un état toutes les 5 s (les 4 cartes, la pastille du haut et la phrase), sans bouton pause.
-  // - Démarre seulement quand le bloc est à l'écran, s'arrête dès qu'il n'y est plus.
-  // - Pause au survol de la section (souris) et au focus clavier dans la section ; le temps
-  //   restant est conservé et la rotation reprend ensuite.
-  // - Pastille cliquable : un clic affiche l'état choisi, le minuteur repart de zéro et la
-  //   rotation continue (même logique que les onglets du carrousel de la page Équipe).
-  // - prefers-reduced-motion : aucune alternance, « Avec WOOP » affiché (la pastille reste
-  //   cliquable). Sans JavaScript : « Avec WOOP ».
+  // - Les 4 cartes, la pastille du haut et la phrase changent ensemble.
+  // - Démarrage seulement quand le bloc (pastille, cartes, phrase) est visible à 35 % ET qu'il est
+  //   apparu (animation d'apparition au défilement, ScrollReveal : sans cette condition, le 1er
+  //   changement pouvait avoir lieu pendant que les cartes étaient encore invisibles) : 1er
+  //   changement 1,5 s après, puis un changement toutes les 5 s.
+  // - Aucune pause au survol (une souris immobile sur la page ne bloque jamais l'alternance).
+  // - Bouton Pause / Lecture (en bas à droite des cartes) : met en pause et relance ; la pause
+  //   choisie reste active jusqu'à un nouvel appui, y compris après une sortie de l'écran.
+  // - Pastille cliquable : l'état choisi s'affiche ; si l'animation tourne, le minuteur repart de
+  //   zéro (5 s) et la rotation continue ; si elle est en pause, la pause est maintenue (même
+  //   logique que les onglets du carrousel de la page Équipe).
+  // - Pause au focus clavier dans la section (pas sur le bouton Pause / Lecture lui-même, pour
+  //   que « Reprendre » relance aussitôt, ni pour un focus posé par un clic) ; arrêt quand le bloc
+  //   sort de l'écran ou que l'onglet du navigateur est masqué, reprise au retour.
+  // - prefers-reduced-motion : pas d'alternance automatique, « Avec WOOP » affiché, bouton en
+  //   position Lecture (un appui lance l'alternance, choix explicite du visiteur).
+  // - Sans JavaScript : « Avec WOOP », bouton caché.
   // - La phrase est dans une zone aria-live="polite" : son texte est remplacé à chaque état.
   (function () {
-    const zone = document.querySelector<HTMLElement>('[data-im-zone]');
+    const zone = document.querySelector<HTMLElement>('#partout');
     const sw = document.querySelector<HTMLElement>('[data-im-sw]');
     const cap = sw?.querySelector<HTMLElement>('[data-im-cap]');
     const capBox = cap?.parentElement;
-    if (!zone || !sw || !cap || !capBox) return;
+    const pauseBtn = sw?.querySelector<HTMLButtonElement>('[data-im-pause]');
+    if (!zone || !sw || !cap || !capBox || !pauseBtn) return;
     const btns = Array.from(sw.querySelectorAll<HTMLButtonElement>('[data-im-mode]'));
     const DUR = 5000;
+    const FIRST = 1500;
     const FADE = 220;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -516,7 +538,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     let mode: Mode = 'on';
     let fadeTimer = 0;
 
-    const set = (m: Mode) => {
+    const set = (m: Mode, animate = !reduced) => {
       mode = m;
       sw.classList.toggle('is-on', m === 'on');
       sw.classList.toggle('is-off', m === 'off');
@@ -524,72 +546,71 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
       btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.imMode === m)));
       const next = (m === 'on' ? capBox.dataset.capOn : capBox.dataset.capOff) || '';
       window.clearTimeout(fadeTimer);
-      if (reduced) { cap.textContent = next; return; }
+      if (!animate) { cap.textContent = next; capBox.classList.remove('is-fading'); return; }
       // Fondu court de la phrase : disparition, nouveau texte, réapparition
       capBox.classList.add('is-fading');
       fadeTimer = window.setTimeout(() => { cap.textContent = next; capBox.classList.remove('is-fading'); }, FADE);
     };
 
-    btns.forEach((b) => b.addEventListener('click', () => {
-      set(b.dataset.imMode === 'off' ? 'off' : 'on');
-      restart();
-    }));
-
-    // Mouvement réduit : « Avec WOOP », sans alternance automatique
-    if (reduced) return;
-
     // Minuteur pausable : temps restant conservé pendant les pauses
-    const reasons = { offscreen: true, hover: false, focus: false, hidden: document.hidden };
-    let remaining = DUR;
+    // unrevealed : bloc pas encore apparu (ScrollReveal le garde invisible tant qu'il n'a pas la
+    // classe is-revealed ; sans animation d'apparition, il est visible d'emblée)
+    const unrevealed = () => document.documentElement.classList.contains('reveal-js') && sw.hasAttribute('data-reveal') && !sw.classList.contains('is-revealed');
+    const reasons = { offscreen: true, unrevealed: unrevealed(), focus: false, hidden: document.hidden, user: reduced };
+    let remaining = reduced ? DUR : FIRST;
     let startedAt = 0;
     let timer = 0;
     const running = () => !Object.values(reasons).some(Boolean);
 
-    const stopClock = () => {
-      if (!timer) return;
-      window.clearTimeout(timer);
-      timer = 0;
-      remaining = Math.max(0, remaining - (performance.now() - startedAt));
-    };
-    const tick = () => {
-      timer = 0;
-      remaining = DUR;
-      set(mode === 'on' ? 'off' : 'on');
-      update();
-    };
     const update = () => {
       sw.classList.toggle('is-paused', !running());
       if (running() && !timer) {
         startedAt = performance.now();
         timer = window.setTimeout(tick, remaining);
-      } else if (!running()) {
-        stopClock();
+      } else if (!running() && timer) {
+        window.clearTimeout(timer);
+        timer = 0;
+        remaining = Math.max(0, remaining - (performance.now() - startedAt));
       }
     };
-    function restart() {
-      if (reduced) return;
+    function tick() {
+      timer = 0;
+      remaining = DUR;
+      set(mode === 'on' ? 'off' : 'on');
+      update();
+    }
+
+    // Bouton Pause / Lecture
+    const setUser = (on: boolean) => {
+      reasons.user = on;
+      sw.classList.toggle('is-user-paused', on);
+      pauseBtn.setAttribute('aria-pressed', String(on));
+      pauseBtn.setAttribute('aria-label', on ? "Reprendre l'animation" : "Mettre en pause l'animation");
+      update();
+    };
+    pauseBtn.hidden = false;
+    pauseBtn.addEventListener('click', () => setUser(!reasons.user));
+
+    // Pastille : l'état choisi ; minuteur relancé (5 s) si l'animation tourne, pause maintenue sinon
+    btns.forEach((b) => b.addEventListener('click', () => {
+      set(b.dataset.imMode === 'off' ? 'off' : 'on');
       window.clearTimeout(timer);
       timer = 0;
       remaining = DUR;
       update();
-    }
+    }));
 
-    // Avant le premier passage à l'écran : « Sans système », puis « Avec WOOP » 5 s plus tard
-    set('off');
-    cap.textContent = capBox.dataset.capOff || '';
-    capBox.classList.remove('is-fading');
-    window.clearTimeout(fadeTimer);
+    // Avant le premier passage à l'écran : « Sans système », puis « Avec WOOP » 1,5 s après
+    // l'arrivée (mouvement réduit : « Avec WOOP » fixe)
+    if (!reduced) set('off', false);
+    setUser(reasons.user);
 
-    // Survol de la section (souris seulement : un toucher ne met pas en pause)
-    zone.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { reasons.hover = true; update(); } });
-    zone.addEventListener('pointerleave', () => { reasons.hover = false; update(); });
-
-    // Focus clavier dans la section (pas le focus posé par un clic)
+    // Focus clavier dans la section (pas sur le bouton Pause / Lecture, pas un focus posé par un clic)
     const keyboardFocus = (el: Element) => {
       try { return el.matches(':focus-visible'); } catch { return true; }
     };
     zone.addEventListener('focusin', (e) => {
-      reasons.focus = e.target instanceof Element && keyboardFocus(e.target);
+      reasons.focus = e.target instanceof Element && e.target !== pauseBtn && keyboardFocus(e.target);
       update();
     });
     zone.addEventListener('focusout', (e) => {
@@ -598,7 +619,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
       update();
     });
 
-    // À l'écran seulement
+    // À l'écran seulement (35 % du bloc visible)
     if ('IntersectionObserver' in window) {
       new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -608,6 +629,15 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
       }, { threshold: 0.35 }).observe(sw);
     } else {
       reasons.offscreen = false;
+    }
+
+    // Apparition du bloc : la classe is-revealed est posée par ScrollReveal
+    if (reasons.unrevealed) {
+      const mo = new MutationObserver(() => {
+        reasons.unrevealed = unrevealed();
+        if (!reasons.unrevealed) { mo.disconnect(); update(); }
+      });
+      mo.observe(sw, { attributes: true, attributeFilter: ['class'] });
     }
 
     document.addEventListener('visibilitychange', () => { reasons.hidden = document.hidden; update(); });
@@ -658,6 +688,33 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
 
   .hp-hero + .hp-block,
   .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  /* H1 du hero : découpage imposé en 5 lignes, à toutes les largeurs (retours à la ligne <br>, une
+     espace avant chacun pour que le texte lu par les moteurs et les lecteurs d'écran reste
+     « … : votre marque commence avant votre logo, au premier regard, au premier appel. »). Chaque
+     ligne est insécable. */
+  .im-ln { white-space: nowrap; }
+
+  /* Taille du H1 : celle du composant (34, 44, 42 puis 50 px), plafonnée à 8,4 % de la largeur de la
+     colonne de texte (unité cqw : la colonne est déclarée conteneur). La ligne la plus longue,
+     « votre marque commence », mesure 11,75 fois la taille de police : avec 8,4 %, elle tient
+     toujours dans la colonne, sans déborder ni se couper. La taille ne baisse donc que là où il le
+     faut : téléphones de moins de 440 px environ, et ordinateurs de 1024 à 1075 px environ. */
+  .hp-hero :global(.md-hero__text) { container-type: inline-size; }
+
+  .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(34px, 8.4cqw); }
+
+  @media (min-width: 600px) {
+    .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(44px, 8.4cqw); }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(42px, 8.4cqw); }
+  }
+
+  @media (min-width: 1280px) {
+    .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(50px, 8.4cqw); }
+  }
 
   /* Gris de l'état « Sans système » (02) et de la carte « Chaque support… » (01) : clair, moyen,
      sombre, sans teinte */
@@ -1142,12 +1199,22 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   .im-a3 .g3 { background: var(--im-g3); transform: rotate(12deg); box-shadow: inset 0 0 0 1px var(--im-g2); }
 
   /* ===== 3. PARTOUT OÙ L'ON VOUS RENCONTRE ===== */
+  /* Grille : pastille centrée en haut, cartes, puis phrase. Le bouton Pause / Lecture est à droite
+     de la pastille sur cellulaire et tablette (visible dès l'arrivée sur la section), et en bas à
+     droite des cartes sur ordinateur (dès 1100 px, cartes sur une rangée). */
   .im-sw {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
+    display: grid;
+    /* Colonne de droite d'au moins 56 px (bouton de 44 px + 12 px d'écart) : la pastille reste
+       centrée dès qu'il y a la place, et se décale un peu vers la gauche sur les petits écrans
+       plutôt que de laisser le bouton déborder */
+    grid-template-columns: minmax(0, 1fr) auto minmax(56px, 1fr);
+    justify-items: center;
+    row-gap: 28px;
   }
+
+  .im-sw > .im-tg { grid-column: 2; grid-row: 1; }
+  .im-sw > .im-stage { grid-column: 1 / -1; grid-row: 2; justify-self: stretch; }
+  .im-sw > .im-cap-box { grid-column: 1 / -1; grid-row: 3; }
 
   /* Pastille « Sans système / Avec WOOP » */
   .im-tg {
@@ -1212,6 +1279,63 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   .im-sw.is-off .im-tg__knob::before { opacity: 1; }
 
   /* Les 4 supports */
+  .im-stage { width: 100%; }
+
+  /* Bouton Pause / Lecture : à droite de la pastille, aligné avec elle (cellulaire et tablette) */
+  .im-sw > .im-play {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    align-self: center;
+    margin-left: 12px;
+  }
+
+  /* Ordinateur : en bas à droite des cartes, à côté des libellés de la dernière carte (alignés à
+     gauche) */
+  @media (min-width: 1100px) {
+    .im-sw > .im-play {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-self: end;
+      align-self: end;
+      margin: 0 0 4px;
+    }
+  }
+
+  .im-play {
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+    cursor: pointer;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .im-play[hidden] { display: none; }
+
+  .im-play:hover {
+    transform: scale(1.06);
+    box-shadow: 0 10px 28px rgba(230, 43, 127, 0.45);
+  }
+
+  .im-play:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 3px;
+  }
+
+  .im-play svg { width: 16px; height: 16px; }
+  .im-play__i-play { display: none; }
+  .im-sw.is-user-paused .im-play__i-pause { display: none; }
+  .im-sw.is-user-paused .im-play__i-play { display: block; margin-left: 2px; }
+
   .im-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -2058,6 +2182,9 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     .im-mk__lg,
     .im-mk__ph i,
     .im-mk__cta,
-    .im-cap { transition: none; }
+    .im-cap,
+    .im-play { transition: none; }
+
+    .im-play:hover { transform: none; }
   }
 </style>
