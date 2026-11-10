@@ -135,14 +135,31 @@ const navItems: NavItem[] = [
     right: 0;
     z-index: 100;
     padding: 16px 0;
-    transition: background 300ms ease;
   }
 
-  .header--scrolled {
+  /*
+   * En-tête « défilé » : fond sombre flouté et filet du bas, portés par un pseudo-élément placé
+   * derrière le contenu de l'en-tête, et non par l'en-tête lui-même. Un élément qui a un
+   * backdrop-filter (comme transform, filter…) devient le bloc conteneur de ses descendants en
+   * position: fixed : le menu burger ouvert (position: fixed; inset: 0) se calait alors sur la
+   * hauteur de l'en-tête au lieu de couvrir l'écran. Le pseudo-élément n'a pas de descendant.
+   * L'en-tête (position: fixed, z-index) forme un contexte d'empilement : z-index: -1 garde le
+   * fond derrière son contenu, sans passer derrière la page.
+   */
+  .header--scrolled::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: rgba(10, 10, 15, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-subtle);
+    animation: header-fond 300ms ease;
+  }
+
+  @keyframes header-fond {
+    from { opacity: 0; }
   }
 
   .header__nav {
@@ -203,7 +220,8 @@ const navItems: NavItem[] = [
     flex-direction: column;
     position: fixed;
     inset: 0;
-    background: rgba(10, 10, 15, 0.97);
+    /* Fond opaque : rien de la page ne se lit à travers les liens */
+    background: var(--bg-deep);
     padding: 100px 32px 48px;
     gap: 32px;
     align-items: flex-start;
@@ -322,6 +340,26 @@ const navItems: NavItem[] = [
 
   .header__item--open > .header__submenu {
     display: flex;
+  }
+
+  /* Menu burger : trait vertical à gauche des sous-menus, 3 px, dégradé de la charte (rose en haut,
+     orange en bas), bouts arrondis */
+  @media (max-width: 1279px) {
+    .header__submenu {
+      position: relative;
+      border-left: 0;
+    }
+
+    .header__submenu::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 3px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, var(--woop-pink), var(--woop-orange));
+    }
   }
 
   .header__submenu li {
@@ -506,7 +544,8 @@ const navItems: NavItem[] = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .header,
+    .header--scrolled::before { animation: none; }
+
     .header__burger-line,
     .header__linkedin,
     .header__chevron,
