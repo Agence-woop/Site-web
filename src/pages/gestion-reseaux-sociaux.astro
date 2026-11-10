@@ -13,6 +13,7 @@ import SpecialistCard from '../components/services/SpecialistCard.astro';
 import Faq from '../components/services/Faq.astro';
 import FurtherReading from '../components/services/FurtherReading.astro';
 import ServiceCycle from '../components/services/ServiceCycle.astro';
+import Silhouette, { type SilhouetteName } from '../components/Silhouette.astro';
 import { team } from '../data/team';
 import { NB } from '../utils/typo';
 
@@ -99,30 +100,6 @@ const GLYPH = {
   star: 'M12 3.5l1.9 5.6 5.6 1.9-5.6 1.9-1.9 5.6-1.9-5.6-5.6-1.9 5.6-1.9z',
 };
 
-// Silhouette unique de la page (dessin plat, sans détails du visage) : tête petite et légèrement
-// ovale, cou suggéré, épaules larges et arrondies en trapèze. 3 coiffures : courts, longs, attachés.
-// Corps en currentColor, cheveux en --sil-hair (posés par la page sur le conteneur).
-// Repère 100 × 100, calé en bas : la silhouette occupe la hauteur de 11 à 100.
-type Hair = 'short' | 'long' | 'bun';
-const SIL_HAIR = {
-  // Cheveux longs : derrière la tête et le cou, jusqu'aux épaules, puis une frange sur le côté
-  longBack: 'M34.5 40C34 27 41 21 50 21s16 6 15.5 19l1.5 23c.3 5-2.5 8-7 8.8H40c-4.5-.8-7.3-3.8-7-8.8z',
-  longFront: 'M36.5 38C36.6 27.8 42.5 22.5 50 22.5c7.3 0 13 4.8 13.6 13.3C57 31.6 47 32.4 36.5 38z',
-  short: 'M36.4 38.5C35.8 27.5 41.8 21.5 50 21.5s14.2 6 13.6 17c-2.7-5.6-7.6-8.4-13.6-8.3-6-.1-10.9 2.7-13.6 8.3z',
-  bunCap: 'M36.6 37C36.6 27.5 42.6 22.5 50 22.5s13.4 5 13.4 14.5c-3.4-5-8-7-13.4-7s-10 2-13.4 7z',
-};
-const sil = (hair: Hair) => {
-  const h = (d: string) => `<path d="${d}" style="fill: var(--sil-hair)"/>`;
-  const body =
-    '<path d="M7 100v-8.5c0-12.5 9-19.5 23.5-22.8L43 65.5h14l12.5 3.2C84 72 93 79 93 91.5v8.5z"/>' +
-    '<path d="M43 50h14v18.5H43z"/>' +
-    '<ellipse cx="50" cy="39" rx="13.5" ry="16.5"/>';
-  const back = hair === 'long' ? h(SIL_HAIR.longBack) : '';
-  const front =
-    hair === 'long' ? h(SIL_HAIR.longFront) : hair === 'short' ? h(SIL_HAIR.short) : `<circle cx="50" cy="18.5" r="7" style="fill: var(--sil-hair)"/>${h(SIL_HAIR.bunCap)}`;
-  return `<svg class="rs-sil" viewBox="0 0 100 100" preserveAspectRatio="xMidYMax meet" fill="currentColor" aria-hidden="true" focusable="false">${back}${body}${front}</svg>`;
-};
-
 // Les 3 réseaux : logo officiel (BrandLogo) en blanc sur une pastille rose, orange ou dégradé
 type NetKey = 'instagram' | 'facebook' | 'linkedin';
 const NETS: Record<NetKey, { name: string; role: string }> = {
@@ -182,10 +159,10 @@ const roles: { key: NetKey; clinic: string; firm: string; reveal: 'left' | 'up' 
 ];
 
 // 03 · Les visages
-const faces: { key: string; name: string; role: string; hair: Hair }[] = [
-  { key: 't0', name: 'Julie', role: 'Physiothérapeute', hair: 'long' },
-  { key: 't1', name: 'Marc', role: 'Ostéopathe', hair: 'short' },
-  { key: 't2', name: 'Sarah', role: 'Recruteuse', hair: 'bun' },
+const faces: { key: string; name: string; role: string; sil: SilhouetteName }[] = [
+  { key: 't0', name: 'Julie', role: 'Physiothérapeute', sil: 'femme-queue-de-cheval' },
+  { key: 't1', name: 'Marc', role: 'Ostéopathe', sil: 'homme' },
+  { key: 't2', name: 'Sarah', role: 'Recruteuse', sil: 'femme-chignon' },
 ];
 
 // 04 · Nos formules
@@ -285,7 +262,10 @@ const calendar: { net?: NetKey; label?: string }[] = [
           </div>
           <b class="rs-ig__name">votreclinique</b>
           <div class="rs-ig__hl"><span></span><span></span><span></span></div>
-          <div class="rs-ig__grid"><i class="p1" set:html={sil('long')} /><i class="p2"></i><i class="p3" set:html={sil('short')} /><i class="p4"></i><i class="p5" set:html={sil('bun')} /><i class="p6"></i></div>
+          <div class="rs-ig__grid">
+            <i class="p1"><Silhouette name="femme-queue-de-cheval" detail="simple" /></i><i class="p2"></i><i class="p3"><Silhouette name="homme" detail="simple" /></i>
+            <i class="p4"><Silhouette name="femme-chignon" detail="simple" tone="grad" /></i><i class="p5"></i><i class="p6"></i>
+          </div>
         </div>
         <figcaption class="rs-role"><span class="rs-net rs-net--instagram"><BrandLogo name="instagram" /></span><div><b>{NETS.instagram.name}</b><small>{NETS.instagram.role}</small></div></figcaption>
       </figure>
@@ -346,7 +326,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
               <div class="rs-av1">{[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0].map((on) => <i class:list={[{ 'is-on': on }]}></i>)}</div>
             )}
             {p.key === 'faces' && (
-              <div class="rs-av2"><span></span><span></span><span class="is-on" set:html={sil('long')} /></div>
+              <div class="rs-av2"><span></span><span></span><span class="is-on"><Silhouette name="femme-queue-de-cheval" detail="simple" /></span></div>
             )}
             {p.key === 'same' && (
               <div class="rs-av3">
@@ -393,7 +373,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
 
       <div class="rs-face__vis" aria-hidden="true" data-reveal="right" data-reveal-step="1">
         {faces.map((f) => (
-          <div class:list={['rs-pt', `rs-pt--${f.key}`]}><span class="rs-pt__ph" set:html={sil(f.hair)} /><b>{f.name}</b><small>{f.role}</small></div>
+          <div class:list={['rs-pt', `rs-pt--${f.key}`]}><span class="rs-pt__ph"><Silhouette name={f.sil} /></span><b>{f.name}</b><small>{f.role}</small></div>
         ))}
       </div>
     </div>
@@ -470,7 +450,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
                       <div class="rs-rp__c">
                         <small>Publié</small>
                         <div class="rs-rp__ps">
-                          <div><i class="pf" set:html={sil('short')} /><span>Équipe</span></div>
+                          <div><i class="pf"><Silhouette name="homme" detail="simple" /></i><span>Équipe</span></div>
                           <div><i class="pt"><b>Aa</b></i><span>Conseil</span></div>
                           <div><i class="pe"><Fragment set:html={icon('calendar')} /></i><span>Nouveauté</span></div>
                         </div>
@@ -478,7 +458,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
                       </div>
                       <div class="rs-rp__c rs-rp__c--win">
                         <small>Ce qui a fonctionné</small>
-                        <div class="rs-rp__top"><i set:html={sil('bun')} /><span><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg></span></div>
+                        <div class="rs-rp__top"><i><Silhouette name="femme-chignon" detail="simple" /></i><span><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg></span></div>
                         <b>La présentation de l'équipe</b>
                         <span class="rs-rp__like"><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg>j'aime</span>
                       </div>
@@ -627,22 +607,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
   }
 
   .rs-ic :global(svg) { width: 24px; height: 24px; }
-
-  /* Silhouette unique (fonction sil) : corps clair, cheveux en baie foncée */
-  .rs-ig__grid,
-  .rs-av2,
-  .rs-pt__ph,
-  .rs-rp {
-    --sil-hair: color-mix(in srgb, var(--bg-deep) 45%, var(--woop-pink));
-  }
-
-  /* Fonds foncés (vignette Instagram, photo de Sarah) : cheveux rose clair pour rester lisibles */
-  .rs-ig__grid .p5,
-  .rs-pt--t2 .rs-pt__ph { --sil-hair: var(--hp-pinklight); }
-
-  .rs-ig__grid :global(.rs-sil),
-  .rs-pt__ph :global(.rs-sil),
-  .rs-rp :global(.rs-sil) { color: color-mix(in srgb, var(--text-primary) 86%, var(--woop-pink)); }
 
   /* Pastille d'un réseau : logo officiel en blanc sur rose, orange ou dégradé */
   .rs-net {
@@ -832,15 +796,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
   .rs-ig__grid .p4 { background: var(--hp-plum); }
   .rs-ig__grid .p5 { background: linear-gradient(150deg, var(--woop-pink), var(--hp-plum)); }
   .rs-ig__grid .p6 { background: color-mix(in srgb, var(--woop-orange) 45%, var(--text-primary)); }
-
-  /* Silhouettes sur 3 vignettes */
-  .rs-ig__grid :global(.rs-sil) {
-    position: absolute;
-    left: 12%;
-    bottom: 0;
-    width: 76%;
-    height: 82%;
-  }
 
   /* LinkedIn : publication d'expertise */
   .rs-x--li .rs-x__card {
@@ -1154,15 +1109,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
 
   .rs-av2 .is-on { background: var(--woop-gradient); }
 
-  .rs-av2 :global(.rs-sil) {
-    position: absolute;
-    left: 8%;
-    bottom: 0;
-    width: 84%;
-    height: 86%;
-    color: var(--hp-light);
-  }
-
   /* Le même contenu partout */
   .rs-av3 {
     display: flex;
@@ -1345,14 +1291,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
       height: 130px;
       border-radius: 14px;
     }
-  }
-
-  .rs-pt__ph :global(.rs-sil) {
-    position: absolute;
-    left: 8%;
-    bottom: 0;
-    width: 84%;
-    height: 86%;
   }
 
   .rs-pt b {
@@ -1879,16 +1817,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
   }
 
   .rs-rp__ps .pe :global(svg) { width: 20px; height: 20px; }
-
-  /* Silhouettes */
-  .rs-rp__ps .pf :global(.rs-sil),
-  .rs-rp__top i :global(.rs-sil) {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 90%;
-  }
 
   .rs-rp__top { position: relative; }
 
