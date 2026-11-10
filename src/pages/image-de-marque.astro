@@ -183,7 +183,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
     secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
   >
-    <Fragment slot="title">Image de marque{NB}: votre marque commence avant votre logo, <span class="gradient-accent hp-kw">au premier regard, au premier appel.</span></Fragment>
+    <Fragment slot="title">Image de marque{NB}: votre marque commence avant votre logo, <span class="gradient-accent hp-kw"><span class="im-nw">au premier regard,</span> <span class="im-nw">au premier appel.</span></span></Fragment>
 
     <Fragment slot="visual">
     <Fragment set:html={"<!-- Illustration : le livre de marque et ses déclinaisons (immobile) -->"} />
@@ -266,6 +266,13 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
           <span class="im-tg__knob" aria-hidden="true"></span>
         </div>
 
+        <!-- Pause / Lecture de l'alternance (affiché par le script : sans JavaScript, rien ne bouge).
+             Cellulaire et tablette : à droite de la pastille ; ordinateur : en bas à droite des cartes -->
+        <button type="button" class="im-play" data-im-pause aria-pressed="false" aria-label="Mettre en pause l'animation" hidden>
+          <svg class="im-play__i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2"/></svg>
+          <svg class="im-play__i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 001.5.86l10.2-6.4a1 1 0 000-1.72L9.5 4.74A1 1 0 008 5.6z"/></svg>
+        </button>
+
         <div class="im-stage">
         <ul class="im-grid">
           {touchpoints.map((t) => (
@@ -310,11 +317,6 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
           ))}
         </ul>
 
-        <!-- Pause / Lecture de l'alternance (affiché par le script : sans JavaScript, rien ne bouge) -->
-        <button type="button" class="im-play" data-im-pause aria-pressed="false" aria-label="Mettre en pause l'animation" hidden>
-          <svg class="im-play__i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2"/></svg>
-          <svg class="im-play__i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 001.5.86l10.2-6.4a1 1 0 000-1.72L9.5 4.74A1 1 0 008 5.6z"/></svg>
-        </button>
         </div>
 
         <div class="im-cap-box">
@@ -686,6 +688,17 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
 
   .hp-hero + .hp-block,
   .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  /* H1 du hero : « au premier regard, » et « au premier appel. » ne sont jamais coupés (chaque groupe
+     passe à la ligne en entier) */
+  .im-nw { white-space: nowrap; }
+
+  /* Moins de 385 px : « au premier regard, » (340 px en display, 34 px) est plus large que la
+     colonne (largeur de l'écran moins 2 × 20 px, avec quelques pixels de marge) ; les groupes peuvent
+     alors se couper, plutôt que de déborder */
+  @media (max-width: 384px) {
+    .im-nw { white-space: normal; }
+  }
 
   /* Gris de l'état « Sans système » (02) et de la carte « Chaque support… » (01) : clair, moyen,
      sombre, sans teinte */
@@ -1170,12 +1183,22 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   .im-a3 .g3 { background: var(--im-g3); transform: rotate(12deg); box-shadow: inset 0 0 0 1px var(--im-g2); }
 
   /* ===== 3. PARTOUT OÙ L'ON VOUS RENCONTRE ===== */
+  /* Grille : pastille centrée en haut, cartes, puis phrase. Le bouton Pause / Lecture est à droite
+     de la pastille sur cellulaire et tablette (visible dès l'arrivée sur la section), et en bas à
+     droite des cartes sur ordinateur (dès 1100 px, cartes sur une rangée). */
   .im-sw {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
+    display: grid;
+    /* Colonne de droite d'au moins 56 px (bouton de 44 px + 12 px d'écart) : la pastille reste
+       centrée dès qu'il y a la place, et se décale un peu vers la gauche sur les petits écrans
+       plutôt que de laisser le bouton déborder */
+    grid-template-columns: minmax(0, 1fr) auto minmax(56px, 1fr);
+    justify-items: center;
+    row-gap: 28px;
   }
+
+  .im-sw > .im-tg { grid-column: 2; grid-row: 1; }
+  .im-sw > .im-stage { grid-column: 1 / -1; grid-row: 2; justify-self: stretch; }
+  .im-sw > .im-cap-box { grid-column: 1 / -1; grid-row: 3; }
 
   /* Pastille « Sans système / Avec WOOP » */
   .im-tg {
@@ -1239,17 +1262,31 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   .im-sw.is-off .im-tg__knob { left: 6px; right: 50%; }
   .im-sw.is-off .im-tg__knob::before { opacity: 1; }
 
-  /* Les 4 supports, et le bouton Pause / Lecture en bas à droite (à côté des libellés de la
-     dernière carte, qui sont alignés à gauche) */
-  .im-stage {
-    position: relative;
-    width: 100%;
+  /* Les 4 supports */
+  .im-stage { width: 100%; }
+
+  /* Bouton Pause / Lecture : à droite de la pastille, aligné avec elle (cellulaire et tablette) */
+  .im-sw > .im-play {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    align-self: center;
+    margin-left: 12px;
+  }
+
+  /* Ordinateur : en bas à droite des cartes, à côté des libellés de la dernière carte (alignés à
+     gauche) */
+  @media (min-width: 1100px) {
+    .im-sw > .im-play {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-self: end;
+      align-self: end;
+      margin: 0 0 4px;
+    }
   }
 
   .im-play {
-    position: absolute;
-    right: 0;
-    bottom: 4px;
     z-index: 1;
     display: inline-flex;
     align-items: center;

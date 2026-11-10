@@ -248,6 +248,7 @@ async function brandSwitch(browser, base) {
   const URL = base + '/image-de-marque/';
   const st = (pg) => pg.evaluate(() => { const w = document.querySelector('[data-im-sw]'); const c = w.querySelector('.im-cap'); const b = w.querySelector('[data-im-pause]'); const r = b.getBoundingClientRect(); return { m: w.dataset.imState || (w.classList.contains('is-on') ? 'on' : 'off'), paused: w.classList.contains('is-paused'), cap: c.textContent.trim(), live: c.getAttribute('aria-live'), pressed: w.querySelector('.im-tg [aria-pressed=true]').dataset.imMode, btn: { vis: !b.hidden && r.width > 0, w: Math.round(r.width), h: Math.round(r.height), label: b.getAttribute('aria-label'), pressed: b.getAttribute('aria-pressed') } }; });
   const flip = async (pg, timeout = 7000) => { const from = (await st(pg)).m; const t0 = Date.now(); await pg.waitForFunction((f) => document.querySelector('[data-im-sw]').dataset.imState !== f, from, { timeout }); return (Date.now() - t0) / 1000; };
+  const where = (pg) => pg.evaluate(() => { const b = document.querySelector('[data-im-pause]').getBoundingClientRect(), t = document.querySelector('.im-tg').getBoundingClientRect(), g = document.querySelector('.im-grid').getBoundingClientRect(), sw = document.querySelector('[data-im-sw]').getBoundingClientRect(); if (Math.abs((b.top + b.height / 2) - (t.top + t.height / 2)) < 2 && b.left - t.right >= 8 && b.left - t.right <= 16 && b.right <= sw.right + 0.5) return 'pastille'; if (Math.abs(b.right - g.right) < 2 && Math.abs(b.bottom - g.bottom) <= 8) return 'cartes'; return 'ailleurs'; });
   const still = async (pg, ms) => { const a = (await st(pg)).m; await pg.waitForTimeout(ms); return (await st(pg)).m === a; };
   let ctx = await L.newContext(browser, base, { reducedMotion: 'no-preference' });
   let pg = await ctx.newPage();
@@ -255,6 +256,7 @@ async function brandSwitch(browser, base) {
   let s = await st(pg);
   ok(s.m === 'off' && s.paused && s.live === 'polite', 'Image de marque : hors de l\'écran, « Sans système » en attente, phrase en aria-live="polite"');
   ok(s.btn.vis && s.btn.w >= 44 && s.btn.h >= 44 && s.btn.label === "Mettre en pause l'animation" && s.btn.pressed === 'false', `Image de marque : bouton Pause visible (${s.btn.w} × ${s.btn.h} px), aria-label « ${s.btn.label} », aria-pressed=false`);
+  ok((await where(pg)) === 'cartes', 'Image de marque 1440 px : bouton Pause en bas à droite des cartes');
   ok(await still(pg, 3000), 'Image de marque : aucune alternance tant que la section n\'est pas à l\'écran');
   // Arrivée à la molette, souris immobile au centre de l'écran (elle finit sur la section)
   await pg.mouse.move(720, 450);
@@ -335,7 +337,7 @@ async function brandSwitch(browser, base) {
   // Cellulaire : bouton visible et de 44 × 44 px au moins
   ctx = await L.newContext(browser, base, { width: 390, height: 844, reducedMotion: 'no-preference', isMobile: true, hasTouch: true });
   pg = await ctx.newPage(); await pg.goto(URL); s = await st(pg);
-  ok(s.btn.vis && s.btn.w >= 44 && s.btn.h >= 44, `Image de marque 390 px : bouton Pause visible (${s.btn.w} × ${s.btn.h} px)`);
+  ok(s.btn.vis && s.btn.w >= 44 && s.btn.h >= 44 && (await where(pg)) === 'pastille', `Image de marque 390 px : bouton Pause visible (${s.btn.w} × ${s.btn.h} px), à droite de la pastille`);
   await ctx.close();
 }
 
