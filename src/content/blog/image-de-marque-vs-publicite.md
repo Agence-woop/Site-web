@@ -20,7 +20,7 @@ Parce qu'il y a une chose qu'on ne vous dit pas quand vous achetez de la publici
 
 Le marketing fait deux métiers différents, et la plupart des entreprises n'en font qu'un.
 
-Le premier, c'est récolter la demande qui existe déjà. Quand quelqu'un cherche votre service aujourd'hui, une publicité bien placée capte ce besoin. C'est mesurable, immédiat, satisfaisant. C'est la performance.
+Le premier, c'est récolter la demande qui existe déjà. Quand quelqu'un cherche votre service aujourd'hui, [une publicité bien placée](/publicite-google-meta/) capte ce besoin. C'est mesurable, immédiat, satisfaisant. C'est la performance.
 
 Le second, c'est créer la demande de demain. Faire qu'un jour, quand le besoin apparaîtra, votre nom soit déjà là, familier et rassurant. C'est lent, difficile à mesurer, et c'est précisément pour cela qu'on le néglige. C'est l'image de marque.
 
