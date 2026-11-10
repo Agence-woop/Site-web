@@ -40,7 +40,14 @@ export const serviceIconSvg = (s: Service): string =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${s.icon}</svg>`;
 
 export const SERVICES: Service[] = [
-  { key: 'marque', label: 'Image de marque', role: 'La fondation de tout le reste', icon: ICONS.palette },
+  {
+    key: 'marque',
+    label: 'Image de marque',
+    role: 'La fondation de tout le reste',
+    hint: 'La fondation de tout le reste',
+    href: '/image-de-marque/',
+    icon: ICONS.palette,
+  },
   {
     key: 'reseaux',
     label: 'Gestion des réseaux sociaux',

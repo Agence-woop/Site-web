@@ -132,6 +132,7 @@ const services: {
     text: 'Logo, charte visuelle, ton de marque, système de design complet. Une identité qui justifie un positionnement premium et qui se distingue dans votre secteur.',
     reveal: 'up',
     step: '1',
+    href: `${base}/image-de-marque/`,
   },
   {
     key: 'web',
@@ -1069,7 +1070,8 @@ const steps = [
   .md-sv--brand .md-mui,
   .md-sv--social .md-mui { margin-top: auto; }
 
-  /* Réseaux sociaux (tuile-lien) : le titre laisse la place du chevron (en haut à droite) */
+  /* Tuiles-liens (Image de marque, Réseaux sociaux) : le titre laisse la place du chevron (en haut à droite) */
+  .md-sv--brand :global(.md-sv__head),
   .md-sv--social :global(.md-sv__head) { padding-right: 44px; }
 
   /* En-tête, illustration, puis texte : Site web, Réputation */

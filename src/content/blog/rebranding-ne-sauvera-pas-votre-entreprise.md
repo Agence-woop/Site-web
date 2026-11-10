@@ -52,7 +52,7 @@ Le test que je propose à mes clients tient en une question. Votre image ment-el
 
 ## Le porte-voix et le message
 
-Une refonte de marque est un porte-voix, pas un message. Elle amplifie ce qui existe déjà. Si ce qui existe est une bonne entreprise à l'image vieillie, alors amplifiez sans hésiter, vous ne faites que rendre justice à ce que vous êtes. Mais si ce qui existe est un problème de positionnement, de service ou de produit, un nouveau logo ne fera que le moderniser, et le rendre plus visible.
+[Une refonte de marque](/image-de-marque/) est un porte-voix, pas un message. Elle amplifie ce qui existe déjà. Si ce qui existe est une bonne entreprise à l'image vieillie, alors amplifiez sans hésiter, vous ne faites que rendre justice à ce que vous êtes. Mais si ce qui existe est un problème de positionnement, de service ou de produit, un nouveau logo ne fera que le moderniser, et le rendre plus visible.
 
 Avant de refaire votre image, posez-vous donc la seule question qui compte : qu'est-ce qu'elle cache ? Réglez cela d'abord. Ensuite seulement, une refonte aura quelque chose de vrai à amplifier.
 

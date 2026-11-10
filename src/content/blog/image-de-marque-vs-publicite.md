@@ -46,7 +46,7 @@ Autrement dit, investir dans votre image de marque, ce n'est pas dépenser à c�
 
 À ce stade, vous vous dites peut-être que tout cela concerne les grandes marques aux budgets de campagne télévisée. C'est faux, et c'est la bonne nouvelle.
 
-Bâtir une marque, pour une clinique ou un cabinet, ne veut pas dire acheter de grandes campagnes. Ça veut dire une identité visuelle cohérente et reconnaissable, une voix qui vous ressemble, un message clair et constant, du contenu qui installe votre autorité, répétés patiemment sur chaque point de contact. C'est beaucoup moins coûteux qu'une grande publicité, et surtout, ça se cumule : contrairement à une publicité qui s'arrête le jour où vous cessez de payer, une marque, une fois installée, continue de travailler pour vous.
+Bâtir une marque, pour une clinique ou un cabinet, ne veut pas dire acheter de grandes campagnes. Ça veut dire [une identité visuelle cohérente et reconnaissable](/image-de-marque/), une voix qui vous ressemble, un message clair et constant, du contenu qui installe votre autorité, répétés patiemment sur chaque point de contact. C'est beaucoup moins coûteux qu'une grande publicité, et surtout, ça se cumule : contrairement à une publicité qui s'arrête le jour où vous cessez de payer, une marque, une fois installée, continue de travailler pour vous.
 
 La performance reste utile, elle est même indispensable pour démarrer et pour récolter vite. Mais elle ne devrait jamais être la totalité de votre effort. Le bon réflexe n'est pas de choisir entre la marque et la publicité. C'est d'arrêter de ne faire que la seconde.
 
