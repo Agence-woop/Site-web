@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Tests de comportement du site compilé : page Contact, quiz du Test de visibilité, barre
-// collante, parcours animé du hero (Santé, RH), carrousel de l'Équipe, pagination du blog,
-// ancres et liens internes.
+// collante, menu burger après défilement, parcours animé du hero (Santé, RH), carrousel de
+// l'Équipe, pagination du blog, ancres et liens internes.
 // Les envois vers Formspree sont simulés (aucune donnée n'est envoyée) et GA4 / Meta sont
 // remplacés par des espions qui notent les événements.
 //
@@ -104,6 +104,61 @@ async function stickyBar(browser, base) {
 
 // Parcours animé du hero (Santé, RH) : étapes allumées l'une après l'autre, puis tout allumé, puis
 // reprise ; avec le mouvement réduit, aucune animation (état final immobile).
+// Menu burger (sous 1280 px) ouvert après défilement : il doit couvrir tout l'écran, comme en haut de
+// page. Garde-fou du bogue où l'en-tête « défilé » (backdrop-filter) devenait le bloc conteneur du
+// menu en position fixe, qui se retrouvait coincé dans la hauteur de l'en-tête.
+async function burgerMenu(browser, base) {
+  for (const url of ['/', '/gestion-reseaux-sociaux/']) {
+    for (const w of [390, 900]) {
+      const ctx = await L.newContext(browser, base, { width: w, height: 700, reducedMotion: 'reduce' });
+      const pg = await ctx.newPage();
+      await pg.goto(base + url);
+      await pg.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight / 2, behavior: 'instant' }));
+      await pg.waitForTimeout(300);
+      const before = await pg.evaluate(() => ({ y: Math.round(scrollY), scrolled: document.getElementById('header').classList.contains('header--scrolled') }));
+      await pg.click('.header__burger');
+      await pg.waitForTimeout(300);
+      // Couverture : le menu occupe tout l'écran, c'est lui qu'on touche en bas de l'écran, fond opaque
+      const cover = await pg.evaluate(() => {
+        const m = document.getElementById('nav-menu'), r = m.getBoundingClientRect();
+        const hit = document.elementFromPoint(innerWidth / 2, innerHeight - 10);
+        const c = getComputedStyle(m).backgroundColor.match(/[\d.]+/g).map(Number);
+        return { full: r.top <= 0 && r.left <= 0 && r.right >= innerWidth && r.bottom >= innerHeight, hit: m.contains(hit), opaque: c.length === 3 || c[3] === 1 };
+      });
+      // Défilement de la page bloqué derrière le menu
+      await pg.mouse.move(w / 2, 650);
+      await pg.mouse.wheel(0, 800);
+      await pg.waitForTimeout(300);
+      const yAfter = await pg.evaluate(() => Math.round(scrollY));
+      // Chaque sous-menu s'ouvre, son premier lien est visible et cliquable (le menu défile s'il dépasse l'écran)
+      const triggers = await pg.$$('#nav-menu .header__trigger, #nav-menu .header__toggle');
+      let subs = 0, reachable = 0;
+      for (const t of triggers) {
+        await t.click();
+        await pg.waitForTimeout(150);
+        const id = await t.getAttribute('aria-controls');
+        const link = await pg.$(`#${id} a`);
+        await link.scrollIntoViewIfNeeded();
+        const r = await pg.evaluate((sel) => {
+          const sub = document.getElementById(sel), a = sub.querySelector('a'), b = a.getBoundingClientRect();
+          const hit = document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2);
+          return { open: getComputedStyle(sub).display !== 'none' && sub.getBoundingClientRect().height > 0, hit: a.contains(hit) };
+        }, id);
+        if (r.open) subs++;
+        if (r.hit) reachable++;
+      }
+      const scroll = await pg.evaluate(() => { const m = document.getElementById('nav-menu'); return { over: m.scrollHeight > m.clientHeight, auto: getComputedStyle(m).overflowY === 'auto' }; });
+      // Un lien du dernier sous-menu (Blog) mène à sa page
+      const last = await triggers[triggers.length - 1].getAttribute('aria-controls');
+      const href = await pg.getAttribute(`#${last} a`, 'href');
+      await Promise.all([pg.waitForURL((u) => u.pathname === href), pg.click(`#${last} a`)]);
+      ok(before.scrolled && cover.full && cover.hit && cover.opaque && yAfter === before.y && subs === triggers.length && reachable === triggers.length && scroll.auto,
+        `Menu burger ${url} ${w}px après défilement : couvre l'écran (fond opaque), page bloquée derrière, ${subs}/${triggers.length} sous-menus ouverts et cliquables${scroll.over ? ' (menu plus haut que l\'écran : il défile)' : ''}, lien ${href} suivi`);
+      await ctx.close();
+    }
+  }
+}
+
 async function heroFlow(browser, base) {
   const state = (pg) => pg.evaluate(() => {
     const f = document.querySelector('[data-md-flow]');
@@ -230,6 +285,7 @@ function anchorsAndLinks(dist) {
     await contact(browser, server.url);
     await quiz(browser, server.url);
     await stickyBar(browser, server.url);
+    await burgerMenu(browser, server.url);
     await heroFlow(browser, server.url);
     await teamCarousel(browser, server.url);
     await blogPager(browser, server.url);
