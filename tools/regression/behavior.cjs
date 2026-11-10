@@ -243,65 +243,99 @@ async function teamCarousel(browser, base) {
 }
 
 async function brandSwitch(browser, base) {
-  // Page Image de marque, section 02 : alternance « Sans système » / « Avec WOOP » toutes les 5 s
+  // Page Image de marque, section 02 : alternance « Sans système » / « Avec WOOP » (1er changement
+  // 1,5 s après l'arrivée à l'écran, puis toutes les 5 s), bouton Pause / Lecture, aucune pause au survol
   const URL = base + '/image-de-marque/';
-  const st = (pg) => pg.evaluate(() => { const w = document.querySelector('[data-im-sw]'); const c = w.querySelector('.im-cap'); return { m: w.dataset.imState || (w.classList.contains('is-on') ? 'on' : 'off'), paused: w.classList.contains('is-paused'), cap: c.textContent.trim(), live: c.getAttribute('aria-live'), pressed: w.querySelector('[aria-pressed=true]').dataset.imMode }; });
-  const waitFlip = async (pg, from, timeout = 7000) => { const t0 = Date.now(); await pg.waitForFunction((f) => document.querySelector('[data-im-sw]').dataset.imState !== f, from, { timeout }); return (Date.now() - t0) / 1000; };
-  const toSection = (pg) => pg.evaluate(() => { const e = document.querySelector('[data-im-sw]'); window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - 120, behavior: 'instant' }); });
+  const st = (pg) => pg.evaluate(() => { const w = document.querySelector('[data-im-sw]'); const c = w.querySelector('.im-cap'); const b = w.querySelector('[data-im-pause]'); const r = b.getBoundingClientRect(); return { m: w.dataset.imState || (w.classList.contains('is-on') ? 'on' : 'off'), paused: w.classList.contains('is-paused'), cap: c.textContent.trim(), live: c.getAttribute('aria-live'), pressed: w.querySelector('.im-tg [aria-pressed=true]').dataset.imMode, btn: { vis: !b.hidden && r.width > 0, w: Math.round(r.width), h: Math.round(r.height), label: b.getAttribute('aria-label'), pressed: b.getAttribute('aria-pressed') } }; });
+  const flip = async (pg, timeout = 7000) => { const from = (await st(pg)).m; const t0 = Date.now(); await pg.waitForFunction((f) => document.querySelector('[data-im-sw]').dataset.imState !== f, from, { timeout }); return (Date.now() - t0) / 1000; };
+  const still = async (pg, ms) => { const a = (await st(pg)).m; await pg.waitForTimeout(ms); return (await st(pg)).m === a; };
   let ctx = await L.newContext(browser, base, { reducedMotion: 'no-preference' });
   let pg = await ctx.newPage();
-  await pg.goto(URL); await pg.mouse.move(2, 2);
+  await pg.goto(URL);
   let s = await st(pg);
   ok(s.m === 'off' && s.paused && s.live === 'polite', 'Image de marque : hors de l\'écran, « Sans système » en attente, phrase en aria-live="polite"');
-  await pg.waitForTimeout(5600); s = await st(pg);
-  ok(s.m === 'off', 'Image de marque : aucune alternance tant que la section n\'est pas à l\'écran');
-  await toSection(pg);
-  let t = await waitFlip(pg, 'off'); s = await st(pg);
-  ok(s.m === 'on' && t > 4.5 && t < 6, `Image de marque : « Avec WOOP » ${t.toFixed(1)} s après l'arrivée à l'écran`);
-  await pg.waitForTimeout(400); s = await st(pg);
-  ok(s.pressed === 'on' && /La même marque à chaque étape/.test(s.cap), 'Image de marque : pastille et phrase suivent l\'état « Avec WOOP »');
-  t = await waitFlip(pg, 'on'); await pg.waitForTimeout(400); s = await st(pg);
-  ok(s.m === 'off' && t > 4.5 && t < 5.6 && s.pressed === 'off' && /Quatre supports/.test(s.cap), `Image de marque : retour à « Sans système » ${t.toFixed(1)} s plus tard (pastille et phrase)`);
-  // Survol
+  ok(s.btn.vis && s.btn.w >= 44 && s.btn.h >= 44 && s.btn.label === "Mettre en pause l'animation" && s.btn.pressed === 'false', `Image de marque : bouton Pause visible (${s.btn.w} × ${s.btn.h} px), aria-label « ${s.btn.label} », aria-pressed=false`);
+  ok(await still(pg, 3000), 'Image de marque : aucune alternance tant que la section n\'est pas à l\'écran');
+  // Arrivée à la molette, souris immobile au centre de l'écran (elle finit sur la section)
+  await pg.mouse.move(720, 450);
+  const t0 = Date.now();
+  // Défilement jusqu'à l'apparition du bloc (classe is-revealed de ScrollReveal) et 35 % visible
+  let early = null;
+  for (let i = 0; i < 120; i++) {
+    const v = await pg.evaluate(() => { const e = document.querySelector('[data-im-sw]'); const r = e.getBoundingClientRect(); return { vis: Math.max(0, Math.min(innerHeight, r.bottom) - Math.max(0, r.top)) / r.height, rev: e.classList.contains('is-revealed'), m: e.dataset.imState }; });
+    if (v.vis >= 0.35 && !v.rev && early === null) { await pg.waitForTimeout(2500); early = (await st(pg)).m; }
+    if (v.vis >= 0.35 && v.rev) break;
+    await pg.mouse.wheel(0, 60); await pg.waitForTimeout(16);
+  }
+  ok(early === null || early === 'off', `Image de marque : pas de changement tant que le bloc n'est pas apparu${early === null ? ' (apparu dès 35 % visible)' : ' (35 % visible mais encore invisible : « Sans système » gardé 2,5 s)'}`);
+  const tVis = Date.now();
+  await pg.waitForFunction(() => document.querySelector('[data-im-sw]').dataset.imState === 'on', null, { timeout: 5000 });
+  let t = (Date.now() - tVis) / 1000;
+  ok(t > 1.0 && t < 2.3, `Image de marque : 1er changement (« Avec WOOP ») ${t.toFixed(1)} s après l'apparition du bloc à l'écran (attendu vers 1,5 s)`);
+  const over = await pg.evaluate(() => document.elementFromPoint(720, 450)?.closest('#partout') !== null);
+  t = await flip(pg); s = await st(pg);
+  ok(over && !s.paused && t > 4.5 && t < 5.6, `Image de marque : pas de pause au survol, souris immobile sur la section (changement suivant ${t.toFixed(1)} s plus tard)`);
   const card = await pg.locator('.im-tile').first().boundingBox();
-  await pg.mouse.move(card.x + card.width / 2, card.y + 60, { steps: 3 }); await pg.waitForTimeout(150);
-  s = await st(pg); const before = s.m;
-  await pg.waitForTimeout(6000); s = await st(pg);
-  ok(s.paused && s.m === before, 'Image de marque : pause au survol de la section (6 s sans changement)');
-  await pg.mouse.move(2, 2, { steps: 3 });
-  t = await waitFlip(pg, before); s = await st(pg);
-  ok(!s.paused && t < 5.6, `Image de marque : reprise à la sortie du survol (changement ${t.toFixed(1)} s plus tard)`);
-  // Clic sur la pastille : état choisi, rotation continue
-  await pg.waitForTimeout(1500);
-  const cur = (await st(pg)).m; const other = cur === 'on' ? 'off' : 'on';
+  await pg.mouse.move(card.x + card.width / 2, card.y + 60, { steps: 4 });
+  t = await flip(pg); s = await st(pg);
+  ok(!s.paused && t < 5.6, `Image de marque : pas de pause en survolant une carte (changement ${t.toFixed(1)} s plus tard)`);
+  await pg.waitForTimeout(400); s = await st(pg);
+  ok(s.pressed === s.m && (s.m === 'on' ? /La même marque/ : /Quatre supports/).test(s.cap), 'Image de marque : pastille et phrase suivent l\'état');
+  // Bouton Pause / Lecture
+  await pg.click('[data-im-pause]'); s = await st(pg);
+  ok(s.paused && s.btn.pressed === 'true' && s.btn.label === "Reprendre l'animation", 'Image de marque : bouton → pause (aria-pressed=true, « Reprendre l\'animation »)');
+  ok(await still(pg, 6000), 'Image de marque : en pause, aucun changement pendant 6 s');
+  const before = (await st(pg)).m; const other = before === 'on' ? 'off' : 'on';
   await pg.click(`[data-im-mode="${other}"]`); s = await st(pg);
-  ok(s.m === other && s.pressed === other, `Image de marque : clic sur la pastille → état « ${other === 'on' ? 'Avec WOOP' : 'Sans système'} »`);
-  await pg.mouse.move(2, 2, { steps: 3 }); const tClick = Date.now();
-  await waitFlip(pg, other); t = (Date.now() - tClick) / 1000;
-  ok(t > 4.3 && t < 5.8, `Image de marque : la rotation continue après le clic (état suivant ${t.toFixed(1)} s plus tard)`);
-  // Focus clavier
-  // Focus au clavier : Maj+Tab depuis « Avec WOOP » vers « Sans système »
+  ok(s.m === other && s.paused && s.btn.pressed === 'true', 'Image de marque : en pause, un clic sur la pastille change l\'état et garde la pause');
+  ok(await still(pg, 6000), 'Image de marque : la pause est maintenue après le clic sur la pastille (6 s)');
+  await pg.click('[data-im-pause]'); s = await st(pg);
+  const tPlay = Date.now();
+  ok(!s.paused && s.btn.pressed === 'false' && s.btn.label === "Mettre en pause l'animation", 'Image de marque : bouton → reprise (aria-pressed=false)');
+  await flip(pg); t = (Date.now() - tPlay) / 1000;
+  ok(t > 4.3 && t < 5.6, `Image de marque : changement suivant ${t.toFixed(1)} s après la reprise`);
+  // Pastille pendant la rotation : l'état change, la rotation continue
+  await pg.waitForTimeout(1500);
+  const cur = (await st(pg)).m; const oth = cur === 'on' ? 'off' : 'on';
+  await pg.click(`[data-im-mode="${oth}"]`); const tClick = Date.now(); s = await st(pg);
+  ok(s.m === oth && !s.paused, `Image de marque : clic sur la pastille → « ${oth === 'on' ? 'Avec WOOP' : 'Sans système'} », rotation toujours active`);
+  await flip(pg); t = (Date.now() - tClick) / 1000;
+  ok(t > 4.3 && t < 5.6, `Image de marque : la rotation continue après le clic (état suivant ${t.toFixed(1)} s plus tard)`);
+  // Focus clavier (Maj+Tab depuis « Avec WOOP » vers « Sans système »)
   await pg.focus('[data-im-mode="on"]'); await pg.keyboard.press('Shift+Tab');
-  const fv = await pg.evaluate(() => document.activeElement.matches(':focus-visible'));
-  s = await st(pg); const b2 = s.m;
-  await pg.waitForTimeout(6000); s = await st(pg);
-  ok(fv && s.paused && s.m === b2, 'Image de marque : pause au focus clavier dans la section (6 s sans changement)');
+  const fv = await pg.evaluate(() => document.activeElement.matches('[data-im-mode="off"]:focus-visible'));
+  s = await st(pg);
+  ok(fv && s.paused && await still(pg, 6000), 'Image de marque : pause au focus clavier dans la section (6 s sans changement)');
   await pg.evaluate(() => document.activeElement.blur());
-  t = await waitFlip(pg, b2);
+  t = await flip(pg);
   ok(t < 5.6, `Image de marque : reprise à la perte du focus (${t.toFixed(1)} s)`);
-  // Hors de l'écran : arrêt
+  // Hors de l'écran : arrêt, puis reprise au retour
   await pg.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await pg.waitForTimeout(200);
-  s = await st(pg); const b3 = s.m;
-  await pg.waitForTimeout(6000); s = await st(pg);
-  ok(s.paused && s.m === b3, 'Image de marque : arrêt quand la section sort de l\'écran');
+  s = await st(pg);
+  ok(s.paused && await still(pg, 6000), 'Image de marque : arrêt quand la section sort de l\'écran (6 s)');
+  await pg.evaluate(() => { const e = document.querySelector('[data-im-sw]'); window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - 120, behavior: 'instant' }); });
+  t = await flip(pg);
+  ok(t < 5.6, `Image de marque : reprise au retour à l'écran (${t.toFixed(1)} s)`);
+  // Pause choisie, puis sortie et retour : la pause reste
+  await pg.click('[data-im-pause]');
+  await pg.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await pg.waitForTimeout(300);
+  await pg.evaluate(() => { const e = document.querySelector('[data-im-sw]'); window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - 120, behavior: 'instant' }); });
+  s = await st(pg);
+  ok(s.paused && s.btn.pressed === 'true' && await still(pg, 6000), 'Image de marque : pause choisie conservée après une sortie et un retour à l\'écran');
   await ctx.close();
-  // Mouvement réduit : « Avec WOOP », sans alternance, pastille cliquable
+  // Mouvement réduit : « Avec WOOP » fixe, bouton en position Lecture, pastille cliquable
   ctx = await L.newContext(browser, base, { reducedMotion: 'reduce' });
-  pg = await ctx.newPage(); await pg.goto(URL); await toSection(pg); await pg.mouse.move(2, 2);
-  s = await st(pg); await pg.waitForTimeout(6000); const s2 = await st(pg);
-  ok(s.m === 'on' && s2.m === 'on' && /La même marque/.test(s2.cap), 'Image de marque : mouvement réduit → « Avec WOOP » fixe (6 s)');
+  pg = await ctx.newPage(); await pg.goto(URL);
+  await pg.evaluate(() => { const e = document.querySelector('[data-im-sw]'); window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - 120, behavior: 'instant' }); });
+  s = await st(pg);
+  ok(s.m === 'on' && s.btn.vis && s.btn.pressed === 'true' && s.btn.label === "Reprendre l'animation" && await still(pg, 6000) && /La même marque/.test((await st(pg)).cap), 'Image de marque : mouvement réduit → « Avec WOOP » fixe (6 s), bouton en position Lecture');
   await pg.click('[data-im-mode="off"]'); s = await st(pg);
-  ok(s.m === 'off' && /Quatre supports/.test(s.cap), 'Image de marque : mouvement réduit → la pastille reste cliquable');
+  ok(s.m === 'off' && /Quatre supports/.test(s.cap) && await still(pg, 6000), 'Image de marque : mouvement réduit → la pastille reste cliquable, sans alternance ensuite');
+  await ctx.close();
+  // Cellulaire : bouton visible et de 44 × 44 px au moins
+  ctx = await L.newContext(browser, base, { width: 390, height: 844, reducedMotion: 'no-preference', isMobile: true, hasTouch: true });
+  pg = await ctx.newPage(); await pg.goto(URL); s = await st(pg);
+  ok(s.btn.vis && s.btn.w >= 44 && s.btn.h >= 44, `Image de marque 390 px : bouton Pause visible (${s.btn.w} × ${s.btn.h} px)`);
   await ctx.close();
 }
 
