@@ -1,0 +1,2007 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import SectionHead from '../components/SectionHead.astro';
+import VisibilityTeaser from '../components/VisibilityTeaser.astro';
+import FinalBand from '../components/FinalBand.astro';
+import StickyBar from '../components/StickyBar.astro';
+import CtaIcon from '../components/CtaIcon.astro';
+import ServiceHero from '../components/services/ServiceHero.astro';
+import AudienceCard from '../components/services/AudienceCard.astro';
+import ServiceTile from '../components/services/ServiceTile.astro';
+import SpecialistCard from '../components/services/SpecialistCard.astro';
+import Faq from '../components/services/Faq.astro';
+import FurtherReading from '../components/services/FurtherReading.astro';
+import ServiceCycle from '../components/services/ServiceCycle.astro';
+import { team } from '../data/team';
+import { service } from '../data/services';
+import { NB } from '../utils/typo';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SITE_URL = 'https://agence-woop.ca';
+const PAGE_URL = `${SITE_URL}/image-de-marque/`;
+
+// Vos questions (accordéon et données structurées FAQPage) : 3 questions par colonne
+const faq = [
+  {
+    q: `Vous partez de zéro, ou de ma marque actuelle${NB}?`,
+    a: "Les deux sont possibles. On commence par regarder ce que votre marque dit aujourd'hui, et on garde ce qui fonctionne.",
+  },
+  {
+    q: `Qu'est-ce que je reçois à la fin${NB}?`,
+    a: 'Votre positionnement, votre identité visuelle, votre ton de marque, un système de design et les déclinaisons dont vous avez besoin, avec des fichiers prêts à utiliser.',
+  },
+  {
+    q: `Est-ce que la marque m'appartient${NB}?`,
+    a: "Oui. Votre marque vous appartient, et vous l'utilisez comme vous le souhaitez. On vous remet des fichiers prêts à utiliser, en PNG, JPG ou PDF selon les livrables. Les fichiers sources vectoriels, utiles pour faire évoluer la marque vous-même ou avec un autre fournisseur, sont offerts en option.",
+  },
+  {
+    q: `Combien de temps ça prend${NB}?`,
+    a: "Comptez de 4 à 8 semaines, selon l'ampleur des livrables et la réflexion de départ sur votre future identité.",
+  },
+  {
+    q: `Qui s'occupe de ma marque${NB}?`,
+    a: "Kevin, designer graphique de formation et cofondateur de WOOP. Il pilote l'identité de marque de chaque projet.",
+  },
+  {
+    q: `Ça marche aussi pour un cabinet de recrutement${NB}?`,
+    a: "Oui. Une marque claire aide autant à décrocher des mandats qu'à attirer les meilleurs candidats.",
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Image de marque pour cliniques et cabinets',
+    serviceType: 'Image de marque pour cliniques et cabinets',
+    // Renvoie à la fiche de l'organisation publiée sur l'accueil
+    provider: { '@id': `${SITE_URL}/#organization`, name: 'Agence WOOP' },
+    areaServed: 'Québec',
+    url: PAGE_URL,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Image de marque', item: PAGE_URL },
+    ],
+  },
+];
+
+// Icônes au trait (même style que le reste du site). Palette : l'icône de l'image de marque
+// (src/data/services.ts), reprise ici pour la tuile « Identité visuelle ».
+const ICONS = {
+  target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+  lines: '<path d="M4 6h16M4 12h10M4 18h13"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  pen: '<path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 7l3 3"/>',
+  // Clinique : bâtiment, croix médicale (blanche dans sa pastille, jamais rouge) et porte
+  clinic: '<path d="M5 21V7a1 1 0 011-1h12a1 1 0 011 1v14"/><path d="M3 21h18"/><path d="M10.5 8.5h3v2h2v3h-2v2h-3v-2h-2v-3h2z"/><path d="M10 21v-3.5h4V21"/>',
+  case: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+} as const;
+type IconKey = keyof typeof ICONS;
+const icon = (k: IconKey) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
+const palette = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${service('marque').icon}</svg>`;
+
+// 01 · Pour qui ?
+const profiles: { key: 'old' | 'value' | 'mixed'; title: string; lived: string; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'old',
+    title: 'Votre logo date, et il ne vous ressemble plus.',
+    lived: 'Votre clinique ou votre cabinet a grandi. Votre image est restée là où vous avez commencé.',
+    reveal: 'left',
+  },
+  {
+    key: 'value',
+    title: 'Vos services valent plus que ce que votre image laisse croire.',
+    lived: 'Une image négligée ne reflète pas la qualité de votre travail.',
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'mixed',
+    title: "Chaque support semble venir d'une organisation différente.",
+    lived: `Le site, la fiche Google, les affiches${NB}: rien ne se répond.`,
+    reveal: 'right',
+    step: '2',
+  },
+];
+
+// 02 · Partout où l'on vous rencontre : les 4 supports, et la phrase de chaque état
+const touchpoints: { key: 'google' | 'site' | 'desk' | 'mail'; title: string; sub: string }[] = [
+  { key: 'google', title: 'La fiche Google', sub: 'Le premier regard' },
+  { key: 'site', title: 'Le site', sub: "Là où l'on vous choisit" },
+  { key: 'desk', title: "L'accueil", sub: "À l'arrivée" },
+  { key: 'mail', title: 'Le courriel', sub: 'Après le rendez-vous' },
+];
+const captions = {
+  off: `Quatre supports, quatre styles${NB}: personne ne fait le lien.`,
+  on: `La même marque à chaque étape${NB}: on vous reconnaît, et on se souvient de vous.`,
+};
+
+// 03 · Les livrables (grille : 1 colonne sur téléphone, 2 sur tablette, 4 sur ordinateur)
+const deliverables: { key: 'id' | 'pos' | 'tone' | 'ds' | 'decl'; shape: 'sq' | 'wide'; ic?: IconKey; title: string; text: string; accent?: boolean; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'id',
+    shape: 'sq',
+    accent: true,
+    title: 'Identité visuelle',
+    text: `Logo, couleurs, typographie, iconographie${NB}: une identité qu'on reconnaît du premier coup d'œil.`,
+    reveal: 'left',
+  },
+  { key: 'pos', shape: 'sq', ic: 'target', title: 'Positionnement', text: "Ce que vous êtes, pour qui, et pourquoi vous plutôt qu'un autre. La base de tout le reste.", reveal: 'right', step: '1' },
+  { key: 'tone', shape: 'sq', ic: 'lines', title: 'Ton de marque', text: 'Votre façon de parler, partout.', reveal: 'up', step: '1' },
+  { key: 'ds', shape: 'sq', ic: 'grid', title: 'Système de design', text: 'Des règles simples, pour que tout reste cohérent.', reveal: 'up', step: '2' },
+  {
+    key: 'decl',
+    shape: 'wide',
+    ic: 'pen',
+    title: 'Les déclinaisons',
+    text: `Votre marque appliquée là où elle vit${NB}: site, réseaux sociaux, documents, cartes, signalétique de la clinique.`,
+    reveal: 'up',
+  },
+];
+
+// Les 5 déclinaisons (mini maquettes de la tuile, avec leur nom en petit dessous)
+const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[] = [
+  { key: 'web', name: 'Page de site' },
+  { key: 'post', name: 'Publication Instagram' },
+  { key: 'doc', name: 'Document à en-tête' },
+  { key: 'card', name: 'Carte de visite' },
+  { key: 'sign', name: "Panneau d'accueil" },
+];
+---
+<Layout
+  title="Image de marque pour cliniques et cabinets | WOOP"
+  description="Positionnement, identité visuelle et système de design pour cliniques et cabinets de recrutement. Une marque reconnue, appliquée partout."
+  ogImage="/images/og-image.jpg"
+  jsonLd={jsonLd}
+>
+
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Le hero n'est jamais animé. -->
+  <ScrollReveal />
+
+  <!-- 1. HERO (sans data-reveal) -->
+  <ServiceHero
+    layout="split"
+    pill="Image de marque"
+    sub={`Pour les cliniques et les cabinets de recrutement${NB}: positionnement, identité visuelle, ton et système de design complet. On construit votre marque, puis on l'applique partout où l'on vous rencontre, de Google à votre accueil.`}
+    strong="Une image à la hauteur de vos services."
+    primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+    secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
+  >
+    <Fragment slot="title">Image de marque{NB}: votre marque commence avant votre logo, <span class="gradient-accent hp-kw">au premier regard, au premier appel.</span></Fragment>
+
+    <Fragment slot="visual">
+    <Fragment set:html={"<!-- Illustration : le livre de marque et ses déclinaisons (immobile) -->"} />
+    <div class="im-hv" aria-hidden="true">
+      <div class="im-hv__glow"></div>
+
+      <!-- Couleurs de la marque -->
+      <div class="im-hv__sw">
+        <span class="im-dot im-dot--o"></span><span class="im-dot im-dot--p"></span><span class="im-dot im-dot--pl"></span><span class="im-dot im-dot--b"></span>
+        <small>Couleurs</small>
+      </div>
+
+      <!-- Typographie -->
+      <div class="im-hv__ty"><b>Aa</b><div><small>Typographie</small><i></i><i class="s"></i></div></div>
+
+      <!-- Cartes de visite (verso blanc, recto en dégradé) -->
+      <div class="im-hv__back"><span class="im-vc im-vc--sm"><b>VC</b></span><b>Votre nom</b><small>Physiothérapeute</small><i></i><i class="s"></i></div>
+      <div class="im-hv__front"><span class="im-vc im-vc--w"><b>VC</b></span><b>Votre clinique</b><small>Santé &amp; mouvement</small></div>
+
+      <!-- Livre de marque -->
+      <div class="im-hv__book">
+        <div class="im-bk__h"><small>Livre de marque</small><small>p. 04</small></div>
+        <div class="im-bk__main"><span class="im-bk__cs"></span><span class="im-vc im-vc--xl"><b>VC</b></span><b>Votre clinique</b></div>
+        <small class="im-bk__l">Déclinaisons</small>
+        <div class="im-bk__var">
+          <span class="v1"><span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span></span>
+          <span class="v2"><span class="im-vc im-vc--xs"><b>VC</b></span></span>
+          <span class="v3"><span class="im-vc im-vc--xs im-vc--dk"><b>VC</b></span></span>
+        </div>
+      </div>
+
+      <!-- Signalétique de l'accueil -->
+      <div class="im-hv__sign"><span class="im-vc im-vc--sm"><b>VC</b></span><div><b>Votre clinique</b><small>Accueil, 1er étage</small></div></div>
+    </div>
+    </Fragment>
+  </ServiceHero>
+
+  <!-- 2. 01 · POUR QUI ? -->
+  <section class="hp-block hp-sec" id="pour-qui" data-reveal-clip>
+    <div class="container">
+      <SectionHead over={`01 · Pour qui${NB}?`}>Vous vous <span class="gradient-accent">reconnaissez</span>{NB}?</SectionHead>
+
+      <div class="im-prs">
+        {profiles.map((p) => (
+          <AudienceCard kind={p.key} title={p.title} lived={p.lived} reveal={p.reveal} step={p.step}>
+            {p.key === 'old' && (
+              <div class="im-a1">
+                <span class="im-a1__old">Logo<br />2014</span>
+                <span class="im-a1__go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
+                <span class="im-vc im-vc--lg"><b>VC</b></span>
+              </div>
+            )}
+            {p.key === 'value' && (
+              <div class="im-a2">
+                <div class="im-a2__col"><span class="im-a2__bar im-a2__bar--hi"></span><small>Vos services</small></div>
+                <div class="im-a2__col"><span class="im-a2__bar"></span><small>Votre image</small></div>
+              </div>
+            )}
+            {p.key === 'mixed' && (
+              <div class="im-a3"><span class="g1"></span><span class="g2"></span><span class="g3"></span></div>
+            )}
+          </AudienceCard>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 02 · PARTOUT OÙ L'ON VOUS RENCONTRE : « Sans système » et « Avec WOOP » en alternance
+       (toutes les 5 s, seulement à l'écran ; pause au survol et au focus clavier de la section ;
+       mouvement réduit ou sans JavaScript : « Avec WOOP », sans alternance) -->
+  <section class="hp-block hp-sec" id="partout" data-reveal-clip data-im-zone>
+    <div class="container">
+      <SectionHead over="02 · Partout où l'on vous rencontre" intro="Ce que votre marque dit avant vous.">Une seule marque, <span class="gradient-accent">partout</span>.</SectionHead>
+
+      <div class="im-sw is-on" data-im-sw data-reveal="up">
+        <div class="im-tg" role="group" aria-label="Comparer les supports">
+          <button type="button" class="im-tg__btn" data-im-mode="off" aria-pressed="false">Sans système</button>
+          <button type="button" class="im-tg__btn" data-im-mode="on" aria-pressed="true">Avec WOOP</button>
+          <span class="im-tg__knob" aria-hidden="true"></span>
+        </div>
+
+        <ul class="im-grid">
+          {touchpoints.map((t) => (
+            <li class="im-tile">
+              <div class="im-mw" aria-hidden="true">
+                <div class:list={['im-mk', `im-mk--${t.key}`]}>
+                  {t.key === 'google' && (
+                    <>
+                      <small class="im-mk__k">Fiche Google</small>
+                      <div class="im-mk__row"><span class="im-mk__lg"><b>VC</b></span><b class="im-mk__nm">Votre clinique</b></div>
+                      <i class="im-mk__ln"></i>
+                      <div class="im-mk__ph"><i></i><i></i><i></i></div>
+                    </>
+                  )}
+                  {t.key === 'site' && (
+                    <>
+                      <div class="im-mk__bar"><i></i><i></i><i></i></div>
+                      <b class="im-mk__nm">Votre clinique</b>
+                      <i class="im-mk__ln"></i>
+                      <span class="im-mk__cta">Réserver</span>
+                    </>
+                  )}
+                  {t.key === 'desk' && (
+                    <>
+                      <span class="im-mk__lg"><b>VC</b></span>
+                      <b class="im-mk__nm">Votre clinique</b>
+                      <small>Accueil, 1er étage</small>
+                    </>
+                  )}
+                  {t.key === 'mail' && (
+                    <>
+                      <div class="im-mk__row"><span class="im-mk__lg"><b>VC</b></span><b class="im-mk__nm">Votre clinique</b></div>
+                      <small>Rendez-vous confirmé</small>
+                      <span class="im-mk__cta">Ajouter au calendrier</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              <b class="im-tile__t">{t.title}</b>
+              <small class="im-tile__s">{t.sub}</small>
+            </li>
+          ))}
+        </ul>
+
+        <p class="im-cap" aria-live="polite" data-cap-off={captions.off} data-cap-on={captions.on}><span data-im-cap>{captions.on}</span></p>
+      </div>
+
+      <div class="md-svc-cta" data-reveal="up">
+        <a class="cta" href={`${base}/contact/`}>Faire le point sur votre marque<CtaIcon /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 03 · LES LIVRABLES -->
+  <section class="hp-block hp-sec" id="livrables" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="03 · Les livrables" intro={`Pas seulement un logo${NB}: un système complet, pensé par un designer.`}>Ce que vous <span class="gradient-accent">recevez</span>.</SectionHead>
+
+      <div class="im-bento">
+        {deliverables.map((t) => (
+          <ServiceTile kind={t.key} shape={t.shape} title={t.title} text={t.text} accent={t.accent} reveal={t.reveal} step={t.step}>
+            <Fragment slot="icon"><Fragment set:html={t.ic ? icon(t.ic) : palette} /></Fragment>
+            <Fragment slot="illustration">
+              <div class:list={['md-mui', `im-mui--${t.key}`]} aria-hidden="true">
+                {t.key === 'id' && (
+                  <>
+                    <div class="im-id__lg"><span class="im-vc im-vc--md"><b>VC</b></span><b>Votre clinique</b></div>
+                    <div class="im-id__row"><span class="o"></span><span class="p"></span><span class="pl"></span><span class="b"></span><span class="w"></span></div>
+                    <div class="im-id__ty"><b>Aa</b><div><i></i><i class="s"></i></div></div>
+                  </>
+                )}
+                {t.key === 'pos' && (
+                  <ol class="im-pos">
+                    <li><span>Pour qui</span></li>
+                    <li><span>Ce qui vous distingue</span></li>
+                    <li class="is-on"><span>Votre promesse</span></li>
+                  </ol>
+                )}
+                {t.key === 'tone' && (
+                  <div class="im-tone">
+                    <span class="im-tone__no">«{NB}Nous offrons des services de qualité{NB}»</span>
+                    <span class="im-tone__yes">«{NB}On vous rappelle dans l'heure{NB}»</span>
+                  </div>
+                )}
+                {t.key === 'ds' && (
+                  <div class="im-ds"><i></i><i class="g"></i><i></i><i class="g"></i></div>
+                )}
+                {t.key === 'decl' && (
+                  <div class="im-dc">
+                    {variants.map((v) => (
+                      <div class:list={['im-dc__it', `im-dc__it--${v.key}`]}>
+                        <div class="im-dc__stage">
+                          {v.key === 'web' && (
+                            <div class="im-dc__mk im-dc__web">
+                              <div class="im-dc__web-bar"><i></i><i></i><i></i></div>
+                              <div class="im-dc__web-hero"><span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span><i></i><span class="im-dc__pill"></span></div>
+                              <div class="im-dc__web-row"><i></i><i></i></div>
+                            </div>
+                          )}
+                          {v.key === 'post' && (
+                            <div class="im-dc__mk im-dc__post">
+                              <div class="im-dc__post-top"><span class="im-dc__av"></span><i></i></div>
+                              <div class="im-dc__post-img"><span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span></div>
+                              <div class="im-dc__post-foot"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0112 7.6a4.3 4.3 0 017.5 2.8c0 5.5-7.5 10.1-7.5 10.1z" /></svg><i></i></div>
+                            </div>
+                          )}
+                          {v.key === 'doc' && (
+                            <div class="im-dc__mk im-dc__doc">
+                              <div class="im-dc__doc-h"><span class="im-vc im-vc--xs"><b>VC</b></span><i></i></div>
+                              <i></i><i></i><i class="s"></i><i></i><i class="s"></i>
+                            </div>
+                          )}
+                          {v.key === 'card' && (
+                            <div class="im-dc__mk im-dc__card">
+                              <span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span>
+                              <div><b>Votre nom</b><i></i></div>
+                            </div>
+                          )}
+                          {v.key === 'sign' && (
+                            <div class="im-dc__mk im-dc__sign">
+                              <span class="im-vc im-vc--xs"><b>VC</b></span>
+                              <small>Accueil · 1er étage</small>
+                            </div>
+                          )}
+                        </div>
+                        <small class="im-dc__name" set:html={v.name.replace('en-tête', '<span class="im-nw">en-tête</span>')} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </Fragment>
+          </ServiceTile>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. BANDEAU « À LA HAUTEUR DE VOS SERVICES » (sans numéro) -->
+  <section class="hp-block hp-sec" id="qualite">
+    <div class="container">
+      <div class="im-band" data-reveal="up">
+        <div class="im-band__head">
+          <p class="im-band__over">À la hauteur de vos services</p>
+          <h2>Une image soignée justifie vos tarifs.</h2>
+        </div>
+        <div class="im-band__txt">
+          <p>Vos patients, vos clients et vos candidats jugent la qualité de votre travail avant même de vous rencontrer. Une marque cohérente et soignée leur dit que chaque détail compte.</p>
+          <a class="cta im-band__cta" href={`${base}/contact/`}>Réserver un appel découverte<CtaIcon /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 04 · L'ÉCOSYSTÈME (cycle des 5 services, l'image de marque au centre), puis le Test de visibilité -->
+  <section class="hp-block hp-sec" id="ecosysteme" data-reveal-clip>
+    <div class="container">
+      <ServiceCycle current="marque" over="04 · L'écosystème" />
+
+      <div class="im-teaser">
+        <VisibilityTeaser />
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 05 · POURQUOI WOOP -->
+  <section class="hp-block hp-sec" id="pourquoi" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="05 · Pourquoi WOOP">Pensée par un <span class="gradient-accent">designer</span>.</SectionHead>
+
+      <SpecialistCard member={team.kevin} badge="Marketing pensé selon les règles de votre ordre professionnel">
+        <p class="md-spc__lead">Kevin est designer graphique de formation. Il pilote l'identité de marque de chaque projet WOOP, du logo jusqu'à la dernière déclinaison.</p>
+        <p>Son passage dans le marketing d'un cabinet de recrutement en santé lui a appris une chose{NB}: une belle marque ne suffit pas, elle doit servir à attirer.</p>
+        <Fragment slot="badge-icon"><Fragment set:html={icon('shield')} /></Fragment>
+      </SpecialistCard>
+    </div>
+  </section>
+
+  <!-- 8. 06 · SANTÉ OU RECRUTEMENT -->
+  <section class="hp-block hp-sec" id="secteurs" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="06 · Santé ou recrutement" intro="Le même principe, adapté à vos deux marchés.">Santé <span class="gradient-accent">ou recrutement</span>.</SectionHead>
+
+      <div class="im-srs">
+        <ServiceTile kind="clinic" shape="sq" title="Pour une clinique" text="Une clinique qui rassure ses patients dès le premier regard, avec une image à la hauteur de ses soins." reveal="left" href={`${base}/services-medical/`}>
+          <Fragment slot="icon"><Fragment set:html={icon('clinic')} /></Fragment>
+        </ServiceTile>
+        <ServiceTile kind="firm" shape="sq" title="Pour un cabinet de recrutement" text="Un cabinet où les meilleurs candidats veulent postuler, et que les entreprises reconnaissent dans sa niche." reveal="right" step="1" href={`${base}/services-recrutement/`}>
+          <Fragment slot="icon"><Fragment set:html={icon('case')} /></Fragment>
+        </ServiceTile>
+      </div>
+
+      <div class="md-svc-cta" data-reveal="up">
+        <a class="cta" href={`${base}/contact/`}>Parlons de votre marque<CtaIcon /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. VOS QUESTIONS (sans surtitre), puis « Pour aller plus loin » -->
+  <section class="hp-block hp-sec" id="faq" data-reveal-clip>
+    <div class="container">
+      <SectionHead>Vos <span class="gradient-accent">questions</span>.</SectionHead>
+
+      <!-- 6 questions : 3 par colonne (la 1re ouverte) -->
+      <Faq items={faq} name="faq-marque" />
+
+      <FurtherReading slugs={['image-de-marque-vs-publicite', 'rebranding-ne-sauvera-pas-votre-entreprise', 'authenticite-marketing-coherence']} />
+    </div>
+  </section>
+
+  <!-- 10. BANDEAU FINAL -->
+  <FinalBand
+    title="Parlons de votre projet."
+    text="Un appel découverte de 30 minutes, sans engagement."
+    cta={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+  />
+
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script du composant StickyBar -->
+  <StickyBar lead="Une marque qu'on reconnaît," strong="partout." order={['gauthier', 'kevin', 'ludo', 'emma']} />
+
+</Layout>
+
+<script>
+  // 02 · Partout où l'on vous rencontre : alternance « Sans système » / « Avec WOOP ».
+  // - Un état toutes les 5 s (les 4 cartes, la pastille du haut et la phrase), sans bouton pause.
+  // - Démarre seulement quand le bloc est à l'écran, s'arrête dès qu'il n'y est plus.
+  // - Pause au survol de la section (souris) et au focus clavier dans la section ; le temps
+  //   restant est conservé et la rotation reprend ensuite.
+  // - Pastille cliquable : un clic affiche l'état choisi, le minuteur repart de zéro et la
+  //   rotation continue (même logique que les onglets du carrousel de la page Équipe).
+  // - prefers-reduced-motion : aucune alternance, « Avec WOOP » affiché (la pastille reste
+  //   cliquable). Sans JavaScript : « Avec WOOP ».
+  // - La phrase est dans une zone aria-live="polite" : son texte est remplacé à chaque état.
+  (function () {
+    const zone = document.querySelector<HTMLElement>('[data-im-zone]');
+    const sw = document.querySelector<HTMLElement>('[data-im-sw]');
+    const cap = sw?.querySelector<HTMLElement>('[data-im-cap]');
+    const capBox = cap?.parentElement;
+    if (!zone || !sw || !cap || !capBox) return;
+    const btns = Array.from(sw.querySelectorAll<HTMLButtonElement>('[data-im-mode]'));
+    const DUR = 5000;
+    const FADE = 220;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    type Mode = 'on' | 'off';
+    let mode: Mode = 'on';
+    let fadeTimer = 0;
+
+    const set = (m: Mode) => {
+      mode = m;
+      sw.classList.toggle('is-on', m === 'on');
+      sw.classList.toggle('is-off', m === 'off');
+      sw.dataset.imState = m;
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.imMode === m)));
+      const next = (m === 'on' ? capBox.dataset.capOn : capBox.dataset.capOff) || '';
+      window.clearTimeout(fadeTimer);
+      if (reduced) { cap.textContent = next; return; }
+      // Fondu court de la phrase : disparition, nouveau texte, réapparition
+      capBox.classList.add('is-fading');
+      fadeTimer = window.setTimeout(() => { cap.textContent = next; capBox.classList.remove('is-fading'); }, FADE);
+    };
+
+    btns.forEach((b) => b.addEventListener('click', () => {
+      set(b.dataset.imMode === 'off' ? 'off' : 'on');
+      restart();
+    }));
+
+    // Mouvement réduit : « Avec WOOP », sans alternance automatique
+    if (reduced) return;
+
+    // Minuteur pausable : temps restant conservé pendant les pauses
+    const reasons = { offscreen: true, hover: false, focus: false, hidden: document.hidden };
+    let remaining = DUR;
+    let startedAt = 0;
+    let timer = 0;
+    const running = () => !Object.values(reasons).some(Boolean);
+
+    const stopClock = () => {
+      if (!timer) return;
+      window.clearTimeout(timer);
+      timer = 0;
+      remaining = Math.max(0, remaining - (performance.now() - startedAt));
+    };
+    const tick = () => {
+      timer = 0;
+      remaining = DUR;
+      set(mode === 'on' ? 'off' : 'on');
+      update();
+    };
+    const update = () => {
+      sw.classList.toggle('is-paused', !running());
+      if (running() && !timer) {
+        startedAt = performance.now();
+        timer = window.setTimeout(tick, remaining);
+      } else if (!running()) {
+        stopClock();
+      }
+    };
+    function restart() {
+      if (reduced) return;
+      window.clearTimeout(timer);
+      timer = 0;
+      remaining = DUR;
+      update();
+    }
+
+    // Avant le premier passage à l'écran : « Sans système », puis « Avec WOOP » 5 s plus tard
+    set('off');
+    cap.textContent = capBox.dataset.capOff || '';
+    capBox.classList.remove('is-fading');
+    window.clearTimeout(fadeTimer);
+
+    // Survol de la section (souris seulement : un toucher ne met pas en pause)
+    zone.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { reasons.hover = true; update(); } });
+    zone.addEventListener('pointerleave', () => { reasons.hover = false; update(); });
+
+    // Focus clavier dans la section (pas le focus posé par un clic)
+    const keyboardFocus = (el: Element) => {
+      try { return el.matches(':focus-visible'); } catch { return true; }
+    };
+    zone.addEventListener('focusin', (e) => {
+      reasons.focus = e.target instanceof Element && keyboardFocus(e.target);
+      update();
+    });
+    zone.addEventListener('focusout', (e) => {
+      if (e.relatedTarget instanceof Node && zone.contains(e.relatedTarget)) return;
+      reasons.focus = false;
+      update();
+    });
+
+    // À l'écran seulement
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          reasons.offscreen = !entry.isIntersecting;
+          update();
+        });
+      }, { threshold: 0.35 }).observe(sw);
+    } else {
+      reasons.offscreen = false;
+    }
+
+    document.addEventListener('visibilitychange', () => { reasons.hidden = document.hidden; update(); });
+    update();
+  })();
+</script>
+
+<style>
+  /* =====================================================================
+     PAGE IMAGE DE MARQUE : styles locaux (scopés).
+     Même modèle que les pages Publicité et Gestion des réseaux sociaux : classes hp-* et md-*
+     communes aux pages Services, classes im-* propres à cette page.
+     Couleurs : uniquement les jetons de global.css, leurs mélanges (color-mix) et des rgba()
+     dérivées de #FA6244 et #E62B7F. Seules exceptions, des gris (mélanges de --text-muted,
+     --text-primary et --bg-deep, sans teinte) : l'état « Sans système » de la section 02 et
+     la carte « Chaque support… » de la section 01.
+     Contraste hybride : sur le dégradé, petits textes en --hp-on-grad (--bg-deep), titres en blanc.
+     ===================================================================== */
+
+  /* ===== ESPACEMENTS DE RÉFÉRENCE (mêmes valeurs que l'accueil) ===== */
+  .hp-hero,
+  .hp-block {
+    --home-section-gap: 80px;
+    --home-head-gap: 16px;
+    --home-head-content: 36px;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 100px; }
+  }
+
+  @media (min-width: 900px) {
+    .hp-hero,
+    .hp-block {
+      --home-head-gap: 20px;
+      --home-head-content: 46px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 120px; }
+  }
+
+  /* Pas de mot seul en fin de paragraphe */
+  p { text-wrap: pretty; }
+
+  .hp-hero + .hp-block,
+  .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  /* Gris de l'état « Sans système » (02) et de la carte « Chaque support… » (01) : clair, moyen,
+     sombre, sans teinte */
+  .hp-block {
+    --im-g1: color-mix(in srgb, var(--text-muted) 30%, var(--text-primary));
+    --im-g2: var(--text-muted);
+    --im-g3: color-mix(in srgb, var(--text-muted) 45%, var(--bg-deep));
+  }
+
+  /* Bouton sous une section */
+  .md-svc-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 34px;
+  }
+
+  @media (min-width: 900px) {
+    .md-svc-cta { margin-top: 44px; }
+  }
+
+  /* Monogramme « VC » de la marque fictive « Votre clinique » : rond en dégradé, lettres blanches */
+  .im-vc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+  }
+
+  .im-vc b {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .im-vc--xs { width: 22px; height: 22px; }
+  .im-vc--xs b { font-size: 8px; }
+  .im-vc--sm { width: 32px; height: 32px; }
+  .im-vc--sm b { font-size: 11px; }
+  .im-vc--md { width: 46px; height: 46px; }
+  .im-vc--md b { font-size: 16px; }
+  .im-vc--lg { width: 66px; height: 66px; box-shadow: 0 12px 26px rgba(230, 43, 127, 0.4); }
+  .im-vc--lg b { font-size: 22px; }
+  .im-vc--xl { width: 70px; height: 70px; }
+  .im-vc--xl b { font-size: 25px; }
+
+  /* Version claire (sur le dégradé) et version foncée */
+  .im-vc--w { background: var(--hp-light); color: var(--md-pink-deep); }
+  .im-vc--dk { background: var(--bg-deep); color: var(--text-primary); }
+
+  /* ===== 1. HERO : le livre de marque et ses déclinaisons =====
+     Colonne de droite du hero (dès 1024 px), sous le texte sur téléphone et tablette.
+     Dès 600 px : livre de marque, cartes de visite, couleurs, typographie et signalétique posés
+     autour du livre. Téléphone : 3 éléments seulement, sans empilement : le livre, la pastille des
+     couleurs (légèrement superposée en haut) et la tuile de l'accueil, dessous.
+     Aucune animation (le hero n'est jamais animé). */
+  .im-hv {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 560px;
+    margin: 8px auto 0;
+  }
+
+  @media (min-width: 1024px) {
+    .im-hv { margin-top: 0; }
+  }
+
+  .im-hv__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 520px;
+    max-width: 120%;
+    height: 520px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 43, 127, 0.32), rgba(250, 98, 68, 0.1) 45%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .im-hv > div:not(.im-hv__glow) { box-shadow: 0 26px 60px var(--hp-shadow); }
+
+  /* Couleurs */
+  .im-hv__sw {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: var(--hp-light);
+  }
+
+  .im-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--hp-light), 0 0 0 3px var(--hp-skel-2);
+  }
+
+  .im-dot--o { background: var(--woop-orange); }
+  .im-dot--p { background: var(--woop-pink); }
+  .im-dot--pl { background: var(--hp-plum); }
+  .im-dot--b { background: var(--hp-blush); }
+
+  .im-hv__sw small,
+  .im-hv__ty small,
+  .im-bk__h small,
+  .im-bk__l {
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .im-hv__sw small { margin-left: 6px; }
+
+  /* Typographie */
+  .im-hv__ty {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+  }
+
+  .im-hv__ty > b {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .im-hv__ty div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .im-hv__ty i {
+    display: block;
+    width: 80px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--hp-skel-2);
+  }
+
+  .im-hv__ty i.s { width: 50px; }
+
+  /* Cartes de visite */
+  .im-hv__back,
+  .im-hv__front {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4px;
+    width: 250px;
+    height: 150px;
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .im-hv__back {
+    background: var(--hp-light);
+    color: var(--bg-deep);
+  }
+
+  .im-hv__back .im-vc {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+  }
+
+  .im-hv__back > b { font-size: 14px; line-height: 1.3; }
+
+  .im-hv__back small {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--md-pink-deep);
+  }
+
+  .im-hv__back i {
+    display: block;
+    width: 70%;
+    height: 5px;
+    margin-top: 4px;
+    border-radius: 3px;
+    background: var(--hp-skel-2);
+  }
+
+  .im-hv__back i.s { width: 45%; }
+
+  .im-hv__front {
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+  }
+
+  .im-hv__front .im-vc {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+  }
+
+  .im-hv__front > b {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .im-hv__front small {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--hp-on-grad);
+  }
+
+  /* Livre de marque */
+  .im-hv__book {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 240px;
+    height: 330px;
+    padding: 18px;
+    border-radius: 14px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+  }
+
+  .im-bk__h {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .im-bk__main {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--woop-pink) 5%, var(--text-primary));
+  }
+
+  .im-bk__cs {
+    position: absolute;
+    inset: 24px 30px 50px;
+    border: 1.5px dashed rgba(230, 43, 127, 0.35);
+    border-radius: 8px;
+  }
+
+  .im-bk__main > b {
+    position: relative;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .im-bk__main .im-vc { position: relative; }
+
+  .im-bk__var {
+    display: flex;
+    gap: 8px;
+  }
+
+  .im-bk__var > span {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    border-radius: 10px;
+  }
+
+  .im-bk__var .v1 { background: var(--woop-gradient); }
+  .im-bk__var .v2 { background: var(--hp-plum); }
+  .im-bk__var .v3 { background: var(--hp-skel-2); }
+
+  /* Signalétique de l'accueil : tuile aubergine */
+  .im-hv__sign {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: var(--hp-plum);
+  }
+
+  .im-hv__sign b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .im-hv__sign small {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--md-pink-soft);
+  }
+
+  /* Téléphone : le livre, la pastille des couleurs superposée en haut, la tuile de l'accueil dessous */
+  @media (max-width: 599px) {
+    .im-hv__ty,
+    .im-hv__back,
+    .im-hv__front { display: none; }
+
+    .im-hv__sw { margin-bottom: -18px; }
+
+    .im-hv__sign { margin-top: 16px; }
+  }
+
+  /* Dès 600 px : composition complète autour du livre */
+  @media (min-width: 600px) {
+    .im-hv {
+      display: block;
+      height: 520px;
+    }
+
+    .im-hv > div:not(.im-hv__glow) { position: absolute; }
+
+    .im-hv__sw { left: 40%; top: 0; }
+    .im-hv__ty { left: 28%; bottom: 20px; z-index: 3; }
+    .im-hv__back { left: 2%; top: 120px; z-index: 2; transform: rotate(-14deg); }
+    .im-hv__front { left: 0; top: 262px; z-index: 3; transform: rotate(-8deg); }
+    .im-hv__book { right: 6%; top: 40px; width: 260px; height: 390px; padding: 20px; transform: rotate(4deg); }
+    .im-hv__sign { right: 0; bottom: 30px; }
+  }
+
+  /* Ordinateur à colonne étroite (1024 à 1279 px) : éléments un peu plus petits */
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .im-hv { height: 480px; }
+    .im-hv__sw { left: 34%; }
+    .im-hv__ty { left: 22%; bottom: 14px; }
+    .im-hv__back { top: 110px; width: 210px; height: 128px; padding: 16px; }
+    .im-hv__front { top: 228px; left: 0; width: 210px; height: 128px; padding: 16px; }
+    .im-hv__front .im-vc { left: 16px; top: 16px; }
+    .im-hv__back .im-vc { right: 14px; top: 14px; }
+    .im-hv__book { right: 4%; width: 220px; height: 350px; padding: 16px; }
+    .im-hv__sign { bottom: 24px; }
+  }
+
+  /* ===== 2. POUR QUI ? ===== */
+  .im-prs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .im-prs {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .md-pr__vis--old,
+  .md-pr__vis--value,
+  .md-pr__vis--mixed {
+    background:
+      radial-gradient(circle at 30% 20%, rgba(230, 43, 127, 0.3), transparent 65%),
+      var(--hp-plum);
+  }
+
+  /* Ancien logo (gris) → nouveau logo (couleurs WOOP) */
+  .im-a1 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .im-a1__old {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 66px;
+    height: 66px;
+    border-radius: 6px;
+    background: var(--im-g1);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    color: var(--im-g3);
+  }
+
+  .im-a1__go {
+    display: inline-flex;
+    color: var(--md-pink-soft);
+  }
+
+  .im-a1__go svg { width: 22px; height: 22px; }
+
+  /* Vos services (barre haute, couleurs WOOP) / votre image (barre basse, grise), sans chiffres */
+  .im-a2 {
+    display: flex;
+    align-items: flex-end;
+    gap: 22px;
+    height: 150px;
+  }
+
+  .im-a2__col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .im-a2__bar {
+    display: block;
+    width: 58px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--im-g2);
+  }
+
+  .im-a2__bar--hi {
+    height: 112px;
+    background: linear-gradient(0deg, var(--woop-orange), var(--woop-pink));
+    box-shadow: 0 14px 30px rgba(230, 43, 127, 0.4);
+  }
+
+  .im-a2__col small {
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--text-secondary);
+  }
+
+  .im-a2__col:first-child small { color: var(--text-primary); }
+
+  /* Supports incohérents : formes qui ne se répondent pas, en gris clair, moyen et sombre */
+  .im-a3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .im-a3 span {
+    display: block;
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+  }
+
+  .im-a3 .g1 { background: var(--im-g1); }
+  .im-a3 .g2 { background: var(--im-g2); border-radius: 50%; }
+  .im-a3 .g3 { background: var(--im-g3); transform: rotate(12deg); box-shadow: inset 0 0 0 1px var(--im-g2); }
+
+  /* ===== 3. PARTOUT OÙ L'ON VOUS RENCONTRE ===== */
+  .im-sw {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  /* Pastille « Sans système / Avec WOOP » */
+  .im-tg {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 6px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hp-line);
+  }
+
+  .im-tg__btn {
+    position: relative;
+    z-index: 1;
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 450ms ease;
+  }
+
+  .im-tg__btn[aria-pressed='true'] { color: var(--text-primary); }
+
+  .im-sw.is-on .im-tg__btn[aria-pressed='true'] { color: var(--hp-on-grad); }
+
+  .im-tg__btn:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 2px;
+  }
+
+  .im-tg__knob {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    right: 6px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    transition: left 450ms cubic-bezier(0.2, 0.8, 0.2, 1), right 450ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 450ms ease;
+  }
+
+  /* État « Sans système » : curseur gris, à gauche (le fond dégradé s'efface) */
+  .im-tg__knob::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--im-g3);
+    opacity: 0;
+    transition: opacity 450ms ease;
+  }
+
+  .im-sw.is-off .im-tg__knob { left: 6px; right: 50%; }
+  .im-sw.is-off .im-tg__knob::before { opacity: 1; }
+
+  /* Les 4 supports */
+  .im-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    width: 100%;
+  }
+
+  @media (min-width: 600px) {
+    .im-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1100px) {
+    .im-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+  }
+
+  .im-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .im-tile__t {
+    margin-top: 12px;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+
+  .im-tile__s {
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--text-secondary);
+  }
+
+  .im-mw {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 220px;
+    padding: 22px;
+    border-radius: 24px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--woop-pink) 8%, color-mix(in srgb, var(--bg-elevated) 80%, transparent)),
+      color-mix(in srgb, var(--bg-elevated) 75%, transparent)
+    );
+    box-shadow: inset 0 0 0 1px var(--hp-line);
+  }
+
+  /* Maquette d'un support : même contenu dans les 2 états, seul le style change */
+  .im-mk {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    width: 100%;
+    max-width: 240px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    font-family: var(--font-body);
+    transition:
+      background-color 600ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-radius 600ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 600ms ease,
+      transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .im-mk small {
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-muted);
+    transition: color 600ms ease;
+  }
+
+  .im-mk__k { text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .im-mk__row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .im-mk__nm {
+    font-size: 15px;
+    line-height: 1.15;
+    transition: color 600ms ease;
+  }
+
+  .im-mk__lg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    transition: background-color 600ms ease, border-radius 600ms ease, color 600ms ease;
+  }
+
+  .im-mk__lg b {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .im-mk--desk .im-mk__lg { width: 38px; height: 38px; }
+  .im-mk--desk .im-mk__lg b { font-size: 13px; }
+
+  .im-mk__ln {
+    display: block;
+    width: 70%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--hp-skel-2);
+  }
+
+  .im-mk__ph {
+    display: flex;
+    gap: 4px;
+    align-self: stretch;
+  }
+
+  .im-mk__ph i {
+    flex: 1;
+    height: 26px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--hp-blush), var(--hp-pinklight));
+    transition: background-color 600ms ease, border-radius 600ms ease;
+  }
+
+  .im-mk__bar {
+    display: flex;
+    gap: 3px;
+  }
+
+  .im-mk__bar i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--hp-skel);
+  }
+
+  .im-mk__cta {
+    margin-top: 2px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    font-size: 10.5px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--hp-on-grad);
+    transition: background-color 600ms ease, border-radius 600ms ease, color 600ms ease;
+  }
+
+  /* Avec WOOP : la même marque « Votre clinique » à nos couleurs, sur les 4 supports */
+  .im-sw.is-on .im-mk {
+    box-shadow: 0 0 0 2px rgba(230, 43, 127, 0.25), 0 14px 30px rgba(230, 43, 127, 0.18);
+  }
+
+  .im-sw.is-on .im-mk__nm {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .im-sw.is-on .im-mk--desk { align-items: center; text-align: center; }
+
+  /* Sans système : uniquement des gris ; formes et typographies qui ne se répondent pas
+     (empattements, machine à écrire, capitales serrées, coins carrés puis arrondis) */
+  .im-sw.is-off .im-mk { box-shadow: none; }
+  .im-sw.is-off .im-mk small { color: var(--im-g2); }
+  .im-sw.is-off .im-mk__ln,
+  .im-sw.is-off .im-mk__bar i { background: var(--im-g1); }
+
+  .im-sw.is-off .im-mk__lg b { color: transparent; }
+
+  .im-sw.is-off .im-mk--google { border-radius: 2px; transform: rotate(-1.5deg); }
+  .im-sw.is-off .im-mk--google .im-mk__nm { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; color: var(--im-g3); }
+  .im-sw.is-off .im-mk--google .im-mk__lg { border-radius: 2px; background: var(--im-g2); }
+  .im-sw.is-off .im-mk--google .im-mk__ph i { border-radius: 0; background: var(--im-g1); }
+
+  .im-sw.is-off .im-mk--site { border-radius: 22px; background: var(--im-g1); transform: rotate(1.5deg); }
+  .im-sw.is-off .im-mk--site .im-mk__nm { font-family: 'Courier New', Courier, monospace; font-weight: 700; color: var(--im-g3); }
+  .im-sw.is-off .im-mk--site .im-mk__ln,
+  .im-sw.is-off .im-mk--site .im-mk__bar i { background: var(--im-g2); }
+  .im-sw.is-off .im-mk--site .im-mk__cta { border-radius: 2px; background: var(--im-g3); color: var(--im-g1); }
+
+  .im-sw.is-off .im-mk--desk { border-radius: 4px; background: var(--im-g3); transform: rotate(-1.5deg); }
+  .im-sw.is-off .im-mk--desk .im-mk__nm { font-family: Impact, 'Arial Narrow', 'Arial Black', sans-serif; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--im-g1); }
+  .im-sw.is-off .im-mk--desk .im-mk__lg { border-radius: 8px; background: var(--im-g2); }
+  .im-sw.is-off .im-mk--desk small { color: var(--im-g1); }
+
+  .im-sw.is-off .im-mk--mail { border-radius: 0; transform: rotate(1.5deg); }
+  .im-sw.is-off .im-mk--mail .im-mk__nm { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-style: italic; color: var(--im-g2); }
+  .im-sw.is-off .im-mk--mail .im-mk__lg { border-radius: 50%; background: var(--im-g1); }
+  .im-sw.is-off .im-mk--mail .im-mk__cta { border-radius: 0; background: var(--im-g2); color: var(--text-primary); }
+
+  /* Phrase sous les cartes : change avec l'état (fondu court) */
+  .im-cap {
+    max-width: 640px;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--text-secondary);
+    text-wrap: balance;
+    transition: opacity 220ms ease;
+  }
+
+  .im-cap.is-fading { opacity: 0; }
+
+  .im-sw.is-on .im-cap span {
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (max-width: 599px) {
+    .im-tg__btn { padding: 10px 16px; }
+    .im-mw { height: 200px; }
+  }
+
+  /* ===== 4. LES LIVRABLES ===== */
+  .im-bento {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .im-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .md-sv--id,
+    .md-sv--pos,
+    .md-sv--decl { grid-column: span 2; }
+  }
+
+  @media (min-width: 1100px) {
+    .im-bento {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .md-sv--id { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+    .md-sv--pos { grid-column: 3 / span 2; grid-row: 1; }
+    .md-sv--tone { grid-column: 3; grid-row: 2; }
+    .md-sv--ds { grid-column: 4; grid-row: 2; }
+    .md-sv--decl { grid-column: 1 / span 4; grid-row: 3; }
+  }
+
+  /* Mini-illustrations des tuiles : boîte commune, puis dessin propre à chaque tuile */
+  .md-mui {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 7%, transparent);
+  }
+
+  /* Identité visuelle (sur le dégradé, fiche blanche) */
+  .im-mui--id {
+    gap: 14px;
+    padding: 18px;
+    border-radius: 20px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--bg-deep) 25%, transparent);
+  }
+
+  @media (min-width: 1100px) {
+    .md-sv--id .im-mui--id {
+      flex: 1;
+      justify-content: space-around;
+    }
+  }
+
+  .im-id__lg {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .im-id__lg > b {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .im-id__row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .im-id__row span {
+    flex: 1;
+    height: 44px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px var(--hp-skel-2);
+  }
+
+  .im-id__row .o { background: var(--woop-orange); }
+  .im-id__row .p { background: var(--woop-pink); }
+  .im-id__row .pl { background: var(--hp-plum); }
+  .im-id__row .b { background: var(--hp-blush); }
+  .im-id__row .w { background: var(--hp-light); }
+
+  .im-id__ty {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .im-id__ty > b {
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 400;
+    line-height: 1;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .im-id__ty div {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .im-id__ty i {
+    display: block;
+    width: 80%;
+    height: 7px;
+    border-radius: 4px;
+    background: var(--hp-skel-2);
+  }
+
+  .im-id__ty i.s { width: 55%; }
+
+  /* Positionnement : trois étapes reliées, la promesse en dégradé */
+  .im-pos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 0;
+    list-style: none;
+  }
+
+  .im-pos li {
+    display: flex;
+    align-items: center;
+  }
+
+  .im-pos li + li::before {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 2px;
+    margin: 0 4px;
+    background: var(--woop-gradient);
+  }
+
+  .im-pos span {
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--text-primary);
+  }
+
+  .im-pos .is-on span {
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+  }
+
+  /* Ton de marque : la formule creuse barrée, la formule WOOP en dégradé */
+  .im-tone {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .im-tone span {
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .im-tone__no {
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+
+  .im-tone__yes {
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+  }
+
+  /* Système de design : grille de 4 blocs */
+  .im-ds {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .im-ds i {
+    display: block;
+    height: 28px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  }
+
+  .im-ds i.g { background: var(--woop-gradient); }
+
+  /* Les déclinaisons : 5 mini maquettes à nos couleurs, alignées, avec leur nom dessous.
+     À droite du texte dès 600 px (tuile large), dessous sur téléphone. */
+  .md-sv--decl .md-mui.im-mui--decl {
+    height: auto;
+    padding: 18px 14px 14px;
+  }
+
+  /* Téléphone : 3 maquettes, puis 2 centrées dessous */
+  .im-dc {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 10px;
+  }
+
+  .im-dc__it { width: calc((100% - 20px) / 3); }
+
+  @media (min-width: 600px) {
+    .im-dc {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .im-dc__it { width: auto; }
+  }
+
+  .im-dc__it {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .im-dc__stage {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 96px;
+  }
+
+  .im-dc__name :global(.im-nw) { white-space: nowrap; }
+
+  .im-dc__name {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  .im-dc__mk {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--hp-light);
+    box-shadow: 0 10px 22px var(--hp-shadow);
+  }
+
+  .im-dc__mk i {
+    display: block;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--hp-skel-2);
+  }
+
+  .im-dc__mk i.s { width: 60%; }
+
+  /* Page de site */
+  .im-dc__web {
+    width: 100%;
+    max-width: 104px;
+    height: 84px;
+    padding: 0 0 7px;
+  }
+
+  .im-dc__web-bar {
+    display: flex;
+    gap: 3px;
+    padding: 5px 6px;
+    background: var(--hp-skel-2);
+  }
+
+  .im-dc__web-bar i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--hp-skel);
+  }
+
+  .im-dc__web-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin: 0 6px;
+    padding: 7px;
+    border-radius: 6px;
+    background: var(--woop-gradient);
+  }
+
+  .im-dc__web-hero i {
+    width: 70%;
+    background: color-mix(in srgb, var(--text-primary) 70%, transparent);
+  }
+
+  .im-dc__pill {
+    width: 28px;
+    height: 7px;
+    border-radius: 4px;
+    background: var(--hp-light);
+  }
+
+  .im-dc__web-row {
+    display: flex;
+    gap: 5px;
+    margin: 0 6px;
+  }
+
+  .im-dc__web-row i { flex: 1; }
+
+  /* Publication Instagram */
+  .im-dc__post {
+    width: 74px;
+    height: 96px;
+    padding: 6px;
+  }
+
+  .im-dc__post-top {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .im-dc__post-top i { flex: 1; }
+
+  .im-dc__av {
+    flex: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+  }
+
+  .im-dc__post-img {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background: linear-gradient(150deg, var(--woop-pink), var(--hp-plum));
+  }
+
+  .im-dc__post-foot {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .im-dc__post-foot svg {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    fill: var(--woop-pink);
+  }
+
+  .im-dc__post-foot i { flex: 1; }
+
+  /* Document à en-tête */
+  .im-dc__doc {
+    width: 66px;
+    height: 92px;
+    padding: 0 7px 7px;
+    border-radius: 4px;
+  }
+
+  .im-dc__doc-h {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 -7px 3px;
+    padding: 5px 7px;
+    border-bottom: 2px solid var(--woop-pink);
+  }
+
+  .im-dc__doc-h .im-vc { width: 16px; height: 16px; }
+  .im-dc__doc-h .im-vc b { font-size: 6px; }
+  .im-dc__doc-h i { flex: 1; background: var(--hp-blush); }
+
+  /* Carte de visite */
+  .im-dc__card {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 100px;
+    height: 60px;
+    padding: 8px;
+    background: var(--woop-gradient);
+  }
+
+  .im-dc__card .im-vc { align-self: flex-start; }
+
+  .im-dc__card div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .im-dc__card div b {
+    font-size: 8px;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--text-primary);
+  }
+
+  .im-dc__card i {
+    width: 30px;
+    background: color-mix(in srgb, var(--text-primary) 60%, transparent);
+  }
+
+  /* Panneau de l'accueil */
+  .im-dc__sign {
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    max-width: 100px;
+    height: 70px;
+    padding: 8px;
+    background: var(--hp-plum);
+    text-align: center;
+  }
+
+  .im-dc__sign small {
+    font-size: 8.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--md-pink-soft);
+  }
+
+  /* ===== 5. BANDEAU « À LA HAUTEUR DE VOS SERVICES » ===== */
+  .im-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    align-items: center;
+    padding: 34px 24px;
+    border-radius: 32px;
+    background: var(--hp-grad-band);
+    box-shadow: 0 30px 70px rgba(230, 43, 127, 0.28);
+  }
+
+  @media (min-width: 900px) {
+    .im-band {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 50px;
+      padding: 50px 56px;
+    }
+  }
+
+  .im-band__over {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hp-on-grad);
+  }
+
+  .im-band h2 {
+    margin-top: 10px;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+
+  @media (min-width: 768px) {
+    .im-band h2 { font-size: 38px; }
+  }
+
+  .im-band__txt {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .im-band__txt p {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--hp-on-grad);
+  }
+
+  /* Bouton foncé sur le dégradé */
+  .cta.im-band__cta {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+  }
+
+  .cta.im-band__cta :global(.cta__ico) {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  .cta.im-band__cta:hover { box-shadow: 0 10px 40px color-mix(in srgb, var(--bg-deep) 45%, transparent); }
+
+  .cta.im-band__cta:focus-visible { outline-color: var(--bg-deep); }
+
+  /* ===== 6. L'ÉCOSYSTÈME : test de visibilité sous le cycle ===== */
+  /* Le bandeau a déjà 22 px de marge au-dessus */
+  .im-teaser { margin-top: 34px; }
+
+  @media (min-width: 900px) {
+    .im-teaser { margin-top: 50px; }
+  }
+
+  /* ===== 8. SANTÉ OU RECRUTEMENT ===== */
+  .im-srs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  /* Tuiles-liens : le titre laisse la place du chevron (en haut à droite) */
+  .im-srs :global(.md-sv__head) { padding-right: 52px; }
+
+  @media (min-width: 768px) {
+    .im-srs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  /* Mouvement réduit : bascule immédiate entre les états */
+  @media (prefers-reduced-motion: reduce) {
+    .im-tg__btn,
+    .im-tg__knob,
+    .im-tg__knob::before,
+    .im-mk,
+    .im-mk small,
+    .im-mk__nm,
+    .im-mk__lg,
+    .im-mk__ph i,
+    .im-mk__cta,
+    .im-cap { transition: none; }
+  }
+</style>
