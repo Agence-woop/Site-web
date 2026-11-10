@@ -84,7 +84,7 @@ const profiles: {
     key: 'grow',
     title: 'Un cabinet en croissance qui veut professionnaliser son image.',
     lived: 'Vous avez les résultats, mais votre marque ne suit plus.',
-    change: 'Il faut un branding à la hauteur de vos ambitions.',
+    change: 'Il faut une image de marque à la hauteur de vos ambitions.',
     reveal: 'right',
     step: '1',
   },
@@ -106,7 +106,7 @@ const profiles: {
 // - wide : 2 colonnes, en-tête et texte à gauche, illustration à droite ;
 // - sq   : 1 colonne.
 // `step` : décalage d'apparition (data-reveal-step), recalculé dans l'ordre de lecture de chaque rangée :
-// Mandats 0 · Candidats 0, Branding 1 · Réseaux sociaux 0, Site web 1, Réputation 2.
+// Mandats 0 · Candidats 0, Image de marque 1 · Réseaux sociaux 0, Site web 1, Réputation 2.
 const services: {
   key: 'mandats' | 'cand' | 'brand' | 'social' | 'web' | 'rep';
   shape: 'feat' | 'wide' | 'sq';
@@ -141,12 +141,13 @@ const services: {
   {
     key: 'brand',
     shape: 'sq',
-    title: 'Branding cabinet',
+    title: 'Image de marque du cabinet',
     text: [
-      'Logo, charte visuelle, ton de marque, design system complet. Une identité qui justifie votre positionnement et qui fait de votre cabinet un endroit où les meilleurs candidats veulent postuler.',
+      'Logo, charte visuelle, ton de marque, système de design complet. Une identité qui justifie votre positionnement et qui fait de votre cabinet un endroit où les meilleurs candidats veulent postuler.',
     ],
     reveal: 'up',
     step: '1',
+    href: `${base}/image-de-marque/`,
   },
   {
     key: 'social',
@@ -210,7 +211,7 @@ const steps = [
   <!-- 1. HERO (sans data-reveal) -->
   <ServiceHero
     pill="RH & Recrutement"
-    sub="Stratégie, branding, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats."
+    sub="Stratégie, image de marque, acquisition de mandats et attraction de candidats. Pour les cabinets de recrutement, multisecteurs ou spécialisés (santé, tech, finance, construction, juridique et autres), ainsi que les consultants RH indépendants qui veulent faire grandir leur banque de mandats, et leur bassin de candidats."
     strong="Votre équipe marketing recrutement, sans avoir à l'embaucher."
     primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
     secondary={{ href: '#services', label: 'Nos services' }}
@@ -1109,11 +1110,12 @@ const steps = [
     .md-sv--rep { grid-column: 3; grid-row: 3; }
   }
 
-  /* En-tête, texte, puis illustration en bas : Branding, Site web */
+  /* En-tête, texte, puis illustration en bas : Image de marque, Site web */
   .md-sv--brand .md-mui,
   .md-sv--web .md-mui { margin-top: auto; }
 
-  /* Réseaux sociaux (tuile-lien) : le titre laisse la place du chevron (en haut à droite) */
+  /* Tuiles-liens (Image de marque, Réseaux sociaux) : le titre laisse la place du chevron (en haut à droite) */
+  .md-sv--brand :global(.md-sv__head),
   .md-sv--social :global(.md-sv__head) { padding-right: 52px; }
 
   /* En-tête, illustration, puis texte : Réseaux sociaux, Réputation */
@@ -1283,7 +1285,7 @@ const steps = [
     color: var(--hp-on-grad);
   }
 
-  /* Branding : logo, palette, « Aa » */
+  /* Image de marque : logo, palette, « Aa » */
   .md-mui--brand {
     flex-direction: row;
     align-items: center;

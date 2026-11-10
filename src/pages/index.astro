@@ -66,8 +66,8 @@ const gridMembers = membersIn(ORDER_GRID);
 const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 
 // Tuiles de Nos services. Si `href` est défini, toute la tuile devient un lien
-// (effet au survol + chevron). Seules les tuiles Publicité et Réseaux sociaux ont un lien pour
-// l'instant : ajouter `href` aux autres dès que leur page est en ligne.
+// (effet au survol + chevron). Seules les tuiles Publicité, Réseaux sociaux et Image de marque ont
+// un lien pour l'instant : ajouter `href` aux autres dès que leur page est en ligne.
 const services: {
   key: 'ads' | 'cx' | 'brand' | 'web' | 'social';
   title: string;
@@ -81,7 +81,7 @@ const services: {
 }[] = [
   { key: 'ads', title: 'Publicité Google et Meta', text: 'Être trouvé en premier, là où vos clients cherchent.', variant: 'grad', layout: 'ads', reveal: 'left', href: `${base}/publicite-google-meta/` },
   { key: 'cx', title: 'Conseil en expérience client', text: 'Du premier clic au rendez-vous, on rend chaque étape plus simple pour vos patients.', variant: 'blush', layout: 'cx', reveal: 'right' },
-  { key: 'brand', title: 'Image de marque', text: 'Logo, charte, système complet. Une identité cohérente qui inspire confiance dès le premier regard.', variant: 'plum', layout: 'sq', reveal: 'up', step: '1', icoGrad: true },
+  { key: 'brand', title: 'Image de marque', text: 'Logo, charte, système complet. Une identité cohérente qui inspire confiance dès le premier regard.', variant: 'plum', layout: 'sq', reveal: 'up', step: '1', icoGrad: true, href: `${base}/image-de-marque/` },
   { key: 'web', title: 'Sites web & pages de conversion', text: 'Un site clair et rapide, conçu pour inspirer confiance et donner envie de prendre rendez-vous.', variant: 'orange', layout: 'sq', reveal: 'right', step: '2' },
   { key: 'social', title: 'Gestion des réseaux sociaux', text: ['Instagram, Facebook, LinkedIn.', 'On crée et on publie vos contenus.'], variant: 'rose', layout: 'social', reveal: 'up', href: `${base}/gestion-reseaux-sociaux/` },
 ];
@@ -258,7 +258,7 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
               <span class:list={['hp-ico', { 'hp-ico--grad': t.icoGrad }]} aria-hidden="true">
                 {t.key === 'ads' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a1 1 0 011-1h3l7-4v14l-7-4H5a1 1 0 01-1-1z"/><path d="M8 16l1.5 4.5"/><path d="M19 9.5a4 4 0 010 5"/></svg>)}
                 {t.key === 'cx' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/><path d="M12 15.5s-3.5-2-3.5-4.3a2 2 0 013.5-1.3 2 2 0 013.5 1.3c0 2.3-3.5 4.3-3.5 4.3z"/></svg>)}
-                {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
+                {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
                 {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 8h18"/><path d="M12 12l6 2.5-2.6 1-1 2.6z"/></svg>)}
                 {t.key === 'social' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>)}
               </span>
