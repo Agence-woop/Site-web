@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Tests de comportement du site compilé : page Contact, quiz du Test de visibilité, barre
 // collante, menu burger après défilement, parcours animé du hero (Santé, RH), carrousel de
-// l'Équipe, pagination du blog, ancres et liens internes.
+// l'Équipe, alternance de la section 02 de la page Image de marque, pagination du blog, ancres et
+// liens internes.
 // Les envois vers Formspree sont simulés (aucune donnée n'est envoyée) et GA4 / Meta sont
 // remplacés par des espions qui notent les événements.
 //
@@ -241,6 +242,69 @@ async function teamCarousel(browser, base) {
   await ctx.close();
 }
 
+async function brandSwitch(browser, base) {
+  // Page Image de marque, section 02 : alternance « Sans système » / « Avec WOOP » toutes les 5 s
+  const URL = base + '/image-de-marque/';
+  const st = (pg) => pg.evaluate(() => { const w = document.querySelector('[data-im-sw]'); const c = w.querySelector('.im-cap'); return { m: w.dataset.imState || (w.classList.contains('is-on') ? 'on' : 'off'), paused: w.classList.contains('is-paused'), cap: c.textContent.trim(), live: c.getAttribute('aria-live'), pressed: w.querySelector('[aria-pressed=true]').dataset.imMode }; });
+  const waitFlip = async (pg, from, timeout = 7000) => { const t0 = Date.now(); await pg.waitForFunction((f) => document.querySelector('[data-im-sw]').dataset.imState !== f, from, { timeout }); return (Date.now() - t0) / 1000; };
+  const toSection = (pg) => pg.evaluate(() => { const e = document.querySelector('[data-im-sw]'); window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - 120, behavior: 'instant' }); });
+  let ctx = await L.newContext(browser, base, { reducedMotion: 'no-preference' });
+  let pg = await ctx.newPage();
+  await pg.goto(URL); await pg.mouse.move(2, 2);
+  let s = await st(pg);
+  ok(s.m === 'off' && s.paused && s.live === 'polite', 'Image de marque : hors de l\'écran, « Sans système » en attente, phrase en aria-live="polite"');
+  await pg.waitForTimeout(5600); s = await st(pg);
+  ok(s.m === 'off', 'Image de marque : aucune alternance tant que la section n\'est pas à l\'écran');
+  await toSection(pg);
+  let t = await waitFlip(pg, 'off'); s = await st(pg);
+  ok(s.m === 'on' && t > 4.5 && t < 6, `Image de marque : « Avec WOOP » ${t.toFixed(1)} s après l'arrivée à l'écran`);
+  await pg.waitForTimeout(400); s = await st(pg);
+  ok(s.pressed === 'on' && /La même marque à chaque étape/.test(s.cap), 'Image de marque : pastille et phrase suivent l\'état « Avec WOOP »');
+  t = await waitFlip(pg, 'on'); await pg.waitForTimeout(400); s = await st(pg);
+  ok(s.m === 'off' && t > 4.5 && t < 5.6 && s.pressed === 'off' && /Quatre supports/.test(s.cap), `Image de marque : retour à « Sans système » ${t.toFixed(1)} s plus tard (pastille et phrase)`);
+  // Survol
+  const card = await pg.locator('.im-tile').first().boundingBox();
+  await pg.mouse.move(card.x + card.width / 2, card.y + 60, { steps: 3 }); await pg.waitForTimeout(150);
+  s = await st(pg); const before = s.m;
+  await pg.waitForTimeout(6000); s = await st(pg);
+  ok(s.paused && s.m === before, 'Image de marque : pause au survol de la section (6 s sans changement)');
+  await pg.mouse.move(2, 2, { steps: 3 });
+  t = await waitFlip(pg, before); s = await st(pg);
+  ok(!s.paused && t < 5.6, `Image de marque : reprise à la sortie du survol (changement ${t.toFixed(1)} s plus tard)`);
+  // Clic sur la pastille : état choisi, rotation continue
+  await pg.waitForTimeout(1500);
+  const cur = (await st(pg)).m; const other = cur === 'on' ? 'off' : 'on';
+  await pg.click(`[data-im-mode="${other}"]`); s = await st(pg);
+  ok(s.m === other && s.pressed === other, `Image de marque : clic sur la pastille → état « ${other === 'on' ? 'Avec WOOP' : 'Sans système'} »`);
+  await pg.mouse.move(2, 2, { steps: 3 }); const tClick = Date.now();
+  await waitFlip(pg, other); t = (Date.now() - tClick) / 1000;
+  ok(t > 4.3 && t < 5.8, `Image de marque : la rotation continue après le clic (état suivant ${t.toFixed(1)} s plus tard)`);
+  // Focus clavier
+  // Focus au clavier : Maj+Tab depuis « Avec WOOP » vers « Sans système »
+  await pg.focus('[data-im-mode="on"]'); await pg.keyboard.press('Shift+Tab');
+  const fv = await pg.evaluate(() => document.activeElement.matches(':focus-visible'));
+  s = await st(pg); const b2 = s.m;
+  await pg.waitForTimeout(6000); s = await st(pg);
+  ok(fv && s.paused && s.m === b2, 'Image de marque : pause au focus clavier dans la section (6 s sans changement)');
+  await pg.evaluate(() => document.activeElement.blur());
+  t = await waitFlip(pg, b2);
+  ok(t < 5.6, `Image de marque : reprise à la perte du focus (${t.toFixed(1)} s)`);
+  // Hors de l'écran : arrêt
+  await pg.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await pg.waitForTimeout(200);
+  s = await st(pg); const b3 = s.m;
+  await pg.waitForTimeout(6000); s = await st(pg);
+  ok(s.paused && s.m === b3, 'Image de marque : arrêt quand la section sort de l\'écran');
+  await ctx.close();
+  // Mouvement réduit : « Avec WOOP », sans alternance, pastille cliquable
+  ctx = await L.newContext(browser, base, { reducedMotion: 'reduce' });
+  pg = await ctx.newPage(); await pg.goto(URL); await toSection(pg); await pg.mouse.move(2, 2);
+  s = await st(pg); await pg.waitForTimeout(6000); const s2 = await st(pg);
+  ok(s.m === 'on' && s2.m === 'on' && /La même marque/.test(s2.cap), 'Image de marque : mouvement réduit → « Avec WOOP » fixe (6 s)');
+  await pg.click('[data-im-mode="off"]'); s = await st(pg);
+  ok(s.m === 'off' && /Quatre supports/.test(s.cap), 'Image de marque : mouvement réduit → la pastille reste cliquable');
+  await ctx.close();
+}
+
 async function blogPager(browser, base) {
   let ctx = await L.newContext(browser, base, { reducedMotion: 'no-preference' });
   let pg = await ctx.newPage(); await pg.goto(base + '/blog/');
@@ -288,6 +352,7 @@ function anchorsAndLinks(dist) {
     await burgerMenu(browser, server.url);
     await heroFlow(browser, server.url);
     await teamCarousel(browser, server.url);
+    await brandSwitch(browser, server.url);
     await blogPager(browser, server.url);
   } finally {
     await browser.close(); await server.close();
