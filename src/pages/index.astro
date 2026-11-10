@@ -66,8 +66,8 @@ const gridMembers = membersIn(ORDER_GRID);
 const roles = ['Stratège', 'Créatif', 'Spécialiste Paid Media', 'Analyste'];
 
 // Tuiles de Nos services. Si `href` est défini, toute la tuile devient un lien
-// (effet au survol + chevron). Seule la tuile Publicité a un lien pour l'instant : ajouter
-// `href` aux autres dès que leur page est en ligne.
+// (effet au survol + chevron). Seules les tuiles Publicité et Réseaux sociaux ont un lien pour
+// l'instant : ajouter `href` aux autres dès que leur page est en ligne.
 const services: {
   key: 'ads' | 'cx' | 'brand' | 'web' | 'social';
   title: string;
@@ -83,7 +83,7 @@ const services: {
   { key: 'cx', title: 'Conseil en expérience client', text: 'Du premier clic au rendez-vous, on rend chaque étape plus simple pour vos patients.', variant: 'blush', layout: 'cx', reveal: 'right' },
   { key: 'brand', title: 'Image de marque', text: 'Logo, charte, système complet. Une identité cohérente qui inspire confiance dès le premier regard.', variant: 'plum', layout: 'sq', reveal: 'up', step: '1', icoGrad: true },
   { key: 'web', title: 'Sites web & pages de conversion', text: 'Un site clair et rapide, conçu pour inspirer confiance et donner envie de prendre rendez-vous.', variant: 'orange', layout: 'sq', reveal: 'right', step: '2' },
-  { key: 'social', title: 'Gestion des réseaux sociaux', text: ['Instagram, Facebook, LinkedIn.', 'On crée, on publie, on anime votre communauté.'], variant: 'rose', layout: 'social', reveal: 'up' },
+  { key: 'social', title: 'Gestion des réseaux sociaux', text: ['Instagram, Facebook, LinkedIn.', 'On crée, on publie, on anime votre communauté.'], variant: 'rose', layout: 'social', reveal: 'up', href: `${base}/reseaux-sociaux/` },
 ];
 
 const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [

@@ -42,7 +42,7 @@ C'est pour cela qu'elle ne se joue pas. Vous ne pouvez pas décider d'être auth
 
 Si l'authenticité ne se fabrique pas, qu'est-ce qui produit l'effet que tout le monde recherche ? Une chose, moins séduisante mais imparable : la cohérence.
 
-Dire la même chose, de la même voix, avec la même identité, en tenant les mêmes promesses, sur chaque point de contact, pendant des années. C'est répétitif, c'est peu spectaculaire, et c'est exactement ce qui fait qu'une personne a l'impression de vous connaître. Or se sentir en terrain connu, c'est précisément ce que le mot « authentique » veut dire pour un client. Les données le confirment : selon une étude de Lucidpress, une présentation de marque cohérente sur tous les canaux peut augmenter les revenus jusqu'à 23 %.
+Dire la même chose, de [la même voix](/reseaux-sociaux/), avec la même identité, en tenant les mêmes promesses, sur chaque point de contact, pendant des années. C'est répétitif, c'est peu spectaculaire, et c'est exactement ce qui fait qu'une personne a l'impression de vous connaître. Or se sentir en terrain connu, c'est précisément ce que le mot « authentique » veut dire pour un client. Les données le confirment : selon une étude de Lucidpress, une présentation de marque cohérente sur tous les canaux peut augmenter les revenus jusqu'à 23 %.
 
 C'est aussi pour cela que la cohérence est un travail, pas une bonne intention. Elle se construit avec une plateforme de marque claire et un système de design qui tient dans le temps, pour que la même voix et la même identité reviennent partout sans effort et sans dérive. Ce n'est pas une campagne d'authenticité. C'est une discipline.
 
