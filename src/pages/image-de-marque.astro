@@ -183,7 +183,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
     secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
   >
-    <Fragment slot="title">Image de marque{NB}: votre marque commence avant votre logo, <span class="gradient-accent hp-kw"><span class="im-nw">au premier regard,</span> <span class="im-nw">au premier appel.</span></span></Fragment>
+    <Fragment slot="title"><span class="im-ln">Image de marque{NB}:</span> <br /><span class="im-ln">votre marque commence</span> <br /><span class="im-ln">avant votre logo,</span> <br /><span class="gradient-accent hp-kw"><span class="im-ln">au premier regard,</span> <br /><span class="im-ln">au premier appel.</span></span></Fragment>
 
     <Fragment slot="visual">
     <Fragment set:html={"<!-- Illustration : le livre de marque et ses déclinaisons (immobile) -->"} />
@@ -689,15 +689,31 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   .hp-hero + .hp-block,
   .hp-block + .hp-block { margin-top: var(--home-section-gap); }
 
-  /* H1 du hero : « au premier regard, » et « au premier appel. » ne sont jamais coupés (chaque groupe
-     passe à la ligne en entier) */
-  .im-nw { white-space: nowrap; }
+  /* H1 du hero : découpage imposé en 5 lignes, à toutes les largeurs (retours à la ligne <br>, une
+     espace avant chacun pour que le texte lu par les moteurs et les lecteurs d'écran reste
+     « … : votre marque commence avant votre logo, au premier regard, au premier appel. »). Chaque
+     ligne est insécable. */
+  .im-ln { white-space: nowrap; }
 
-  /* Moins de 385 px : « au premier regard, » (340 px en display, 34 px) est plus large que la
-     colonne (largeur de l'écran moins 2 × 20 px, avec quelques pixels de marge) ; les groupes peuvent
-     alors se couper, plutôt que de déborder */
-  @media (max-width: 384px) {
-    .im-nw { white-space: normal; }
+  /* Taille du H1 : celle du composant (34, 44, 42 puis 50 px), plafonnée à 8,4 % de la largeur de la
+     colonne de texte (unité cqw : la colonne est déclarée conteneur). La ligne la plus longue,
+     « votre marque commence », mesure 11,75 fois la taille de police : avec 8,4 %, elle tient
+     toujours dans la colonne, sans déborder ni se couper. La taille ne baisse donc que là où il le
+     faut : téléphones de moins de 440 px environ, et ordinateurs de 1024 à 1075 px environ. */
+  .hp-hero :global(.md-hero__text) { container-type: inline-size; }
+
+  .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(34px, 8.4cqw); }
+
+  @media (min-width: 600px) {
+    .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(44px, 8.4cqw); }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(42px, 8.4cqw); }
+  }
+
+  @media (min-width: 1280px) {
+    .hp-hero.md-hero.md-hero--split :global(.md-hero__title) { font-size: min(50px, 8.4cqw); }
   }
 
   /* Gris de l'état « Sans système » (02) et de la carte « Chaque support… » (01) : clair, moyen,
