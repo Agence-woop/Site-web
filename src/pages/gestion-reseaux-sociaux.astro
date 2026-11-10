@@ -218,13 +218,12 @@ const strategy: { key: NetKey; tone: string }[] = [
   { key: 'facebook', tone: 'Proximité' },
 ];
 
-// Calendrier de la tuile : un mois de 5 semaines (5 jours), une case vide sur deux
+// Calendrier de la tuile : un mois de 4 semaines (5 jours), une case vide sur deux
 const calendar: { net?: NetKey; label?: string }[] = [
   { net: 'instagram', label: 'Équipe' }, {}, { net: 'linkedin', label: 'Conseil' }, {}, { net: 'facebook', label: 'Nouveauté' },
   {}, { net: 'instagram', label: 'Coulisses' }, {}, { net: 'linkedin', label: 'Expertise' }, {},
   { net: 'facebook', label: 'Quartier' }, {}, { net: 'instagram', label: 'Visage' }, {}, { net: 'linkedin', label: 'Article' },
   {}, { net: 'linkedin', label: 'Conseil' }, {}, { net: 'facebook', label: 'Événement' }, {},
-  { net: 'instagram', label: 'Portrait' }, {}, { net: 'facebook', label: 'Quartier' }, {}, { net: 'instagram', label: 'Équipe' },
 ];
 ---
 <Layout
@@ -417,6 +416,9 @@ const calendar: { net?: NetKey; label?: string }[] = [
                     <div class="rs-cal__g">
                       {['L', 'M', 'M', 'J', 'V'].map((d) => <small>{d}</small>)}
                       {calendar.map((c) => <span class:list={[c.net && `is-${c.net}`]}>{c.label}</span>)}
+                    </div>
+                    <div class="rs-cal__leg">
+                      {(['instagram', 'linkedin', 'facebook'] as NetKey[]).map((k) => <span><i class:list={[`is-${k}`]}></i>{NETS[k].name}</span>)}
                     </div>
                   </div>
                 )}
@@ -1545,15 +1547,63 @@ const calendar: { net?: NetKey; label?: string }[] = [
 
     .rs-cal__g {
       flex: 1;
-      grid-template-rows: auto repeat(5, minmax(52px, 1fr));
+      grid-template-rows: auto repeat(4, minmax(52px, 1fr));
     }
 
     .rs-cal__g span { height: auto; }
   }
 
-  .rs-cal__g .is-instagram { background: var(--woop-gradient); }
-  .rs-cal__g .is-facebook { background: var(--hp-plum); }
-  .rs-cal__g .is-linkedin { background: var(--hp-pinklight); color: var(--bg-deep); }
+  /* Ordinateur à colonnes étroites (1100 à 1279 px) : cases plus étroites, donc l'en-tête, les
+     espacements et la légende (empilée) prennent plus de hauteur pour garder des cases presque
+     carrées sans espace vide */
+  @media (min-width: 1100px) and (max-width: 1279px) {
+    .rs-cal__h { margin-bottom: 18px; }
+    .rs-cal__h b { font-size: 26px; }
+    .rs-cal__g { gap: 10px 8px; }
+    .rs-cal__leg {
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 18px;
+    }
+  }
+
+  @media (min-width: 1100px) and (max-width: 1199px) {
+    .rs-mui--cal { padding: 20px; }
+    .rs-cal__h { margin-bottom: 22px; }
+    .rs-cal__g { row-gap: 14px; }
+  }
+
+  .rs-cal__g .is-instagram,
+  .rs-cal__leg .is-instagram { background: var(--woop-gradient); }
+  .rs-cal__g .is-facebook,
+  .rs-cal__leg .is-facebook { background: var(--hp-plum); }
+  .rs-cal__g .is-linkedin,
+  .rs-cal__leg .is-linkedin { background: var(--hp-pinklight); color: var(--bg-deep); }
+
+  /* Légende des couleurs, sous la grille */
+  .rs-cal__leg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-muted);
+  }
+
+  .rs-cal__leg span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .rs-cal__leg i {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+  }
 
   /* Stratégie par réseau : les 3 réseaux */
   .rs-st {
