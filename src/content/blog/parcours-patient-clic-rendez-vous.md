@@ -21,7 +21,7 @@ Parce qu'entre le moment où quelqu'un clique sur votre annonce et celui où son
 
 Le problème n'est pas technique, il est structurel. C'est une question de qui regarde quoi.
 
-Votre publicité est jugée au clic. Le tableau de bord affiche des impressions, des clics, un coût par clic, et tout cela monte. De l'autre côté, votre clinique se juge à l'agenda, aux nouveaux patients, aux plages remplies. Deux tableaux de bord, deux équipes, deux vérités. Et quand l'agence vous dit que les clics sont en hausse pendant que la réception vous jure que le téléphone ne sonne pas plus, les deux ont raison en même temps.
+[Votre publicité est jugée au clic](/publicite-google-meta/). Le tableau de bord affiche des impressions, des clics, un coût par clic, et tout cela monte. De l'autre côté, votre clinique se juge à l'agenda, aux nouveaux patients, aux plages remplies. Deux tableaux de bord, deux équipes, deux vérités. Et quand l'agence vous dit que les clics sont en hausse pendant que la réception vous jure que le téléphone ne sonne pas plus, les deux ont raison en même temps.
 
 Ce qui manque, c'est le milieu. Personne n'est responsable du couloir entre les deux, donc personne ne le mesure, donc personne ne sait où les gens s'arrêtent. C'est le véritable angle mort du [marketing santé](/services-medical/) : on optimise l'entrée, on compte la sortie, et on ignore tout du trajet.
 
