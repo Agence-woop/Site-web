@@ -42,7 +42,7 @@ Soyez utile avant d'être visible. Expliquez clairement ce que les gens comprenn
 
 Faites de la nuance votre signature. Dire « ça dépend », montrer les limites de ce qu'on sait, c'est précisément ce qui sépare un professionnel crédible d'un argumentaire de vente. La retenue, en santé, se lit comme de l'expertise.
 
-Tenez [une ligne cohérente dans le temps](/blog/authenticite-marketing-coherence/). Une marque crédible se construit lentement : une même voix, les mêmes valeurs, répétées. La cohérence est ce qui transforme [des publications éparses](/reseaux-sociaux/) en une réputation reconnaissable.
+Tenez [une ligne cohérente dans le temps](/blog/authenticite-marketing-coherence/). Une marque crédible se construit lentement : une même voix, les mêmes valeurs, répétées. La cohérence est ce qui transforme [des publications éparses](/gestion-reseaux-sociaux/) en une réputation reconnaissable.
 
 Laissez la preuve parler à votre place. Tout le monde peut écrire « expert » sur son profil. Très peu peuvent le démontrer. Un cas bien expliqué, une démarche claire, une reconnaissance par vos pairs valent infiniment plus que n'importe quelle description que vous feriez de vous-même.
 

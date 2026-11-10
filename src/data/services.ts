@@ -43,10 +43,10 @@ export const SERVICES: Service[] = [
   { key: 'marque', label: 'Image de marque', role: 'La fondation de tout le reste', icon: ICONS.palette },
   {
     key: 'reseaux',
-    label: 'Réseaux sociaux',
+    label: 'Gestion des réseaux sociaux',
     role: 'Fait connaître',
     hint: 'Fait connaître',
-    href: '/reseaux-sociaux/',
+    href: '/gestion-reseaux-sociaux/',
     icon: ICONS.instagram,
   },
   {
