@@ -1531,9 +1531,24 @@ const calendar: { net?: NetKey; label?: string }[] = [
     }
   }
 
-  /* Ordinateur : cases un peu plus hautes. Hauteur fixe : le calendrier n'est pas étiré */
+  /* Ordinateur : la carte couvre 2 rangées et sa hauteur vient des cartes voisines. Le calendrier
+     remplit l'espace entre le texte et le bas de la carte (même écart texte → illustration et même
+     marge du bas que les autres cartes) ; ses 4 rangées de cases s'agrandissent d'autant */
   @media (min-width: 1100px) {
-    .rs-cal__g span { height: 62px; }
+    .md-sv--cal .rs-mui--cal { flex: 1; }
+
+    .rs-cal {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .rs-cal__g {
+      flex: 1;
+      grid-template-rows: auto repeat(4, minmax(62px, 1fr));
+    }
+
+    .rs-cal__g span { height: auto; }
   }
 
   .rs-cal__g .is-instagram { background: var(--woop-gradient); }

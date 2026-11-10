@@ -53,7 +53,7 @@ export const SERVICES: Service[] = [
     key: 'publicite',
     label: 'Publicité Google et Meta',
     role: 'Fait venir',
-    hint: 'Amène le patient',
+    hint: 'Fait venir',
     href: '/publicite-google-meta/',
     icon: ICONS.megaphone,
   },
