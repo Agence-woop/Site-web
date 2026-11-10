@@ -156,6 +156,7 @@ const services: {
       'Présence soignée sur LinkedIn, Instagram, Facebook et autres plateformes adaptées à votre cible. Calendrier éditorial, publications qui mettent en avant votre expertise auprès des entreprises clientes, et contenu qui parle aux candidats.',
     ],
     reveal: 'up',
+    href: `${base}/reseaux-sociaux/`,
   },
   {
     key: 'web',
@@ -1111,6 +1112,9 @@ const steps = [
   /* En-tête, texte, puis illustration en bas : Branding, Site web */
   .md-sv--brand .md-mui,
   .md-sv--web .md-mui { margin-top: auto; }
+
+  /* Réseaux sociaux (tuile-lien) : le titre laisse la place du chevron (en haut à droite) */
+  .md-sv--social :global(.md-sv__head) { padding-right: 52px; }
 
   /* En-tête, illustration, puis texte : Réseaux sociaux, Réputation */
   .md-sv--social .md-sv__text,

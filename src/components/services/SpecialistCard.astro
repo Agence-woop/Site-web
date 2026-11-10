@@ -6,7 +6,12 @@
 //
 // Props
 // - member : la personne (src/data/team.ts) : photo, cadrage, prénom, nom, rôle et contact
+// - members : plusieurs personnes (page Réseaux sociaux : Emma et Kevin), en photos rondes côte à
+//   côte, chacune avec son nom et son rôle ; remplace member
 // - badge : texte du badge (texte simple, les apostrophes et NB restent tels quels dans le HTML)
+// - cta : bouton { href, label } (href avec le préfixe base) ; par défaut « Parler à {prénom} »
+//   vers le lien de contact de la personne (obligatoire avec members : le paramètre ?personne=
+//   de la page Contact ne présélectionne qu'une seule personne)
 // Emplacements
 // - par défaut : les paragraphes ; le premier porte la classe md-spc__lead (chapeau)
 // - badge-icon : le SVG de l'icône du badge
@@ -15,24 +20,48 @@ import CtaIcon from '../CtaIcon.astro';
 import PortraitBadge from './PortraitBadge.astro';
 import type { TeamMember } from '../../data/team';
 
-interface Props {
-  member: TeamMember;
-  badge: string;
+interface Link {
+  href: string;
+  label: string;
 }
 
-const { member, badge } = Astro.props;
+interface Props {
+  member?: TeamMember;
+  members?: TeamMember[];
+  badge: string;
+  cta?: Link;
+}
+
+const { member, members, badge, cta } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const duo = members && members.length > 1 ? members : undefined;
+const solo = duo ? undefined : (member ?? members?.[0])!;
 ---
-<div class="md-spc md-glass">
-  <div class="md-spc__id" data-reveal="left">
-    <TeamAvatar member={member} class="md-spc__ph" alt={member.firstName} />
-    <p class="md-spc__name"><b>{member.fullName}</b><span>{member.roles.card}</span></p>
-  </div>
+<div class:list={['md-spc', { 'md-spc--duo': duo }, 'md-glass']}>
+  {duo ? (
+    <div class="md-spc__id md-spc__id--duo" data-reveal="left">
+      {duo.map((m) => (
+        <div class="md-spc__person">
+          <TeamAvatar member={m} class="md-spc__ph" alt={m.firstName} />
+          <p class="md-spc__name"><b>{m.fullName}</b><span>{m.roles.card}</span></p>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div class="md-spc__id" data-reveal="left">
+      <TeamAvatar member={solo} class="md-spc__ph" alt={solo.firstName} />
+      <p class="md-spc__name"><b>{solo.fullName}</b><span>{solo.roles.card}</span></p>
+    </div>
+  )}
   <div class="md-spc__txt" data-reveal="right" data-reveal-step="1">
     <slot />
     <div class="md-spc__foot">
       <PortraitBadge text={badge}><slot name="badge-icon" /></PortraitBadge>
-      <a class="cta" href={`${base}${member.contact}`}>Parler à {member.firstName}<CtaIcon /></a>
+      {cta ? (
+        <a class="cta" href={cta.href}>{cta.label}<CtaIcon /></a>
+      ) : (
+        <a class="cta" href={`${base}${solo.contact}`}>Parler à {solo.firstName}<CtaIcon /></a>
+      )}
     </div>
   </div>
 </div>
@@ -105,6 +134,49 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     object-position: var(--obj-pos, center);
     transform: scale(var(--zoom, 1));
     transform-origin: var(--obj-pos, center);
+  }
+
+  /* Plusieurs personnes (members) : photos côte à côte, chacune avec son nom et son rôle */
+  @media (min-width: 768px) {
+    .md-spc--duo { grid-template-columns: 340px minmax(0, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .md-spc--duo { grid-template-columns: 420px minmax(0, 1fr); }
+  }
+
+  .md-spc__id--duo {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  @media (min-width: 1024px) {
+    .md-spc__id--duo { gap: 28px; }
+  }
+
+  .md-spc__person {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .md-spc__id--duo :global(.md-spc__ph) { width: 132px; height: 132px; }
+
+  /* Téléphone : noms et rôles un peu plus petits pour tenir sur une ligne côte à côte */
+  @media (max-width: 599px) {
+    .md-spc__id--duo { gap: 12px; }
+    .md-spc__id--duo :global(.md-spc__ph) { width: 120px; height: 120px; }
+    .md-spc__id--duo .md-spc__name b { font-size: 17px; }
+    .md-spc__id--duo .md-spc__name span { font-size: 13px; }
+  }
+
+  @media (min-width: 1024px) {
+    .md-spc__id--duo :global(.md-spc__ph) { width: 168px; height: 168px; }
   }
 
   .md-spc__name {

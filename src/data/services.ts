@@ -41,7 +41,14 @@ export const serviceIconSvg = (s: Service): string =>
 
 export const SERVICES: Service[] = [
   { key: 'marque', label: 'Image de marque', role: 'La fondation de tout le reste', icon: ICONS.palette },
-  { key: 'reseaux', label: 'Réseaux sociaux', role: 'Fait connaître', icon: ICONS.instagram },
+  {
+    key: 'reseaux',
+    label: 'Réseaux sociaux',
+    role: 'Fait connaître',
+    hint: 'Fait connaître',
+    href: '/reseaux-sociaux/',
+    icon: ICONS.instagram,
+  },
   {
     key: 'publicite',
     label: 'Publicité Google et Meta',

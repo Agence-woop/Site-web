@@ -27,7 +27,7 @@ Votre offre d'emploi ne parle qu'à ces 30 %. Et encore, les meilleurs d'entre e
 
 Alors si le candidat passif ne lit pas vos offres, que lit-il ? Il lit votre marque employeur.
 
-Concrètement, cela veut dire votre page LinkedIn, les publications de vos dirigeants, ce que vos équipes partagent, vos avis en ligne, votre présence dans son fil, la réputation qui circule dans son secteur. Tout cela, mis bout à bout, forme l'idée qu'il se fait de vous comme employeur. Et il se la fait lentement, passivement, longtemps avant qu'un poste soit ouvert. Près d'un candidat passif sur deux consulte votre site et vos réseaux sociaux pour comprendre qui vous êtes.
+Concrètement, cela veut dire votre page LinkedIn, les publications de vos dirigeants, ce que vos équipes partagent, vos avis en ligne, votre présence dans son fil, la réputation qui circule dans son secteur. Tout cela, mis bout à bout, forme l'idée qu'il se fait de vous comme employeur. Et il se la fait lentement, passivement, longtemps avant qu'un poste soit ouvert. Près d'un candidat passif sur deux consulte votre site et [vos réseaux sociaux](/reseaux-sociaux/) pour comprendre qui vous êtes.
 
 Voici le point que la plupart des entreprises manquent : vous avez déjà une marque employeur, que vous la pilotiez ou non. La seule question est de savoir si c'est celle que vous avez choisie, ou celle que le hasard a laissée s'installer à votre place.
 

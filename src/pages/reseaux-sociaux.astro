@@ -1,0 +1,1877 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import SectionHead from '../components/SectionHead.astro';
+import VisibilityTeaser from '../components/VisibilityTeaser.astro';
+import FinalBand from '../components/FinalBand.astro';
+import StickyBar from '../components/StickyBar.astro';
+import BrandLogo from '../components/BrandLogo.astro';
+import ServiceHero from '../components/services/ServiceHero.astro';
+import AudienceCard from '../components/services/AudienceCard.astro';
+import ServiceTile from '../components/services/ServiceTile.astro';
+import SpecialistCard from '../components/services/SpecialistCard.astro';
+import Faq from '../components/services/Faq.astro';
+import FurtherReading from '../components/services/FurtherReading.astro';
+import ServiceCycle from '../components/services/ServiceCycle.astro';
+import { team } from '../data/team';
+import { NB } from '../utils/typo';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SITE_URL = 'https://agence-woop.ca';
+const PAGE_URL = `${SITE_URL}/reseaux-sociaux/`;
+
+// Vos questions (accordéon et données structurées FAQPage)
+const faq = [
+  {
+    q: `Quelle formule choisir${NB}?`,
+    a: "Clé en main si vous voulez déléguer entièrement vos réseaux. Autonomie si votre équipe veut créer et publier elle-même avec de bons outils. On vous aide à choisir lors de l'appel découverte.",
+  },
+  {
+    q: `Est-ce que je valide les publications${NB}?`,
+    a: 'Oui, toujours. Vous approuvez chaque publication avant sa mise en ligne.',
+  },
+  {
+    q: `Est-ce conforme aux règles de mon ordre${NB}?`,
+    a: 'On crée selon les bonnes pratiques et vos directives. Vous approuvez chaque publication avant sa mise en ligne et restez responsable de sa conformité.',
+  },
+  {
+    q: `Faut-il que notre équipe apparaisse${NB}?`,
+    a: "C'est fortement conseillé, mais toujours avec l'accord de chaque personne. Montrer les personnes derrière votre nom, c'est ce qui vous distingue.",
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Gestion des réseaux sociaux pour cliniques et cabinets',
+    serviceType: 'Gestion des réseaux sociaux pour cliniques et cabinets',
+    // Renvoie à la fiche de l'organisation publiée sur l'accueil
+    provider: { '@id': `${SITE_URL}/#organization`, name: 'Agence WOOP' },
+    areaServed: 'Québec',
+    url: PAGE_URL,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Gestion des réseaux sociaux', item: PAGE_URL },
+    ],
+  },
+];
+
+// Icônes au trait (même style que le reste du site)
+const ICONS = {
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+  target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+  pen: '<path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 7l3 3"/>',
+  bubble: '<path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/>',
+  chart: '<path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/>',
+  // Clé en main : coche dans un cercle ; autonomie : boîte à outils (la trousse de création)
+  done: '<circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/>',
+  kit: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a2 2 0 012-2h2a2 2 0 012 2v2"/><path d="M3 13h18M10.5 13v2h3v-2"/>',
+  // Clinique : bâtiment, croix médicale (blanche dans sa pastille, jamais rouge) et porte
+  clinic: '<path d="M5 21V7a1 1 0 011-1h12a1 1 0 011 1v14"/><path d="M3 21h18"/><path d="M10.5 8.5h3v2h2v3h-2v2h-3v-2h-2v-3h2z"/><path d="M10 21v-3.5h4V21"/>',
+  case: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+} as const;
+type IconKey = keyof typeof ICONS;
+const icon = (k: IconKey) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
+
+// Pictogrammes pleins des petites illustrations (dessinés pour WOOP)
+const GLYPH = {
+  heart: 'M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0112 7.6a4.3 4.3 0 017.5 2.8c0 5.5-7.5 10.1-7.5 10.1z',
+  star: 'M12 3.5l1.9 5.6 5.6 1.9-5.6 1.9-1.9 5.6-1.9-5.6-5.6-1.9 5.6-1.9z',
+};
+
+// Les 3 réseaux : logo officiel (BrandLogo) en blanc sur une pastille rose, orange ou dégradé
+type NetKey = 'instagram' | 'facebook' | 'linkedin';
+const NETS: Record<NetKey, { name: string; role: string }> = {
+  instagram: { name: 'Instagram', role: 'Montre la clinique' },
+  linkedin: { name: 'LinkedIn', role: "Montre l'expertise" },
+  facebook: { name: 'Facebook', role: 'Rassemble le quartier' },
+};
+const heroNets: NetKey[] = ['instagram', 'linkedin', 'facebook'];
+
+// 01 · Pour qui ?
+const profiles: { key: 'rare' | 'faces' | 'same'; title: string; lived: string; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'rare',
+    title: "Vous publiez quand vous avez le temps, c'est-à-dire rarement.",
+    lived: "Trois publications en mars, puis plus rien jusqu'en juin.",
+    reveal: 'left',
+  },
+  {
+    key: 'faces',
+    title: 'Vos publications parlent de services, jamais des gens.',
+    lived: "Des visuels génériques que n'importe quel concurrent pourrait publier.",
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'same',
+    title: 'Vous ne savez pas vraiment à quoi sert chaque réseau.',
+    lived: 'Alors vous publiez la même chose partout, et aucun réseau ne joue son rôle.',
+    reveal: 'right',
+    step: '2',
+  },
+];
+
+// 02 · La méthode : le rôle de chaque réseau
+const roles: { key: NetKey; clinic: string; firm: string; reveal: 'left' | 'up' | 'right'; step?: string; hot?: boolean }[] = [
+  {
+    key: 'instagram',
+    clinic: "Montrer la clinique, l'équipe et le quotidien des soins.",
+    firm: 'Montrer la culture du cabinet aux candidats.',
+    reveal: 'left',
+  },
+  {
+    key: 'facebook',
+    clinic: 'Rejoindre la communauté du quartier, annoncer les nouveautés.',
+    firm: 'Diffuser les postes et rejoindre les candidats qui ne cherchent pas encore.',
+    reveal: 'up',
+    step: '1',
+    hot: true,
+  },
+  {
+    key: 'linkedin',
+    clinic: "Asseoir l'expertise des praticiens auprès des référents et des futurs employés.",
+    firm: 'Se faire connaître des décideurs RH qui confient les mandats.',
+    reveal: 'right',
+    step: '2',
+  },
+];
+
+// 03 · Les visages
+const faces = [
+  { key: 't0', name: 'Julie', role: 'Physiothérapeute' },
+  { key: 't1', name: 'Marc', role: 'Ostéopathe' },
+  { key: 't2', name: 'Sarah', role: 'Recruteuse' },
+];
+
+// 04 · Nos formules
+const plans: { key: 'full' | 'self'; ic: IconKey; name: string; lead: string; text: string; items: string[]; reveal: 'left' | 'right'; step?: string; hot?: boolean }[] = [
+  {
+    key: 'full',
+    ic: 'done',
+    name: 'Clé en main',
+    lead: "On s'occupe de tout.",
+    text: 'On crée les visuels, on publie, on anime. Vous validez.',
+    items: ['Stratégie et calendrier', 'Création des visuels et des textes', 'Publication et animation', 'Rapport mensuel ou hebdomadaire'],
+    reveal: 'left',
+    hot: true,
+  },
+  {
+    key: 'self',
+    ic: 'kit',
+    name: 'Formule autonomie',
+    lead: 'Vous publiez, avec les bons outils.',
+    text: 'On vous remet une trousse de création : des modèles à vos couleurs et un calendrier éditorial. À partir de ces modèles, vous créez vous-mêmes vos visuels et vous les publiez. On se concentre ensemble sur vos autres objectifs.',
+    items: ['Trousse de création à vos couleurs', 'Calendrier éditorial', 'Accompagnement au démarrage'],
+    reveal: 'right',
+    step: '1',
+  },
+];
+
+// 05 · Les livrables (grille : 1 colonne sur téléphone, 2 sur tablette, 4 sur ordinateur)
+const deliverables: { key: 'cal' | 'strat' | 'create' | 'post' | 'report'; ic: IconKey; title: string; text: string; accent?: boolean; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'cal',
+    ic: 'calendar',
+    accent: true,
+    title: 'Un calendrier éditorial',
+    text: 'Construit à partir de vos services et de vos objectifs, pas un fil de publications au hasard.',
+    reveal: 'left',
+  },
+  { key: 'strat', ic: 'target', title: 'Une stratégie par réseau', text: 'Le rôle de chaque réseau, le ton, la fréquence.', reveal: 'right', step: '1' },
+  { key: 'create', ic: 'pen', title: 'La création', text: 'Visuels et textes, à vos couleurs.', reveal: 'up', step: '1' },
+  { key: 'post', ic: 'bubble', title: 'Publication et animation', text: 'On publie, on répond, on anime.', reveal: 'up', step: '2' },
+  {
+    key: 'report',
+    ic: 'chart',
+    title: 'Un rapport mensuel, et hebdomadaire au besoin',
+    text: "Chaque mois, le bilan complet : ce qui a été publié, ce qui a fonctionné et ce qu'on ajuste. Selon votre forfait, un point rapide chaque semaine en plus. Expliqué simplement, sans jargon.",
+    reveal: 'up',
+  },
+];
+
+// Calendrier de la tuile : 3 semaines de 5 jours, une case vide sur deux
+const calendar: { net?: NetKey; label?: string }[] = [
+  { net: 'instagram', label: 'Équipe' }, {}, { net: 'linkedin', label: 'Conseil' }, {}, { net: 'facebook', label: 'Nouveauté' },
+  {}, { net: 'instagram', label: 'Coulisses' }, {}, { net: 'linkedin', label: 'Expertise' }, {},
+  { net: 'facebook', label: 'Quartier' }, {}, { net: 'instagram', label: 'Visage' }, {}, { net: 'linkedin', label: 'Article' },
+];
+---
+<Layout
+  title="Gestion des réseaux sociaux pour cliniques et cabinets | WOOP"
+  description="Instagram, Facebook, LinkedIn : un rôle par réseau, un calendrier bâti sur vos services. Gestion complète ou trousse de création pour publier vous-mêmes."
+  ogImage="/images/og-image.jpg"
+  jsonLd={jsonLd}
+>
+
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Le hero n'est jamais animé. -->
+  <ScrollReveal />
+
+  <!-- 1. HERO (sans data-reveal) -->
+  <ServiceHero
+    layout="split"
+    pill="Gestion des réseaux sociaux"
+    sub={`Instagram, Facebook, LinkedIn${NB}: on définit le rôle de chaque réseau, on crée, on publie et on anime votre communauté, selon un calendrier régulier et en tenant compte des règles de votre secteur.`}
+    strong="Des réseaux qui montrent qui vous êtes, pas seulement ce que vous offrez."
+    primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+    secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
+  >
+    <Fragment slot="title">Gestion des réseaux sociaux{NB}: un réseau, un rôle, <span class="gradient-accent hp-kw">une seule voix.</span></Fragment>
+
+    <Fragment slot="visual">
+    <Fragment set:html={"<!-- Illustration : un réseau, un rôle (Instagram, LinkedIn, Facebook) -->"} />
+    <div class="rs-hv" aria-hidden="true">
+      <div class="rs-hv__glow"></div>
+
+      <!-- Instagram : le profil de la clinique -->
+      <figure class="rs-x rs-x--ig">
+        <div class="rs-x__card">
+          <div class="rs-ig__top">
+            <span class="rs-ig__ring"><span class="rs-ig__av">VC</span></span>
+            <div class="rs-ig__st"><b>Équipe</b><small>à la une</small></div>
+          </div>
+          <b class="rs-ig__name">votreclinique</b>
+          <div class="rs-ig__hl"><span></span><span></span><span></span></div>
+          <div class="rs-ig__grid"><i class="p1"></i><i class="p2"></i><i class="p3"></i><i class="p4"></i><i class="p5"></i><i class="p6"></i></div>
+        </div>
+        <figcaption class="rs-role"><span class="rs-net rs-net--instagram"><BrandLogo name="instagram" /></span><div><b>{NETS.instagram.name}</b><small>{NETS.instagram.role}</small></div></figcaption>
+      </figure>
+
+      <!-- LinkedIn : l'expertise d'une praticienne -->
+      <figure class="rs-x rs-x--li">
+        <div class="rs-x__card">
+          <div class="rs-li__top">
+            <span class="rs-li__av"></span>
+            <div><b>Julie, physiothérapeute</b><small>Votre clinique</small></div>
+            <span class="rs-li__in">in</span>
+          </div>
+          <p class="rs-li__txt">Trois erreurs qui aggravent les douleurs lombaires, et comment les éviter.</p>
+          <div class="rs-li__doc"><small>Article</small><b>Le mal de dos, expliqué</b><i></i><i class="h"></i></div>
+          <div class="rs-li__re">
+            <span class="rs-react">
+              <span class="rs-react__i rs-react__i--p"><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg></span>
+              <span class="rs-react__i rs-react__i--o"><svg viewBox="0 0 24 24"><path d={GLYPH.star} /></svg></span>
+            </span>
+            <small>Partagé par des professionnels</small>
+          </div>
+        </div>
+        <figcaption class="rs-role"><span class="rs-net rs-net--linkedin"><BrandLogo name="linkedin" /></span><div><b>{NETS.linkedin.name}</b><small>{NETS.linkedin.role}</small></div></figcaption>
+      </figure>
+
+      <!-- Facebook : un événement de quartier -->
+      <figure class="rs-x rs-x--fb">
+        <div class="rs-x__card">
+          <div class="rs-fb__cover"><span class="rs-fb__date"><small>Sam.</small><span set:html={icon('calendar')} /></span></div>
+          <div class="rs-fb__body">
+            <small>Événement · Votre quartier</small>
+            <b>Portes ouvertes de la clinique</b>
+            <span class="rs-fb__go">✓ Intéressé</span>
+          </div>
+        </div>
+        <figcaption class="rs-role"><span class="rs-net rs-net--facebook"><BrandLogo name="facebook" /></span><div><b>{NETS.facebook.name}</b><small>{NETS.facebook.role}</small></div></figcaption>
+      </figure>
+
+      <!-- Téléphone : les 3 pastilles de rôle en rangée, sous la carte Instagram -->
+      <ul class="rs-roles">
+        {heroNets.map((k) => (
+          <li><span class:list={['rs-net', `rs-net--${k}`]}><BrandLogo name={k} /></span><b>{NETS[k].name}</b><small>{NETS[k].role}</small></li>
+        ))}
+      </ul>
+    </div>
+    </Fragment>
+  </ServiceHero>
+
+  <!-- 2. 01 · POUR QUI ? -->
+  <section class="hp-block hp-sec" id="pour-qui" data-reveal-clip>
+    <div class="container">
+      <SectionHead over={`01 · Pour qui${NB}?`}>Vous vous <span class="gradient-accent">reconnaissez</span>{NB}?</SectionHead>
+
+      <div class="rs-prs">
+        {profiles.map((p) => (
+          <AudienceCard kind={p.key} title={p.title} lived={p.lived} reveal={p.reveal} step={p.step}>
+            {p.key === 'rare' && (
+              <div class="rs-av1">{[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0].map((on) => <i class:list={[{ 'is-on': on }]}></i>)}</div>
+            )}
+            {p.key === 'faces' && (
+              <div class="rs-av2"><span></span><span></span><span class="is-on"></span></div>
+            )}
+            {p.key === 'same' && (
+              <div class="rs-av3">
+                <span class="rs-net rs-net--instagram"><BrandLogo name="instagram" /></span>
+                <b>=</b>
+                <span class="rs-net rs-net--facebook"><BrandLogo name="facebook" /></span>
+                <b>=</b>
+                <span class="rs-net rs-net--linkedin"><BrandLogo name="linkedin" /></span>
+                <b class="rs-av3__q">?</b>
+              </div>
+            )}
+          </AudienceCard>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 02 · LA MÉTHODE -->
+  <section class="hp-block hp-sec" id="methode" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="02 · La méthode" intro="Chaque réseau a un public et un objectif différents. Vos publications nourrissent aussi vos campagnes publicitaires.">Chaque réseau a <span class="gradient-accent">son rôle</span>.</SectionHead>
+
+      <ul class="rs-nets">
+        {roles.map((r) => (
+          <li class:list={['rs-rl', { 'md-glass': !r.hot, 'rs-rl--hot': r.hot }]} data-reveal={r.reveal} data-reveal-step={r.step}>
+            <div class="rs-rl__head">
+              <span class:list={['rs-net', 'rs-net--lg', `rs-net--${r.key}`]} aria-hidden="true"><BrandLogo name={r.key} /></span>
+              <h3>{NETS[r.key].name}</h3>
+            </div>
+            <dl>
+              <dt>Pour une clinique</dt><dd>{r.clinic}</dd>
+              <dt>Pour un cabinet de recrutement</dt><dd>{r.firm}</dd>
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4. 03 · LES VISAGES (section ouverte, sans encadré) -->
+  <section class="hp-block hp-sec" id="visages" data-reveal-clip>
+    <div class="container rs-face">
+      <SectionHead over="03 · Les visages" intro={`On montre les personnes derrière votre clinique ou votre cabinet${NB}: vos praticiens, vos recruteurs, votre quotidien. Un patient choisit plus facilement quelqu'un qu'il a déjà vu. Un candidat aussi.`} class="rs-face__head">Les visages derrière <span class="gradient-accent">la marque</span>.</SectionHead>
+
+      <div class="rs-face__vis" aria-hidden="true" data-reveal="right" data-reveal-step="1">
+        {faces.map((f) => (
+          <div class:list={['rs-pt', `rs-pt--${f.key}`]}><span class="rs-pt__ph"></span><b>{f.name}</b><small>{f.role}</small></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 04 · NOS FORMULES -->
+  <section class="hp-block hp-sec" id="formules" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="04 · Nos formules" intro={`Vous préférez publier vous-mêmes${NB}? On vous en donne les moyens.`}>Deux façons de<br /> <span class="gradient-accent">travailler ensemble</span>.</SectionHead>
+
+      <div class="rs-plans">
+        {plans.map((f) => (
+          <article class:list={['rs-plan', { 'md-glass': !f.hot, 'rs-plan--hot': f.hot }]} data-reveal={f.reveal} data-reveal-step={f.step}>
+            <div class="rs-plan__head">
+              <span class="rs-ic" aria-hidden="true" set:html={icon(f.ic)} />
+              <h3>{f.name}</h3>
+            </div>
+            <p class="rs-plan__lead">{f.lead}</p>
+            <p>{f.text}</p>
+            <ul>{f.items.map((it) => <li>{it}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 05 · LES LIVRABLES -->
+  <section class="hp-block hp-sec" id="livrables" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="05 · Les livrables">Ce que vous <span class="gradient-accent">recevez</span>.</SectionHead>
+
+      <div class="rs-bento">
+        {deliverables.map((t) => (
+          <ServiceTile kind={t.key} shape="sq" title={t.title} text={t.text} accent={t.accent} reveal={t.reveal} step={t.step}>
+            <Fragment slot="icon"><Fragment set:html={icon(t.ic)} /></Fragment>
+            <Fragment slot="illustration">
+              <div class:list={['md-mui', `rs-mui--${t.key}`]} aria-hidden="true">
+                {t.key === 'cal' && (
+                  <div class="rs-cal">
+                    <div class="rs-cal__h"><b>Novembre</b><small>Votre clinique</small></div>
+                    <div class="rs-cal__g">
+                      {['L', 'M', 'M', 'J', 'V'].map((d) => <small>{d}</small>)}
+                      {calendar.map((c) => <span class:list={[c.net && `is-${c.net}`]}>{c.label}</span>)}
+                    </div>
+                  </div>
+                )}
+                {t.key === 'strat' && (
+                  <div class="rs-st">
+                    {(['instagram', 'facebook', 'linkedin'] as NetKey[]).map((k) => (
+                      <span><span class:list={['rs-net', 'rs-net--sm', `rs-net--${k}`]}><BrandLogo name={k} /></span>{NETS[k].name}</span>
+                    ))}
+                  </div>
+                )}
+                {t.key === 'create' && (
+                  <div class="rs-cr"><span></span><span></span><span></span></div>
+                )}
+                {t.key === 'post' && (
+                  <div class="rs-bub"><span>Merci pour votre message, on vous répond en privé{NB}!</span></div>
+                )}
+                {t.key === 'report' && (
+                  <div class="rs-rp">
+                    <div class="rs-rp__tabs"><span class="is-on">Mois</span><span>Semaine</span></div>
+                    <div class="rs-rp__cols">
+                      <div class="rs-rp__c">
+                        <small>Publié</small>
+                        <div class="rs-rp__ps">
+                          <div><i class="pf"></i><span>Équipe</span></div>
+                          <div><i class="pt"><b>Aa</b></i><span>Conseil</span></div>
+                          <div><i class="pe"><Fragment set:html={icon('calendar')} /></i><span>Nouveauté</span></div>
+                        </div>
+                        <b>Trois publications différentes</b>
+                      </div>
+                      <div class="rs-rp__c rs-rp__c--win">
+                        <small>Ce qui a fonctionné</small>
+                        <div class="rs-rp__top"><i></i><span><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg></span></div>
+                        <b>La présentation de l'équipe</b>
+                        <span class="rs-rp__like"><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg>j'aime</span>
+                      </div>
+                      <div class="rs-rp__c">
+                        <small>Ce qu'on ajuste</small>
+                        <div class="rs-rp__adj">
+                          <div><small>On garde</small><span class="k">Les visages de l'équipe</span></div>
+                          <div><small>On fait mieux</small><span class="y">Une courte vidéo de Julie</span></div>
+                        </div>
+                        <b>Le mois prochain</b>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Fragment>
+          </ServiceTile>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 06 · L'ÉCOSYSTÈME (cycle des 5 services), puis le Test de visibilité -->
+  <section class="hp-block hp-sec" id="ecosysteme" data-reveal-clip>
+    <div class="container">
+      <ServiceCycle current="reseaux" over="06 · L'écosystème" />
+
+      <div class="rs-teaser">
+        <VisibilityTeaser />
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 07 · POURQUOI WOOP -->
+  <section class="hp-block hp-sec" id="pourquoi" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="07 · Pourquoi WOOP">Deux personnes <span class="gradient-accent">nommées</span>.</SectionHead>
+
+      <SpecialistCard
+        members={[team.emma, team.kevin]}
+        badge="Marketing pensé selon les règles de votre ordre professionnel"
+        cta={{ href: `${base}/contact/`, label: 'Parler à Emma et Kevin' }}
+      >
+        <p class="md-spc__lead">Emma et Kevin s'occupent de vos réseaux, à deux.</p>
+        <p>Emma définit le rôle de chaque réseau et relie vos publications à vos campagnes{NB}: ce qui fonctionne en publication nourrit la publicité. Kevin crée vos visuels et veille à ce que chaque publication reste fidèle à votre marque.</p>
+        <Fragment slot="badge-icon"><Fragment set:html={icon('shield')} /></Fragment>
+      </SpecialistCard>
+    </div>
+  </section>
+
+  <!-- 9. 08 · SANTÉ OU RECRUTEMENT -->
+  <section class="hp-block hp-sec" id="secteurs" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="08 · Santé ou recrutement" intro="Le même principe, adapté à vos deux marchés.">Santé <span class="gradient-accent">ou recrutement</span>.</SectionHead>
+
+      <div class="rs-srs">
+        <ServiceTile kind="clinic" shape="sq" title="Pour une clinique" text="Montrer vos praticiens, rassurer avant le premier rendez-vous et faire connaître la clinique dans son quartier." reveal="left" href={`${base}/services-medical/`}>
+          <Fragment slot="icon"><Fragment set:html={icon('clinic')} /></Fragment>
+        </ServiceTile>
+        <ServiceTile kind="firm" shape="sq" title="Pour un cabinet de recrutement" text="Attirer les candidats qui ne cherchent pas encore, et vous faire connaître des décideurs RH qui confient les mandats." reveal="right" step="1" href={`${base}/services-recrutement/`}>
+          <Fragment slot="icon"><Fragment set:html={icon('case')} /></Fragment>
+        </ServiceTile>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. VOS QUESTIONS (sans surtitre), puis « Pour aller plus loin » -->
+  <section class="hp-block hp-sec" id="faq" data-reveal-clip>
+    <div class="container">
+      <SectionHead>Vos <span class="gradient-accent">questions</span>.</SectionHead>
+
+      <Faq items={faq} name="faq-reseaux" />
+
+      <FurtherReading slugs={['marque-personnelle-sante-credibilite', 'candidat-passif-contenu-marque-employeur', 'authenticite-marketing-coherence']} />
+    </div>
+  </section>
+
+  <!-- 11. BANDEAU FINAL -->
+  <FinalBand
+    title="Parlons de votre projet."
+    text="Un appel découverte de 30 minutes, sans engagement."
+    cta={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+  />
+
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script du composant StickyBar -->
+  <StickyBar lead="Un réseau, un rôle." strong="Une seule voix." order={['gauthier', 'kevin', 'ludo', 'emma']} />
+
+</Layout>
+
+<style>
+  /* =====================================================================
+     PAGE GESTION DES RÉSEAUX SOCIAUX : styles locaux (scopés).
+     Même modèle que la page Publicité : classes hp-* et md-* communes aux pages Services, classes
+     rs-* propres à cette page.
+     Couleurs : uniquement les jetons de global.css, leurs mélanges (color-mix) et des rgba()
+     dérivées de #FA6244 et #E62B7F. Aucun bleu, y compris pour LinkedIn et Facebook : logos
+     officiels en blanc sur une pastille (Instagram : dégradé, Facebook : orange, LinkedIn : rose).
+     Contraste hybride : sur le dégradé, petits textes en --hp-on-grad (--bg-deep), titres en blanc.
+     ===================================================================== */
+
+  /* ===== ESPACEMENTS DE RÉFÉRENCE (mêmes valeurs que l'accueil) ===== */
+  .hp-hero,
+  .hp-block {
+    --home-section-gap: 80px;
+    --home-head-gap: 16px;
+    --home-head-content: 36px;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 100px; }
+  }
+
+  @media (min-width: 900px) {
+    .hp-hero,
+    .hp-block {
+      --home-head-gap: 20px;
+      --home-head-content: 46px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 120px; }
+  }
+
+  /* Pas de mot seul en fin de paragraphe */
+  p { text-wrap: pretty; }
+
+  .hp-hero + .hp-block,
+  .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  /* Pastille d'icône au trait (formules) */
+  .rs-ic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 8px 20px rgba(230, 43, 127, 0.3);
+  }
+
+  .rs-ic :global(svg) { width: 24px; height: 24px; }
+
+  /* Pastille d'un réseau : logo officiel en blanc sur rose, orange ou dégradé */
+  .rs-net {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    color: var(--text-primary);
+  }
+
+  .rs-net :global(svg) { width: 16px; height: 16px; }
+
+  .rs-net--instagram { background: var(--woop-gradient); }
+  .rs-net--facebook { background: var(--woop-orange); }
+  .rs-net--linkedin { background: var(--woop-pink); }
+
+  .rs-net--sm {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+  }
+
+  .rs-net--sm :global(svg) { width: 12px; height: 12px; }
+
+  .rs-net--lg {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+  }
+
+  .rs-net--lg :global(svg) { width: 24px; height: 24px; }
+
+  /* ===== 1. HERO : un réseau, un rôle ===== */
+  /* Colonne de droite du hero (dès 1024 px), sous le texte sur téléphone et tablette.
+     Dès 600 px : les 3 cartes posées en quinconce (Instagram à gauche, LinkedIn en haut à droite,
+     Facebook en bas à droite), chacune avec sa pastille de rôle.
+     Téléphone : la carte Instagram seule, puis les 3 pastilles de rôle en rangée. */
+  .rs-hv {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    margin: 8px auto 0;
+  }
+
+  @media (min-width: 1024px) {
+    .rs-hv { margin-top: 0; }
+  }
+
+  .rs-hv__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 560px;
+    max-width: 120%;
+    height: 520px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 43, 127, 0.32), rgba(250, 98, 68, 0.1) 45%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .rs-x {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    text-align: left;
+  }
+
+  .rs-x__card {
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    box-shadow: 0 26px 60px var(--hp-shadow);
+  }
+
+  /* Pastille de rôle sous chaque carte */
+  .rs-role {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 10px;
+    padding: 7px 14px 7px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hp-line), 0 16px 34px var(--hp-shadow);
+  }
+
+  .rs-role b {
+    display: block;
+    font-size: 13px;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .rs-role small {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--md-pink-soft);
+  }
+
+  /* Instagram : profil de la clinique */
+  .rs-x--ig .rs-x__card {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 14px 14px 0;
+  }
+
+  .rs-ig__top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .rs-ig__ring {
+    padding: 3px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+  }
+
+  .rs-ig__av {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    box-shadow: 0 0 0 3px var(--hp-light);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .rs-ig__st b {
+    display: block;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .rs-ig__st small {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .rs-ig__name { font-size: 12px; }
+
+  .rs-ig__hl {
+    display: flex;
+    gap: 8px;
+  }
+
+  .rs-ig__hl span {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--hp-blush);
+    box-shadow: 0 0 0 2px var(--hp-light), 0 0 0 3.5px var(--hp-skel);
+  }
+
+  .rs-ig__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin: 4px -14px 0;
+  }
+
+  .rs-ig__grid i {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  .rs-ig__grid .p1 { background: linear-gradient(150deg, var(--hp-pinklight), var(--woop-pink)); }
+  .rs-ig__grid .p2 { background: var(--hp-blush); }
+  .rs-ig__grid .p3 { background: var(--woop-gradient); }
+  .rs-ig__grid .p4 { background: var(--hp-plum); }
+  .rs-ig__grid .p5 { background: linear-gradient(150deg, var(--woop-pink), var(--hp-plum)); }
+  .rs-ig__grid .p6 { background: color-mix(in srgb, var(--woop-orange) 45%, var(--text-primary)); }
+
+  /* Silhouettes (tête et épaules) sur 3 vignettes */
+  .rs-ig__grid .p1::after,
+  .rs-ig__grid .p3::after,
+  .rs-ig__grid .p5::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    width: 34px;
+    height: 30px;
+    border-radius: 20px 20px 0 0;
+    background: color-mix(in srgb, var(--text-primary) 60%, transparent);
+    transform: translateX(-50%);
+    box-shadow: 0 -22px 0 -6px color-mix(in srgb, var(--text-primary) 75%, transparent);
+  }
+
+  /* LinkedIn : publication d'expertise */
+  .rs-x--li .rs-x__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .rs-li__top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .rs-li__top b {
+    display: block;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .rs-li__top small {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .rs-li__av {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(150deg, var(--hp-pinklight), var(--woop-pink));
+  }
+
+  .rs-li__in {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin-left: auto;
+    border-radius: 5px;
+    background: var(--woop-pink);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  .rs-li__txt {
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .rs-li__doc {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 12px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--woop-pink) 6%, var(--text-primary));
+  }
+
+  .rs-li__doc small {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .rs-li__doc b { font-size: 13px; }
+
+  .rs-li__doc i {
+    display: block;
+    height: 5px;
+    margin-top: 3px;
+    border-radius: 3px;
+    background: var(--hp-skel-2);
+  }
+
+  .rs-li__doc i.h { width: 60%; margin-top: 0; }
+
+  .rs-li__re {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--hp-skel-2);
+  }
+
+  .rs-li__re small {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* Réactions rondes (dessinées pour WOOP) : cœur sur rose, étoile sur orange */
+  .rs-react { display: flex; }
+
+  .rs-react__i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--hp-light);
+  }
+
+  .rs-react__i + .rs-react__i { margin-left: -4px; }
+
+  .rs-react__i svg {
+    width: 11px;
+    height: 11px;
+    fill: var(--text-primary);
+  }
+
+  .rs-react__i--p { background: var(--woop-pink); }
+  .rs-react__i--o { background: var(--woop-orange); }
+
+  /* Facebook : événement de quartier */
+  .rs-fb__cover {
+    position: relative;
+    height: 92px;
+    background: var(--woop-gradient);
+  }
+
+  .rs-fb__date {
+    position: absolute;
+    left: 14px;
+    bottom: -22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 50px;
+    height: 54px;
+    border-radius: 12px;
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--bg-deep) 20%, transparent);
+  }
+
+  .rs-fb__date small {
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .rs-fb__date :global(svg) { width: 20px; height: 20px; }
+
+  .rs-fb__body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 30px 14px 14px;
+  }
+
+  .rs-fb__body small {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .rs-fb__body b {
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  .rs-fb__go {
+    align-self: flex-start;
+    margin-top: 4px;
+    padding: 7px 11px;
+    border-radius: 8px;
+    background: var(--hp-blush);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--md-pink-deep);
+  }
+
+  /* Rangée des pastilles de rôle : téléphone seulement */
+  .rs-roles {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .rs-roles li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 6px;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hp-line);
+    text-align: center;
+  }
+
+  .rs-roles .rs-net { margin-bottom: 4px; }
+
+  .rs-roles b {
+    font-size: 13px;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .rs-roles small {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--md-pink-soft);
+  }
+
+  /* Téléphone : carte Instagram seule (sans sa pastille), centrée */
+  @media (max-width: 599px) {
+    .rs-x--li,
+    .rs-x--fb,
+    .rs-x--ig .rs-role { display: none; }
+
+    .rs-x--ig {
+      width: 100%;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+  }
+
+  /* Dès 600 px : les 3 cartes en quinconce */
+  @media (min-width: 600px) {
+    .rs-roles { display: none; }
+
+    .rs-hv { height: 600px; }
+
+    .rs-x { position: absolute; z-index: 2; }
+
+    .rs-x--ig { left: 0; top: 110px; width: 215px; }
+    .rs-x--li { right: 0; top: 0; z-index: 3; width: 270px; }
+    .rs-x--fb { right: 10px; top: 345px; z-index: 4; width: 255px; }
+  }
+
+  /* Ordinateur à colonne étroite (1024 à 1279 px) : cartes un peu plus petites */
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .rs-hv { height: 580px; }
+    .rs-x--ig { top: 120px; width: 195px; }
+    .rs-x--li { width: 245px; }
+    .rs-x--fb { right: 0; top: 340px; width: 235px; }
+  }
+
+  /* ===== 2. POUR QUI ? ===== */
+  .rs-prs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .rs-prs {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .md-pr__vis--rare,
+  .md-pr__vis--faces,
+  .md-pr__vis--same {
+    background:
+      radial-gradient(circle at 30% 20%, rgba(230, 43, 127, 0.3), transparent 65%),
+      var(--hp-plum);
+  }
+
+  /* Publications rares : 2 semaines, 3 jours publiés */
+  .rs-av1 {
+    display: grid;
+    grid-template-columns: repeat(7, 18px);
+    gap: 5px;
+  }
+
+  .rs-av1 i {
+    display: block;
+    height: 18px;
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  }
+
+  .rs-av1 i.is-on { background: var(--woop-gradient); }
+
+  /* Services, jamais les gens : 2 visuels vides, 1 visage */
+  .rs-av2 {
+    display: flex;
+    gap: 10px;
+  }
+
+  .rs-av2 span {
+    position: relative;
+    overflow: hidden;
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  }
+
+  .rs-av2 .is-on { background: var(--woop-gradient); }
+
+  .rs-av2 .is-on::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 12px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    transform: translateX(-50%);
+    box-shadow: 0 22px 0 6px var(--hp-light);
+  }
+
+  /* Le même contenu partout */
+  .rs-av3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rs-av3 .rs-net {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    box-shadow: 0 10px 22px var(--hp-shadow);
+  }
+
+  .rs-av3 .rs-net :global(svg) { width: 22px; height: 22px; }
+
+  .rs-av3 b {
+    font-size: 22px;
+    line-height: 1;
+    color: var(--text-secondary);
+  }
+
+  .rs-av3 b.rs-av3__q {
+    margin-left: 4px;
+    font-size: 28px;
+    color: var(--md-pink-soft);
+  }
+
+  /* ===== 3. LA MÉTHODE : le rôle de chaque réseau ===== */
+  .rs-nets {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    list-style: none;
+  }
+
+  @media (min-width: 900px) {
+    .rs-nets {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .rs-rl {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px 24px;
+    border-radius: 26px;
+  }
+
+  @media (min-width: 1024px) {
+    .rs-rl { padding: 30px; }
+  }
+
+  .rs-rl--hot {
+    background: var(--woop-gradient);
+    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.28);
+  }
+
+  .rs-rl__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .rs-rl h3 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .rs-rl dl {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hp-line);
+  }
+
+  .rs-rl dt {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--md-pink-soft);
+  }
+
+  .rs-rl dd + dt { margin-top: 12px; }
+
+  .rs-rl dd {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+
+  /* Carte mise en avant, sur le dégradé : titre en blanc, petits textes en --hp-on-grad ;
+     pastille Facebook orange cerclée de blanc pour rester lisible sur le dégradé */
+  .rs-rl--hot .rs-net {
+    box-shadow: inset 0 0 0 2px var(--hp-light), 0 8px 22px color-mix(in srgb, var(--bg-deep) 25%, transparent);
+  }
+
+  .rs-rl--hot dt,
+  .rs-rl--hot dd { color: var(--hp-on-grad); }
+
+  .rs-rl--hot dl { border-top-color: color-mix(in srgb, var(--bg-deep) 22%, transparent); }
+
+  /* ===== 4. LES VISAGES : section ouverte, texte à gauche et 3 portraits à droite ===== */
+  @media (min-width: 900px) {
+    .rs-face {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 50px;
+    }
+  }
+
+  .rs-face__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--home-head-gap);
+  }
+
+
+  .rs-face__vis {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    height: 260px;
+    margin: 36px auto 0;
+  }
+
+  @media (min-width: 600px) {
+    .rs-face__vis { height: 310px; }
+  }
+
+  @media (min-width: 900px) {
+    .rs-face__vis { margin-top: 0; }
+  }
+
+  .rs-pt {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 120px;
+    padding: 10px 10px 12px;
+    border-radius: 18px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    box-shadow: 0 22px 50px var(--hp-shadow);
+  }
+
+  @media (min-width: 600px) {
+    .rs-pt {
+      width: 170px;
+      padding: 14px;
+      border-radius: 20px;
+    }
+  }
+
+  .rs-pt__ph {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+  }
+
+  @media (min-width: 600px) {
+    .rs-pt__ph {
+      height: 130px;
+      border-radius: 14px;
+    }
+  }
+
+  .rs-pt__ph::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 22%;
+    width: 32%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text-primary) 75%, transparent);
+    transform: translateX(-50%);
+  }
+
+  .rs-pt__ph::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -20px;
+    width: 72%;
+    height: 50%;
+    border-radius: 50px 50px 0 0;
+    background: color-mix(in srgb, var(--text-primary) 60%, transparent);
+    transform: translateX(-50%);
+  }
+
+  .rs-pt b {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .rs-pt small {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--md-pink-deep);
+  }
+
+  .rs-pt--t0 { left: 0; top: 40px; transform: rotate(-6deg); }
+  .rs-pt--t1 { left: 50%; top: 0; z-index: 2; transform: translateX(-50%); }
+  .rs-pt--t2 { right: 0; top: 50px; transform: rotate(6deg); }
+
+  .rs-pt--t0 .rs-pt__ph { background: linear-gradient(150deg, var(--hp-pinklight), var(--woop-pink)); }
+  .rs-pt--t1 .rs-pt__ph { background: var(--woop-gradient); }
+  .rs-pt--t2 .rs-pt__ph { background: linear-gradient(150deg, var(--hp-plum), var(--woop-pink)); }
+
+  /* ===== 5. NOS FORMULES ===== */
+  .rs-plans {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 900px) {
+    .rs-plans {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .rs-plan {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px 24px;
+    border-radius: 26px;
+  }
+
+  @media (min-width: 768px) {
+    .rs-plan { padding: 34px; }
+  }
+
+  .rs-plan--hot {
+    background: var(--woop-gradient);
+    box-shadow: 0 26px 60px rgba(230, 43, 127, 0.3);
+  }
+
+  .rs-plan__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+
+  .rs-plan h3 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  .rs-plan p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .rs-plan p.rs-plan__lead {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text-primary);
+  }
+
+  .rs-plan ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--hp-line);
+  }
+
+  .rs-plan li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-primary);
+  }
+
+  .rs-plan li::before {
+    content: '✓';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* Formule mise en avant, sur le dégradé */
+  .rs-plan--hot .rs-ic {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: none;
+  }
+
+  .rs-plan--hot p { color: var(--hp-on-grad); font-weight: 600; }
+  .rs-plan--hot ul { border-top-color: color-mix(in srgb, var(--bg-deep) 22%, transparent); }
+
+  .rs-plan--hot li::before {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+  }
+
+  /* ===== 6. LES LIVRABLES ===== */
+  .rs-bento {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .rs-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .md-sv--cal,
+    .md-sv--strat,
+    .md-sv--report { grid-column: span 2; }
+  }
+
+  @media (min-width: 1100px) {
+    .rs-bento {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .md-sv--cal { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+    .md-sv--strat { grid-column: 3 / span 2; grid-row: 1; }
+    .md-sv--create { grid-column: 3; grid-row: 2; }
+    .md-sv--post { grid-column: 4; grid-row: 2; }
+    .md-sv--report { grid-column: 1 / span 4; grid-row: 3; }
+  }
+
+  /* Mini-illustrations des tuiles : boîte commune, puis dessin propre à chaque tuile */
+  .md-mui {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 7%, transparent);
+  }
+
+  /* Calendrier éditorial (sur le dégradé, fiche blanche) */
+  .rs-mui--cal {
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--bg-deep) 25%, transparent);
+  }
+
+  .rs-cal__h {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .rs-cal__h b {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .rs-cal__h small {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .rs-cal__g {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .rs-cal__g small {
+    font-size: 10px;
+    font-weight: 800;
+    text-align: center;
+    color: var(--text-muted);
+  }
+
+  .rs-cal__g span {
+    display: flex;
+    align-items: flex-end;
+    min-width: 0;
+    height: 42px;
+    padding: 5px 6px;
+    overflow: hidden;
+    border-radius: 9px;
+    background: var(--hp-skel-2);
+    font-size: 9.5px;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--text-primary);
+  }
+
+  /* Téléphone : cases plus serrées pour que chaque étiquette tienne en entier */
+  @media (max-width: 599px) {
+    .rs-mui--cal { padding: 12px; }
+    .rs-cal__g { gap: 4px; }
+    .rs-cal__g span {
+      padding: 4px;
+      font-size: 8.5px;
+      letter-spacing: -0.01em;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .rs-cal__g span { height: 62px; }
+  }
+
+  .rs-cal__g .is-instagram { background: var(--woop-gradient); }
+  .rs-cal__g .is-facebook { background: var(--hp-plum); }
+  .rs-cal__g .is-linkedin { background: var(--hp-pinklight); color: var(--bg-deep); }
+
+  /* Stratégie par réseau : les 3 réseaux */
+  .rs-st {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .rs-st > span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px 8px 8px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+
+  /* La création : 3 visuels à vos couleurs */
+  .rs-cr {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .rs-cr span {
+    height: 60px;
+    border-radius: 10px;
+    background: var(--woop-gradient);
+  }
+
+  .rs-cr span:nth-child(2) { background: var(--hp-blush); }
+  .rs-cr span:nth-child(3) { background: var(--hp-plum); }
+
+  /* Publication et animation : une réponse */
+  .rs-bub span {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 14px 14px 14px 4px;
+    background: var(--woop-gradient);
+    font-size: 12.5px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--hp-on-grad);
+  }
+
+  /* Rapport : fiche blanche, 3 colonnes (publié, ce qui a fonctionné, ce qu'on ajuste) */
+  .md-sv.md-sv--report .md-mui { height: auto; }
+
+  .rs-mui--report {
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--hp-light);
+    color: var(--bg-deep);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--bg-deep) 25%, transparent);
+  }
+
+  .rs-rp {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rs-rp__tabs {
+    display: flex;
+    align-self: flex-start;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--woop-pink) 6%, var(--text-primary));
+  }
+
+  .rs-rp__tabs span {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.3;
+    color: var(--text-muted);
+  }
+
+  .rs-rp__tabs .is-on {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  .rs-rp__cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  @media (min-width: 768px) {
+    .rs-rp__cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  .rs-rp__c {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--woop-pink) 4%, var(--text-primary));
+  }
+
+  .rs-rp__c > small {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .rs-rp__c > b {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .rs-rp__c--win {
+    background: color-mix(in srgb, var(--woop-pink) 7%, var(--text-primary));
+    box-shadow: inset 0 0 0 1.5px var(--hp-pinklight);
+  }
+
+  .rs-rp__c--win > small { color: var(--md-pink-deep); }
+
+  .rs-rp__ps {
+    display: flex;
+    gap: 6px;
+  }
+
+  .rs-rp__ps > div {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .rs-rp__ps span {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: var(--text-muted);
+  }
+
+  .rs-rp__ps i {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    height: 46px;
+    border-radius: 8px;
+  }
+
+  .rs-rp__ps .pf,
+  .rs-rp__top i { background: linear-gradient(150deg, var(--hp-pinklight), var(--woop-pink)); }
+
+  .rs-rp__ps .pt { background: var(--hp-blush); }
+
+  .rs-rp__ps .pt b {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--md-pink-deep);
+  }
+
+  .rs-rp__ps .pe {
+    background: var(--hp-plum);
+    color: var(--text-primary);
+  }
+
+  .rs-rp__ps .pe :global(svg) { width: 20px; height: 20px; }
+
+  /* Silhouettes (tête et épaules) */
+  .rs-rp__ps .pf::before,
+  .rs-rp__top i::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 9px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text-primary) 80%, transparent);
+    transform: translateX(-50%);
+  }
+
+  .rs-rp__ps .pf::after,
+  .rs-rp__top i::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    width: 26px;
+    height: 18px;
+    border-radius: 14px 14px 0 0;
+    background: color-mix(in srgb, var(--text-primary) 70%, transparent);
+    transform: translateX(-50%);
+  }
+
+  .rs-rp__top { position: relative; }
+
+  .rs-rp__top i {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    height: 46px;
+    border-radius: 8px;
+  }
+
+  .rs-rp__top > span {
+    position: absolute;
+    right: -6px;
+    top: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    box-shadow: 0 4px 10px rgba(230, 43, 127, 0.3);
+  }
+
+  .rs-rp__top svg,
+  .rs-rp__like svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .rs-rp__top svg { fill: var(--woop-pink); }
+
+  .rs-rp__like {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--hp-on-grad);
+    box-shadow: 0 6px 14px rgba(230, 43, 127, 0.35);
+  }
+
+  .rs-rp__like svg { fill: currentColor; }
+
+  .rs-rp__adj {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .rs-rp__adj small {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .rs-rp__adj span {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .rs-rp__adj .k {
+    background: color-mix(in srgb, var(--woop-pink) 7%, var(--text-primary));
+    color: var(--md-pink-deep);
+    box-shadow: inset 0 0 0 1px var(--hp-pinklight);
+  }
+
+  .rs-rp__adj .y {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  /* ===== 7. L'ÉCOSYSTÈME : test de visibilité sous le cycle ===== */
+  /* Le bandeau a déjà 22 px de marge au-dessus */
+  .rs-teaser { margin-top: 34px; }
+
+  @media (min-width: 900px) {
+    .rs-teaser { margin-top: 50px; }
+  }
+
+  /* ===== 9. SANTÉ OU RECRUTEMENT ===== */
+  .rs-srs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  /* Tuiles-liens : le titre laisse la place du chevron (en haut à droite) */
+  .rs-srs :global(.md-sv__head) { padding-right: 52px; }
+
+  @media (min-width: 768px) {
+    .rs-srs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+</style>
