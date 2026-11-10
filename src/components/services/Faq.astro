@@ -18,6 +18,9 @@
 // - items : liste { q, a } (textes simples ; les apostrophes et NB restent tels quels)
 // - name : nom du groupe (attribut name des <details>), unique dans la page
 // - open : rang de la question ouverte au chargement (0 par défaut ; -1 pour aucune)
+// - left : nombre de questions de la colonne de gauche (par défaut, la moitié arrondie au-dessus) ;
+//   avec un nombre impair de questions et la 1re ouverte, left = moitié arrondie au-dessous
+//   équilibre la hauteur des 2 colonnes
 import { text } from '../../utils/html';
 
 interface Item {
@@ -29,10 +32,11 @@ interface Props {
   items: Item[];
   name: string;
   open?: number;
+  left?: number;
 }
 
-const { items, name, open = 0 } = Astro.props;
-const half = Math.ceil(items.length / 2);
+const { items, name, open = 0, left } = Astro.props;
+const half = left ?? Math.ceil(items.length / 2);
 const columns = [items.slice(0, half), items.slice(half)].map((col, c) => col.map((item, i) => ({ ...item, rank: c * half + i })));
 ---
 <div class="md-faq" data-faq data-reveal="up">

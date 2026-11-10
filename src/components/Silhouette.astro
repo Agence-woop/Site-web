@@ -1,0 +1,62 @@
+---
+// Silhouette de personne (buste coupé par le cadre), en un seul aplat dont la couleur vient du CSS.
+//
+// Tracés : src/assets/silhouettes/*.svg, vectorisés avec potrace à partir des références
+// docs/maquettes/silhouettes/*.png (outil : tools/silhouettes/vectoriser.py). Chaque tracé est cadré
+// dans un carré : bas du buste au bas du cadre, figure centrée, un peu d'air au-dessus de la tête.
+// Deux niveaux de détail : full (mèches et profil) et simple (mèches fines retirées, pour les petites
+// tailles, sans points parasites).
+//
+// Rendu : un <span> qui remplit son conteneur (position absolue, inset 0). Le tracé sert de masque
+// CSS, cadré en bas et au centre (mask-size: contain) ; la couleur est le fond du <span> :
+// - tone="light" (par défaut) : crème, pour un fond rose, orange ou en dégradé ;
+// - tone="grad" : dégradé de la charte (rose vers orange), pour un fond sombre.
+// Le conteneur doit être positionné (position: relative) et, en général, overflow: hidden.
+//
+// Props
+// - name : femme-queue-de-cheval | homme | femme-chignon
+// - detail : full (par défaut) ou simple
+// - tone : light (par défaut) ou grad
+// Décoratif (aria-hidden).
+import queueFull from '../assets/silhouettes/femme-queue-de-cheval-full.svg?raw';
+import queueSimple from '../assets/silhouettes/femme-queue-de-cheval-simple.svg?raw';
+import hommeFull from '../assets/silhouettes/homme-full.svg?raw';
+import hommeSimple from '../assets/silhouettes/homme-simple.svg?raw';
+import chignonFull from '../assets/silhouettes/femme-chignon-full.svg?raw';
+import chignonSimple from '../assets/silhouettes/femme-chignon-simple.svg?raw';
+
+export type SilhouetteName = 'femme-queue-de-cheval' | 'homme' | 'femme-chignon';
+
+interface Props {
+  name: SilhouetteName;
+  detail?: 'full' | 'simple';
+  tone?: 'light' | 'grad';
+}
+
+const SVG: Record<SilhouetteName, Record<'full' | 'simple', string>> = {
+  'femme-queue-de-cheval': { full: queueFull, simple: queueSimple },
+  homme: { full: hommeFull, simple: hommeSimple },
+  'femme-chignon': { full: chignonFull, simple: chignonSimple },
+};
+
+const { name, detail = 'full', tone = 'light' } = Astro.props;
+const mask = `url("data:image/svg+xml,${encodeURIComponent(SVG[name][detail].trim())}")`;
+---
+<span class:list={['sil', `sil--${tone}`]} style={`--sil-mask: ${mask}`} aria-hidden="true"></span>
+
+<style>
+  .sil {
+    position: absolute;
+    inset: 0;
+    display: block;
+    -webkit-mask: var(--sil-mask) center bottom / contain no-repeat;
+    mask: var(--sil-mask) center bottom / contain no-repeat;
+    pointer-events: none;
+  }
+
+  /* Fond rose, orange ou en dégradé : aplat crème */
+  .sil--light { background: color-mix(in srgb, var(--woop-orange) 8%, var(--text-primary)); }
+
+  /* Fond sombre : dégradé de la charte, du rose (haut) vers l'orange (bas) */
+  .sil--grad { background: linear-gradient(180deg, var(--woop-pink), var(--woop-orange)); }
+</style>

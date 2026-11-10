@@ -13,13 +13,14 @@ import SpecialistCard from '../components/services/SpecialistCard.astro';
 import Faq from '../components/services/Faq.astro';
 import FurtherReading from '../components/services/FurtherReading.astro';
 import ServiceCycle from '../components/services/ServiceCycle.astro';
+import Silhouette, { type SilhouetteName } from '../components/Silhouette.astro';
 import { team } from '../data/team';
 import { NB } from '../utils/typo';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const SITE_URL = 'https://agence-woop.ca';
-const PAGE_URL = `${SITE_URL}/reseaux-sociaux/`;
+const PAGE_URL = `${SITE_URL}/gestion-reseaux-sociaux/`;
 
 // Vos questions (accordéon et données structurées FAQPage)
 const faq = [
@@ -30,6 +31,10 @@ const faq = [
   {
     q: `Est-ce que je valide les publications${NB}?`,
     a: 'Oui, toujours. Vous approuvez chaque publication avant sa mise en ligne.',
+  },
+  {
+    q: `Gérez-vous les commentaires et les messages${NB}?`,
+    a: "Non. Répondre à un patient ou à un candidat demande de connaître son dossier, et c'est à votre équipe que revient cette relation. On vous conseille sur le ton à adopter.",
   },
   {
     q: `Est-ce conforme aux règles de mon ordre${NB}?`,
@@ -76,7 +81,7 @@ const ICONS = {
   calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
   target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
   pen: '<path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 7l3 3"/>',
-  bubble: '<path d="M20 12a8 8 0 01-11.6 7.1L4 20l1-4.2A8 8 0 1120 12z"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   chart: '<path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/>',
   // Clé en main : coche dans un cercle ; autonomie : boîte à outils (la trousse de création)
   done: '<circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.2l2.4 2.4 4.6-4.8"/>',
@@ -154,10 +159,10 @@ const roles: { key: NetKey; clinic: string; firm: string; reveal: 'left' | 'up' 
 ];
 
 // 03 · Les visages
-const faces = [
-  { key: 't0', name: 'Julie', role: 'Physiothérapeute' },
-  { key: 't1', name: 'Marc', role: 'Ostéopathe' },
-  { key: 't2', name: 'Sarah', role: 'Recruteuse' },
+const faces: { key: string; name: string; role: string; sil: SilhouetteName }[] = [
+  { key: 't0', name: 'Julie', role: 'Physiothérapeute', sil: 'femme-queue-de-cheval' },
+  { key: 't1', name: 'Marc', role: 'Ostéopathe', sil: 'homme' },
+  { key: 't2', name: 'Sarah', role: 'Recruteuse', sil: 'femme-chignon' },
 ];
 
 // 04 · Nos formules
@@ -167,8 +172,8 @@ const plans: { key: 'full' | 'self'; ic: IconKey; name: string; lead: string; te
     ic: 'done',
     name: 'Clé en main',
     lead: "On s'occupe de tout.",
-    text: 'On crée les visuels, on publie, on anime. Vous validez.',
-    items: ['Stratégie et calendrier', 'Création des visuels et des textes', 'Publication et animation', 'Rapport mensuel ou hebdomadaire'],
+    text: 'On crée vos visuels et vos textes, on programme et on publie. Vous validez.',
+    items: ['Stratégie et calendrier éditorial', 'Création des visuels et des textes', 'Programmation et publication de vos contenus', 'Rapport mensuel ou hebdomadaire'],
     reveal: 'left',
     hot: true,
   },
@@ -196,7 +201,7 @@ const deliverables: { key: 'cal' | 'strat' | 'create' | 'post' | 'report'; ic: I
   },
   { key: 'strat', ic: 'target', title: 'Une stratégie par réseau', text: 'Le rôle de chaque réseau, le ton, la fréquence.', reveal: 'right', step: '1' },
   { key: 'create', ic: 'pen', title: 'La création', text: 'Visuels et textes, à vos couleurs.', reveal: 'up', step: '1' },
-  { key: 'post', ic: 'bubble', title: 'Publication et animation', text: 'On publie, on répond, on anime.', reveal: 'up', step: '2' },
+  { key: 'post', ic: 'clock', title: 'Programmation et publication', text: 'On programme vos contenus et on les publie sur chaque réseau, au bon moment.', reveal: 'up', step: '2' },
   {
     key: 'report',
     ic: 'chart',
@@ -206,11 +211,19 @@ const deliverables: { key: 'cal' | 'strat' | 'create' | 'post' | 'report'; ic: I
   },
 ];
 
-// Calendrier de la tuile : 3 semaines de 5 jours, une case vide sur deux
+// Stratégie par réseau : rôle (repris du hero) et ton de chaque réseau
+const strategy: { key: NetKey; tone: string }[] = [
+  { key: 'instagram', tone: 'Chaleureux' },
+  { key: 'linkedin', tone: 'Expert' },
+  { key: 'facebook', tone: 'Proximité' },
+];
+
+// Calendrier de la tuile : un mois de 4 semaines (5 jours), une case vide sur deux
 const calendar: { net?: NetKey; label?: string }[] = [
   { net: 'instagram', label: 'Équipe' }, {}, { net: 'linkedin', label: 'Conseil' }, {}, { net: 'facebook', label: 'Nouveauté' },
   {}, { net: 'instagram', label: 'Coulisses' }, {}, { net: 'linkedin', label: 'Expertise' }, {},
   { net: 'facebook', label: 'Quartier' }, {}, { net: 'instagram', label: 'Visage' }, {}, { net: 'linkedin', label: 'Article' },
+  {}, { net: 'linkedin', label: 'Conseil' }, {}, { net: 'facebook', label: 'Événement' }, {},
 ];
 ---
 <Layout
@@ -227,7 +240,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
   <ServiceHero
     layout="split"
     pill="Gestion des réseaux sociaux"
-    sub={`Instagram, Facebook, LinkedIn${NB}: on définit le rôle de chaque réseau, on crée, on publie et on anime votre communauté, selon un calendrier régulier et en tenant compte des règles de votre secteur.`}
+    sub={`Instagram, Facebook, LinkedIn${NB}: on définit le rôle de chaque réseau, on crée et on publie vos contenus, selon un calendrier régulier et en tenant compte des règles de votre secteur.`}
     strong="Des réseaux qui montrent qui vous êtes, pas seulement ce que vous offrez."
     primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
     secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
@@ -248,7 +261,10 @@ const calendar: { net?: NetKey; label?: string }[] = [
           </div>
           <b class="rs-ig__name">votreclinique</b>
           <div class="rs-ig__hl"><span></span><span></span><span></span></div>
-          <div class="rs-ig__grid"><i class="p1"></i><i class="p2"></i><i class="p3"></i><i class="p4"></i><i class="p5"></i><i class="p6"></i></div>
+          <div class="rs-ig__grid">
+            <i class="p1"><Silhouette name="femme-queue-de-cheval" detail="simple" /></i><i class="p2"></i><i class="p3"><Silhouette name="homme" detail="simple" /></i>
+            <i class="p4"><Silhouette name="femme-chignon" detail="simple" tone="grad" /></i><i class="p5"></i><i class="p6"></i>
+          </div>
         </div>
         <figcaption class="rs-role"><span class="rs-net rs-net--instagram"><BrandLogo name="instagram" /></span><div><b>{NETS.instagram.name}</b><small>{NETS.instagram.role}</small></div></figcaption>
       </figure>
@@ -309,7 +325,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
               <div class="rs-av1">{[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0].map((on) => <i class:list={[{ 'is-on': on }]}></i>)}</div>
             )}
             {p.key === 'faces' && (
-              <div class="rs-av2"><span></span><span></span><span class="is-on"></span></div>
+              <div class="rs-av2"><span></span><span></span><span class="is-on"><Silhouette name="femme-queue-de-cheval" detail="simple" /></span></div>
             )}
             {p.key === 'same' && (
               <div class="rs-av3">
@@ -356,7 +372,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
 
       <div class="rs-face__vis" aria-hidden="true" data-reveal="right" data-reveal-step="1">
         {faces.map((f) => (
-          <div class:list={['rs-pt', `rs-pt--${f.key}`]}><span class="rs-pt__ph"></span><b>{f.name}</b><small>{f.role}</small></div>
+          <div class:list={['rs-pt', `rs-pt--${f.key}`]}><span class="rs-pt__ph"><Silhouette name={f.sil} /></span><b>{f.name}</b><small>{f.role}</small></div>
         ))}
       </div>
     </div>
@@ -404,17 +420,27 @@ const calendar: { net?: NetKey; label?: string }[] = [
                   </div>
                 )}
                 {t.key === 'strat' && (
-                  <div class="rs-st">
-                    {(['instagram', 'facebook', 'linkedin'] as NetKey[]).map((k) => (
-                      <span><span class:list={['rs-net', 'rs-net--sm', `rs-net--${k}`]}><BrandLogo name={k} /></span>{NETS[k].name}</span>
+                  <ul class="rs-st">
+                    {strategy.map((r) => (
+                      <li>
+                        <span class:list={['rs-net', 'rs-net--sm', `rs-net--${r.key}`]}><BrandLogo name={r.key} /></span>
+                        <span class="rs-st__txt"><b>{NETS[r.key].name}</b><small>{NETS[r.key].role}</small></span>
+                        <span class="rs-st__tone">{r.tone}</span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 )}
                 {t.key === 'create' && (
                   <div class="rs-cr"><span></span><span></span><span></span></div>
                 )}
                 {t.key === 'post' && (
-                  <div class="rs-bub"><span>Merci pour votre message, on vous répond en privé{NB}!</span></div>
+                  <div class="rs-sched">
+                    <div class="rs-sched__post">
+                      <span class="rs-sched__img"></span>
+                      <span class="rs-sched__lines"><i></i><i class="s"></i></span>
+                    </div>
+                    <span class="rs-sched__tag"><Fragment set:html={icon('clock')} />Programmée</span>
+                  </div>
                 )}
                 {t.key === 'report' && (
                   <div class="rs-rp">
@@ -423,7 +449,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
                       <div class="rs-rp__c">
                         <small>Publié</small>
                         <div class="rs-rp__ps">
-                          <div><i class="pf"></i><span>Équipe</span></div>
+                          <div><i class="pf"><Silhouette name="homme" detail="simple" /></i><span>Équipe</span></div>
                           <div><i class="pt"><b>Aa</b></i><span>Conseil</span></div>
                           <div><i class="pe"><Fragment set:html={icon('calendar')} /></i><span>Nouveauté</span></div>
                         </div>
@@ -431,7 +457,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
                       </div>
                       <div class="rs-rp__c rs-rp__c--win">
                         <small>Ce qui a fonctionné</small>
-                        <div class="rs-rp__top"><i></i><span><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg></span></div>
+                        <div class="rs-rp__top"><i><Silhouette name="femme-chignon" detail="simple" /></i><span><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg></span></div>
                         <b>La présentation de l'équipe</b>
                         <span class="rs-rp__like"><svg viewBox="0 0 24 24"><path d={GLYPH.heart} /></svg>j'aime</span>
                       </div>
@@ -503,7 +529,8 @@ const calendar: { net?: NetKey; label?: string }[] = [
     <div class="container">
       <SectionHead>Vos <span class="gradient-accent">questions</span>.</SectionHead>
 
-      <Faq items={faq} name="faq-reseaux" />
+      <!-- 5 questions : 2 à gauche (dont la 1re, ouverte), 3 à droite, pour des colonnes de même hauteur -->
+      <Faq items={faq} name="faq-reseaux" left={2} />
 
       <FurtherReading slugs={['marque-personnelle-sante-credibilite', 'candidat-passif-contenu-marque-employeur', 'authenticite-marketing-coherence']} />
     </div>
@@ -769,22 +796,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
   .rs-ig__grid .p5 { background: linear-gradient(150deg, var(--woop-pink), var(--hp-plum)); }
   .rs-ig__grid .p6 { background: color-mix(in srgb, var(--woop-orange) 45%, var(--text-primary)); }
 
-  /* Silhouettes (tête et épaules) sur 3 vignettes */
-  .rs-ig__grid .p1::after,
-  .rs-ig__grid .p3::after,
-  .rs-ig__grid .p5::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -8px;
-    width: 34px;
-    height: 30px;
-    border-radius: 20px 20px 0 0;
-    background: color-mix(in srgb, var(--text-primary) 60%, transparent);
-    transform: translateX(-50%);
-    box-shadow: 0 -22px 0 -6px color-mix(in srgb, var(--text-primary) 75%, transparent);
-  }
-
   /* LinkedIn : publication d'expertise */
   .rs-x--li .rs-x__card {
     display: flex;
@@ -969,6 +980,9 @@ const calendar: { net?: NetKey; label?: string }[] = [
     color: var(--md-pink-deep);
   }
 
+  /* Hero seulement : logos des réseaux dans un rond (mêmes couleurs) */
+  .rs-hv .rs-net { border-radius: 50%; }
+
   /* Rangée des pastilles de rôle : téléphone seulement */
   .rs-roles {
     position: relative;
@@ -1094,19 +1108,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
 
   .rs-av2 .is-on { background: var(--woop-gradient); }
 
-  .rs-av2 .is-on::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 12px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--hp-light);
-    transform: translateX(-50%);
-    box-shadow: 0 22px 0 6px var(--hp-light);
-  }
-
   /* Le même contenu partout */
   .rs-av3 {
     display: flex;
@@ -1214,7 +1215,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
     box-shadow: inset 0 0 0 2px var(--hp-light), 0 8px 22px color-mix(in srgb, var(--bg-deep) 25%, transparent);
   }
 
-  .rs-rl--hot dt,
+  .rs-rl--hot dt { color: var(--text-primary); }
   .rs-rl--hot dd { color: var(--hp-on-grad); }
 
   .rs-rl--hot dl { border-top-color: color-mix(in srgb, var(--bg-deep) 22%, transparent); }
@@ -1289,30 +1290,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
       height: 130px;
       border-radius: 14px;
     }
-  }
-
-  .rs-pt__ph::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 22%;
-    width: 32%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--text-primary) 75%, transparent);
-    transform: translateX(-50%);
-  }
-
-  .rs-pt__ph::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -20px;
-    width: 72%;
-    height: 50%;
-    border-radius: 50px 50px 0 0;
-    background: color-mix(in srgb, var(--text-primary) 60%, transparent);
-    transform: translateX(-50%);
   }
 
   .rs-pt b {
@@ -1554,6 +1531,7 @@ const calendar: { net?: NetKey; label?: string }[] = [
     }
   }
 
+  /* Ordinateur : cases un peu plus hautes. Hauteur fixe : le calendrier n'est pas étiré */
   @media (min-width: 1100px) {
     .rs-cal__g span { height: 62px; }
   }
@@ -1566,17 +1544,53 @@ const calendar: { net?: NetKey; label?: string }[] = [
   .rs-st {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 8px;
+    list-style: none;
   }
 
-  .rs-st > span {
+  .rs-st li {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 12px 8px 8px;
+    gap: 12px;
+    padding: 10px 12px 10px 10px;
     border-radius: 12px;
     background: color-mix(in srgb, var(--text-primary) 6%, transparent);
-    font-size: 13px;
+  }
+
+  .rs-st .rs-net {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+
+  .rs-st .rs-net :global(svg) { width: 16px; height: 16px; }
+
+  .rs-st__txt {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .rs-st__txt b {
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+
+  .rs-st__txt small {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--md-pink-soft);
+  }
+
+  .rs-st__tone {
+    flex: none;
+    padding: 5px 10px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--hp-line);
+    font-size: 11.5px;
     font-weight: 700;
     line-height: 1.3;
     color: var(--text-primary);
@@ -1598,16 +1612,67 @@ const calendar: { net?: NetKey; label?: string }[] = [
   .rs-cr span:nth-child(2) { background: var(--hp-blush); }
   .rs-cr span:nth-child(3) { background: var(--hp-plum); }
 
-  /* Publication et animation : une réponse */
-  .rs-bub span {
-    display: inline-block;
-    padding: 10px 14px;
-    border-radius: 14px 14px 14px 4px;
+  /* Programmation et publication : une publication programmée */
+  .rs-sched {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .rs-sched__post {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 12px;
+    background: var(--hp-light);
+    box-shadow: 0 12px 26px var(--hp-shadow);
+  }
+
+  .rs-sched__img {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 9px;
     background: var(--woop-gradient);
-    font-size: 12.5px;
+  }
+
+  .rs-sched__lines {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rs-sched__lines i {
+    display: block;
+    height: 7px;
+    border-radius: 4px;
+    background: var(--hp-skel);
+  }
+
+  .rs-sched__lines i.s { width: 60%; background: var(--hp-skel-2); }
+
+  .rs-sched__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px 6px 8px;
+    border-radius: 999px;
+    background: var(--woop-gradient);
+    font-size: 12px;
     font-weight: 700;
-    line-height: 1.4;
+    line-height: 1.2;
     color: var(--hp-on-grad);
+  }
+
+  .rs-sched__tag :global(svg) {
+    flex: none;
+    width: 16px;
+    height: 16px;
   }
 
   /* Rapport : fiche blanche, 3 colonnes (publié, ce qui a fonctionné, ce qu'on ajuste) */
@@ -1738,33 +1803,6 @@ const calendar: { net?: NetKey; label?: string }[] = [
 
   .rs-rp__ps .pe :global(svg) { width: 20px; height: 20px; }
 
-  /* Silhouettes (tête et épaules) */
-  .rs-rp__ps .pf::before,
-  .rs-rp__top i::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 9px;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--text-primary) 80%, transparent);
-    transform: translateX(-50%);
-  }
-
-  .rs-rp__ps .pf::after,
-  .rs-rp__top i::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -6px;
-    width: 26px;
-    height: 18px;
-    border-radius: 14px 14px 0 0;
-    background: color-mix(in srgb, var(--text-primary) 70%, transparent);
-    transform: translateX(-50%);
-  }
-
   .rs-rp__top { position: relative; }
 
   .rs-rp__top i {
@@ -1789,13 +1827,13 @@ const calendar: { net?: NetKey; label?: string }[] = [
     box-shadow: 0 4px 10px rgba(230, 43, 127, 0.3);
   }
 
-  .rs-rp__top svg,
+  .rs-rp__top > span svg,
   .rs-rp__like svg {
     width: 12px;
     height: 12px;
   }
 
-  .rs-rp__top svg { fill: var(--woop-pink); }
+  .rs-rp__top > span svg { fill: var(--woop-pink); }
 
   .rs-rp__like {
     display: inline-flex;

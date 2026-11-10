@@ -46,10 +46,17 @@ function walk(dir, base = dir) {
 
 const sha256 = (buf) => crypto.createHash('sha256').update(buf).digest('hex');
 
-/** URL de toutes les pages compilées (un index.html par page). */
+/** Page de redirection générée par Astro (option redirects : balise meta refresh). */
+const isRedirect = (dist, f) => /<meta http-equiv="refresh"/.test(fs.readFileSync(path.join(dist, f), 'utf8').slice(0, 600));
+
+/**
+ * URL de toutes les pages compilées (un index.html par page). Les pages de redirection (anciennes
+ * adresses, option redirects d'Astro) sont exclues : elles quittent la page dès le chargement, ce qui
+ * interromprait les relevés. Elles restent dans le manifeste des fichiers (empreinte comparée).
+ */
 function listPages(dist) {
   return walk(dist)
-    .filter((f) => f.endsWith('index.html'))
+    .filter((f) => f.endsWith('index.html') && !isRedirect(dist, f))
     .map((f) => '/' + f.replace(/index\.html$/, ''))
     .sort();
 }
