@@ -1865,6 +1865,9 @@ const calendar: { net?: NetKey; label?: string }[] = [
     gap: 20px;
   }
 
+  /* Tuiles-liens : le titre laisse la place du chevron (en haut à droite) */
+  .rs-srs :global(.md-sv__head) { padding-right: 52px; }
+
   @media (min-width: 768px) {
     .rs-srs {
       grid-template-columns: repeat(2, minmax(0, 1fr));

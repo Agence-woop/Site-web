@@ -1417,6 +1417,8 @@ const testimonials: { paragraphs: string[]; name: string; role?: string }[] = [
     .hp-tile--social .hp-ico { grid-column: 1; grid-row: 1; align-self: start; }
     .hp-tile--social .hp-tile__txt { grid-column: 1 / 3; grid-row: 2; max-width: 380px; }
     .hp-posts { grid-column: 3; grid-row: 1 / 3; gap: 16px; padding-top: 0; }
+    /* Tuile-lien : les publications laissent la place du chevron (en haut à droite) */
+    .hp-tile--social.hp-tile--link { padding-right: 90px; }
   }
 
   /* Téléphone : tuiles pleine largeur compactes. Icône et titre sur une ligne,
