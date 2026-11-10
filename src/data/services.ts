@@ -44,7 +44,7 @@ export const SERVICES: Service[] = [
     key: 'marque',
     label: 'Image de marque',
     role: 'La fondation de tout le reste',
-    hint: 'La fondation de tout le reste',
+    hint: 'La fondation',
     href: '/image-de-marque/',
     icon: ICONS.palette,
   },
