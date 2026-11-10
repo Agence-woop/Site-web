@@ -530,10 +530,10 @@ const faq = [
       <SectionHead over="08 · Santé ou recrutement" intro="Le même principe, adapté à vos deux marchés.">Santé <span class="gradient-accent">ou recrutement</span>.</SectionHead>
 
       <div class="pu-srs">
-        <ServiceTile kind="clinic" shape="sq" title="Pour une clinique" text={`Un entonnoir pour les patients${NB}: Meta fait connaître la clinique dans le quartier, Google capte ceux qui cherchent, le reciblage les ramène jusqu'à la réservation.`} reveal="left">
+        <ServiceTile kind="clinic" shape="sq" title="Pour une clinique" text={`Un entonnoir pour les patients${NB}: Meta fait connaître la clinique dans le quartier, Google capte ceux qui cherchent, le reciblage les ramène jusqu'à la réservation.`} reveal="left" href={`${base}/services-medical/`}>
           <Fragment slot="icon"><Fragment set:html={icon('clinic')} /></Fragment>
         </ServiceTile>
-        <ServiceTile kind="firm" shape="sq" title="Pour un cabinet de recrutement" text={`Un double entonnoir${NB}: Google pour les entreprises qui cherchent un cabinet, Meta pour les candidats qui ne cherchent pas encore.`} reveal="right" step="1">
+        <ServiceTile kind="firm" shape="sq" title="Pour un cabinet de recrutement" text={`Un double entonnoir${NB}: Google pour les entreprises qui cherchent un cabinet, Meta pour les candidats qui ne cherchent pas encore.`} reveal="right" step="1" href={`${base}/services-recrutement/`}>
           <Fragment slot="icon"><Fragment set:html={icon('case')} /></Fragment>
         </ServiceTile>
       </div>
@@ -1063,7 +1063,8 @@ const faq = [
 
   .pu-fn dd.pu-fn__kpi { color: var(--md-pink-soft); }
 
-  /* Étape mise en avant, sur le dégradé : titre en blanc, petits textes en --hp-on-grad */
+  /* Étape mise en avant, sur le dégradé : titre et intitulés (Réseau, Objectif, Ce qu'on mesure)
+     en blanc, comme la carte Facebook de la page Réseaux sociaux ; petits textes en --hp-on-grad */
   .pu-fn--hot .pu-ic {
     background: var(--hp-light);
     color: var(--md-pink-deep);
@@ -1072,9 +1073,10 @@ const faq = [
 
   .pu-fn--hot .pu-fn__n,
   .pu-fn--hot .pu-fn__where,
-  .pu-fn--hot dt,
   .pu-fn--hot dd,
   .pu-fn--hot dd.pu-fn__kpi { color: var(--hp-on-grad); }
+
+  .pu-fn--hot dt { color: var(--text-primary); }
 
   .pu-fn--hot dl { border-top-color: color-mix(in srgb, var(--bg-deep) 22%, transparent); }
 
@@ -1688,6 +1690,9 @@ const faq = [
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
   }
+
+  /* Tuiles-liens : le titre laisse la place du chevron (en haut à droite) */
+  .pu-srs :global(.md-sv__head) { padding-right: 52px; }
 
   @media (min-width: 768px) {
     .pu-srs {

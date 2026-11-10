@@ -150,7 +150,7 @@ const deliverables: { key: 'id' | 'pos' | 'tone' | 'ds' | 'decl'; shape: 'sq' | 
     shape: 'wide',
     ic: 'pen',
     title: 'Les déclinaisons',
-    text: `Votre marque appliquée là où elle vit${NB}: site, réseaux sociaux, documents, cartes, signalétique de la clinique.`,
+    text: `Votre marque appliquée là où elle vit${NB}: site, réseaux sociaux, documents, cartes, signalétique de votre clinique ou de votre cabinet.`,
     reveal: 'up',
   },
 ];
@@ -200,23 +200,23 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
       <div class="im-hv__ty"><b>Aa</b><div><small>Typographie</small><i></i><i class="s"></i></div></div>
 
       <!-- Cartes de visite (verso blanc, recto en dégradé) -->
-      <div class="im-hv__back"><span class="im-vc im-vc--sm"><b>VC</b></span><b>Votre nom</b><small>Physiothérapeute</small><i></i><i class="s"></i></div>
-      <div class="im-hv__front"><span class="im-vc im-vc--w"><b>VC</b></span><b>Votre clinique</b><small>Santé &amp; mouvement</small></div>
+      <div class="im-hv__back"><span class="im-vc im-vc--sm"><b>VM</b></span><b>Votre nom</b><small>Physiothérapeute</small><i></i><i class="s"></i></div>
+      <div class="im-hv__front"><span class="im-vc im-vc--w"><b>VM</b></span><b>Votre marque</b><small>Santé &amp; mouvement</small></div>
 
       <!-- Livre de marque -->
       <div class="im-hv__book">
         <div class="im-bk__h"><small>Livre de marque</small><small>p. 04</small></div>
-        <div class="im-bk__main"><span class="im-bk__cs"></span><span class="im-vc im-vc--xl"><b>VC</b></span><b>Votre clinique</b></div>
+        <div class="im-bk__main"><span class="im-bk__cs"></span><span class="im-vc im-vc--xl"><b>VM</b></span><b>Votre marque</b></div>
         <small class="im-bk__l">Déclinaisons</small>
         <div class="im-bk__var">
-          <span class="v1"><span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span></span>
-          <span class="v2"><span class="im-vc im-vc--xs"><b>VC</b></span></span>
-          <span class="v3"><span class="im-vc im-vc--xs im-vc--dk"><b>VC</b></span></span>
+          <span class="v1"><span class="im-vc im-vc--xs im-vc--w"><b>VM</b></span></span>
+          <span class="v2"><span class="im-vc im-vc--xs"><b>VM</b></span></span>
+          <span class="v3"><span class="im-vc im-vc--xs im-vc--dk"><b>VM</b></span></span>
         </div>
       </div>
 
       <!-- Signalétique de l'accueil -->
-      <div class="im-hv__sign"><span class="im-vc im-vc--sm"><b>VC</b></span><div><b>Votre clinique</b><small>Accueil, 1er étage</small></div></div>
+      <div class="im-hv__sign"><span class="im-vc im-vc--sm"><b>VM</b></span><div><b>Votre marque</b><small>Accueil, 1er étage</small></div></div>
     </div>
     </Fragment>
   </ServiceHero>
@@ -233,13 +233,13 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
               <div class="im-a1">
                 <span class="im-a1__old">Logo<br />2014</span>
                 <span class="im-a1__go"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg></span>
-                <span class="im-vc im-vc--lg"><b>VC</b></span>
+                <span class="im-vc im-vc--lg"><b>VM</b></span>
               </div>
             )}
             {p.key === 'value' && (
               <div class="im-a2">
-                <div class="im-a2__col"><span class="im-a2__bar im-a2__bar--hi"></span><small>Vos services</small></div>
                 <div class="im-a2__col"><span class="im-a2__bar"></span><small>Votre image</small></div>
+                <div class="im-a2__col im-a2__col--hi"><span class="im-a2__bar im-a2__bar--hi"></span><small>Vos services</small></div>
               </div>
             )}
             {p.key === 'mixed' && (
@@ -273,7 +273,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
                   {t.key === 'google' && (
                     <>
                       <small class="im-mk__k">Fiche Google</small>
-                      <div class="im-mk__row"><span class="im-mk__lg"><b>VC</b></span><b class="im-mk__nm">Votre clinique</b></div>
+                      <div class="im-mk__row"><span class="im-mk__lg"><b>VM</b></span><b class="im-mk__nm">Votre marque</b></div>
                       <i class="im-mk__ln"></i>
                       <div class="im-mk__ph"><i></i><i></i><i></i></div>
                     </>
@@ -281,21 +281,21 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
                   {t.key === 'site' && (
                     <>
                       <div class="im-mk__bar"><i></i><i></i><i></i></div>
-                      <b class="im-mk__nm">Votre clinique</b>
+                      <b class="im-mk__nm">Votre marque</b>
                       <i class="im-mk__ln"></i>
                       <span class="im-mk__cta">Réserver</span>
                     </>
                   )}
                   {t.key === 'desk' && (
                     <>
-                      <span class="im-mk__lg"><b>VC</b></span>
-                      <b class="im-mk__nm">Votre clinique</b>
+                      <span class="im-mk__lg"><b>VM</b></span>
+                      <b class="im-mk__nm">Votre marque</b>
                       <small>Accueil, 1er étage</small>
                     </>
                   )}
                   {t.key === 'mail' && (
                     <>
-                      <div class="im-mk__row"><span class="im-mk__lg"><b>VC</b></span><b class="im-mk__nm">Votre clinique</b></div>
+                      <div class="im-mk__row"><span class="im-mk__lg"><b>VM</b></span><b class="im-mk__nm">Votre marque</b></div>
                       <small>Rendez-vous confirmé</small>
                       <span class="im-mk__cta">Ajouter au calendrier</span>
                     </>
@@ -308,7 +308,11 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
           ))}
         </ul>
 
-        <p class="im-cap" aria-live="polite" data-cap-off={captions.off} data-cap-on={captions.on}><span data-im-cap>{captions.on}</span></p>
+        <div class="im-cap-box">
+          <span class="im-cap__size" aria-hidden="true">{captions.off}</span>
+          <span class="im-cap__size" aria-hidden="true">{captions.on}</span>
+          <p class="im-cap" aria-live="polite" data-cap-off={captions.off} data-cap-on={captions.on}><span data-im-cap>{captions.on}</span></p>
+        </div>
       </div>
 
       <div class="md-svc-cta" data-reveal="up">
@@ -330,7 +334,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
               <div class:list={['md-mui', `im-mui--${t.key}`]} aria-hidden="true">
                 {t.key === 'id' && (
                   <>
-                    <div class="im-id__lg"><span class="im-vc im-vc--md"><b>VC</b></span><b>Votre clinique</b></div>
+                    <div class="im-id__lg"><span class="im-vc im-vc--md"><b>VM</b></span><b>Votre marque</b></div>
                     <div class="im-id__row"><span class="o"></span><span class="p"></span><span class="pl"></span><span class="b"></span><span class="w"></span></div>
                     <div class="im-id__ty"><b>Aa</b><div><i></i><i class="s"></i></div></div>
                   </>
@@ -359,32 +363,32 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
                           {v.key === 'web' && (
                             <div class="im-dc__mk im-dc__web">
                               <div class="im-dc__web-bar"><i></i><i></i><i></i></div>
-                              <div class="im-dc__web-hero"><span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span><i></i><span class="im-dc__pill"></span></div>
+                              <div class="im-dc__web-hero"><span class="im-vc im-vc--xs im-vc--w"><b>VM</b></span><i></i><span class="im-dc__pill"></span></div>
                               <div class="im-dc__web-row"><i></i><i></i></div>
                             </div>
                           )}
                           {v.key === 'post' && (
                             <div class="im-dc__mk im-dc__post">
                               <div class="im-dc__post-top"><span class="im-dc__av"></span><i></i></div>
-                              <div class="im-dc__post-img"><span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span></div>
+                              <div class="im-dc__post-img"><span class="im-vc im-vc--xs im-vc--w"><b>VM</b></span></div>
                               <div class="im-dc__post-foot"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0112 7.6a4.3 4.3 0 017.5 2.8c0 5.5-7.5 10.1-7.5 10.1z" /></svg><i></i></div>
                             </div>
                           )}
                           {v.key === 'doc' && (
                             <div class="im-dc__mk im-dc__doc">
-                              <div class="im-dc__doc-h"><span class="im-vc im-vc--xs"><b>VC</b></span><i></i></div>
+                              <div class="im-dc__doc-h"><span class="im-vc im-vc--xs"><b>VM</b></span><i></i></div>
                               <i></i><i></i><i class="s"></i><i></i><i class="s"></i>
                             </div>
                           )}
                           {v.key === 'card' && (
                             <div class="im-dc__mk im-dc__card">
-                              <span class="im-vc im-vc--xs im-vc--w"><b>VC</b></span>
+                              <span class="im-vc im-vc--xs im-vc--w"><b>VM</b></span>
                               <div><b>Votre nom</b><i></i></div>
                             </div>
                           )}
                           {v.key === 'sign' && (
                             <div class="im-dc__mk im-dc__sign">
-                              <span class="im-vc im-vc--xs"><b>VC</b></span>
+                              <span class="im-vc im-vc--xs"><b>VM</b></span>
                               <small>Accueil · 1er étage</small>
                             </div>
                           )}
@@ -675,7 +679,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     .md-svc-cta { margin-top: 44px; }
   }
 
-  /* Monogramme « VC » de la marque fictive « Votre clinique » : rond en dégradé, lettres blanches */
+  /* Monogramme « VM » de la marque fictive « Votre marque » : rond en dégradé, lettres blanches */
   .im-vc {
     display: inline-flex;
     align-items: center;
@@ -1080,7 +1084,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
 
   .im-a1__go svg { width: 22px; height: 22px; }
 
-  /* Vos services (barre haute, couleurs WOOP) / votre image (barre basse, grise), sans chiffres */
+  /* Votre image (barre basse, grise), puis vos services (barre haute, couleurs WOOP), sans chiffres */
   .im-a2 {
     display: flex;
     align-items: flex-end;
@@ -1117,7 +1121,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     color: var(--text-secondary);
   }
 
-  .im-a2__col:first-child small { color: var(--text-primary); }
+  .im-a2__col--hi small { color: var(--text-primary); }
 
   /* Supports incohérents : formes qui ne se répondent pas, en gris clair, moyen et sombre */
   .im-a3 {
@@ -1372,7 +1376,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     transition: background-color 600ms ease, border-radius 600ms ease, color 600ms ease;
   }
 
-  /* Avec WOOP : la même marque « Votre clinique » à nos couleurs, sur les 4 supports */
+  /* Avec WOOP : la même marque « Votre marque » à nos couleurs, sur les 4 supports */
   .im-sw.is-on .im-mk {
     box-shadow: 0 0 0 2px rgba(230, 43, 127, 0.25), 0 14px 30px rgba(230, 43, 127, 0.18);
   }
@@ -1417,16 +1421,45 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   .im-sw.is-off .im-mk--mail .im-mk__lg { border-radius: 50%; background: var(--im-g1); }
   .im-sw.is-off .im-mk--mail .im-mk__cta { border-radius: 0; background: var(--im-g2); color: var(--text-primary); }
 
-  /* Phrase sous les cartes : change avec l'état (fondu court) */
-  .im-cap {
+  /* Phrase sous les cartes : change avec l'état (fondu court). Les 2 phrases, invisibles, sont
+     empilées dans la même case de grille que la phrase affichée : la zone prend la hauteur de la
+     plus longue, et rien ne saute au changement d'état. Une seule ligne sur ordinateur (dès
+     1024 px), 2 lignes au plus sur tablette et cellulaire. */
+  .im-cap-box {
+    display: grid;
+    width: 100%;
     max-width: 640px;
+  }
+
+  .im-cap-box > * { grid-area: 1 / 1; }
+
+  .im-cap,
+  .im-cap__size {
     font-size: 17px;
     font-weight: 700;
     line-height: 1.5;
     text-align: center;
-    color: var(--text-secondary);
     text-wrap: balance;
+  }
+
+  .im-cap__size { visibility: hidden; }
+
+  .im-cap {
+    color: var(--text-secondary);
     transition: opacity 220ms ease;
+  }
+
+  /* Petits cellulaires : un peu plus petite, pour tenir en 2 lignes */
+  @media (max-width: 419px) {
+    .im-cap,
+    .im-cap__size { font-size: 15px; }
+  }
+
+  @media (min-width: 1024px) {
+    .im-cap-box { max-width: none; }
+
+    .im-cap,
+    .im-cap__size { white-space: nowrap; }
   }
 
   .im-cap.is-fading { opacity: 0; }
@@ -1567,27 +1600,50 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
 
   .im-id__ty i.s { width: 55%; }
 
-  /* Positionnement : trois étapes reliées, la promesse en dégradé */
+  /* Positionnement : trois étapes reliées, la promesse en dégradé. Dès 600 px, les étiquettes se
+     répartissent sur toute la largeur du cadre et les traits s'allongent d'autant (à parts égales).
+     Cellulaire : les 3 étiquettes l'une sous l'autre, reliées par de courts traits verticaux. */
   .im-pos {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 0;
+    flex-direction: column;
+    align-items: flex-start;
     list-style: none;
   }
 
   .im-pos li {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .im-pos li + li::before {
     content: '';
     display: block;
-    width: 18px;
-    height: 2px;
-    margin: 0 4px;
-    background: var(--woop-gradient);
+    flex: none;
+    width: 2px;
+    height: 12px;
+    margin: 4px 0 4px 18px;
+    background: linear-gradient(180deg, var(--woop-orange), var(--woop-pink));
+  }
+
+  @media (min-width: 600px) {
+    .im-pos {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .im-pos li { flex-direction: row; align-items: center; }
+
+    .im-pos li + li { flex: 1 1 auto; }
+
+    .im-pos li + li::before {
+      flex: 1 1 18px;
+      width: auto;
+      min-width: 18px;
+      height: 2px;
+      margin: 0 6px;
+      background: var(--woop-gradient);
+    }
   }
 
   .im-pos span {
