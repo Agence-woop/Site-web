@@ -10,6 +10,8 @@ import ServiceHero from '../components/services/ServiceHero.astro';
 import AudienceCard from '../components/services/AudienceCard.astro';
 import ServiceTile from '../components/services/ServiceTile.astro';
 import FounderPortrait from '../components/services/FounderPortrait.astro';
+import Silhouette from '../components/Silhouette.astro';
+import BrandLogo from '../components/BrandLogo.astro';
 import Steps from '../components/services/Steps.astro';
 import { team } from '../data/team';
 import { NB } from '../utils/typo';
@@ -96,9 +98,9 @@ const profiles: {
 // - wide : 2 colonnes, en-tête et texte à gauche, illustration à droite ;
 // - sq   : 1 colonne.
 // `step` : décalage d'apparition (data-reveal-step), recalculé dans l'ordre de lecture de chaque rangée :
-// Expérience 0 · Acquisition 0, Image de marque 1 · Site web 0, Stratégie 1, Réputation 2.
+// Expérience 0 · Acquisition 0, Image de marque 1 · Site web 0, Réseaux sociaux 1, Réputation 2.
 const services: {
-  key: 'cx' | 'acq' | 'brand' | 'web' | 'strat' | 'rep';
+  key: 'cx' | 'acq' | 'brand' | 'web' | 'social' | 'rep';
   shape: 'feat' | 'wide' | 'sq';
   title: string;
   text: string;
@@ -135,22 +137,23 @@ const services: {
     key: 'web',
     shape: 'sq',
     title: 'Site web et présence en ligne',
-    text: 'Sites de conversion pensés pour transformer un visiteur en rendez-vous. Présence soignée sur les réseaux sociaux avec un calendrier éditorial régulier. Le tout conforme aux meilleures pratiques web et optimisé pour Google.',
+    text: 'Sites de conversion pensés pour transformer un visiteur en rendez-vous. Le tout conforme aux meilleures pratiques web et optimisé pour Google.',
     reveal: 'up',
   },
   {
-    key: 'strat',
+    key: 'social',
     shape: 'sq',
-    title: 'Stratégie et conseil',
-    text: "Audit, positionnement, plan d'action. Pour les directeurs de clinique qui veulent une vision claire avant de lancer leurs investissements marketing.",
+    title: 'Gestion des réseaux sociaux',
+    text: "Un rôle par réseau, un calendrier éditorial régulier et les visages de votre équipe mis de l'avant.",
     reveal: 'up',
     step: '1',
+    href: `${base}/gestion-reseaux-sociaux/`,
   },
   {
     key: 'rep',
     shape: 'sq',
     title: 'Gestion de la réputation en ligne',
-    text: "Avis Google, réponses aux commentaires, suivi de votre image sur le web. On vous aide à construire et protéger la réputation de votre clinique, aujourd'hui votre actif le plus visible.",
+    text: "Avis Google, réponses aux avis, suivi de votre image sur le web. On vous aide à construire et protéger la réputation de votre clinique, aujourd'hui votre actif le plus visible.",
     reveal: 'up',
     step: '2',
   },
@@ -291,7 +294,7 @@ const steps = [
               {t.key === 'acq' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg>)}
               {t.key === 'brand' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 000 18c1 0 1.7-.8 1.7-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 005-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11.5" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/><circle cx="17.2" cy="11" r="1"/></svg>)}
               {t.key === 'web' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>)}
-              {t.key === 'strat' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/></svg>)}
+              {t.key === 'social' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>)}
               {t.key === 'rep' && (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg>)}
             </Fragment>
             <Fragment slot="illustration">
@@ -325,10 +328,14 @@ const steps = [
                       <div class="md-phn"><i></i><span></span></div>
                     </>
                   )}
-                  {t.key === 'strat' && (
+                  {t.key === 'social' && (
                     <>
-                      <div class="md-road"><span class="md-road__d is-on"></span><i></i><span class="md-road__d is-on"></span><i class="is-dim"></i><span class="md-road__d"></span></div>
-                      <div class="md-rl"><i></i><i></i><i></i></div>
+                      <div class="md-so__top"><span class="md-so__net"><BrandLogo name="instagram" /></span><span class="md-so__ln"><i></i><i></i></span></div>
+                      <div class="md-so__grid">
+                        <i class="md-so__p1"><Silhouette name="femme-queue-de-cheval" detail="simple" /></i>
+                        <i class="md-so__p2"><Silhouette name="homme" detail="simple" tone="grad" /></i>
+                        <i class="md-so__p3"><Silhouette name="femme-chignon" detail="simple" /></i>
+                      </div>
                     </>
                   )}
                   {t.key === 'rep' && (
@@ -1054,13 +1061,16 @@ const steps = [
     .md-sv--acq { grid-column: 1 / span 2; grid-row: 2; }
     .md-sv--brand { grid-column: 3; grid-row: 2; }
     .md-sv--web { grid-column: 1; grid-row: 3; }
-    .md-sv--strat { grid-column: 2; grid-row: 3; }
+    .md-sv--social { grid-column: 2; grid-row: 3; }
     .md-sv--rep { grid-column: 3; grid-row: 3; }
   }
 
-  /* En-tête, texte, puis illustration en bas : Image de marque, Stratégie */
+  /* En-tête, texte, puis illustration en bas : Image de marque, Réseaux sociaux */
   .md-sv--brand .md-mui,
-  .md-sv--strat .md-mui { margin-top: auto; }
+  .md-sv--social .md-mui { margin-top: auto; }
+
+  /* Réseaux sociaux (tuile-lien) : le titre laisse la place du chevron (en haut à droite) */
+  .md-sv--social :global(.md-sv__head) { padding-right: 44px; }
 
   /* En-tête, illustration, puis texte : Site web, Réputation */
   .md-sv--web .md-sv__text,
@@ -1294,31 +1304,66 @@ const steps = [
   .md-phn i { display: block; height: 5px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 40%, transparent); }
   .md-phn span { display: block; height: 18px; border-radius: 6px; background: var(--woop-gradient); }
 
-  /* Stratégie : feuille de route */
-  .md-mui--strat {
-    gap: 12px;
-    background: transparent;
-    box-shadow: none;
-    border: 1.5px dashed color-mix(in srgb, var(--text-primary) 18%, transparent);
+  /* Réseaux sociaux : profil (logo Instagram en blanc sur le dégradé) et 3 publications avec les
+     silhouettes de la page Gestion des réseaux sociaux (crème sur fond clair ou dégradé, dégradé
+     sur fond sombre) */
+  .md-mui--social { gap: 9px; }
+
+  .md-so__top {
+    display: flex;
+    align-items: center;
+    gap: 9px;
   }
 
-  .md-road { display: flex; align-items: center; }
-
-  .md-road__d {
+  .md-so__net {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--text-primary) 30%, transparent);
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--woop-gradient);
+    color: var(--text-primary);
   }
 
-  .md-road__d.is-on { background: var(--woop-gradient); box-shadow: 0 0 12px rgba(230, 43, 127, 0.6); }
-  .md-road i { flex: 1; height: 2px; background: var(--woop-gradient); }
-  .md-road i.is-dim { background: color-mix(in srgb, var(--text-primary) 15%, transparent); }
+  .md-so__net :global(svg) { width: 14px; height: 14px; }
 
-  .md-rl { display: flex; justify-content: space-between; }
-  .md-rl i { display: block; width: 22%; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--text-primary) 28%, transparent); }
-  .md-rl i:nth-child(2) { width: 32%; }
+  .md-so__ln {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .md-so__ln i {
+    display: block;
+    width: 55%;
+    height: 6px;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  }
+
+  .md-so__ln i + i { width: 35%; background: color-mix(in srgb, var(--text-primary) 16%, transparent); }
+
+  .md-so__grid {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    min-height: 0;
+  }
+
+  .md-so__grid i {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 9px;
+  }
+
+  .md-so__p1 { background: var(--woop-gradient); }
+  .md-so__p2 { background: var(--hp-plum); }
+  .md-so__p3 { background: linear-gradient(150deg, var(--hp-pinklight), var(--woop-pink)); }
 
   /* Réputation : avis et réponse */
   .md-mui--rep {
