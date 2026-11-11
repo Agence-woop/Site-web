@@ -15,7 +15,9 @@
 //   l'autre colonne.
 //
 // Props
-// - items : liste { q, a } (textes simples ; les apostrophes et NB restent tels quels)
+// - items : liste { q, a } (textes simples ; les apostrophes et NB restent tels quels) ; html,
+//   facultatif : la réponse en HTML (par exemple avec un lien), affichée à la place de a (a reste
+//   le texte simple, repris par les données structurées FAQPage)
 // - name : nom du groupe (attribut name des <details>), unique dans la page
 // - open : rang de la question ouverte au chargement (0 par défaut ; -1 pour aucune)
 // - left : nombre de questions de la colonne de gauche (par défaut, la moitié arrondie au-dessus) ;
@@ -26,6 +28,7 @@ import { text } from '../../utils/html';
 interface Item {
   q: string;
   a: string;
+  html?: string;
 }
 
 interface Props {
@@ -45,7 +48,7 @@ const columns = [items.slice(0, half), items.slice(half)].map((col, c) => col.ma
       {col.map((item) => (
         <details class="md-faq__item md-glass" name={name} open={item.rank === open}>
           <summary class="md-faq__q"><span set:html={text(item.q)} /><span class="md-faq__pl" aria-hidden="true"></span></summary>
-          <div class="md-faq__a"><p set:html={text(item.a)} /></div>
+          <div class="md-faq__a"><p set:html={item.html ?? text(item.a)} /></div>
         </details>
       ))}
     </div>

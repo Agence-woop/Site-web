@@ -34,7 +34,10 @@ const faq = [
   },
   {
     q: `Gérez-vous les commentaires et les messages${NB}?`,
-    a: "Non. Répondre à un patient ou à un candidat demande de connaître son dossier, et c'est à votre équipe que revient cette relation. On vous conseille sur le ton à adopter.",
+    a: "Non. Répondre à un patient ou à un candidat demande de connaître son dossier, et c'est à votre équipe que revient cette relation. On vous conseille sur le ton à adopter. Les avis Google, eux, font partie de notre service de conseil en expérience patient.",
+    // Même réponse, avec un lien discret vers la page Conseil en expérience patient (a reste le
+    // texte simple des données structurées FAQPage)
+    html: `Non. Répondre à un patient ou à un candidat demande de connaître son dossier, et c'est à votre équipe que revient cette relation. On vous conseille sur le ton à adopter. Les avis Google, eux, font partie de notre service de <a class="link-inline" href="${base}/conseil-experience-patient/">conseil en expérience patient</a>.`,
   },
   {
     q: `Est-ce conforme aux règles de mon ordre${NB}?`,

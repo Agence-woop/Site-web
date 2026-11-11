@@ -49,7 +49,7 @@ Le but n'a jamais été d'atteindre un 5,0 parfait. C'est d'avoir une salle d'at
 
 ## La salle que vous ne voyez pas
 
-Vous pouvez continuer à soigner la salle d'attente que vos patients découvrent en deuxième. Vous devriez, d'ailleurs, elle compte encore. Mais elle n'est plus la première.
+Vous pouvez continuer à soigner [la salle d'attente que vos patients découvrent en deuxième](/conseil-experience-patient/). Vous devriez, d'ailleurs, elle compte encore. Mais elle n'est plus la première.
 
 La première, aujourd'hui, c'est vos avis Google. C'est là que le patient s'assoit, observe, et décide s'il vous fait confiance. La question n'est donc pas de savoir si vous avez une salle d'attente en ligne. Vous en avez une, qu'elle soit tenue ou non. La seule question, c'est de savoir si elle est aussi soignée que celle où vous avez mis de belles chaises.
 
