@@ -315,7 +315,8 @@ const jsonLd = [
     <div class="container">
       <h2 class="acq-h2 acq-h2--faq" data-reveal="left">Questions <span class="gradient-accent acq-kw">fréquentes</span></h2>
       <!-- Même FAQ que les pages Services : chevrons, 2 colonnes, accordéon exclusif -->
-      <Faq items={faq} name="faq-test-visibilite" />
+      <!-- 5 questions, toutes fermées : 2 par colonne, puis la 5e sur toute la largeur (colonnes de même hauteur) -->
+      <Faq items={faq} name="faq-test-visibilite" wide />
     </div>
   </section>
 
