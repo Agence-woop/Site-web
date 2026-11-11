@@ -86,19 +86,29 @@ const services = liveServices();
     margin-bottom: 48px;
   }
 
-  /* Tablette : présentation sur toute la largeur, puis les 4 rubriques côte à côte */
+  /* Tablette et ordinateur : chaque rubrique prend la largeur de son contenu le plus long (colonnes
+     auto), et l'espace restant est réparti à parts égales entre les colonnes (space-between) :
+     l'écart entre la fin du texte le plus long d'une rubrique et le début de la suivante est donc
+     identique partout, et la dernière rubrique (Contact) s'aligne sur le bord droit du contenu.
+     column-gap fixe le plus petit écart possible : quand la place manque (vers 768 px), les
+     colonnes reviennent à leur largeur minimale et un libellé passe sur 2 lignes, sans jamais
+     coller à la rubrique suivante. Ajouter des liens dans une rubrique (par ex. Services) ne
+     demande aucun réglage.
+     Tablette : présentation sur toute la largeur, puis les 4 rubriques côte à côte. */
   @media (min-width: 768px) {
     .footer__grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(4, auto);
+      justify-content: space-between;
       gap: 32px;
     }
 
     .footer__brand { grid-column: 1 / -1; }
   }
 
-  /* Ordinateur : présentation et 4 rubriques sur une ligne */
+  /* Ordinateur : présentation et 4 rubriques sur une ligne ; la présentation garde sa largeur
+     (texte limité à 320 px) et le même écart la sépare de la 1re rubrique */
   @media (min-width: 1200px) {
-    .footer__grid { grid-template-columns: 1.6fr repeat(4, minmax(0, 1fr)); }
+    .footer__grid { grid-template-columns: auto repeat(4, auto); }
 
     .footer__brand { grid-column: auto; }
   }
