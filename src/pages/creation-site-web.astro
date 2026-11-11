@@ -1754,6 +1754,36 @@ const measures: { page: string; w: string }[] = [
     .wb-bento :global(.md-sv--measure) { grid-column: 3 / span 2; grid-row: 2; }
   }
 
+  /* Titres des tuiles : ils restent toujours dans leur tuile. « Référencement », le plus long mot
+     des titres, mesure 7,5 fois la taille de la police (Inter, 700) : la taille du titre suit la
+     largeur du contenu de la tuile (requête de conteneur, unité cqi), sans dépasser 21 px, la taille
+     du composant. Elle ne baisse que là où le mot ne tient pas : tuiles d'une colonne, vers 600 px
+     et de 1 100 à 1 250 px environ. Icône et titre restent sur la même ligne. */
+  .wb-bento :global(.md-sv--sq) { container-type: inline-size; }
+
+  .wb-bento :global(.md-sv--sq h3) { font-size: min(21px, calc((100cqi - 68px) / 7.6)); }
+
+  /* Tuiles les plus étroites (moins de 210 px de contenu : 1 100 à 1 190 px environ) : pastille
+     de l'icône et marges un peu réduites, pour garder un titre lisible (17 à 18 px au plus serré) */
+  @media (min-width: 1100px) and (max-width: 1279px) {
+    .wb-bento :global(.md-sv--img),
+    .wb-bento :global(.md-sv--seo) { padding: 28px 24px; }
+  }
+
+  @container (max-width: 210px) {
+    .wb-bento :global(.md-sv__head) { gap: 12px; }
+
+    .wb-bento :global(.md-xi) {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+    }
+
+    .wb-bento :global(.md-xi svg) { width: 22px; height: 22px; }
+
+    .wb-bento :global(.md-sv--sq h3) { font-size: min(21px, calc((100cqi - 56px) / 7.6)); }
+  }
+
   /* Mini-illustrations des tuiles : boîte commune, puis dessin propre à chaque tuile */
   .md-mui {
     display: flex;
