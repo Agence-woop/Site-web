@@ -426,6 +426,35 @@ const navItems: NavItem[] = [
     box-shadow: 0 4px 16px rgba(230, 43, 127, 0.35);
   }
 
+  /* Menu burger : quand « Réserver un appel découverte » et le bouton téléphone ne tiennent pas sur
+     une ligne (téléphones), le bouton téléphone passe dessous, en entier. Le bouton principal ne
+     dépasse jamais la largeur du menu (son texte peut passer sur 2 lignes en dernier recours). */
+  @media (max-width: 1279px) {
+    .header__actions {
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+
+    .header__actions :global(.btn) {
+      max-width: 100%;
+      white-space: normal;
+    }
+  }
+
+  /* Très petits écrans (moins de 360 px) : marges du menu et du bouton réduites, pour garder le
+     bouton sur une ligne */
+  @media (max-width: 359px) {
+    .header__menu {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
+    .header__actions :global(.btn) {
+      padding-left: 22px;
+      padding-right: 22px;
+    }
+  }
+
   /* Menu complet à partir de 1280 px (en dessous, menu burger) : aucun libellé sur deux lignes.
      (1170 px avant l'entrée « Services » : avec elle, le menu complet ne tient sur une ligne
      qu'à partir de 1240 px environ.) */

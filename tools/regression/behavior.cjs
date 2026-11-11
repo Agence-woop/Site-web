@@ -342,7 +342,7 @@ async function brandSwitch(browser, base) {
 }
 
 // Page Création de site web : illustrations animées ([data-wb-anim]) : curseur du hero, roue de
-// chargement (01), curseur de la page WOOP (02), jauge (04). Elles tournent quand elles sont à
+// chargement (01), curseur de la page WOOP (02), jauge en boucle de 4 s (04). Elles tournent quand elles sont à
 // l'écran, sont en pause hors de l'écran (temps de l'animation figé), et n'existent pas avec le
 // mouvement réduit (état final affiché). Le texte du hero ne bouge jamais.
 async function siteAnimations(browser, base) {
@@ -381,14 +381,30 @@ async function siteAnimations(browser, base) {
     const off = (await frozen(pg, SEL.woop)) && (await frozen(pg, SEL.spin));
     await to(pg, '.wb-br');
     const heroBack = await advancing(pg, SEL.hero);
-    // Jauge : en attente (aiguille à gauche) tant qu'elle n'est pas à l'écran, puis un seul balayage
-    const before = await pg.evaluate(() => ({ r: getComputedStyle(document.querySelector('.wb-gauge__needle')).rotate, a: document.querySelector('.wb-gauge__needle').getAnimations()[0]?.playState }));
-    await to(pg, '.wb-gauge'); await pg.waitForTimeout(2200);
-    const after = await pg.evaluate(() => ({ r: getComputedStyle(document.querySelector('.wb-gauge__needle')).rotate, a: document.querySelector('.wb-gauge__needle').getAnimations()[0]?.playState, arc: getComputedStyle(document.querySelector('.wb-gauge__arc')).strokeDashoffset }));
     ok(heroText && heroRuns && woopWaits && spinRuns && heroOff && woopRuns && off && heroBack,
       `Création de site web ${w}px : animations à l'écran seulement (hero ${heroRuns}, roue ${spinRuns}, page WOOP ${woopRuns} ; en pause hors de l'écran ${woopWaits && heroOff && off} ; reprise ${heroBack}), texte du hero immobile ${heroText}`);
-    ok(before.a === 'paused' && /-180deg/.test(before.r) && after.a === 'finished' && (after.r === '0deg' || after.r === 'none') && parseFloat(after.arc) === 0,
-      `Création de site web ${w}px : jauge en attente hors de l'écran (${before.r}), puis aiguille au maximum (${after.r}) et arc entièrement tracé`);
+    // Jauge : boucle continue de 4 s (se vide, se remplit jusqu'au maximum, recommence), en pause hors
+    // de l'écran, jamais arrêtée par le survol ni le clic sur sa carte
+    const gaugeAnim = () => pg.evaluate(() => { const a = document.querySelector('.wb-gauge__needle').getAnimations()[0]; return a ? { t: Number(a.currentTime), state: a.playState, dur: a.effect.getTiming().duration, it: a.effect.getTiming().iterations } : null; });
+    const gOff = await gaugeAnim();
+    await to(pg, '.wb-gauge');
+    // Rotation de l'aiguille sur un peu plus d'un cycle (relevé toutes les 100 ms)
+    const rots = [];
+    const t0 = (await gaugeAnim()).t;
+    for (let i = 0; i < 46; i++) { rots.push(await pg.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.wb-gauge__needle')).rotate) || 0)); await pg.waitForTimeout(100); }
+    const g1 = await gaugeAnim();
+    const looped = g1.t - t0 > 4000 && g1.state === 'running';
+    const sweep = Math.min(...rots) < -150 && Math.max(...rots) > -1;
+    // Survol puis clic sur la carte « Léger et rapide » : la boucle continue
+    const card = await pg.locator('.md-sv--fast').boundingBox();
+    await pg.mouse.move(card.x + card.width / 2, card.y + card.height / 2, { steps: 4 });
+    const hoverRuns = await advancing(pg, SEL.gauge);
+    await pg.mouse.click(card.x + 30, card.y + card.height - 30);
+    const clickRuns = await advancing(pg, SEL.gauge);
+    await away(pg);
+    const gaugeOff = await frozen(pg, SEL.gauge);
+    ok(gOff && gOff.state === 'paused' && g1.dur === 4000 && g1.it === Infinity && looped && sweep && hoverRuns && clickRuns && gaugeOff,
+      `Création de site web ${w}px : jauge en boucle de 4 s (durée ${g1.dur} ms, ${g1.it} cycles, aiguille de ${Math.min(...rots).toFixed(0)}° à ${Math.max(...rots).toFixed(0)}°, toujours en marche après ${(g1.t - t0) / 1000} s), sans arrêt au survol (${hoverRuns}) ni au clic (${clickRuns}), en pause hors de l'écran (${gaugeOff && gOff.state === 'paused'})`);
     await ctx.close();
   }
 
@@ -416,7 +432,7 @@ async function siteAnimations(browser, base) {
       };
     });
     ok(r.running === 0 && r.anim === 0 && r.ok && r.pick && r.done && r.curHero && r.curWoop && r.gauge && /Demande envoyée/.test(r.okText) && /Demande envoyée/.test(r.doneText),
-      `Création de site web ${w}px, mouvement réduit : aucune animation (${r.running} en cours), état final (créneau choisi ${r.pick}, « Demande envoyée » ${r.ok && r.done}, curseurs sur les boutons ${r.curHero && r.curWoop}, jauge au maximum ${r.gauge})`);
+      `Création de site web ${w}px, mouvement réduit : aucune animation (${r.running} en cours), état final (créneau choisi ${r.pick}, « Demande envoyée » ${r.ok && r.done}, curseurs sur les boutons ${r.curHero && r.curWoop}, jauge pleine et immobile ${r.gauge})`);
     await ctx.close();
   }
 }
