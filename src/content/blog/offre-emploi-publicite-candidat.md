@@ -34,7 +34,7 @@ D'abord, le salaire. Toujours selon Monster, 60 % des candidats refusent de post
 
 Ensuite, la clarté. Un candidat sur deux écarte une offre dont la description est floue. « Environnement dynamique » et « équipe tissée serré » ne disent rien. Le candidat veut savoir ce qu'il fera vraiment de ses journées, avec qui, et pour quoi.
 
-Enfin, le respect de son temps. Près d'un candidat sur deux abandonne une candidature trop longue ou trop compliquée. Chaque formulaire interminable est une porte de sortie que vous lui ouvrez vous-même.
+Enfin, le respect de son temps. Près d'un candidat sur deux abandonne une candidature trop longue ou trop compliquée. Chaque [formulaire interminable](/creation-site-web/) est une porte de sortie que vous lui ouvrez vous-même.
 
 ## Écrire pour le candidat, pas pour vous
 

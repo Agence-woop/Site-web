@@ -64,7 +64,14 @@ export const SERVICES: Service[] = [
     href: '/publicite-google-meta/',
     icon: ICONS.megaphone,
   },
-  { key: 'sites', label: 'Sites web', role: 'Fait réserver', icon: ICONS.browser },
+  {
+    key: 'sites',
+    label: 'Création de sites web',
+    role: 'Fait réserver',
+    hint: 'Fait réserver',
+    href: '/creation-site-web/',
+    icon: ICONS.browser,
+  },
   { key: 'experience', label: 'Expérience client', role: 'Fait revenir et recommander', icon: ICONS.heartBubble },
 ];
 
