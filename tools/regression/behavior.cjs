@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Tests de comportement du site compilé : page Contact, quiz du Test de visibilité, barre
 // collante, menu burger après défilement, parcours animé du hero (Santé, RH), carrousel de
-// l'Équipe, alternance de la section 02 de la page Image de marque, pagination du blog, ancres et
-// liens internes.
+// l'Équipe, alternance de la section 02 de la page Image de marque, illustrations animées de la page
+// Création de site web, pagination du blog, ancres et liens internes.
 // Les envois vers Formspree sont simulés (aucune donnée n'est envoyée) et GA4 / Meta sont
 // remplacés par des espions qui notent les événements.
 //
@@ -17,7 +17,7 @@ const args = L.parseArgs();
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) { pass++; console.log('OK   ' + m); } else { fail++; console.log('ÉCHEC ' + m); } };
 
-const STICKY_PAGES = ['/', '/services-medical/', '/services-recrutement/', '/equipe/'];
+const STICKY_PAGES = ['/', '/services-medical/', '/services-recrutement/', '/equipe/', '/creation-site-web/'];
 const spy = () => { window.__ev = []; window.gtag = (...a) => window.__ev.push(['gtag', ...a]); window.woopMetaTrack = (...a) => window.__ev.push(['meta', ...a]); };
 
 async function contact(browser, base) {
@@ -341,6 +341,86 @@ async function brandSwitch(browser, base) {
   await ctx.close();
 }
 
+// Page Création de site web : illustrations animées ([data-wb-anim]) : curseur du hero, roue de
+// chargement (01), curseur de la page WOOP (02), jauge (04). Elles tournent quand elles sont à
+// l'écran, sont en pause hors de l'écran (temps de l'animation figé), et n'existent pas avec le
+// mouvement réduit (état final affiché). Le texte du hero ne bouge jamais.
+async function siteAnimations(browser, base) {
+  const URL = '/creation-site-web/';
+  const SEL = { hero: '.wb-br .wb-cur', spin: '.wb-a3__sp', woop: '.gd .wb-cur', gauge: '.wb-gauge__needle' };
+  // Temps courant de l'animation de l'élément, et état de lecture
+  const anim = (pg, sel) => pg.evaluate((s) => {
+    const a = document.querySelector(s).getAnimations()[0];
+    return a ? { t: Number(a.currentTime), state: a.playState } : null;
+  }, sel);
+  const advancing = async (pg, sel) => {
+    const a = await anim(pg, sel); await pg.waitForTimeout(600); const b = await anim(pg, sel);
+    return !!a && !!b && b.state === 'running' && b.t > a.t;
+  };
+  const frozen = async (pg, sel) => {
+    const a = await anim(pg, sel); await pg.waitForTimeout(600); const b = await anim(pg, sel);
+    return !!a && !!b && b.state === 'paused' && b.t === a.t;
+  };
+  const to = async (pg, sel) => { await pg.evaluate((s) => document.querySelector(s).scrollIntoView({ block: 'center', behavior: 'instant' }), sel); await pg.waitForTimeout(1300); };
+  const away = async (pg) => { await pg.evaluate(() => document.querySelector('[data-hp-final]').scrollIntoView({ block: 'center', behavior: 'instant' })); await pg.waitForTimeout(500); };
+
+  for (const w of [1440, 390]) {
+    const ctx = await L.newContext(browser, base, { width: w, height: 900, reducedMotion: 'no-preference' });
+    const pg = await ctx.newPage();
+    await pg.goto(base + URL); await pg.waitForTimeout(800);
+    const heroText = await pg.evaluate(() => [...document.querySelectorAll('.md-hero__text, .md-hero__text *')].every((el) => el.getAnimations().length === 0));
+    await to(pg, '.wb-br');
+    const heroRuns = await advancing(pg, SEL.hero);
+    const woopWaits = await frozen(pg, SEL.woop);
+    await to(pg, '.wb-a3');
+    const spinRuns = await advancing(pg, SEL.spin);
+    const heroOff = await frozen(pg, SEL.hero);
+    await to(pg, '.gd');
+    const woopRuns = await advancing(pg, SEL.woop);
+    await away(pg);
+    const off = (await frozen(pg, SEL.woop)) && (await frozen(pg, SEL.spin));
+    await to(pg, '.wb-br');
+    const heroBack = await advancing(pg, SEL.hero);
+    // Jauge : en attente (aiguille à gauche) tant qu'elle n'est pas à l'écran, puis un seul balayage
+    const before = await pg.evaluate(() => ({ r: getComputedStyle(document.querySelector('.wb-gauge__needle')).rotate, a: document.querySelector('.wb-gauge__needle').getAnimations()[0]?.playState }));
+    await to(pg, '.wb-gauge'); await pg.waitForTimeout(2200);
+    const after = await pg.evaluate(() => ({ r: getComputedStyle(document.querySelector('.wb-gauge__needle')).rotate, a: document.querySelector('.wb-gauge__needle').getAnimations()[0]?.playState, arc: getComputedStyle(document.querySelector('.wb-gauge__arc')).strokeDashoffset }));
+    ok(heroText && heroRuns && woopWaits && spinRuns && heroOff && woopRuns && off && heroBack,
+      `Création de site web ${w}px : animations à l'écran seulement (hero ${heroRuns}, roue ${spinRuns}, page WOOP ${woopRuns} ; en pause hors de l'écran ${woopWaits && heroOff && off} ; reprise ${heroBack}), texte du hero immobile ${heroText}`);
+    ok(before.a === 'paused' && /-180deg/.test(before.r) && after.a === 'finished' && (after.r === '0deg' || after.r === 'none') && parseFloat(after.arc) === 0,
+      `Création de site web ${w}px : jauge en attente hors de l'écran (${before.r}), puis aiguille au maximum (${after.r}) et arc entièrement tracé`);
+    await ctx.close();
+  }
+
+  // Mouvement réduit : aucune animation dans la page, état final de chaque illustration
+  for (const w of [1440, 390]) {
+    const ctx = await L.newContext(browser, base, { width: w, height: 900, reducedMotion: 'reduce' });
+    const pg = await ctx.newPage();
+    await pg.goto(base + URL);
+    await pg.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 40)); } });
+    await pg.waitForTimeout(1500);
+    const r = await pg.evaluate(() => {
+      const inside = (el, box) => { const a = el.getBoundingClientRect(), b = box.getBoundingClientRect(); const x = a.left + 6, y = a.top + 3; return x >= b.left && x <= b.right && y >= b.top && y <= b.bottom; };
+      const cs = (s) => getComputedStyle(document.querySelector(s));
+      return {
+        running: document.getAnimations().filter((a) => a.playState === 'running').length,
+        anim: document.querySelectorAll('.is-anim').length,
+        ok: cs('.wb-ok').transform === 'none' && cs('.wb-ok').opacity === '1',
+        pick: cs('.wb-pick').boxShadow.includes('2px'),
+        done: cs('.gd-done').opacity === '1' && cs('.gd-done').transform === 'none',
+        curHero: cs('.wb-br .wb-cur').opacity === '1' && inside(document.querySelector('.wb-br .wb-cur'), document.querySelector('.wb-cta')),
+        curWoop: cs('.gd .wb-cur').opacity === '1' && inside(document.querySelector('.gd .wb-cur'), document.querySelector('.gd-cta')),
+        gauge: ['0deg', 'none'].includes(cs('.wb-gauge__needle').rotate) && parseFloat(cs('.wb-gauge__arc').strokeDashoffset) === 0,
+        okText: document.querySelector('.wb-ok').textContent.trim(),
+        doneText: document.querySelector('.gd-done').textContent.trim(),
+      };
+    });
+    ok(r.running === 0 && r.anim === 0 && r.ok && r.pick && r.done && r.curHero && r.curWoop && r.gauge && /Demande envoyée/.test(r.okText) && /Demande envoyée/.test(r.doneText),
+      `Création de site web ${w}px, mouvement réduit : aucune animation (${r.running} en cours), état final (créneau choisi ${r.pick}, « Demande envoyée » ${r.ok && r.done}, curseurs sur les boutons ${r.curHero && r.curWoop}, jauge au maximum ${r.gauge})`);
+    await ctx.close();
+  }
+}
+
 async function blogPager(browser, base) {
   let ctx = await L.newContext(browser, base, { reducedMotion: 'no-preference' });
   let pg = await ctx.newPage(); await pg.goto(base + '/blog/');
@@ -382,14 +462,10 @@ function anchorsAndLinks(dist) {
   const browser = await chromium.launch();
   try {
     anchorsAndLinks(dist);
-    await contact(browser, server.url);
-    await quiz(browser, server.url);
-    await stickyBar(browser, server.url);
-    await burgerMenu(browser, server.url);
-    await heroFlow(browser, server.url);
-    await teamCarousel(browser, server.url);
-    await brandSwitch(browser, server.url);
-    await blogPager(browser, server.url);
+    // Une erreur (délai dépassé…) dans un groupe compte comme un échec, sans arrêter les suivants
+    for (const t of [contact, quiz, stickyBar, burgerMenu, heroFlow, teamCarousel, brandSwitch, siteAnimations, blogPager]) {
+      try { await t(browser, server.url); } catch (e) { ok(false, `${t.name} : erreur (${String(e.message || e).split('\n')[0]})`); }
+    }
   } finally {
     await browser.close(); await server.close();
   }

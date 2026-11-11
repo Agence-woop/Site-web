@@ -42,7 +42,7 @@ La première, c'est la [fiche d'établissement Google négligée](/blog/publicit
 
 La deuxième, c'est l'avis sans réponse. Un avis négatif laissé sans réponse, c'est une histoire racontée à sens unique devant tous vos futurs patients. Or 40 % des patients déclarent avoir annulé un rendez-vous ou renoncé à en prendre un à cause d'avis négatifs. Répondre, calmement et professionnellement, n'efface pas l'avis, mais montre comment vous traitez les gens. Ça pèse autant que la note elle-même.
 
-La troisième, c'est l'absence de prise de rendez-vous en ligne. Près de 70 % des patients se disent plus susceptibles de choisir un professionnel qui leur permet de réserver en ligne. La raison est simple : prendre rendez-vous au téléphone prend en moyenne huit minutes, contre une seule en ligne. Chaque appel manqué, chaque message vocal, chaque mise en attente est une porte de sortie que vous tendez vous-même au patient.
+La troisième, c'est l'absence de [prise de rendez-vous en ligne](/creation-site-web/). Près de 70 % des patients se disent plus susceptibles de choisir un professionnel qui leur permet de réserver en ligne. La raison est simple : prendre rendez-vous au téléphone prend en moyenne huit minutes, contre une seule en ligne. Chaque appel manqué, chaque message vocal, chaque mise en attente est une porte de sortie que vous tendez vous-même au patient.
 
 ## Comment mesurer ce qui est invisible
 
