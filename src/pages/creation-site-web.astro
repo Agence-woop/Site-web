@@ -148,7 +148,7 @@ const deliverables: { key: 'pages' | 'copy' | 'img' | 'seo' | 'measure'; ic: Ico
     key: 'img',
     ic: 'image',
     title: 'Illustrations ou photos',
-    text: `Des visuels qui ressemblent à votre clinique ou à votre cabinet${NB}: vos photos en priorité, une séance sur place à Montréal, à Laval ou sur la Rive-Sud, ou des images de banque avec votre accord écrit.`,
+    text: 'Des visuels qui ressemblent à votre clinique ou à votre cabinet, pour mettre en avant vos services, mais aussi votre équipe.',
     reveal: 'up',
   },
   { key: 'seo', ic: 'search', title: 'Référencement de base', text: 'Une structure propre, pour être bien lu par Google.', reveal: 'up', step: '1' },
@@ -164,6 +164,9 @@ const deliverables: { key: 'pages' | 'copy' | 'img' | 'seo' | 'measure'; ic: Ico
 
 // Mini-pages de la tuile « Site complet ou pages de conversion »
 const servicePages = ['Physiothérapie', 'Ostéopathie', 'Massothérapie'];
+
+// Points cochés de la tuile « Référencement de base »
+const seoPoints = ['Titre', 'Description', 'Structure', 'Mots-clés', 'Indexation', 'Plan du site'];
 
 // Barres de la tuile « La mesure des demandes » (longueurs illustratives, sans chiffre)
 const measures: { page: string; w: string }[] = [
@@ -303,14 +306,11 @@ const measures: { page: string; w: string }[] = [
                   <p>Une évaluation complète dès la 1<sup>re</sup> visite.</p>
                   <span class="gd-cta" data-wb-t2>Réserver une évaluation</span>
                 </div>
-                <!-- Visuel plat, sans personnage : formes abstraites et pictogramme d'une articulation en mouvement -->
+                <!-- Visuel plat, sans personnage : fond en dégradé et formes abstraites -->
                 <div class="gd-img">
                   <svg viewBox="0 0 120 120" preserveAspectRatio="xMidYMid slice" focusable="false">
                     <circle class="gd-img__c1" cx="96" cy="22" r="34" />
                     <circle class="gd-img__c2" cx="18" cy="106" r="30" />
-                    <path class="gd-img__arc" d="M30 84a34 34 0 0 1 58-34" />
-                    <path class="gd-img__tip" d="M80 40l9 9-12 3" />
-                    <circle class="gd-img__dot" cx="58" cy="70" r="8" />
                   </svg>
                 </div>
               </div>
@@ -367,7 +367,7 @@ const measures: { page: string; w: string }[] = [
                   <div class="wb-img"><span></span><span></span><span></span></div>
                 )}
                 {t.key === 'seo' && (
-                  <ul class="wb-seo"><li>Titre</li><li>Description</li><li>Structure</li></ul>
+                  <ul class="wb-seo">{seoPoints.map((p) => <li>{p}</li>)}</ul>
                 )}
                 {t.key === 'measure' && (
                   <div class="wb-ms">
@@ -393,8 +393,8 @@ const measures: { page: string; w: string }[] = [
         <ServiceTile kind="fast" shape="sq" title="Léger et rapide" text={`Des sites construits avec une approche d'écoconception${NB}: moins de poids, un chargement rapide, même sur mobile. Votre score de vitesse est mesuré avant chaque mise en ligne.`} reveal="left">
           <Fragment slot="icon"><Fragment set:html={icon('bolt')} /></Fragment>
           <Fragment slot="illustration">
-            <!-- Jauge de vitesse : arc entièrement rempli, aiguille au maximum (à droite) ; à l'apparition,
-                 l'aiguille part de la gauche et l'arc se trace avec elle -->
+            <!-- Jauge de vitesse en boucle de 4 s : elle se vide, puis l'arc se trace avec l'aiguille jusqu'au
+                 maximum (à droite) ; immobile et pleine en mouvement réduit -->
             <div class="md-mui wb-mui--gauge" aria-hidden="true">
               <div class="wb-gauge" data-wb-anim>
                 <svg viewBox="0 0 140 80" focusable="false">
@@ -455,20 +455,9 @@ const measures: { page: string; w: string }[] = [
       <div class="wb-srs">
         <ServiceTile kind="clinic" shape="sq" title="Pour une clinique" text="Une page par service, et la demande de rendez-vous au cœur de chacune." reveal="left" href={`${base}/services-medical/`}>
           <Fragment slot="icon"><Fragment set:html={icon('clinic')} /></Fragment>
-          <Fragment slot="illustration">
-            <div class="md-mui wb-flow" aria-hidden="true">
-              <div><span>Page service</span><i></i><span class="is-ok">Demande de rendez-vous</span></div>
-            </div>
-          </Fragment>
         </ServiceTile>
         <ServiceTile kind="firm" shape="sq" title="Pour un cabinet de recrutement" text="Des pages pour les entreprises clientes, et des pages pour les candidats. Chacune avec son objectif." reveal="right" step="1" href={`${base}/services-recrutement/`}>
           <Fragment slot="icon"><Fragment set:html={icon('case')} /></Fragment>
-          <Fragment slot="illustration">
-            <div class="md-mui wb-flow" aria-hidden="true">
-              <div><span>Page entreprises</span><i></i><span class="is-ok">Mandat</span></div>
-              <div><span>Page candidats</span><i></i><span class="is-ok">Candidature</span></div>
-            </div>
-          </Fragment>
         </ServiceTile>
       </div>
 
@@ -1512,7 +1501,7 @@ const measures: { page: string; w: string }[] = [
     box-shadow: 0 10px 22px rgba(230, 43, 127, 0.4);
   }
 
-  /* Visuel plat de la page : formes abstraites et pictogramme, sans personnage */
+  /* Visuel plat de la page : fond en dégradé et formes abstraites, sans personnage */
   .gd-img {
     position: relative;
     min-height: 120px;
@@ -1531,16 +1520,6 @@ const measures: { page: string; w: string }[] = [
   .gd-img__c1 { fill: color-mix(in srgb, var(--text-primary) 22%, transparent); }
   .gd-img__c2 { fill: color-mix(in srgb, var(--woop-orange) 70%, transparent); }
 
-  .gd-img__arc,
-  .gd-img__tip {
-    fill: none;
-    stroke: var(--text-primary);
-    stroke-width: 7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .gd-img__dot { fill: var(--text-primary); }
 
   .gd-sec {
     display: flex;
@@ -1912,26 +1891,36 @@ const measures: { page: string; w: string }[] = [
 
   .wb-img span:last-child { background: var(--hp-plum); box-shadow: inset 0 0 0 1px var(--hp-line); }
 
-  /* Référencement de base : 3 points cochés */
+  /* Référencement de base : 6 points cochés, en 2 colonnes de 3 (1 colonne si la tuile est trop
+     étroite pour que chaque libellé tienne sur une ligne) */
   .wb-seo {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    /* Au plus 2 colonnes, et 1 seule si une colonne ferait moins de 96 px */
+    grid-template-columns: repeat(auto-fit, minmax(max(96px, calc((100% - 6px) / 2)), 1fr));
     gap: 6px;
   }
 
+  .wb-mui--seo { padding: 12px 10px; }
+
   .wb-seo li {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 7px 10px;
+    gap: 6px;
+    min-width: 0;
+    padding: 7px 8px;
     border-radius: 9px;
     background: color-mix(in srgb, var(--text-primary) 6%, transparent);
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
     color: var(--text-primary);
   }
 
   .wb-seo li::after {
     content: '✓';
+    flex: none;
     color: var(--md-pink-soft);
   }
 
@@ -2003,9 +1992,11 @@ const measures: { page: string; w: string }[] = [
     }
   }
 
-  /* Jauge de vitesse : arc en dégradé, entièrement rempli ; aiguille blanche du centre vers la
-     droite (position maximale). À l'apparition (une fois) : l'aiguille balaie de la gauche vers
-     la droite en 1,6 s et l'arc se trace avec elle. */
+  /* Jauge de vitesse : arc en dégradé, aiguille blanche du centre vers la droite (position
+     maximale). Boucle continue de 4 s : la jauge se vide (aiguille à gauche), se remplit
+     progressivement jusqu'au maximum avec l'aiguille, reste pleine un instant, puis recommence.
+     Aucun arrêt au survol, au clic ni au focus ; en pause seulement hors de l'écran (script).
+     Mouvement réduit ou sans JavaScript : jauge pleine, aiguille au maximum, immobile. */
   .wb-mui--gauge {
     align-items: center;
     gap: 14px;
@@ -2052,17 +2043,21 @@ const measures: { page: string; w: string }[] = [
     stroke-width: 3;
   }
 
-  .wb-gauge.is-anim .wb-gauge__arc { animation: wb-gauge-arc 1.6s cubic-bezier(0.3, 0.7, 0.2, 1) 0.2s 1 both; }
-  .wb-gauge.is-anim .wb-gauge__needle { animation: wb-gauge-needle 1.6s cubic-bezier(0.3, 0.7, 0.2, 1) 0.2s 1 both; }
+  .wb-gauge.is-anim .wb-gauge__arc { animation: wb-gauge-arc 4s linear infinite; }
+  .wb-gauge.is-anim .wb-gauge__needle { animation: wb-gauge-needle 4s linear infinite; }
 
+  /* 0 → 12 % : la jauge se vide ; 12 → 72 % : elle se remplit (même courbe qu'avant) ;
+     72 → 100 % : pleine, aiguille au maximum */
   @keyframes wb-gauge-arc {
-    from { stroke-dashoffset: 100; }
-    to { stroke-dashoffset: 0; }
+    0% { stroke-dashoffset: 0; animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0); }
+    12% { stroke-dashoffset: 100; animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1); }
+    72%, 100% { stroke-dashoffset: 0; }
   }
 
   @keyframes wb-gauge-needle {
-    from { rotate: -180deg; }
-    to { rotate: 0deg; }
+    0% { rotate: 0deg; animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0); }
+    12% { rotate: -180deg; animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1); }
+    72%, 100% { rotate: 0deg; }
   }
 
   .wb-mui--gauge small {
@@ -2116,37 +2111,5 @@ const measures: { page: string; w: string }[] = [
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 22px;
     }
-  }
-
-  /* Parcours : la page, puis la demande (pastille en dégradé) */
-  .wb-flow { gap: 10px; }
-
-  .wb-flow div {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .wb-flow span {
-    padding: 7px 12px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--text-primary) 8%, transparent);
-    color: var(--text-primary);
-    font-size: 12px;
-    font-weight: 800;
-    line-height: 1.25;
-  }
-
-  .wb-flow span.is-ok {
-    background: var(--woop-gradient);
-    color: var(--hp-on-grad);
-  }
-
-  .wb-flow i {
-    flex: none;
-    width: 14px;
-    height: 2px;
-    background: var(--woop-gradient);
   }
 </style>
