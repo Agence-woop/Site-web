@@ -80,6 +80,18 @@ Le dossier `tools/regression/out/` est ignoré par git.
 - Les styles calculés couvrent l'état normal des éléments ; les états au survol ou au focus
   sont couverts par les tests de comportement et par la relecture des styles des composants.
 
+## Fiabilité des tests de comportement
+
+Le site défile en douceur (`scroll-behavior: smooth`) et ses éléments apparaissent en fondu,
+glissent (barre collante en 600 ms) ou se mettent en pause via un `IntersectionObserver`
+(asynchrone). Un délai fixe (« attendre 300 ms ») rend donc un test aléatoire selon la charge
+de la machine. `behavior.cjs` attend plutôt **l'état réel** : défilement terminé
+(`scrollSettled`), animations et transitions d'un élément terminées (`animSettled`), état
+de lecture ou de pause atteint, avant de vérifier. Ce que chaque test vérifie ne change pas.
+Exemple de piège corrigé : un clic sur un onglet du carrousel de l'Équipe pendant son
+apparition était manqué ; Playwright refaisait alors défiler la page, la fiche glissait sous
+la souris et le carrousel se mettait en pause (attente de 12 s dépassée).
+
 ## Tolérance de lissage des captures
 
 Même sans aucun changement du site, Chromium lisse parfois de façon différente le bord des

@@ -20,6 +20,18 @@ let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) { pass++; console.log('OK   ' + m); } else { fail++; console.log('ÉCHEC ' + m); } };
 
 const STICKY_PAGES = ['/', '/services-medical/', '/services-recrutement/', '/equipe/', '/creation-site-web/', '/conseil-experience-patient/'];
+// Attentes sur l'état réel plutôt qu'un délai fixe :
+// - fin du défilement de la page (le site défile en douceur, scroll-behavior: smooth : un défilement
+//   lancé par le test peut durer plus que quelques centaines de millisecondes) ;
+// - fin des animations et transitions d'un élément (la barre collante glisse en 600 ms ; le carrousel
+//   de l'Équipe apparaît en fondu et en glissement : un clic pendant ce mouvement est manqué, et
+//   Playwright refait alors défiler la page, ce qui glisse la fiche sous la souris et met le carrousel en pause).
+const scrollSettled = (pg) => pg.evaluate(() => new Promise((done) => {
+  let y = scrollY, still = 0;
+  const f = () => { if (scrollY === y) { if (++still >= 6) return done(); } else { y = scrollY; still = 0; } requestAnimationFrame(f); };
+  requestAnimationFrame(f);
+}));
+const animSettled = (pg, sel) => pg.waitForFunction((s) => document.querySelector(s).getAnimations().every((a) => a.playState !== 'running'), sel);
 const spy = () => { window.__ev = []; window.gtag = (...a) => window.__ev.push(['gtag', ...a]); window.woopMetaTrack = (...a) => window.__ev.push(['meta', ...a]); };
 
 async function contact(browser, base) {
@@ -86,7 +98,7 @@ async function stickyBar(browser, base) {
       const shown = () => pg.evaluate(() => document.querySelector('[data-hp-pop]').classList.contains('is-shown'));
       const onHero = await shown();
       await pg.evaluate(() => window.scrollTo({ top: document.querySelector('[data-hp-hero]').getBoundingClientRect().bottom + scrollY + 200, behavior: 'instant' }));
-      await pg.waitForTimeout(500);
+      await pg.waitForTimeout(500); await animSettled(pg, '[data-hp-pop]');
       const mid = await shown();
       const g = await pg.evaluate(() => { const p = document.querySelector('[data-hp-pop]'), pr = p.getBoundingClientRect(), b = p.querySelector('.cta'), br = b.getBoundingClientRect(); const hit = document.elementFromPoint(br.left + br.width / 2, br.top + br.height / 2); return { inView: pr.left >= 0 && pr.right <= innerWidth, btn: br.left >= pr.left && br.right <= pr.right && !!hit && b.contains(hit), doc: document.documentElement.scrollWidth - innerWidth }; });
       await pg.evaluate(() => { const d = document.createElement('div'); d.className = 'cky-consent-container'; d.style.cssText = 'position:fixed;left:0;bottom:0;width:300px;height:120px;background:#fff'; document.body.appendChild(d); });
@@ -205,7 +217,7 @@ async function teamCarousel(browser, base) {
   await pg.goto(base + '/equipe/');
   let s = await state(pg);
   ok(s.paused && s.btn, 'Équipe : carrousel en pause tant qu\'il est hors de l\'écran, bouton visible');
-  await pg.locator('[data-eq-sp]').scrollIntoViewIfNeeded(); await pg.waitForTimeout(300);
+  await pg.evaluate(() => document.querySelector('[data-eq-sp]').scrollIntoView({ block: 'center', behavior: 'instant' })); await scrollSettled(pg); await animSettled(pg, '[data-eq-sp]'); await pg.waitForTimeout(300);
   s = await state(pg); ok(!s.paused && s.run === 'eq-tab-gauthier' && s.play === 'running', 'Équipe : défile une fois visible (Gauthier)');
   const dur = await pg.evaluate(() => getComputedStyle(document.querySelector('.eq-sp__tab.is-run .eq-sp__prog'), '::after').animationDuration);
   ok(dur === '10s', `Équipe : 10 s par profil (${dur})`);
@@ -234,7 +246,7 @@ async function teamCarousel(browser, base) {
   await tap(); s = await state(pg); ok(!s.user, 'Équipe 390 px : 2e toucher → reprise');
   await ctx.close();
   ctx = await L.newContext(browser, base, { reducedMotion: 'reduce' });
-  pg = await ctx.newPage(); await pg.goto(base + '/equipe/'); await pg.locator('[data-eq-sp]').scrollIntoViewIfNeeded(); await pg.waitForTimeout(300);
+  pg = await ctx.newPage(); await pg.goto(base + '/equipe/'); await pg.evaluate(() => document.querySelector('[data-eq-sp]').scrollIntoView({ block: 'center', behavior: 'instant' })); await scrollSettled(pg); await animSettled(pg, '[data-eq-sp]'); await pg.waitForTimeout(300);
   s = await state(pg); ok(s.stopped && !s.run && s.btn, 'Équipe : mouvement réduit → aucun défilement, bouton visible');
   await ctx.close();
   ctx = await L.newContext(browser, base, { javaScriptEnabled: false });
@@ -314,7 +326,9 @@ async function brandSwitch(browser, base) {
   t = await flip(pg);
   ok(t < 5.6, `Image de marque : reprise à la perte du focus (${t.toFixed(1)} s)`);
   // Hors de l'écran : arrêt, puis reprise au retour
-  await pg.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await pg.waitForTimeout(200);
+  await pg.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })); await scrollSettled(pg);
+  // L'arrêt est signalé par l'IntersectionObserver (asynchrone) : on attend la pause réelle (2 s au plus)
+  await pg.waitForFunction(() => document.querySelector('[data-im-sw]').classList.contains('is-paused'), null, { timeout: 2000 }).catch(() => {});
   s = await st(pg);
   ok(s.paused && await still(pg, 6000), 'Image de marque : arrêt quand la section sort de l\'écran (6 s)');
   await pg.evaluate(() => { const e = document.querySelector('[data-im-sw]'); window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - 120, behavior: 'instant' }); });
@@ -355,11 +369,16 @@ async function siteAnimations(browser, base) {
     const a = document.querySelector(s).getAnimations()[0];
     return a ? { t: Number(a.currentTime), state: a.playState } : null;
   }, sel);
+  // L'état (lecture ou pause) suit l'IntersectionObserver, asynchrone : on attend qu'il soit atteint
+  // (3 s au plus), puis on vérifie sur 600 ms que l'animation avance ou reste figée.
+  const reach = (pg, sel, state) => pg.waitForFunction(([s, st]) => { const a = document.querySelector(s).getAnimations()[0]; return !!a && a.playState === st; }, [sel, state], { timeout: 3000 }).catch(() => {});
   const advancing = async (pg, sel) => {
+    await reach(pg, sel, 'running');
     const a = await anim(pg, sel); await pg.waitForTimeout(600); const b = await anim(pg, sel);
     return !!a && !!b && b.state === 'running' && b.t > a.t;
   };
   const frozen = async (pg, sel) => {
+    await reach(pg, sel, 'paused');
     const a = await anim(pg, sel); await pg.waitForTimeout(600); const b = await anim(pg, sel);
     return !!a && !!b && b.state === 'paused' && b.t === a.t;
   };
