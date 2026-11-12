@@ -483,16 +483,20 @@ async function experience(browser, base) {
     // Section 03 : avancée automatique, clic sans arrêt, pause, lecture, hors de l'écran
     await to(pg, '[data-cx-mo]');
     const b0 = await btn(pg);
+    const n = await pg.evaluate(() => document.querySelectorAll('[data-cx-moment]').length);
     const c0 = await cur(pg); await pg.waitForTimeout(3900); const c1 = await cur(pg);
     await pg.locator('[data-cx-moment="4"]').click(); const c2 = await cur(pg);
     await pg.waitForTimeout(3900); const c3 = await cur(pg);
+    // Dernier moment, puis retour au 1er (boucle sur les 7 moments)
+    await pg.locator(`[data-cx-moment="${n - 1}"]`).click(); const c4 = await cur(pg);
+    await pg.waitForTimeout(3900); const c5 = await cur(pg);
     await pg.locator('[data-cx-pause]').click(); const b1 = await btn(pg);
     const p0 = await cur(pg); await pg.waitForTimeout(4300); const p1 = await cur(pg);
     await pg.locator('[data-cx-moment="1"]').click(); const p2 = await cur(pg); await pg.waitForTimeout(4000); const p3 = await cur(pg);
     await pg.locator('[data-cx-pause]').click(); const b2 = await btn(pg); await pg.waitForTimeout(3900); const p4 = await cur(pg);
     await away(pg); const o1 = await cur(pg); await pg.waitForTimeout(4300); const o2 = await cur(pg);
-    ok(b0.vis && b0.w >= 44 && b0.h >= 44 && b0.pressed === 'false' && c1 === (c0 + 1) % 8 && c2 === 4 && c3 === 5,
-      `Conseil en expérience patient ${w}px : moments en rotation (${c0} → ${c1} en 3,6 s), clic sur le 5e (${c2}) sans arrêt de la rotation (${c3}), bouton visible ${b0.w}×${b0.h}`);
+    ok(b0.vis && b0.w >= 44 && b0.h >= 44 && b0.pressed === 'false' && n === 7 && c1 === (c0 + 1) % n && c2 === 4 && c3 === 5 && c4 === n - 1 && c5 === 0,
+      `Conseil en expérience patient ${w}px : ${n} moments en rotation (${c0} → ${c1} en 3,6 s), clic sur le 5e (${c2}) sans arrêt de la rotation (${c3}), du dernier (${c4}) au 1er (${c5}), bouton visible ${b0.w}×${b0.h}`);
     ok(b1.pressed === 'true' && b1.label === "Reprendre l'animation" && p0 === p1 && p2 === 1 && p3 === 1 && b2.pressed === 'false' && b2.label === "Mettre en pause l'animation" && p4 === 2 && o1 === o2,
       `Conseil en expérience patient ${w}px : bouton Pause (aria-pressed ${b1.pressed}, « ${b1.label} ») ; en pause, aucune avancée (${p0} = ${p1}) et clic sur le 2e affiché sans relancer (${p2}, ${p3}) ; Lecture (${b2.pressed}) : reprise (${p4}) ; hors de l'écran : arrêt (${o1} = ${o2})`);
     await ctx.close();

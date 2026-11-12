@@ -180,9 +180,8 @@ const moments: { name: string; lived: string; reco: string }[] = [
   { name: 'Réserver', lived: 'Le formulaire demande dix informations. Il abandonne.', reco: 'Une réservation en quelques clics, ou un rappel rapide.' },
   { name: 'Arriver', lived: 'Personne ne lève les yeux à son arrivée.', reco: 'Un accueil qui le reconnaît et lui dit quoi faire.' },
   { name: 'Attendre', lived: 'Vingt minutes de retard, et personne ne le prévient.', reco: 'Il est prévenu, et sait combien de temps il attend.' },
-  { name: 'Être soigné', lived: "Le soin est excellent. C'est votre cœur de métier.", reco: `On ne touche pas au soin${NB}: on s'assure que tout le reste est à sa hauteur.` },
-  { name: 'Payer', lived: 'La facture est floue, il ne sait pas ce qui est couvert.', reco: 'Une facture claire, expliquée au comptoir.' },
-  { name: 'Être relancé', lived: 'Après le soin, plus aucune nouvelle.', reco: 'Un message de suivi, et le prochain rendez-vous proposé.' },
+  { name: 'Régler sa visite', lived: 'La facture est floue, il ne sait pas ce qui est couvert.', reco: 'Une facture claire, expliquée au comptoir.' },
+  { name: 'Être suivi', lived: 'Après le soin, plus aucune nouvelle.', reco: 'Un message de suivi, et le prochain rendez-vous proposé.' },
   { name: 'Recommander', lived: 'Personne ne lui a demandé son avis.', reco: "Une demande d'avis au bon moment, et des patients qui vous recommandent." },
 ];
 
@@ -204,7 +203,7 @@ const deliverables: { key: 'diag' | 'map' | 'plan' | 'team' | 'kpi'; ic: IconKey
     reveal: 'right',
     step: '1',
   },
-  { key: 'plan', ic: 'list', title: "Un plan d'action par priorité", text: "Ce qu'on change, et dans quel ordre.", reveal: 'up' },
+  { key: 'plan', ic: 'list', title: "Un plan d'action par priorité", text: "Ce qu'on recommande, et dans quel ordre.", reveal: 'up' },
   {
     key: 'team',
     ic: 'team',
@@ -232,13 +231,14 @@ const diagRows: { label: string; state: 'ok' | 'mid' | 'hi'; tag: string }[] = [
   { label: 'Suivi après la visite', state: 'hi', tag: 'Prioritaire' },
 ];
 
-// Carte du parcours (illustration) : étapes, irritants repérés (le soin reste neutre : on ne l'évalue pas)
-const mapSteps: { label: string; state: 'ok' | 'bad' | 'neutral' }[] = [
+// Carte du parcours (illustration) : étapes des 7 moments, irritants repérés (la consultation et les
+// soins n'y figurent pas : on ne les évalue jamais)
+const mapSteps: { label: string; state: 'ok' | 'bad' }[] = [
   { label: 'Trouver', state: 'ok' },
   { label: 'Réserver', state: 'bad' },
   { label: 'Arriver', state: 'ok' },
   { label: 'Attendre', state: 'bad' },
-  { label: 'Soin', state: 'neutral' },
+  { label: 'Régler', state: 'ok' },
   { label: 'Suivi', state: 'bad' },
 ];
 
@@ -350,7 +350,7 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
        aucune avancée automatique ; sans JavaScript : le 1er moment -->
   <section class="hp-block hp-sec" id="moments" data-reveal-clip>
     <div class="container">
-      <SectionHead over="03 · Les moments qui comptent" intro="Huit moments, du premier clic à la recommandation. Un seul qui bloque, et le patient ne revient pas. Cliquez sur un moment.">Les irritants qu'on <span class="gradient-accent">traque</span>.</SectionHead>
+      <SectionHead over="03 · Les moments qui comptent" intro="Sept moments, du premier clic à la recommandation. Un seul qui bloque, et le patient ne revient pas. Cliquez sur un moment.">Les irritants qu'on <span class="gradient-accent">traque</span>.</SectionHead>
 
       <div class="cx-mw" data-cx-mo data-reveal="up">
         <div class="cx-mw__bar">
@@ -410,7 +410,7 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
                   </div>
                 )}
                 {t.key === 'plan' && (
-                  <div class="cx-pl"><span><b>1</b>Rappeler sous 2{NB}h</span><span><b>2</b>Simplifier la réservation</span></div>
+                  <div class="cx-pl"><span><b>1</b>Rappeler sous 2{NB}h</span><span><b>2</b>Simplifier la réservation</span><span><b>3</b>Prévenir en cas de retard</span></div>
                 )}
                 {t.key === 'team' && (
                   <div class="cx-team"><span></span><span></span><span class="is-on"></span></div>
@@ -429,16 +429,17 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
   <!-- 6. 05 · LE RAPPORT -->
   <section class="hp-block hp-sec" id="rapport" data-reveal-clip>
     <div class="container">
-      <div class="cx-rp md-glass" data-reveal="up">
-        <div class="cx-rp__txt">
-          <SectionHead over="05 · Le rapport" reveal={false} class="cx-rp__head">Votre rapport, <span class="gradient-accent">concrètement</span>.</SectionHead>
-          <p>Un document clair, que vous pouvez partager avec votre équipe. Pas de jargon{NB}: ce qu'on a vu, ce que ça coûte à votre clinique, et ce qu'on change en premier.</p>
+      <SectionHead over="05 · Le rapport">Votre rapport, <span class="gradient-accent">concrètement</span>.</SectionHead>
+
+      <div class="cx-rp">
+        <div class="cx-rp__txt" data-reveal="left">
+          <p>Un document clair, que vous pouvez partager avec votre équipe. Pas de jargon{NB}: ce qu'on a vu, ce que ça coûte à votre clinique, et ce qu'on recommande en premier.</p>
           <ol class="cx-toc">
             {toc.map((t, i) => <li><b>0{i + 1}</b>{t}</li>)}
           </ol>
           <a class="cta" href={`${base}/contact/`}>Demander un diagnostic<CtaIcon /></a>
         </div>
-        <div class="cx-docs" aria-hidden="true">
+        <div class="cx-docs" aria-hidden="true" data-reveal="right" data-reveal-step="1">
           <div class="cx-pg cx-pg--3"></div><div class="cx-pg cx-pg--2"></div>
           <div class="cx-pg cx-pg--1">
             <div class="cx-pg__h"><span class="cx-pg__lg"></span><small>Rapport d'expérience patient</small></div>
@@ -449,7 +450,7 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
               <div><span class="is-hi"></span>Suivi après la visite<em>Priorité 2</em></div>
               <div><span class="is-mid"></span>Réservation en ligne<em>Priorité 3</em></div>
             </div>
-            <div class="cx-pg__f"><small>Préparé par Kevin et Gauthier, WOOP</small><span class="cx-pg__sg"></span></div>
+            <div class="cx-pg__f"><small>Préparé par Kevin et Gauthier, WOOP</small></div>
           </div>
         </div>
       </div>
@@ -1259,7 +1260,7 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
   .cx-fn--hot dl { border-top-color: color-mix(in srgb, var(--bg-deep) 22%, transparent); }
 
   /* ===== 4. LES MOMENTS QUI COMPTENT =====
-     Ordinateur (dès 1180 px) : les 8 moments sur une ligne, reliés ; en dessous, 4 par ligne. */
+     Ordinateur (dès 1180 px) : les 7 moments sur une ligne, reliés ; en dessous, 4 par ligne. */
   .cx-mw {
     display: flex;
     flex-direction: column;
@@ -1320,15 +1321,15 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
 
   @media (min-width: 1180px) {
     .cx-mos {
-      grid-template-columns: repeat(8, minmax(0, 1fr));
+      grid-template-columns: repeat(7, minmax(0, 1fr));
     }
 
-    /* Ligne qui relie les 8 moments */
+    /* Ligne qui relie les 7 moments (du centre du 1er au centre du dernier) */
     .cx-mos::before {
       content: '';
       position: absolute;
-      left: calc(100% / 16);
-      right: calc(100% / 16);
+      left: calc(100% / 14);
+      right: calc(100% / 14);
       top: 24px;
       height: 2px;
       background: var(--woop-gradient);
@@ -1633,7 +1634,7 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
   .cx-dg__row.is-hi i { background: var(--woop-gradient); }
   .cx-dg__row.is-hi em { background: var(--woop-gradient); color: var(--text-primary); }
 
-  /* Carte du parcours : 6 étapes reliées, irritants en dégradé (le soin reste neutre) */
+  /* Carte du parcours : 6 étapes reliées, irritants en dégradé */
   .cx-map {
     display: flex;
     align-items: flex-start;
@@ -1675,11 +1676,6 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
   .cx-map .is-bad i {
     background: var(--woop-gradient);
     box-shadow: 0 0 0 5px rgba(230, 43, 127, 0.22);
-  }
-
-  .cx-map .is-neutral i {
-    background: var(--bg-elevated);
-    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--text-primary) 35%, transparent);
   }
 
   .cx-map span {
@@ -1780,26 +1776,19 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
     color: var(--hp-on-grad);
   }
 
-  /* ===== 6. LE RAPPORT : texte à gauche, le rapport à droite (dès 980 px) ===== */
+  /* ===== 6. LE RAPPORT : section ouverte, comme les autres (titre de section, puis le texte à
+     gauche et le rapport à droite dès 980 px, sans cadre) ===== */
   .cx-rp {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 40px;
     align-items: center;
-    padding: 34px 22px;
-    border-radius: 34px;
-    overflow: hidden;
-  }
-
-  @media (min-width: 768px) {
-    .cx-rp { padding: 44px 40px; }
   }
 
   @media (min-width: 980px) {
     .cx-rp {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 60px;
-      padding: 56px;
     }
   }
 
@@ -1810,15 +1799,6 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
     flex-direction: column;
     align-items: flex-start;
   }
-
-  .cx-rp__txt :global(.cx-rp__head) {
-    display: flex;
-    flex-direction: column;
-    gap: var(--home-head-gap);
-    margin-bottom: 18px;
-  }
-
-  .cx-rp__txt :global(.cx-rp__head .hp-title) { margin-bottom: 0; }
 
   .cx-rp__txt > p {
     font-size: 17px;
@@ -1998,14 +1978,6 @@ const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irrit
     font-weight: 600;
     line-height: 1.35;
     color: var(--text-muted);
-  }
-
-  .cx-pg__sg {
-    flex: none;
-    width: 60px;
-    height: 22px;
-    border-bottom: 2px solid var(--woop-pink);
-    border-radius: 0 0 40% 10%;
   }
 
   /* ===== 7. L'ÉCOSYSTÈME : test de visibilité sous le cycle ===== */
