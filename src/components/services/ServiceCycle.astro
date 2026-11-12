@@ -30,7 +30,8 @@
 // - l'animation démarre quand le cycle est à l'écran (IntersectionObserver) et se met en pause
 //   hors de l'écran ; sans JavaScript ou avec prefers-reduced-motion, pointillés fixes ;
 // - liens : seules les cartes des pages en ligne (href dans src/data/services.ts) sont
-//   cliquables ; « Service suivant » n'apparaît que si la page du service suivant est en ligne.
+//   cliquables ; « Service suivant » (sur chaque page, y compris l'image de marque, qui mène au
+//   1er service du cycle) n'apparaît que si la page du service suivant est en ligne.
 // Le dégradé a un id fixe (sc-g) : un seul cycle par page.
 //
 // Props
@@ -51,8 +52,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const core = service(CYCLE_CORE);
 const ring = CYCLE.map((key, i) => ({ ...service(key), area: `s${i + 1}` }));
+// Service suivant : le suivant dans l'ordre du cycle (le dernier mène au premier) ; depuis l'image de
+// marque, au centre (hors de l'anneau), le premier service du cycle
 const at = CYCLE.indexOf(current);
-const next = at >= 0 ? service(CYCLE[(at + 1) % CYCLE.length]) : undefined;
+const next = service(at >= 0 ? CYCLE[(at + 1) % CYCLE.length] : CYCLE[0]);
 
 // Boucle (repère 1000 × 460) passant par le centre des 4 cartes, aux points (18 %, 18 %),
 // (82 %, 18 %), (82 %, 82 %) et (18 %, 82 %), coins arrondis comme chez Emma (sous les cartes).
