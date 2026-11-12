@@ -521,8 +521,8 @@ const calendar: { net?: NetKey; label?: string }[] = [
     <div class="container">
       <SectionHead>Vos <span class="gradient-accent">questions</span>.</SectionHead>
 
-      <!-- 5 questions : 2 à gauche (dont la 1re, ouverte), 3 à droite, pour des colonnes de même hauteur -->
-      <Faq items={faq} name="faq-reseaux" left={2} />
+      <!-- 5 questions, toutes fermées : 2 par colonne, puis la 5e sur toute la largeur (colonnes de même hauteur) -->
+      <Faq items={faq} name="faq-reseaux" wide />
 
       <FurtherReading slugs={['marque-personnelle-sante-credibilite', 'candidat-passif-contenu-marque-employeur', 'authenticite-marketing-coherence']} />
     </div>
