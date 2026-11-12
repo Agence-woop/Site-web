@@ -7,8 +7,9 @@
 // - shape : feat (bandeau dégradé, pleine largeur, texte à gauche et illustration à droite),
 //   wide (2 colonnes, en-tête et texte à gauche, illustration à droite) ou sq (1 colonne)
 // - title ; text : un texte (un seul paragraphe) ou une liste de paragraphes
-// - badge : pastille au-dessus du titre (tuile feat : pastille claire ; tuiles wide et sq : petite
-//   pastille discrète, par exemple « En option »)
+// - badge : pastille (tuile feat : pastille claire, au-dessus du titre ; tuile sq : petite pastille
+//   discrète, par exemple « En option », sous la ligne icône et titre, juste avant le texte, pour que
+//   l'icône et le titre restent à la même hauteur que ceux des tuiles voisines)
 // - reveal, step : apparition au défilement (data-reveal, data-reveal-step)
 // - href : toute la tuile devient un lien (survol, focus et chevron) ; au repos, elle garde
 //   l'apparence d'une tuile simple (le chevron n'apparaît qu'au survol et au focus clavier),
@@ -65,11 +66,11 @@ const lines = Array.isArray(text) ? text : null;
     </>
   ) : (
     <>
-      {badge && <span class="md-sv__badge">{badge}</span>}
       <div class="md-sv__head">
         <span class:list={['md-xi', { 'md-xi--w': onGrad }]} aria-hidden="true"><slot name="icon" /></span>
         <h3>{title}</h3>
       </div>
+      {badge && <span class="md-sv__badge">{badge}</span>}
       {lines ? (
         <div class="md-sv__text" {...scope}>
           {lines.map((line) => <p>{line}</p>)}
@@ -288,11 +289,12 @@ const lines = Array.isArray(text) ? text : null;
 
   .md-sv--accent p { color: var(--hp-on-grad); }
 
-  /* Petite pastille au-dessus de l'en-tête des tuiles wide et sq (badge), discrète : contour rose,
-     texte rose éclairci ; l'en-tête remonte pour garder l'écart habituel avec le texte */
+  /* Petite pastille des tuiles sq (badge), discrète : contour rose, texte rose éclairci. Sous la
+     ligne icône et titre, alignée à gauche avec le texte, qu'elle précède de près (marges négatives :
+     écarts de 14 px au-dessus et de 12 px au-dessous, au lieu des 20 px entre blocs de la tuile) */
   .md-sv__badge {
     align-self: flex-start;
-    margin-bottom: -8px;
+    margin: -6px 0 -8px;
     padding: 5px 11px;
     border-radius: 999px;
     background: rgba(230, 43, 127, 0.1);
