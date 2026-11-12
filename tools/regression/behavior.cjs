@@ -2,7 +2,8 @@
 // Tests de comportement du site compilé : page Contact, quiz du Test de visibilité, barre
 // collante, menu burger après défilement, parcours animé du hero (Santé, RH), carrousel de
 // l'Équipe, alternance de la section 02 de la page Image de marque, illustrations animées de la page
-// Création de site web, animations de la page Conseil en expérience patient, pagination du blog,
+// Création de site web, animations de la page Conseil en expérience patient, FAQ (fermées à
+// l'arrivée, accordéon exclusif, clavier), pagination du blog,
 // ancres et liens internes.
 // Les envois vers Formspree sont simulés (aucune donnée n'est envoyée) et GA4 / Meta sont
 // remplacés par des espions qui notent les événements.
@@ -514,6 +515,38 @@ async function experience(browser, base) {
   }
 }
 
+// FAQ (composant Faq : les 5 pages Services et le Test de visibilité) : toutes les questions fermées à
+// l'arrivée (réponses présentes dans le HTML), un clic ouvre une question, un clic sur une autre
+// referme la première, on peut refermer la question ouverte ; même chose au clavier (Entrée, Espace).
+const FAQ_PAGES = ['/publicite-google-meta/', '/gestion-reseaux-sociaux/', '/image-de-marque/', '/creation-site-web/', '/conseil-experience-patient/', '/acquisition-client/'];
+async function faq(browser, base) {
+  for (const url of FAQ_PAGES) {
+    for (const w of [1440, 390]) {
+      const ctx = await L.newContext(browser, base, { width: w, height: 900 });
+      const pg = await ctx.newPage();
+      await pg.goto(base + url);
+      // Lu après l'événement toggle (asynchrone), qui met à jour aria-expanded ; « ! » : aria-expanded faux
+      const state = async () => { await pg.waitForTimeout(150); return pg.evaluate(() => [...document.querySelectorAll('[data-faq] details')].map((d) => (d.open ? 1 : 0) + (d.querySelector('summary').getAttribute('aria-expanded') === String(d.open) ? '' : '!')).join('')); };
+      const init = await pg.evaluate(() => { const ds = [...document.querySelectorAll('[data-faq] details')]; return { n: ds.length, open: ds.filter((d) => d.open || d.hasAttribute('open')).length, answers: ds.every((d) => d.querySelector('.md-faq__a p').textContent.trim().length > 20) }; });
+      const html = await (await pg.request.get(base + url)).text();
+      const htmlClosed = !/<details[^>]*\sopen[\s>=]/.test(html);
+      const q = (i) => pg.locator('[data-faq] summary').nth(i);
+      await q(0).scrollIntoViewIfNeeded();
+      await q(0).click(); const s1 = await state();
+      await q(1).click(); const s2 = await state();
+      await q(1).click(); const s3 = await state();
+      // Clavier : Entrée ouvre, Espace sur une autre question l'ouvre et referme la première, Entrée referme
+      await q(2).focus(); await pg.keyboard.press('Enter'); const k1 = await state();
+      await q(3).focus(); await pg.keyboard.press('Space'); const k2 = await state();
+      await pg.keyboard.press('Enter'); const k3 = await state();
+      const z = '0'.repeat(init.n), at = (i) => z.slice(0, i) + '1' + z.slice(i + 1);
+      ok(init.open === 0 && htmlClosed && init.answers && s1 === at(0) && s2 === at(1) && s3 === z && k1 === at(2) && k2 === at(3) && k3 === z,
+        `FAQ ${url} ${w}px : ${init.n} questions fermées à l'arrivée (réponses dans le HTML ${init.answers}), clic ${s1} → autre clic ${s2} → refermée ${s3}, clavier ${k1} → ${k2} → ${k3}`);
+      await ctx.close();
+    }
+  }
+}
+
 async function blogPager(browser, base) {
   let ctx = await L.newContext(browser, base, { reducedMotion: 'no-preference' });
   let pg = await ctx.newPage(); await pg.goto(base + '/blog/');
@@ -556,7 +589,7 @@ function anchorsAndLinks(dist) {
   try {
     anchorsAndLinks(dist);
     // Une erreur (délai dépassé…) dans un groupe compte comme un échec, sans arrêter les suivants
-    for (const t of [contact, quiz, stickyBar, burgerMenu, heroFlow, teamCarousel, brandSwitch, siteAnimations, experience, blogPager]) {
+    for (const t of [contact, quiz, stickyBar, burgerMenu, heroFlow, teamCarousel, brandSwitch, siteAnimations, experience, faq, blogPager]) {
       try { await t(browser, server.url); } catch (e) { ok(false, `${t.name} : erreur (${String(e.message || e).split('\n')[0]})`); }
     }
   } finally {

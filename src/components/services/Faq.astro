@@ -5,24 +5,31 @@
 //
 // - Chaque question est un <details> / <summary> natif : sans JavaScript, toutes les questions
 //   s'ouvrent et se ferment au clic et au clavier (Entrée, Espace).
-// - Accordéon exclusif : ouvrir une question ferme celle qui était ouverte. Les <details> portent
-//   le même attribut name (exclusivité native des navigateurs récents) et le script fait de même
-//   pour les autres navigateurs.
+// - À l'arrivée sur la page, toutes les questions sont fermées : aucune ne s'ouvre par défaut. Les
+//   réponses restent dans le HTML (<details> fermé), lues par les moteurs et les lecteurs d'écran.
+// - Accordéon exclusif : ouvrir une question ferme celle qui était ouverte. La question ouverte peut
+//   aussi être refermée (toutes fermées). Les <details> portent le même attribut name
+//   (exclusivité native des navigateurs récents) et le script fait de même pour les autres
+//   navigateurs.
 // - Le script tient à jour aria-expanded sur chaque <summary> (posé seulement quand le script
 //   tourne, pour ne jamais annoncer un état faux).
 // - Colonnes : la 1re moitié des questions à gauche, la 2de à droite (ordre de lecture conservé
 //   en 1 colonne). Chaque colonne est une pile indépendante : ouvrir une question ne décale pas
 //   l'autre colonne.
+// - Nombre impair de questions : avec `wide`, la dernière question occupe toute la largeur, sous les
+//   2 colonnes (ordinateur), pour que les 2 colonnes aient le même nombre de questions et la même
+//   hauteur, questions fermées. Ordre de lecture : colonne de gauche, colonne de droite, puis la
+//   dernière question (ordre du HTML, identique en 1 colonne).
 //
 // Props
 // - items : liste { q, a } (textes simples ; les apostrophes et NB restent tels quels) ; html,
 //   facultatif : la réponse en HTML (par exemple avec un lien), affichée à la place de a (a reste
 //   le texte simple, repris par les données structurées FAQPage)
 // - name : nom du groupe (attribut name des <details>), unique dans la page
-// - open : rang de la question ouverte au chargement (0 par défaut ; -1 pour aucune)
-// - left : nombre de questions de la colonne de gauche (par défaut, la moitié arrondie au-dessus) ;
-//   avec un nombre impair de questions et la 1re ouverte, left = moitié arrondie au-dessous
-//   équilibre la hauteur des 2 colonnes
+// - left : nombre de questions de la colonne de gauche (par défaut, la moitié arrondie au-dessus,
+//   ou la moitié des questions hors la dernière avec `wide`), à régler pour que les 2 colonnes,
+//   toutes questions fermées, soient de hauteur équivalente
+// - wide : la dernière question sur toute la largeur, sous les 2 colonnes (voir plus haut)
 import { text } from '../../utils/html';
 
 interface Item {
@@ -34,19 +41,22 @@ interface Item {
 interface Props {
   items: Item[];
   name: string;
-  open?: number;
   left?: number;
+  wide?: boolean;
 }
 
-const { items, name, open = 0, left } = Astro.props;
-const half = left ?? Math.ceil(items.length / 2);
-const columns = [items.slice(0, half), items.slice(half)].map((col, c) => col.map((item, i) => ({ ...item, rank: c * half + i })));
+const { items, name, left, wide = false } = Astro.props;
+// Questions réparties dans les 2 colonnes (toutes sauf la dernière avec `wide`), puis la dernière
+const inCols = wide ? items.slice(0, -1) : items;
+const half = left ?? Math.ceil(inCols.length / 2);
+const columns = [inCols.slice(0, half), inCols.slice(half)];
+if (wide) columns.push(items.slice(-1));
 ---
 <div class="md-faq" data-faq data-reveal="up">
-  {columns.map((col) => (
-    <div class="md-faq__col">
+  {columns.map((col, c) => (
+    <div class:list={['md-faq__col', { 'md-faq__col--wide': c === 2 }]}>
       {col.map((item) => (
-        <details class="md-faq__item md-glass" name={name} open={item.rank === open}>
+        <details class="md-faq__item md-glass" name={name}>
           <summary class="md-faq__q"><span set:html={text(item.q)} /><span class="md-faq__pl" aria-hidden="true"></span></summary>
           <div class="md-faq__a"><p set:html={item.html ?? text(item.a)} /></div>
         </details>
@@ -93,6 +103,9 @@ const columns = [items.slice(0, half), items.slice(half)].map((col, c) => col.ma
 
   @media (min-width: 900px) {
     .md-faq__col { gap: 16px; }
+
+    /* Dernière question sur toute la largeur, sous les 2 colonnes (wide) */
+    .md-faq__col--wide { grid-column: 1 / -1; }
   }
 
   .md-faq__item {
