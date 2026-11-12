@@ -719,9 +719,9 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
   /* Gris de l'état « Sans système » (02) et de la carte « Chaque support… » (01) : clair, moyen,
      sombre, sans teinte */
   .hp-block {
-    --im-g1: color-mix(in srgb, var(--text-muted) 30%, var(--text-primary));
+    --im-g1: color-mix(in srgb, var(--grey-illustration) 30%, var(--text-primary));
     --im-g2: var(--text-muted);
-    --im-g3: color-mix(in srgb, var(--text-muted) 45%, var(--bg-deep));
+    --im-g3: color-mix(in srgb, var(--grey-illustration) 45%, var(--bg-deep));
   }
 
   /* Bouton sous une section */
@@ -840,7 +840,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     line-height: 1.2;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   .im-hv__sw small { margin-left: 6px; }
@@ -1413,7 +1413,7 @@ const variants: { key: 'web' | 'post' | 'doc' | 'card' | 'sign'; name: string }[
     font-size: 10.5px;
     font-weight: 600;
     line-height: 1.3;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
     transition: color 600ms ease;
   }
 

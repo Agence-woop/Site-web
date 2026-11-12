@@ -664,7 +664,7 @@ const steps = [
     box-shadow: inset 0 0 0 1.5px var(--hp-skel);
     font-size: 12px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   .md-sbar svg {
@@ -740,7 +740,7 @@ const steps = [
     color: var(--hp-dark);
   }
 
-  .md-slotx--dim em { color: var(--text-muted); }
+  .md-slotx--dim em { color: var(--text-muted-on-light); }
   .md-slotx--dim i { background: var(--hp-blush); }
 
   .md-xrv {
@@ -765,7 +765,7 @@ const steps = [
   .md-xrv small {
     font-size: 10.5px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   /* ===== 2. POUR QUI ? ===== */
@@ -1446,15 +1446,7 @@ const steps = [
     border-radius: 4px;
   }
 
-  /* ===== 4. NOTRE DIFFÉRENCE (FounderPortrait) =====
-     Cadrage de la photo : téléphone, tablette (600 à 767 px), puis dès 768 px photo calée en bas
-     et agrandie autour de ce point. */
-  .md-gau {
-    --gau-pos: 51% 60%;
-    --gau-pos-sm: 51% 36%;
-    --gau-pos-md: 51% 100%;
-    --gau-zoom: 1.15;
-  }
+  /* ===== 4. NOTRE DIFFÉRENCE (FounderPortrait) : photo ronde, cadrage de src/data/team.ts ===== */
 
   /* ===== MOUVEMENT RÉDUIT ===== */
   @media (prefers-reduced-motion: reduce) {

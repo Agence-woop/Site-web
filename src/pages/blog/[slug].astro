@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { byDateDesc } from '../../utils/posts';
 import Layout from '../../layouts/Layout.astro';
 import { authors, type AuthorKey } from '../../data/authors';
 import { categoryLabels, getCtaForArticle, type CategoryKey } from '../../data/categories';
@@ -30,7 +31,7 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 220));
 
 const related = allPosts
   .filter((e) => e.id !== entry.id && e.data.categoriePrincipale === data.categoriePrincipale)
-  .sort((a, b) => b.data.datePublication.getTime() - a.data.datePublication.getTime())
+  .sort(byDateDesc)
   .slice(0, 3);
 
 const ogImage = data.vignettePartage ?? '/images/og-image.jpg';

@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { byDateDesc } from '../utils/posts';
 import Layout from '../layouts/Layout.astro';
 import ArticleCard from '../components/blog/ArticleCard.astro';
 import { categoryLabels, categoryDescriptions, type CategoryKey } from '../data/categories';
@@ -10,9 +11,7 @@ const allPosts = await getCollection('blog', ({ data }) =>
   import.meta.env.PROD ? !data.brouillon : true,
 );
 
-const sortedPosts = allPosts.sort(
-  (a, b) => b.data.datePublication.getTime() - a.data.datePublication.getTime(),
-);
+const sortedPosts = allPosts.sort(byDateDesc);
 
 const featured = sortedPosts[0];
 const others = sortedPosts.slice(1);

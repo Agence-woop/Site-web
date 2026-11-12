@@ -781,7 +781,7 @@ const measures: { page: string; w: string }[] = [
     line-height: 1.3;
     white-space: nowrap;
     text-overflow: ellipsis;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   /* Bas de la page réservé à la confirmation : elle ne cache jamais le bouton Réserver */
@@ -1231,12 +1231,12 @@ const measures: { page: string; w: string }[] = [
 
   /* --- Site classique : gris, polices de bureau, tout au même niveau --- */
   .wb-col--off {
-    --ms-ink: color-mix(in srgb, var(--text-muted) 55%, var(--bg-deep));
-    --ms-txt: var(--text-muted);
-    --ms-light: color-mix(in srgb, var(--text-muted) 55%, var(--text-primary));
-    --ms-pale: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
-    --ms-paler: color-mix(in srgb, var(--text-muted) 10%, var(--text-primary));
-    --ms-mid: color-mix(in srgb, var(--text-muted) 80%, var(--text-primary));
+    --ms-ink: color-mix(in srgb, var(--grey-illustration) 55%, var(--bg-deep));
+    --ms-txt: var(--text-muted-on-light);
+    --ms-light: color-mix(in srgb, var(--grey-illustration) 55%, var(--text-primary));
+    --ms-pale: color-mix(in srgb, var(--grey-illustration) 22%, var(--text-primary));
+    --ms-paler: color-mix(in srgb, var(--grey-illustration) 10%, var(--text-primary));
+    --ms-mid: color-mix(in srgb, var(--grey-illustration) 80%, var(--text-primary));
   }
 
   .wb-col--off .wb-frame { background: var(--text-primary); }
@@ -1426,7 +1426,7 @@ const measures: { page: string; w: string }[] = [
   .gd-ln {
     font-size: 10.5px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   .gd-r {
@@ -1481,7 +1481,7 @@ const measures: { page: string; w: string }[] = [
   .gd-ht p {
     font-size: 11px;
     line-height: 1.45;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   .gd-ht sup {

@@ -696,7 +696,7 @@ const steps = [
     box-shadow: inset 0 0 0 1.5px var(--hp-skel);
     font-size: 12px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   .md-sbar svg {
@@ -772,7 +772,7 @@ const steps = [
     color: var(--hp-dark);
   }
 
-  .md-slotx--dim em { color: var(--text-muted); }
+  .md-slotx--dim em { color: var(--text-muted-on-light); }
   .md-slotx--dim i { background: var(--hp-blush); }
 
   /* Étape 4 : carte claire en barres de gabarit (pas de témoignage) */
@@ -1039,7 +1039,7 @@ const steps = [
 
   .md-pc div { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .md-pc b { font-size: 13px; font-weight: 700; line-height: 1.3; }
-  .md-pc small { font-size: 10.5px; font-weight: 600; line-height: 1.3; color: var(--text-muted); }
+  .md-pc small { font-size: 10.5px; font-weight: 600; line-height: 1.3; color: var(--text-muted-on-light); }
 
   .md-pc__ver {
     display: inline-flex;
@@ -1355,7 +1355,7 @@ const steps = [
 
   .md-li__h div { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   .md-li__h b { font-size: 12px; font-weight: 700; line-height: 1.3; }
-  .md-li__h small { font-size: 10px; line-height: 1.3; color: var(--text-muted); }
+  .md-li__h small { font-size: 10px; line-height: 1.3; color: var(--text-muted-on-light); }
 
   .md-li__in {
     display: inline-flex;
@@ -1395,7 +1395,7 @@ const steps = [
     gap: 12px;
     font-size: 10.5px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--text-muted-on-light);
   }
 
   .md-li__f span { display: inline-flex; align-items: center; gap: 4px; }
@@ -1530,15 +1530,7 @@ const steps = [
     border-radius: 4px;
   }
 
-  /* ===== 4. NOTRE DIFFÉRENCE (FounderPortrait) =====
-     Cadrage de la photo : téléphone, tablette (600 à 767 px), puis dès 768 px photo calée en bas
-     et agrandie autour de ce point. */
-  .md-gau {
-    --gau-pos: 50% 52%;
-    --gau-pos-sm: 50% 45%;
-    --gau-pos-md: 49% 100%;
-    --gau-zoom: 1.1;
-  }
+  /* ===== 4. NOTRE DIFFÉRENCE (FounderPortrait) : photo ronde, cadrage de src/data/team.ts ===== */
 
   /* ===== MOUVEMENT RÉDUIT ===== */
   @media (prefers-reduced-motion: reduce) {

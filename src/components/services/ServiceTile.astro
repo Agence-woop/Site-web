@@ -161,6 +161,13 @@ const lines = Array.isArray(text) ? text : null;
     .md-sv.md-sv--wide :global(.md-mui) { height: 170px; }
   }
 
+  /* Tuile-lien large (wide), de 600 à 1099 px : l'illustration, à droite, est assez haute pour
+     passer sous le chevron (en haut à droite) ; elle descend sous lui pour qu'il reste visible et
+     dégagé (bas du chevron : 72 à 74 px du haut de la tuile). Dès 1100 px, rendu inchangé. */
+  @media (min-width: 600px) and (max-width: 1099px) {
+    .md-sv--wide.hp-tile--link :global(.md-mui) { margin-top: 56px; }
+  }
+
   /* Tuile-lien (href défini) : survol, focus et chevron, comme sur l'accueil */
   .hp-tile--link { cursor: pointer; }
 

@@ -17,7 +17,14 @@
 
   --text-primary: #f5f5f7;
   --text-secondary: #a8a8b3;
-  --text-muted: #6e6e7a;
+  /* Texte discret sur fond sombre : contraste d'au moins 4,5 sur le fond de page, les cartes vitrées et
+     les autres fonds sombres du site (#6e6e7a avant : 3,2 à 3,9) */
+  --text-muted: #8e8e99;
+  /* Texte discret sur fond clair (fiches blanches des illustrations) : contraste d'au moins 4,5 */
+  --text-muted-on-light: #50505b;
+  /* Gris de base des gris dérivés des illustrations (lignes, site « classique »…) : ancienne valeur de
+     --text-muted, inchangée */
+  --grey-illustration: #6e6e7a;
 
   --border-subtle: rgba(255, 255, 255, 0.07);
   --border-accent: rgba(230, 43, 127, 0.32);
@@ -170,8 +177,8 @@ ul {
   --hp-plum: color-mix(in srgb, var(--woop-pink) 20%, var(--bg-deep));
   --hp-card: var(--bg-elevated);
   --hp-line: color-mix(in srgb, var(--text-primary) 14%, transparent);
-  --hp-skel: color-mix(in srgb, var(--text-muted) 22%, var(--text-primary));
-  --hp-skel-2: color-mix(in srgb, var(--text-muted) 12%, var(--text-primary));
+  --hp-skel: color-mix(in srgb, var(--grey-illustration) 22%, var(--text-primary));
+  --hp-skel-2: color-mix(in srgb, var(--grey-illustration) 12%, var(--text-primary));
   --hp-shadow: color-mix(in srgb, var(--bg-deep) 55%, transparent);
   --hp-grad-band: linear-gradient(120deg, var(--woop-orange) 25%, var(--woop-pink));
   /* Roses éclairci et foncé (surtitres, pastille du hero, pages de services et Équipe) */

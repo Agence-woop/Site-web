@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { byDateDesc } from '../../utils/posts';
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from './ArticleCard.astro';
 import {
@@ -26,9 +27,7 @@ const posts = await getCollection('blog', ({ data }) =>
   (import.meta.env.PROD ? !data.brouillon : true) && data.categoriePrincipale === category,
 );
 
-const sortedPosts = posts.sort(
-  (a, b) => b.data.datePublication.getTime() - a.data.datePublication.getTime(),
-);
+const sortedPosts = posts.sort(byDateDesc);
 
 const thematiquesSet = new Set<string>();
 sortedPosts.forEach((post) => {
