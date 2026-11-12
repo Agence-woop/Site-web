@@ -67,7 +67,7 @@ Faites le trajet vous-même, un soir, sur votre téléphone, en navigation priv�
 
 Ensuite, mesurez les trois chiffres qui comptent vraiment. Votre taux de réponse au téléphone, pendant et surtout après les heures d'ouverture. Votre taux d'abandon de formulaire, que votre outil d'analyse vous donne déjà. Et le rapprochement le plus révélateur de tous : vos clics et vos nouveaux rendez-vous sur le même mois, côte à côte. L'écart entre les deux, c'est précisément votre couloir invisible, et c'est le seul indicateur de marketing santé qui relie vraiment ce que vous payez à ce que vous obtenez.
 
-Enfin, confiez ce couloir à quelqu'un. Tant qu'il n'appartient à personne, il restera le seul endroit de votre acquisition que personne n'améliore.
+Enfin, [confiez ce couloir à quelqu'un](/conseil-experience-patient/). Tant qu'il n'appartient à personne, il restera le seul endroit de votre acquisition que personne n'améliore.
 
 ## L'entonnoir ne s'arrête pas au clic
 

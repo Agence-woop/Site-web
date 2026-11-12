@@ -72,7 +72,14 @@ export const SERVICES: Service[] = [
     href: '/creation-site-web/',
     icon: ICONS.browser,
   },
-  { key: 'experience', label: 'Expérience client', role: 'Fait revenir et recommander', icon: ICONS.heartBubble },
+  {
+    key: 'experience',
+    label: 'Conseil en expérience patient',
+    role: 'Fait revenir et recommander',
+    hint: 'Fait revenir et recommander',
+    href: '/conseil-experience-patient/',
+    icon: ICONS.heartBubble,
+  },
 ];
 
 /** Pages Services déjà en ligne, dans l'ordre du menu. */

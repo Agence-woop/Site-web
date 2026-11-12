@@ -22,7 +22,7 @@ Parce qu'en santé, la vraie question n'a jamais été « qu'est-ce que la techn
 
 Le danger, ce n'est pas une mauvaise technologie. Les outils sont souvent excellents. Le danger, c'est d'appliquer une logique d'efficacité au seul secteur où le contact humain n'est pas un accessoire du service, mais le service lui-même.
 
-Quand un patient pousse la porte de votre clinique, il n'achète pas seulement un acte technique. Il achète le fait d'être vu, écouté, rassuré par quelqu'un en qui il a confiance. Retirez l'humain de cette équation, et il ne reste pas un service plus efficace. Il reste un service vidé de ce qui le rendait précieux.
+Quand un patient [pousse la porte de votre clinique](/conseil-experience-patient/), il n'achète pas seulement un acte technique. Il achète le fait d'être vu, écouté, rassuré par quelqu'un en qui il a confiance. Retirez l'humain de cette équation, et il ne reste pas un service plus efficace. Il reste un service vidé de ce qui le rendait précieux.
 
 Les patients le sentent, d'ailleurs, bien avant nous. Une enquête du Pew Research Center révèle que 60 % des adultes seraient mal à l'aise si leur propre professionnel de santé s'appuyait sur l'IA pour les diagnostiquer et les traiter. Plus parlant encore pour mon propos : 57 % craignent que l'IA n'abîme la nature personnelle de la relation entre le patient et le soignant. Ce n'est pas de la technophobie. C'est l'intuition juste que, dans le soin, le lien fait partie du remède.
 

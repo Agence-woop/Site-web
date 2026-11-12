@@ -2,7 +2,8 @@
 // Tests de comportement du site compilé : page Contact, quiz du Test de visibilité, barre
 // collante, menu burger après défilement, parcours animé du hero (Santé, RH), carrousel de
 // l'Équipe, alternance de la section 02 de la page Image de marque, illustrations animées de la page
-// Création de site web, FAQ (fermées à l'arrivée, accordéon exclusif, clavier), pagination du blog,
+// Création de site web, animations de la page Conseil en expérience patient, FAQ (fermées à
+// l'arrivée, accordéon exclusif, clavier), pagination du blog,
 // ancres et liens internes.
 // Les envois vers Formspree sont simulés (aucune donnée n'est envoyée) et GA4 / Meta sont
 // remplacés par des espions qui notent les événements.
@@ -18,7 +19,7 @@ const args = L.parseArgs();
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) { pass++; console.log('OK   ' + m); } else { fail++; console.log('ÉCHEC ' + m); } };
 
-const STICKY_PAGES = ['/', '/services-medical/', '/services-recrutement/', '/equipe/', '/creation-site-web/'];
+const STICKY_PAGES = ['/', '/services-medical/', '/services-recrutement/', '/equipe/', '/creation-site-web/', '/conseil-experience-patient/'];
 const spy = () => { window.__ev = []; window.gtag = (...a) => window.__ev.push(['gtag', ...a]); window.woopMetaTrack = (...a) => window.__ev.push(['meta', ...a]); };
 
 async function contact(browser, base) {
@@ -438,10 +439,86 @@ async function siteAnimations(browser, base) {
   }
 }
 
-// FAQ (composant Faq : pages Services et Test de visibilité) : toutes les questions fermées à
+// Page Conseil en expérience patient : hero (parcours de Sophie : irritant 1,7 s, corrigé 1,9 s, étape
+// suivante, en boucle, sans pause au survol) ; section 03 (un moment toutes les 3,6 s, bouton Pause /
+// Lecture, clic sur un moment sans arrêter la rotation sauf pause choisie) ; arrêt hors de l'écran ;
+// mouvement réduit : immobile, état final.
+async function experience(browser, base) {
+  const URL = '/conseil-experience-patient/';
+  const heroState = (pg) => pg.evaluate(() => {
+    const cards = [...document.querySelectorAll('[data-cx-step]')];
+    return `${cards.findIndex((c) => c.classList.contains('is-on'))}${document.querySelector('[data-cx-chip]').classList.contains('is-fix') ? 'C' : 'I'}`;
+  });
+  const cur = (pg) => pg.evaluate(() => Number(document.querySelector('[data-cx-mo]').dataset.cxCurrent ?? 0));
+  const btn = (pg) => pg.evaluate(() => { const b = document.querySelector('[data-cx-pause]'); const r = b.getBoundingClientRect(); return { pressed: b.getAttribute('aria-pressed'), label: b.getAttribute('aria-label'), w: Math.round(r.width), h: Math.round(r.height), vis: !b.hidden && getComputedStyle(b).display !== 'none' }; });
+  const to = async (pg, sel) => { await pg.evaluate((x) => document.querySelector(x).scrollIntoView({ block: 'center', behavior: 'instant' }), sel); await pg.waitForTimeout(1300); };
+  const away = async (pg) => { await pg.evaluate(() => document.querySelector('[data-hp-final]').scrollIntoView({ block: 'center', behavior: 'instant' })); await pg.waitForTimeout(400); };
+
+  for (const w of [1440, 390]) {
+    const ctx = await L.newContext(browser, base, { width: w, height: 900, reducedMotion: 'no-preference' });
+    const pg = await ctx.newPage();
+    await pg.goto(base + URL);
+    // Hero : séquence sur un cycle complet (3 étapes × 3,6 s), souris posée sur l'illustration
+    await to(pg, '[data-cx-hero]');
+    const box = await pg.locator('[data-cx-hero]').boundingBox();
+    await pg.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    const seq = []; const times = []; const t0 = Date.now();
+    while (Date.now() - t0 < 11800) { const s = await heroState(pg); if (seq[seq.length - 1] !== s) { seq.push(s); times.push(Date.now() - t0); } await pg.waitForTimeout(80); }
+    const want = ['0I', '0C', '1I', '1C', '2I', '2C', '0I'];
+    const start = seq.indexOf(seq.find((x) => want.includes(x)));
+    const okSeq = seq.length >= 7 && seq.slice(0, 7).every((x, i) => x === want[(want.indexOf(seq[0]) + i) % 6]);
+    const gaps = times.slice(1).map((t, i) => t - times[i]).slice(1, 5);
+    const okTiming = gaps.every((g) => g > 1500 && g < 2150);
+    const dash = await pg.evaluate(() => document.querySelector('.cx-dash').getAnimations()[0]?.playState);
+    // Hors de l'écran : plus rien ne bouge
+    await away(pg);
+    const h1 = await heroState(pg); await pg.waitForTimeout(4200); const h2 = await heroState(pg);
+    const dashOff = await pg.evaluate(() => document.querySelector('.cx-dash').getAnimations()[0]?.playState);
+    const text = await pg.evaluate(() => [...document.querySelectorAll('.md-hero__text, .md-hero__text *')].every((el) => el.getAnimations().length === 0));
+    // Pointillés : seulement dès 600 px (cachés sur téléphone)
+    const dashOk = w < 600 ? dash === undefined && dashOff === undefined : dash === 'running' && dashOff === 'paused';
+    ok(okSeq && okTiming && dashOk && h1 === h2 && text,
+      `Conseil en expérience patient ${w}px : hero en boucle (${seq.join(' → ')}), intervalles ${gaps.map((g) => (g / 1000).toFixed(1)).join(' / ')} s, sans pause au survol ; à l'arrêt hors de l'écran (${h1} = ${h2}, pointillés ${dashOff}) ; texte immobile ${text}`);
+
+    // Section 03 : avancée automatique, clic sans arrêt, pause, lecture, hors de l'écran
+    await to(pg, '[data-cx-mo]');
+    const b0 = await btn(pg);
+    const c0 = await cur(pg); await pg.waitForTimeout(3900); const c1 = await cur(pg);
+    await pg.locator('[data-cx-moment="4"]').click(); const c2 = await cur(pg);
+    await pg.waitForTimeout(3900); const c3 = await cur(pg);
+    await pg.locator('[data-cx-pause]').click(); const b1 = await btn(pg);
+    const p0 = await cur(pg); await pg.waitForTimeout(4300); const p1 = await cur(pg);
+    await pg.locator('[data-cx-moment="1"]').click(); const p2 = await cur(pg); await pg.waitForTimeout(4000); const p3 = await cur(pg);
+    await pg.locator('[data-cx-pause]').click(); const b2 = await btn(pg); await pg.waitForTimeout(3900); const p4 = await cur(pg);
+    await away(pg); const o1 = await cur(pg); await pg.waitForTimeout(4300); const o2 = await cur(pg);
+    ok(b0.vis && b0.w >= 44 && b0.h >= 44 && b0.pressed === 'false' && c1 === (c0 + 1) % 8 && c2 === 4 && c3 === 5,
+      `Conseil en expérience patient ${w}px : moments en rotation (${c0} → ${c1} en 3,6 s), clic sur le 5e (${c2}) sans arrêt de la rotation (${c3}), bouton visible ${b0.w}×${b0.h}`);
+    ok(b1.pressed === 'true' && b1.label === "Reprendre l'animation" && p0 === p1 && p2 === 1 && p3 === 1 && b2.pressed === 'false' && b2.label === "Mettre en pause l'animation" && p4 === 2 && o1 === o2,
+      `Conseil en expérience patient ${w}px : bouton Pause (aria-pressed ${b1.pressed}, « ${b1.label} ») ; en pause, aucune avancée (${p0} = ${p1}) et clic sur le 2e affiché sans relancer (${p2}, ${p3}) ; Lecture (${b2.pressed}) : reprise (${p4}) ; hors de l'écran : arrêt (${o1} = ${o2})`);
+    await ctx.close();
+  }
+
+  // Mouvement réduit : rien ne bouge, état final
+  for (const w of [1440, 390]) {
+    const ctx = await L.newContext(browser, base, { width: w, height: 900, reducedMotion: 'reduce' });
+    const pg = await ctx.newPage();
+    await pg.goto(base + URL);
+    const h1 = await heroState(pg);
+    await to(pg, '[data-cx-mo]');
+    const c1 = await cur(pg); const b = await btn(pg);
+    await pg.waitForTimeout(4500);
+    const h2 = await heroState(pg); const c2 = await cur(pg);
+    const r = await pg.evaluate(() => ({ running: document.getAnimations().filter((a) => a.playState === 'running').length, chip: document.querySelector('[data-cx-s]').textContent, anim: document.querySelector('[data-cx-hero]').classList.contains('is-anim') }));
+    ok(h1 === '2C' && h2 === '2C' && c1 === c2 && b.pressed === 'true' && r.running === 0 && !r.anim && /prévenu/.test(r.chip),
+      `Conseil en expérience patient ${w}px, mouvement réduit : hero figé à l'état final (${h2}, « ${r.chip} »), aucune avancée des moments (${c1} = ${c2}), bouton en position Lecture, ${r.running} animation en cours`);
+    await ctx.close();
+  }
+}
+
+// FAQ (composant Faq : les 5 pages Services et le Test de visibilité) : toutes les questions fermées à
 // l'arrivée (réponses présentes dans le HTML), un clic ouvre une question, un clic sur une autre
 // referme la première, on peut refermer la question ouverte ; même chose au clavier (Entrée, Espace).
-const FAQ_PAGES = ['/publicite-google-meta/', '/gestion-reseaux-sociaux/', '/image-de-marque/', '/creation-site-web/', '/acquisition-client/'];
+const FAQ_PAGES = ['/publicite-google-meta/', '/gestion-reseaux-sociaux/', '/image-de-marque/', '/creation-site-web/', '/conseil-experience-patient/', '/acquisition-client/'];
 async function faq(browser, base) {
   for (const url of FAQ_PAGES) {
     for (const w of [1440, 390]) {
@@ -512,7 +589,7 @@ function anchorsAndLinks(dist) {
   try {
     anchorsAndLinks(dist);
     // Une erreur (délai dépassé…) dans un groupe compte comme un échec, sans arrêter les suivants
-    for (const t of [contact, quiz, stickyBar, burgerMenu, heroFlow, teamCarousel, brandSwitch, siteAnimations, faq, blogPager]) {
+    for (const t of [contact, quiz, stickyBar, burgerMenu, heroFlow, teamCarousel, brandSwitch, siteAnimations, experience, faq, blogPager]) {
       try { await t(browser, server.url); } catch (e) { ok(false, `${t.name} : erreur (${String(e.message || e).split('\n')[0]})`); }
     }
   } finally {

@@ -1,0 +1,2032 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
+import SectionHead from '../components/SectionHead.astro';
+import VisibilityTeaser from '../components/VisibilityTeaser.astro';
+import FinalBand from '../components/FinalBand.astro';
+import StickyBar from '../components/StickyBar.astro';
+import CtaIcon from '../components/CtaIcon.astro';
+import ServiceHero from '../components/services/ServiceHero.astro';
+import AudienceCard from '../components/services/AudienceCard.astro';
+import ServiceTile from '../components/services/ServiceTile.astro';
+import SpecialistCard from '../components/services/SpecialistCard.astro';
+import Faq from '../components/services/Faq.astro';
+import FurtherReading from '../components/services/FurtherReading.astro';
+import ServiceCycle from '../components/services/ServiceCycle.astro';
+import { team } from '../data/team';
+import { service } from '../data/services';
+import { NB } from '../utils/typo';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const SITE_URL = 'https://agence-woop.ca';
+const PAGE_URL = `${SITE_URL}/conseil-experience-patient/`;
+
+// Vos questions (accordéon et données structurées FAQPage) : 3 questions par colonne, toutes fermées
+const faq = [
+  {
+    q: `Pourquoi une agence marketing s'occupe de l'expérience patient${NB}?`,
+    a: "Parce que la publicité amène le patient, mais c'est l'expérience qui décide s'il revient et s'il vous recommande. Une bonne campagne ne compense pas un appel sans réponse.",
+  },
+  {
+    q: `Est-ce que vous venez vraiment dans la clinique${NB}?`,
+    a: `Oui. Après la fiche Google et le site, Kevin vient sur place et vit votre parcours comme un patient${NB}: l'accueil, l'attente, l'environnement, le paiement et ce qui se passe après. On se déplace à Montréal, à Laval et sur la Rive-Sud, et dans d'autres régions sur demande.`,
+  },
+  {
+    q: `Mon équipe est-elle prévenue de la visite${NB}?`,
+    a: "Oui. La visite est programmée avec vous et annoncée à votre équipe. On n'évalue jamais la consultation ni les soins donnés par vos praticiens.",
+  },
+  {
+    q: `Avez-vous accès aux dossiers de nos patients${NB}?`,
+    a: `Jamais. On observe le parcours, pas les dossiers${NB}: ce n'est pas le but de notre visite.`,
+  },
+  {
+    q: `Combien de temps ça prend${NB}?`,
+    a: 'La visite peut avoir lieu dans les 48 à 72 heures suivant notre appel découverte. Vous recevez ensuite votre rapport et nos recommandations dans les 48 à 72 heures.',
+  },
+  {
+    q: `Qu'est-ce qui est inclus${NB}?`,
+    a: "L'audit de votre fiche Google, de votre site et de votre clinique, et un rapport avec les irritants, le plan d'action par priorité et les indicateurs à suivre. La formation et l'accompagnement de votre équipe d'accueil, ainsi qu'un audit de suivi quelques mois plus tard, sont offerts en option.",
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Conseil en expérience patient',
+    serviceType: 'Conseil en expérience patient pour cliniques',
+    // Renvoie à la fiche de l'organisation publiée sur l'accueil
+    provider: { '@id': `${SITE_URL}/#organization`, name: 'Agence WOOP' },
+    areaServed: 'Québec',
+    url: PAGE_URL,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: service('experience').label, item: PAGE_URL },
+    ],
+  },
+];
+
+// Icônes au trait (même style que le reste du site)
+const ICONS = {
+  pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  screen: '<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8"/>',
+  // Clinique : bâtiment, croix médicale (blanche dans sa pastille, jamais rouge) et porte (même
+  // pictogramme que les autres pages Services)
+  clinic: '<path d="M5 21V7a1 1 0 011-1h12a1 1 0 011 1v14"/><path d="M3 21h18"/><path d="M10.5 8.5h3v2h2v3h-2v2h-3v-2h-2v-3h2z"/><path d="M10 21v-3.5h4V21"/>',
+  phone: '<path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11 11 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+  route: '<path d="M4 6h4v4H4zM16 14h4v4h-4z"/><path d="M8 8h5a3 3 0 013 3v3"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18h2"/>',
+  team: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14.5c2.3.2 4 1.8 4.5 4.5"/>',
+  chart: '<path d="M4 20V10M10 20V5M16 20v-7M22 20H2"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+} as const;
+type IconKey = keyof typeof ICONS;
+const icon = (k: IconKey) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
+
+// Flèche des illustrations et des moments (même tracé que les boutons)
+const ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+
+// Hero : les 3 étapes du parcours, et ce que la patiente rencontre à chacune (irritant, puis correction)
+const steps: { k: string; ic: IconKey; over: string; title: string; what: string; irritant: string; fix: string }[] = [
+  { k: '1', ic: 'pin', over: '1 · En ligne', title: 'Votre fiche Google', what: 'Avis, photos, horaires, réponses', irritant: 'Aucune réponse aux avis', fix: 'Une réponse à chaque avis' },
+  { k: '2', ic: 'screen', over: '2 · En ligne', title: 'Votre site', what: "Trouver l'info, réserver", irritant: 'Réservation en 6 étapes', fix: 'Réservation en 3 clics' },
+  { k: '3', ic: 'clinic', over: '3 · En personne', title: 'Votre clinique', what: 'Accueil, attente, environnement, paiement, suivi', irritant: 'Attente sans nouvelles', fix: 'Patient prévenu du retard' },
+];
+const last = steps[steps.length - 1];
+
+// 01 · Pour qui ?
+const profiles: { key: 'once' | 'reviews' | 'phone' | 'ads'; title: string; lived: string; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'once',
+    title: 'Vos patients viennent une fois, puis ne reviennent pas.',
+    lived: `Le soin était bon. Alors qu'est-ce qui les a fait partir${NB}?`,
+    reveal: 'left',
+  },
+  {
+    key: 'reviews',
+    title: "Vos avis Google parlent plus de l'accueil que du soin.",
+    lived: `«${NB}Personne ne répond au téléphone${NB}», «${NB}40 minutes d'attente sans nouvelles${NB}».`,
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'phone',
+    title: 'Le téléphone sonne, et personne ne décroche.',
+    lived: "Des appels perdus, des rendez-vous manqués, une équipe d'accueil débordée.",
+    reveal: 'up',
+    step: '2',
+  },
+  {
+    key: 'ads',
+    title: "Vous investissez en publicité, mais l'expérience ne suit pas.",
+    lived: "La pub amène le patient. Si le parcours bloque, l'argent part avec lui.",
+    reveal: 'right',
+    step: '3',
+  },
+];
+
+// 02 · L'audit
+const audits: { n: string; ic: IconKey; title: string; where: string; look: string; goal: string; reveal: 'left' | 'up' | 'right'; step?: string; hot?: boolean }[] = [
+  {
+    n: '01',
+    ic: 'pin',
+    title: 'La fiche Google',
+    where: 'Ce que le patient voit avant même de cliquer.',
+    look: 'Avis, photos, horaires, réponses aux commentaires.',
+    goal: 'Une première impression qui donne confiance',
+    reveal: 'left',
+  },
+  {
+    n: '02',
+    ic: 'screen',
+    title: 'Le site web',
+    where: "La facilité à trouver l'information et à réserver.",
+    look: "Clarté, rapidité, nombre d'étapes pour prendre rendez-vous.",
+    goal: 'Une réservation sans effort',
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    n: '03',
+    ic: 'clinic',
+    title: 'La clinique, en personne',
+    where: 'On vient sur place, comme un patient.',
+    look: "L'accueil, l'attente, l'environnement, le paiement, et ce qui se passe après.",
+    goal: 'Une expérience cohérente du début à la fin',
+    reveal: 'right',
+    step: '2',
+    hot: true,
+  },
+];
+
+// 03 · Les moments qui comptent
+const moments: { name: string; lived: string; reco: string }[] = [
+  { name: 'Trouver', lived: 'Il tombe sur une fiche Google sans photos, et des avis restés sans réponse.', reco: 'Une fiche complète, des photos récentes, une réponse à chaque avis.' },
+  { name: 'Réserver', lived: 'Le formulaire demande dix informations. Il abandonne.', reco: 'Une réservation en quelques clics, ou un rappel rapide.' },
+  { name: 'Arriver', lived: 'Personne ne lève les yeux à son arrivée.', reco: 'Un accueil qui le reconnaît et lui dit quoi faire.' },
+  { name: 'Attendre', lived: 'Vingt minutes de retard, et personne ne le prévient.', reco: 'Il est prévenu, et sait combien de temps il attend.' },
+  { name: 'Être soigné', lived: "Le soin est excellent. C'est votre cœur de métier.", reco: `On ne touche pas au soin${NB}: on s'assure que tout le reste est à sa hauteur.` },
+  { name: 'Payer', lived: 'La facture est floue, il ne sait pas ce qui est couvert.', reco: 'Une facture claire, expliquée au comptoir.' },
+  { name: 'Être relancé', lived: 'Après le soin, plus aucune nouvelle.', reco: 'Un message de suivi, et le prochain rendez-vous proposé.' },
+  { name: 'Recommander', lived: 'Personne ne lui a demandé son avis.', reco: "Une demande d'avis au bon moment, et des patients qui vous recommandent." },
+];
+
+// 04 · Les livrables (grille : 1 colonne sur téléphone, 2 sur tablette, 4 sur ordinateur)
+const deliverables: { key: 'diag' | 'map' | 'plan' | 'team' | 'kpi'; ic: IconKey; title: string; text: string; badge?: string; accent?: boolean; reveal: 'left' | 'up' | 'right'; step?: string }[] = [
+  {
+    key: 'diag',
+    ic: 'search',
+    accent: true,
+    title: 'Le diagnostic',
+    text: 'Votre fiche Google, votre site et votre clinique, parcourus comme un patient. Tout ce qui fonctionne, et tout ce qui bloque.',
+    reveal: 'left',
+  },
+  {
+    key: 'map',
+    ic: 'route',
+    title: 'La carte du parcours',
+    text: "Chaque étape vécue par vos patients, de la recherche en ligne jusqu'au suivi, avec les irritants repérés.",
+    reveal: 'right',
+    step: '1',
+  },
+  { key: 'plan', ic: 'list', title: "Un plan d'action par priorité", text: "Ce qu'on change, et dans quel ordre.", reveal: 'up' },
+  {
+    key: 'team',
+    ic: 'team',
+    badge: 'En option',
+    title: "L'équipe d'accueil",
+    text: `On se déplace dans votre clinique pour former et accompagner l'équipe qui reçoit vos patients${NB}: l'accueil au téléphone, l'arrivée, l'attente et le suivi.`,
+    reveal: 'up',
+    step: '1',
+  },
+  {
+    key: 'kpi',
+    ic: 'chart',
+    title: 'Les indicateurs à suivre',
+    text: `Délai de réponse, rendez-vous manqués, avis Google, patients qui reviennent${NB}: des indicateurs que vous regardez déjà, listés dans votre rapport. Les chiffres viennent de votre clinique, jamais d'une estimation. Un audit de suivi, quelques mois plus tard, est possible en option.`,
+    reveal: 'up',
+    step: '2',
+  },
+];
+
+// Lignes du diagnostic (illustration) : état et libellé, aux couleurs de la charte
+const diagRows: { label: string; state: 'ok' | 'mid' | 'hi'; tag: string }[] = [
+  { label: 'Fiche Google', state: 'ok', tag: 'Bien' },
+  { label: 'Réservation en ligne', state: 'mid', tag: 'À améliorer' },
+  { label: 'Accueil téléphonique', state: 'hi', tag: 'Prioritaire' },
+  { label: 'Suivi après la visite', state: 'hi', tag: 'Prioritaire' },
+];
+
+// Carte du parcours (illustration) : étapes, irritants repérés (le soin reste neutre : on ne l'évalue pas)
+const mapSteps: { label: string; state: 'ok' | 'bad' | 'neutral' }[] = [
+  { label: 'Trouver', state: 'ok' },
+  { label: 'Réserver', state: 'bad' },
+  { label: 'Arriver', state: 'ok' },
+  { label: 'Attendre', state: 'bad' },
+  { label: 'Soin', state: 'neutral' },
+  { label: 'Suivi', state: 'bad' },
+];
+
+// 05 · Le rapport : sommaire
+const toc = ['Votre parcours en ligne', 'Votre parcours en clinique', 'Les irritants, par priorité', "Le plan d'action", 'Les indicateurs à suivre'];
+---
+<Layout
+  title="Conseil en expérience patient à Montréal | WOOP"
+  description="Fiche Google, site web, puis visite sur place : on vit votre parcours de A à Z et on vous remet un plan pour corriger chaque irritant."
+  ogImage="/images/og-image.jpg"
+  jsonLd={jsonLd}
+>
+
+  <!-- Apparition des blocs au défilement (avant le premier bloc animé). Le hero n'est jamais animé. -->
+  <ScrollReveal />
+
+  <!-- 1. HERO (sans data-reveal ; texte immobile, seule l'illustration s'anime) -->
+  <ServiceHero
+    layout="split"
+    pill="Conseil en expérience patient"
+    sub={`Votre fiche Google, votre site, puis votre clinique, sur place${NB}: on parcourt chaque étape comme un patient, on repère les irritants, et on vous remet un plan clair pour une expérience complète, avant, pendant et après le rendez-vous.`}
+    strong="Le marketing amène vos patients. L'expérience les fait revenir."
+    primary={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+    secondary={{ href: `${base}/acquisition-client/`, label: 'Testez votre visibilité' }}
+  >
+    <Fragment slot="title">Conseil en expérience patient{NB}: on vit votre parcours, <span class="gradient-accent hp-kw">en ligne, puis en personne</span>.</Fragment>
+
+    <Fragment slot="visual">
+    <Fragment set:html={"<!-- Illustration : le parcours de Sophie, de la fiche Google à la clinique ; à chaque étape, un irritant repéré puis corrigé -->"} />
+    <div class="cx-hv" aria-hidden="true" data-cx-hero>
+      <div class="cx-hv__glow"></div>
+      <svg class="cx-path" viewBox="0 0 520 480" preserveAspectRatio="none" focusable="false">
+        <defs><linearGradient id="cx-path-g" x1="0" x2="1"><stop class="cx-stop-o" offset="0" /><stop class="cx-stop-p" offset="1" /></linearGradient></defs>
+        <path class="cx-dash" d="M110 90 C 300 90, 330 170, 260 230 S 160 330, 380 380" />
+      </svg>
+      <div class="cx-steps">
+        {steps.map((s, i) => (
+          <div class:list={['cx-st', `cx-st--${s.k}`, { 'is-on': i === steps.length - 1 }]} data-cx-step data-irritant={s.irritant} data-fix={s.fix}>
+            <span class="cx-ic" set:html={icon(s.ic)} />
+            <div><small>{s.over}</small><b>{s.title}</b><em>{s.what}</em></div>
+          </div>
+        ))}
+      </div>
+      <div class="cx-pat" data-cx-pat><span class="cx-av">S</span><div><b>Sophie</b><small>Nouvelle patiente</small></div></div>
+      <div class="cx-chip is-fix" data-cx-chip><span class="cx-ci" data-cx-ci>✓</span><div><b data-cx-t>Corrigé</b><small data-cx-s>{last.fix}</small></div></div>
+    </div>
+    </Fragment>
+  </ServiceHero>
+
+  <!-- 2. 01 · POUR QUI ? -->
+  <section class="hp-block hp-sec" id="pour-qui" data-reveal-clip>
+    <div class="container">
+      <SectionHead over={`01 · Pour qui${NB}?`}>Vous vous <span class="gradient-accent">reconnaissez</span>{NB}?</SectionHead>
+
+      <div class="cx-prs">
+        {profiles.map((p) => (
+          <AudienceCard kind={p.key} title={p.title} lived={p.lived} reveal={p.reveal} step={p.step}>
+            {p.key === 'once' && (
+              <div class="cx-a1">
+                <div class="cx-a1__bars"><i style="height:95%"></i><i style="height:45%"></i><i style="height:25%"></i><i style="height:15%"></i></div>
+                <small>1<sup>re</sup> visite, puis…</small>
+              </div>
+            )}
+            {p.key === 'reviews' && (
+              <div class="cx-a2">
+                <span class="cx-a2__stars"><span>★★★</span><span class="cx-a2__off">★★</span></span>
+                <b>«{NB}Accueil à revoir{NB}»</b>
+              </div>
+            )}
+            {p.key === 'phone' && (
+              <div class="cx-a3"><span set:html={icon('phone')} /><b>3 appels manqués</b></div>
+            )}
+            {p.key === 'ads' && (
+              <div class="cx-a4"><span class="cx-a4__nd cx-a4__nd--w">Pub</span><i></i><span class="cx-a4__nd cx-a4__nd--p">?</span><i></i><span class="cx-a4__nd cx-a4__nd--g">✓</span></div>
+            )}
+          </AudienceCard>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 02 · L'AUDIT -->
+  <section class="hp-block hp-sec" id="audit" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="02 · L'audit" intro="Votre clinique, vue par vos patients. Et on se déplace dans votre clinique.">En ligne, puis <span class="gradient-accent">en personne</span>.</SectionHead>
+
+      <ol class="cx-fns">
+        {audits.map((a) => (
+          <li class:list={['cx-fn', { 'md-glass': !a.hot, 'cx-fn--hot': a.hot }]} data-reveal={a.reveal} data-reveal-step={a.step}>
+            <div class="cx-fn__head">
+              <span class="cx-fn__n" aria-hidden="true">{a.n}</span>
+              <span class="cx-ic" aria-hidden="true" set:html={icon(a.ic)} />
+              <h3><span class="visually-hidden">{a.n} </span>{a.title}</h3>
+            </div>
+            <p class="cx-fn__where">{a.where}</p>
+            <dl>
+              <dt>On regarde</dt><dd>{a.look}</dd>
+              <dt>Objectif</dt><dd class="cx-fn__goal">{a.goal}</dd>
+            </dl>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. 03 · LES MOMENTS QUI COMPTENT : un moment après l'autre, toutes les 3,6 s (maquette) ;
+       bouton Pause / Lecture ; un clic sur un moment l'affiche sans arrêter la rotation (sauf pause
+       choisie) ; pause au focus clavier dans la section ; arrêt hors de l'écran ; mouvement réduit :
+       aucune avancée automatique ; sans JavaScript : le 1er moment -->
+  <section class="hp-block hp-sec" id="moments" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="03 · Les moments qui comptent" intro="Huit moments, du premier clic à la recommandation. Un seul qui bloque, et le patient ne revient pas. Cliquez sur un moment.">Les irritants qu'on <span class="gradient-accent">traque</span>.</SectionHead>
+
+      <div class="cx-mw" data-cx-mo data-reveal="up">
+        <div class="cx-mw__bar">
+          <button type="button" class="cx-play" data-cx-pause aria-pressed="false" aria-label="Mettre en pause l'animation" hidden>
+            <svg class="cx-play__i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.2"/></svg>
+            <svg class="cx-play__i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.6v12.8a1 1 0 001.5.86l10.2-6.4a1 1 0 000-1.72L9.5 4.74A1 1 0 008 5.6z"/></svg>
+          </button>
+        </div>
+        <ol class="cx-mos">
+          {moments.map((m, i) => (
+            <li class:list={['cx-mo', { 'is-act': i === 0 }]}>
+              <button type="button" data-cx-moment={i} aria-pressed={i === 0 ? 'true' : 'false'} aria-controls={`cx-pn-${i}`}><span class="cx-dot" aria-hidden="true">{i + 1}</span><b>{m.name}</b></button>
+            </li>
+          ))}
+        </ol>
+        <div class="cx-pns">
+          {moments.map((m, i) => (
+            <div class:list={['cx-pn', { 'is-act': i === 0 }]} id={`cx-pn-${i}`} aria-hidden={i === 0 ? undefined : 'true'}>
+              <div class="cx-pa"><small>Ce que vit le patient</small><p>{m.lived}</p></div>
+              <span class="cx-arr" aria-hidden="true" set:html={ARROW} />
+              <div class="cx-pb"><small>Ce qu'on recommande</small><p>{m.reco}</p></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="md-svc-cta" data-reveal="up">
+        <a class="cta" href={`${base}/contact/`}>Faire auditer votre parcours patient<CtaIcon /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 04 · LES LIVRABLES -->
+  <section class="hp-block hp-sec" id="livrables" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="04 · Les livrables" intro="Un constat clair, et un plan pour le corriger avec votre équipe.">Ce que vous <span class="gradient-accent">recevez</span>.</SectionHead>
+
+      <div class="cx-bento">
+        {deliverables.map((t) => (
+          <ServiceTile kind={t.key} shape="sq" title={t.title} text={t.text} badge={t.badge} accent={t.accent} reveal={t.reveal} step={t.step}>
+            <Fragment slot="icon"><Fragment set:html={icon(t.ic)} /></Fragment>
+            <Fragment slot="illustration">
+              <div class:list={['md-mui', `cx-mui--${t.key}`]} aria-hidden="true">
+                {t.key === 'diag' && (
+                  <div class="cx-dg">
+                    <div class="cx-dg__h"><b>Diagnostic</b><span>Votre clinique</span></div>
+                    {diagRows.map((r) => (
+                      <div class:list={['cx-dg__row', `is-${r.state}`]}><span>{r.label}</span><i></i><em>{r.tag}</em></div>
+                    ))}
+                  </div>
+                )}
+                {t.key === 'map' && (
+                  <div class="cx-map">
+                    {mapSteps.map((s) => (
+                      <div class:list={[`is-${s.state}`]}><i></i><span>{s.label}</span>{s.state === 'bad' && <em>Irritant</em>}</div>
+                    ))}
+                  </div>
+                )}
+                {t.key === 'plan' && (
+                  <div class="cx-pl"><span><b>1</b>Rappeler sous 2{NB}h</span><span><b>2</b>Simplifier la réservation</span></div>
+                )}
+                {t.key === 'team' && (
+                  <div class="cx-team"><span></span><span></span><span class="is-on"></span></div>
+                )}
+                {t.key === 'kpi' && (
+                  <div class="cx-kpi"><span>Délai de réponse</span><span>Rendez-vous manqués</span><span>Avis Google</span><span class="is-ok">Patients qui reviennent</span></div>
+                )}
+              </div>
+            </Fragment>
+          </ServiceTile>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 05 · LE RAPPORT -->
+  <section class="hp-block hp-sec" id="rapport" data-reveal-clip>
+    <div class="container">
+      <div class="cx-rp md-glass" data-reveal="up">
+        <div class="cx-rp__txt">
+          <SectionHead over="05 · Le rapport" reveal={false} class="cx-rp__head">Votre rapport, <span class="gradient-accent">concrètement</span>.</SectionHead>
+          <p>Un document clair, que vous pouvez partager avec votre équipe. Pas de jargon{NB}: ce qu'on a vu, ce que ça coûte à votre clinique, et ce qu'on change en premier.</p>
+          <ol class="cx-toc">
+            {toc.map((t, i) => <li><b>0{i + 1}</b>{t}</li>)}
+          </ol>
+          <a class="cta" href={`${base}/contact/`}>Demander un diagnostic<CtaIcon /></a>
+        </div>
+        <div class="cx-docs" aria-hidden="true">
+          <div class="cx-pg cx-pg--3"></div><div class="cx-pg cx-pg--2"></div>
+          <div class="cx-pg cx-pg--1">
+            <div class="cx-pg__h"><span class="cx-pg__lg"></span><small>Rapport d'expérience patient</small></div>
+            <b class="cx-pg__t">Votre clinique,<br />vue par vos patients</b>
+            <div class="cx-pg__l"><i style="width:80%"></i><i style="width:62%"></i></div>
+            <div class="cx-prio">
+              <div><span class="is-hi"></span>Accueil téléphonique<em>Priorité 1</em></div>
+              <div><span class="is-hi"></span>Suivi après la visite<em>Priorité 2</em></div>
+              <div><span class="is-mid"></span>Réservation en ligne<em>Priorité 3</em></div>
+            </div>
+            <div class="cx-pg__f"><small>Préparé par Kevin et Gauthier, WOOP</small><span class="cx-pg__sg"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 06 · L'ÉCOSYSTÈME (cycle des 5 services), puis le Test de visibilité -->
+  <section class="hp-block hp-sec" id="ecosysteme" data-reveal-clip>
+    <div class="container">
+      <ServiceCycle current="experience" over="06 · L'écosystème" />
+
+      <div class="cx-teaser">
+        <VisibilityTeaser />
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 07 · POURQUOI WOOP -->
+  <section class="hp-block hp-sec" id="pourquoi" data-reveal-clip>
+    <div class="container">
+      <SectionHead over="07 · Pourquoi WOOP">Deux regards sur <span class="gradient-accent">votre clinique</span>.</SectionHead>
+
+      <SpecialistCard members={[team.kevin, team.gauthier]} badge="Marketing pensé selon les règles de votre ordre professionnel" cta={{ href: `${base}/contact/`, label: 'Parler de votre parcours patient' }}>
+        <p class="md-spc__lead">Un patient oublie votre publicité. Il se souvient de son appel, de son attente et de son suivi.</p>
+        <p>Kevin et Gauthier mènent votre audit à deux. Kevin, spécialiste de l'expérience patient, vient dans votre clinique et vit votre parcours comme un patient{NB}: l'accueil, l'attente, le paiement, le suivi. Gauthier, infirmier clinicien et ancien directeur de cliniques privées, connaît ces irritants de l'intérieur. Ensemble, ils traduisent chaque constat en recommandations réalistes pour votre équipe.</p>
+        <Fragment slot="badge-icon"><Fragment set:html={icon('shield')} /></Fragment>
+      </SpecialistCard>
+    </div>
+  </section>
+
+  <!-- 9. VOS QUESTIONS (sans surtitre), puis « Pour aller plus loin » -->
+  <section class="hp-block hp-sec" id="faq" data-reveal-clip>
+    <div class="container">
+      <SectionHead>Vos <span class="gradient-accent">questions</span>.</SectionHead>
+
+      <!-- 6 questions, toutes fermées à l'arrivée : 3 par colonne -->
+      <Faq items={faq} name="faq-experience" />
+
+      <FurtherReading slugs={['avis-google-salle-attente', 'parcours-patient-clic-rendez-vous', 'marketing-sante-ia-plus-humain']} />
+    </div>
+  </section>
+
+  <!-- 10. BANDEAU FINAL -->
+  <FinalBand
+    title="Parlons de votre clinique."
+    text="Un appel découverte de 30 minutes, sans engagement."
+    cta={{ href: `${base}/contact/`, label: 'Réserver un appel découverte' }}
+  />
+
+  <!-- BANDEAU COLLANT (bas d'écran) : hors data-reveal, piloté par le script du composant StickyBar -->
+  <StickyBar lead="On vit votre parcours patient," strong="en ligne puis en personne." order={['gauthier', 'kevin', 'ludo', 'emma']} />
+
+</Layout>
+
+<script>
+  // Conditions communes aux deux animations : à l'écran (part visible), bloc apparu (ScrollReveal),
+  // onglet affiché. prefers-reduced-motion : aucune animation, état final.
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealedOf = (el: HTMLElement) => {
+    const box = el.closest<HTMLElement>('[data-reveal]') ?? (el.hasAttribute('data-reveal') ? el : null);
+    return () => !document.documentElement.classList.contains('reveal-js') || !box || box.classList.contains('is-revealed');
+  };
+
+  // ===== HERO : le parcours de Sophie (maquette, mêmes durées) =====
+  // À chaque étape : la carte s'allume, Sophie et la pastille la rejoignent (0,8 s), « Irritant
+  // repéré » (1,7 s), puis « Corrigé » (1,9 s), puis l'étape suivante ; les pointillés défilent
+  // (1,6 s par motif). Aucune pause au survol ni bouton. Arrêt hors de l'écran, reprise au retour.
+  // Mouvement réduit : 3e étape allumée, « Corrigé », immobile. Téléphone (moins de 600 px) : les
+  // 3 cartes l'une sous l'autre, la pastille sous les cartes (pas de déplacement).
+  (function () {
+    const hv = document.querySelector<HTMLElement>('[data-cx-hero]');
+    if (!hv) return;
+    const cards = Array.from(hv.querySelectorAll<HTMLElement>('[data-cx-step]'));
+    const pat = hv.querySelector<HTMLElement>('[data-cx-pat]')!;
+    const chip = hv.querySelector<HTMLElement>('[data-cx-chip]')!;
+    const ci = chip.querySelector<HTMLElement>('[data-cx-ci]')!;
+    const T = chip.querySelector<HTMLElement>('[data-cx-t]')!;
+    const S = chip.querySelector<HTMLElement>('[data-cx-s]')!;
+    const phone = window.matchMedia('(max-width: 599px)');
+    let k = reduced ? cards.length - 1 : 0;
+    let phase = reduced ? 1 : 0;
+
+    // Place Sophie au-dessus de la carte active et la pastille en bas à droite (maquette)
+    const place = () => {
+      if (phone.matches) {
+        [pat, chip].forEach((el) => { el.style.left = ''; el.style.top = ''; });
+        return;
+      }
+      const c = cards[k];
+      pat.style.left = `${c.offsetLeft - 20}px`;
+      pat.style.top = `${c.offsetTop - 44}px`;
+      chip.style.left = `${c.offsetLeft + c.offsetWidth - 150}px`;
+      chip.style.top = `${c.offsetTop + c.offsetHeight - 6}px`;
+    };
+    const show = () => {
+      cards.forEach((c, i) => c.classList.toggle('is-on', i === k));
+      const fixed = phase === 1;
+      chip.classList.toggle('is-fix', fixed);
+      ci.textContent = fixed ? '✓' : '!';
+      T.textContent = fixed ? 'Corrigé' : 'Irritant repéré';
+      S.textContent = (fixed ? cards[k].dataset.fix : cards[k].dataset.irritant) || '';
+      place();
+    };
+    show();
+    hv.classList.add('is-placed');
+    if ('ResizeObserver' in window) new ResizeObserver(place).observe(hv);
+    else window.addEventListener('resize', place);
+    if (reduced || !('IntersectionObserver' in window)) return;
+
+    // Étape suivante : « Irritant repéré » 1,7 s, puis « Corrigé » 1,9 s
+    phase = 0;
+    show();
+    hv.classList.add('is-anim');
+    const revealed = revealedOf(hv);
+    const state = { visible: false, hidden: document.hidden };
+    let timer = 0;
+    const tick = () => {
+      timer = 0;
+      if (phase === 0) phase = 1;
+      else { phase = 0; k = (k + 1) % cards.length; }
+      show();
+      schedule();
+    };
+    const running = () => state.visible && !state.hidden && revealed();
+    function schedule() {
+      if (!running() || timer) return;
+      timer = window.setTimeout(tick, phase === 0 ? 1700 : 1900);
+    }
+    const update = () => {
+      hv.classList.toggle('is-playing', running());
+      if (running()) schedule();
+      else if (timer) { window.clearTimeout(timer); timer = 0; }
+    };
+    new IntersectionObserver((entries) => entries.forEach((e) => { state.visible = e.isIntersecting; update(); }), { threshold: 0.25 }).observe(hv);
+    document.addEventListener('visibilitychange', () => { state.hidden = document.hidden; update(); });
+  })();
+
+  // ===== 03 · LES MOMENTS QUI COMPTENT =====
+  // Un moment toutes les 3,6 s (maquette). Démarrage quand le bloc est visible à 35 % et apparu.
+  // - Aucune pause au survol (comme la page Image de marque).
+  // - Bouton Pause / Lecture : la pause choisie reste active jusqu'à un nouvel appui.
+  // - Clic sur un moment : il s'affiche ; si la rotation tourne, le minuteur repart (3,6 s) et la
+  //   rotation continue ; en pause, la pause est maintenue.
+  // - Pause au focus clavier dans la section (pas sur le bouton Pause / Lecture, ni pour un focus posé
+  //   par un clic) ; arrêt hors de l'écran ou onglet masqué, reprise au retour.
+  // - prefers-reduced-motion : aucune avancée automatique (bouton en position Lecture).
+  // - Sans JavaScript : le 1er moment, bouton caché.
+  (function () {
+    const zone = document.querySelector<HTMLElement>('#moments');
+    const mw = document.querySelector<HTMLElement>('[data-cx-mo]');
+    const pauseBtn = mw?.querySelector<HTMLButtonElement>('[data-cx-pause]');
+    if (!zone || !mw || !pauseBtn) return;
+    const btns = Array.from(mw.querySelectorAll<HTMLButtonElement>('[data-cx-moment]'));
+    const items = btns.map((b) => b.closest('li')!);
+    const panels = Array.from(mw.querySelectorAll<HTMLElement>('.cx-pn'));
+    const DUR = 3600;
+    let cur = 0;
+
+    const go = (n: number) => {
+      cur = n;
+      items.forEach((li, i) => li.classList.toggle('is-act', i === n));
+      btns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === n)));
+      panels.forEach((p, i) => {
+        p.classList.toggle('is-act', i === n);
+        if (i === n) p.removeAttribute('aria-hidden');
+        else p.setAttribute('aria-hidden', 'true');
+      });
+      mw.dataset.cxCurrent = String(n);
+    };
+
+    const revealed = revealedOf(mw);
+    const reasons = { offscreen: true, unrevealed: !revealed(), focus: false, hidden: document.hidden, user: reduced };
+    let remaining = DUR;
+    let startedAt = 0;
+    let timer = 0;
+    const running = () => !Object.values(reasons).some(Boolean);
+    const update = () => {
+      mw.classList.toggle('is-paused', !running());
+      if (running() && !timer) {
+        startedAt = performance.now();
+        timer = window.setTimeout(tick, remaining);
+      } else if (!running() && timer) {
+        window.clearTimeout(timer);
+        timer = 0;
+        remaining = Math.max(0, remaining - (performance.now() - startedAt));
+      }
+    };
+    function tick() {
+      timer = 0;
+      remaining = DUR;
+      go((cur + 1) % btns.length);
+      update();
+    }
+
+    const setUser = (on: boolean) => {
+      reasons.user = on;
+      mw.classList.toggle('is-user-paused', on);
+      pauseBtn.setAttribute('aria-pressed', String(on));
+      pauseBtn.setAttribute('aria-label', on ? "Reprendre l'animation" : "Mettre en pause l'animation");
+      update();
+    };
+    pauseBtn.hidden = false;
+    pauseBtn.addEventListener('click', () => setUser(!reasons.user));
+
+    btns.forEach((b, i) => b.addEventListener('click', () => {
+      go(i);
+      window.clearTimeout(timer);
+      timer = 0;
+      remaining = DUR;
+      update();
+    }));
+
+    const keyboardFocus = (el: Element) => {
+      try { return el.matches(':focus-visible'); } catch { return true; }
+    };
+    zone.addEventListener('focusin', (e) => {
+      reasons.focus = e.target instanceof Element && e.target !== pauseBtn && keyboardFocus(e.target);
+      update();
+    });
+    zone.addEventListener('focusout', (e) => {
+      if (e.relatedTarget instanceof Node && zone.contains(e.relatedTarget)) return;
+      reasons.focus = false;
+      update();
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => entries.forEach((entry) => { reasons.offscreen = !entry.isIntersecting; update(); }), { threshold: 0.35 }).observe(mw);
+    } else {
+      reasons.offscreen = false;
+    }
+    if (reasons.unrevealed) {
+      const mo = new MutationObserver(() => {
+        reasons.unrevealed = !revealed();
+        if (!reasons.unrevealed) { mo.disconnect(); update(); }
+      });
+      mo.observe(mw, { attributes: true, attributeFilter: ['class'] });
+    }
+    document.addEventListener('visibilitychange', () => { reasons.hidden = document.hidden; update(); });
+    setUser(reasons.user);
+  })();
+</script>
+
+<style>
+  /* =====================================================================
+     PAGE CONSEIL EN EXPÉRIENCE PATIENT : styles locaux (scopés).
+     Même modèle que les autres pages Services : classes hp-* et md-* communes, classes cx-*
+     propres à cette page.
+     Couleurs : uniquement les jetons de global.css, leurs mélanges (color-mix) et des rgba()
+     dérivées de #FA6244 et #E62B7F. Contraste hybride : sur le dégradé, petits textes en
+     --hp-on-grad (--bg-deep), titres en blanc. Pictogramme de clinique : celui des autres pages,
+     croix blanche dans sa pastille (jamais rouge).
+     ===================================================================== */
+
+  /* ===== ESPACEMENTS DE RÉFÉRENCE (mêmes valeurs que l'accueil) ===== */
+  .hp-hero,
+  .hp-block {
+    --home-section-gap: 80px;
+    --home-head-gap: 16px;
+    --home-head-content: 36px;
+  }
+
+  @media (min-width: 768px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 100px; }
+  }
+
+  @media (min-width: 900px) {
+    .hp-hero,
+    .hp-block {
+      --home-head-gap: 20px;
+      --home-head-content: 46px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hp-hero,
+    .hp-block { --home-section-gap: 120px; }
+  }
+
+  /* Pas de mot seul en fin de paragraphe */
+  p { text-wrap: pretty; }
+
+  .hp-hero + .hp-block,
+  .hp-block + .hp-block { margin-top: var(--home-section-gap); }
+
+  /* Bouton sous une section */
+  .md-svc-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 34px;
+  }
+
+  @media (min-width: 900px) {
+    .md-svc-cta { margin-top: 44px; }
+  }
+
+  /* Couleurs des fiches blanches des illustrations (fond, filets, lignes), teintées de rose */
+  .cx-hv,
+  .hp-block {
+    --cx-paper: var(--hp-light);
+    --cx-tint: color-mix(in srgb, var(--woop-pink) 6%, var(--text-primary));
+    --cx-tint-2: color-mix(in srgb, var(--woop-pink) 12%, var(--text-primary));
+    --cx-line: color-mix(in srgb, var(--woop-pink) 16%, var(--text-primary));
+  }
+
+  /* Pastille d'icône (hero, section 02) */
+  .cx-ic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+    box-shadow: 0 8px 20px rgba(230, 43, 127, 0.3);
+  }
+
+  .cx-ic :global(svg) { width: 22px; height: 22px; }
+
+  /* ===== 1. HERO : le parcours de Sophie =====
+     Ordinateur et tablette (dès 600 px) : 3 cartes en escalier sur 500 px de haut, reliées par des
+     pointillés qui défilent ; Sophie et la pastille rejoignent la carte active (maquette).
+     Téléphone : les 3 cartes l'une sous l'autre, compactes, et la pastille dessous. */
+  .cx-hv {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    margin: 8px auto 0;
+  }
+
+  @media (min-width: 600px) {
+    .cx-hv { height: 500px; }
+  }
+
+  @media (min-width: 1024px) {
+    .cx-hv { margin-top: 0; }
+  }
+
+  .cx-hv__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 520px;
+    max-width: 120%;
+    height: 520px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(230, 43, 127, 0.32), rgba(250, 98, 68, 0.1) 45%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cx-path {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    .cx-path { display: block; }
+  }
+
+  .cx-stop-o { stop-color: var(--woop-orange); }
+  .cx-stop-p { stop-color: var(--woop-pink); }
+
+  .cx-dash {
+    fill: none;
+    stroke: url(#cx-path-g);
+    stroke-width: 2.5;
+    stroke-dasharray: 6 9;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Pointillés qui défilent (maquette : -30 en 1,6 s), seulement à l'écran */
+  .cx-hv.is-anim .cx-dash { animation: cx-dash 1.6s linear infinite paused; }
+  .cx-hv.is-anim.is-playing .cx-dash { animation-play-state: running; }
+
+  @keyframes cx-dash {
+    to { stroke-dashoffset: -30; }
+  }
+
+  .cx-steps {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  @media (min-width: 600px) {
+    .cx-steps {
+      position: absolute;
+      inset: 0;
+      display: block;
+    }
+  }
+
+  .cx-st {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 22px;
+    background: var(--cx-paper);
+    color: var(--bg-deep);
+    text-align: left;
+    box-shadow: 0 18px 40px var(--hp-shadow);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s, background 0.5s, color 0.5s;
+  }
+
+  @media (min-width: 600px) {
+    .cx-st {
+      position: absolute;
+      width: 300px;
+      padding: 16px 20px;
+    }
+
+    .cx-st--1 { left: 0; top: 50px; }
+    .cx-st--2 { left: 120px; top: 200px; }
+    .cx-st--3 { right: 0; top: 340px; }
+  }
+
+  .cx-st small {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .cx-st b {
+    display: block;
+    font-size: 17px;
+    line-height: 1.25;
+  }
+
+  .cx-st em {
+    display: block;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  /* Étape active : dégradé, titre blanc, petits textes en --hp-on-grad */
+  .cx-st.is-on {
+    transform: scale(1.04);
+    background: var(--woop-gradient);
+    color: var(--text-primary);
+    box-shadow: 0 24px 50px rgba(230, 43, 127, 0.45);
+  }
+
+  .cx-st.is-on small,
+  .cx-st.is-on em { color: var(--hp-on-grad); }
+
+  /* Téléphone : la carte active ne grossit pas (elle resterait dans la marge de l'écran) */
+  @media (max-width: 599px) {
+    .cx-st.is-on { transform: none; }
+  }
+
+  .cx-st.is-on .cx-ic {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: none;
+  }
+
+  /* Sophie et la pastille « Irritant repéré » / « Corrigé » : placées par le script (sans JavaScript :
+     cachées) ; déplacement de 0,8 s (maquette) */
+  .cx-pat,
+  .cx-chip {
+    z-index: 4;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 10px 10px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--bg-elevated) 92%, transparent);
+    text-align: left;
+    white-space: nowrap;
+    box-shadow: inset 0 0 0 1px var(--hp-line), 0 18px 40px var(--hp-shadow);
+    transition: left 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .cx-hv.is-placed .cx-chip { display: flex; }
+
+  @media (min-width: 600px) {
+    .cx-pat,
+    .cx-chip { position: absolute; }
+
+    .cx-hv.is-placed .cx-pat { display: flex; }
+  }
+
+  /* Téléphone : la pastille sous les cartes, centrée */
+  @media (max-width: 599px) {
+    .cx-chip {
+      position: relative;
+      width: max-content;
+      max-width: 100%;
+      margin: 14px auto 0;
+    }
+  }
+
+  .cx-pat b,
+  .cx-chip b {
+    display: block;
+    font-size: 13px;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .cx-pat small,
+  .cx-chip small {
+    display: block;
+    font-size: 11.5px;
+    line-height: 1.3;
+    color: var(--text-secondary);
+  }
+
+  .cx-av {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    font-weight: 800;
+  }
+
+  .cx-ci {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-weight: 800;
+    transition: background 0.3s;
+  }
+
+  .cx-chip.is-fix .cx-ci {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+  }
+
+  /* ===== 2. POUR QUI ? ===== */
+  .cx-prs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .cx-prs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1200px) {
+    .cx-prs {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .md-pr__vis--once,
+  .md-pr__vis--reviews,
+  .md-pr__vis--phone,
+  .md-pr__vis--ads {
+    background:
+      radial-gradient(circle at 30% 20%, rgba(230, 43, 127, 0.3), transparent 65%),
+      var(--hp-plum);
+  }
+
+  /* 1re visite, puis… : barres qui baissent */
+  .cx-a1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cx-a1__bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+    height: 70px;
+  }
+
+  .cx-a1__bars i {
+    display: block;
+    width: 18px;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--text-primary) 25%, transparent);
+  }
+
+  .cx-a1__bars i:first-child { background: var(--woop-gradient); }
+
+  .cx-a1 small {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .cx-a1 sup { font-size: 0.7em; line-height: 0; }
+
+  /* Avis à 3 étoiles (illustratif) */
+  .cx-a2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: var(--cx-paper);
+    color: var(--bg-deep);
+    text-align: center;
+  }
+
+  .cx-a2__stars {
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: var(--woop-orange);
+  }
+
+  .cx-a2__off { color: var(--cx-line); }
+
+  .cx-a2 b { font-size: 13px; }
+
+  /* 3 appels manqués */
+  .cx-a3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+    box-shadow: inset 0 0 0 1px rgba(230, 43, 127, 0.4);
+  }
+
+  .cx-a3 span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-ink);
+  }
+
+  .cx-a3 span :global(svg) { width: 18px; height: 18px; }
+
+  .cx-a3 b {
+    font-size: 13px;
+    color: var(--text-primary);
+  }
+
+  /* Pub → ? → ✓ */
+  .cx-a4 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cx-a4__nd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 10px;
+    border-radius: 14px;
+    font-weight: 800;
+  }
+
+  .cx-a4__nd--w {
+    background: var(--hp-light);
+    color: var(--woop-orange);
+  }
+
+  .cx-a4__nd--p {
+    background: var(--hp-light);
+    color: var(--woop-pink);
+  }
+
+  .cx-a4__nd--g {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  .cx-a4 i {
+    width: 22px;
+    height: 2px;
+    background: var(--woop-gradient);
+  }
+
+  /* ===== 3. L'AUDIT ===== */
+  .cx-fns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    list-style: none;
+  }
+
+  @media (min-width: 1100px) {
+    .cx-fns {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+  }
+
+  .cx-fn {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px 24px;
+    border-radius: 26px;
+  }
+
+  @media (min-width: 1024px) {
+    .cx-fn { padding: 30px; }
+  }
+
+  .cx-fn--hot {
+    background: var(--woop-gradient);
+    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.28);
+  }
+
+  .cx-fn__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cx-fn__n {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--md-pink-soft);
+  }
+
+  .cx-fn h3 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.05;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+
+  .cx-fn__where {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  .cx-fn dl {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px 16px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--hp-line);
+  }
+
+  .cx-fn dt {
+    padding-top: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .cx-fn dd {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--text-primary);
+  }
+
+  .cx-fn dd.cx-fn__goal { color: var(--md-pink-soft); }
+
+  /* Tuile 03, sur le dégradé : intitulés (On regarde, Objectif) en blanc, textes en --bg-deep */
+  .cx-fn--hot .cx-ic {
+    background: var(--hp-light);
+    color: var(--md-pink-deep);
+    box-shadow: none;
+  }
+
+  .cx-fn--hot .cx-fn__n,
+  .cx-fn--hot .cx-fn__where,
+  .cx-fn--hot dd,
+  .cx-fn--hot dd.cx-fn__goal { color: var(--hp-on-grad); }
+
+  .cx-fn--hot dt { color: var(--text-primary); }
+
+  .cx-fn--hot dl { border-top-color: color-mix(in srgb, var(--bg-deep) 22%, transparent); }
+
+  /* ===== 4. LES MOMENTS QUI COMPTENT =====
+     Ordinateur (dès 1180 px) : les 8 moments sur une ligne, reliés ; en dessous, 4 par ligne. */
+  .cx-mw {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .cx-mw__bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -10px;
+  }
+
+  /* Bouton Pause / Lecture (même style que la page Image de marque), toujours visible */
+  .cx-play {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    box-shadow: 0 8px 22px rgba(230, 43, 127, 0.3);
+    cursor: pointer;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .cx-play[hidden] { display: none; }
+
+  .cx-play:hover {
+    transform: scale(1.06);
+    box-shadow: 0 10px 28px rgba(230, 43, 127, 0.45);
+  }
+
+  .cx-play:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 3px;
+  }
+
+  .cx-play svg { width: 16px; height: 16px; }
+  .cx-play__i-play { display: none; }
+  .cx-mw.is-user-paused .cx-play__i-pause { display: none; }
+  .cx-mw.is-user-paused .cx-play__i-play { display: block; margin-left: 2px; }
+
+  .cx-mos {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 26px 4px;
+    list-style: none;
+  }
+
+  @media (min-width: 600px) {
+    .cx-mos { column-gap: 10px; }
+  }
+
+  @media (min-width: 1180px) {
+    .cx-mos {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+
+    /* Ligne qui relie les 8 moments */
+    .cx-mos::before {
+      content: '';
+      position: absolute;
+      left: calc(100% / 16);
+      right: calc(100% / 16);
+      top: 24px;
+      height: 2px;
+      background: var(--woop-gradient);
+      opacity: 0.5;
+    }
+  }
+
+  .cx-mo {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .cx-mo button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .cx-mo button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--woop-pink) 55%, var(--text-primary));
+    outline-offset: 4px;
+  }
+
+  .cx-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    box-shadow: inset 0 0 0 2px rgba(230, 43, 127, 0.55), 0 0 0 6px var(--bg-deep);
+    color: var(--md-pink-soft);
+    font-weight: 800;
+    transition: transform 0.35s, background 0.35s, box-shadow 0.35s, color 0.35s;
+  }
+
+  .cx-mo b {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+  }
+
+  @media (max-width: 399px) {
+    .cx-mo b { font-size: 11px; }
+  }
+
+  /* Très petits écrans (moins de 360 px) : libellés des moments et de la carte du parcours réduits */
+  @media (max-width: 359px) {
+    .cx-mo b { font-size: 10px; }
+
+    .hp-block .cx-map span { font-size: 7.5px; }
+  }
+
+  @media (min-width: 600px) {
+    .cx-mo b { font-size: 15px; }
+  }
+
+  .cx-mo.is-act b { color: var(--text-primary); }
+
+  .cx-mo.is-act .cx-dot {
+    transform: scale(1.12);
+    background: var(--woop-gradient);
+    box-shadow: 0 0 0 6px var(--bg-deep), 0 0 26px rgba(230, 43, 127, 0.6);
+    color: var(--text-primary);
+  }
+
+  .cx-mo button:hover .cx-dot { box-shadow: inset 0 0 0 2px var(--woop-pink), 0 0 0 6px var(--bg-deep); }
+
+  .cx-mo.is-act button:hover .cx-dot { box-shadow: 0 0 0 6px var(--bg-deep), 0 0 26px rgba(230, 43, 127, 0.6); }
+
+  /* Panneaux : le moment actif ; les autres, superposés et invisibles (fondu de 0,45 s) */
+  .cx-pns { position: relative; }
+
+  .cx-pn {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.45s, transform 0.45s;
+    pointer-events: none;
+  }
+
+  .cx-pn.is-act {
+    position: relative;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  @media (min-width: 820px) {
+    .cx-pn {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+  }
+
+  .cx-pa,
+  .cx-pb {
+    padding: 22px 22px;
+    border-radius: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .cx-pa,
+    .cx-pb { padding: 24px 28px; }
+  }
+
+  .cx-pa {
+    background: color-mix(in srgb, var(--text-primary) 3%, transparent);
+    border: 1.5px dashed color-mix(in srgb, var(--text-primary) 18%, transparent);
+  }
+
+  .cx-pb {
+    background: var(--woop-gradient);
+    box-shadow: 0 24px 60px rgba(230, 43, 127, 0.28);
+  }
+
+  .cx-pa small,
+  .cx-pb small {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .cx-pb small { color: var(--hp-on-grad); }
+
+  .cx-pa p,
+  .cx-pb p {
+    margin-top: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  @media (min-width: 768px) {
+    .cx-pa p,
+    .cx-pb p { font-size: 18px; }
+  }
+
+  .cx-pa p { color: var(--text-secondary); }
+  .cx-pb p { color: var(--text-primary); }
+
+  .cx-arr {
+    display: inline-flex;
+    align-self: center;
+    justify-self: center;
+    color: var(--md-pink-soft);
+    rotate: 90deg;
+  }
+
+  .cx-arr :global(svg) { width: 26px; height: 26px; }
+
+  @media (min-width: 820px) {
+    .cx-arr { rotate: none; }
+  }
+
+  /* ===== 5. LES LIVRABLES =====
+     Ordinateur (dès 1100 px), 4 colonnes : diagnostic (dégradé) et carte du parcours en haut ;
+     plan d'action, équipe d'accueil et indicateurs en bas. Tablette : 2 colonnes. Téléphone : 1. */
+  .cx-bento {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  @media (min-width: 600px) {
+    .cx-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cx-bento :global(.md-sv--diag),
+    .cx-bento :global(.md-sv--map),
+    .cx-bento :global(.md-sv--kpi) { grid-column: span 2; }
+  }
+
+  @media (min-width: 1100px) {
+    .cx-bento {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .cx-bento :global(.md-sv--diag) { grid-column: 1 / span 2; grid-row: 1; }
+    .cx-bento :global(.md-sv--map) { grid-column: 3 / span 2; grid-row: 1; }
+    .cx-bento :global(.md-sv--plan) { grid-column: 1; grid-row: 2; }
+    .cx-bento :global(.md-sv--team) { grid-column: 2; grid-row: 2; }
+    .cx-bento :global(.md-sv--kpi) { grid-column: 3 / span 2; grid-row: 2; }
+  }
+
+  /* Titres des tuiles : toujours dans leur tuile (même réglage que la page Création de sites web :
+     taille selon la largeur de la tuile, 21 px au plus ; « L'équipe d'accueil » et « Un plan
+     d'action par priorité » passent à la ligne entre les mots) */
+  .cx-bento :global(.md-sv--sq) { container-type: inline-size; }
+
+  .cx-bento :global(.md-sv--sq h3) { font-size: min(21px, calc((100cqi - 68px) / 5.6)); }
+
+  /* Mini-illustrations des tuiles : boîte commune */
+  .md-mui {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 14px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-primary) 7%, transparent);
+  }
+
+  /* Diagnostic (sur le dégradé) : fiche blanche, état de chaque point aux couleurs de la charte */
+  .cx-mui--diag {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .cx-dg {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--cx-paper);
+    color: var(--bg-deep);
+    box-shadow: 0 18px 40px color-mix(in srgb, var(--bg-deep) 20%, transparent);
+  }
+
+  .cx-dg__h {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 2px;
+  }
+
+  .cx-dg__h b {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--md-pink-deep);
+  }
+
+  .cx-dg__h span {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .cx-dg__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 46px auto;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    background: var(--cx-tint);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  @media (min-width: 400px) {
+    .cx-dg__row { grid-template-columns: minmax(0, 1fr) 60px auto; }
+  }
+
+  .cx-dg__row i {
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  .cx-dg__row em {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-style: normal;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .cx-dg__row.is-ok i { background: var(--text-muted); }
+  .cx-dg__row.is-ok em { background: var(--cx-tint-2); color: var(--text-muted); }
+  .cx-dg__row.is-mid i { background: var(--woop-orange); }
+  .cx-dg__row.is-mid em { background: color-mix(in srgb, var(--woop-orange) 16%, var(--text-primary)); color: color-mix(in srgb, var(--woop-orange) 70%, var(--bg-deep)); }
+  .cx-dg__row.is-hi i { background: var(--woop-gradient); }
+  .cx-dg__row.is-hi em { background: var(--woop-gradient); color: var(--text-primary); }
+
+  /* Carte du parcours : 6 étapes reliées, irritants en dégradé (le soin reste neutre) */
+  .cx-map {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 6px;
+  }
+
+  .cx-map > div {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    text-align: center;
+  }
+
+  .cx-map > div::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -50%;
+    width: 100%;
+    height: 2px;
+    background: color-mix(in srgb, var(--text-primary) 18%, transparent);
+  }
+
+  .cx-map > div:first-child::before { display: none; }
+
+  .cx-map i {
+    position: relative;
+    z-index: 1;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--hp-light);
+  }
+
+  .cx-map .is-bad i {
+    background: var(--woop-gradient);
+    box-shadow: 0 0 0 5px rgba(230, 43, 127, 0.22);
+  }
+
+  .cx-map .is-neutral i {
+    background: var(--bg-elevated);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--text-primary) 35%, transparent);
+  }
+
+  .cx-map span {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-secondary);
+  }
+
+  .cx-map em {
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(230, 43, 127, 0.18);
+    color: var(--md-pink-soft);
+    font-style: normal;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Téléphone : libellés plus petits, pour que les 6 étapes ne se chevauchent pas */
+  @media (max-width: 599px) {
+    .cx-mui--map { padding: 12px 6px; }
+
+    .cx-map span { font-size: 8.5px; }
+
+    .cx-map em { font-size: 7.5px; padding: 3px 4px; letter-spacing: 0.02em; }
+  }
+
+  /* Plan d'action : 2 priorités */
+  .cx-pl {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cx-pl span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .cx-pl b {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+    font-size: 10px;
+  }
+
+  /* Équipe d'accueil : 3 personnes, l'une en dégradé */
+  .cx-mui--team { align-items: flex-start; }
+
+  .cx-team { display: flex; }
+
+  .cx-team span {
+    width: 40px;
+    height: 40px;
+    margin-left: -10px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--text-primary) 20%, var(--bg-elevated));
+    box-shadow: 0 0 0 3px var(--bg-elevated);
+  }
+
+  .cx-team span:first-child { margin-left: 0; }
+  .cx-team span.is-on { background: var(--woop-gradient); }
+
+  /* Indicateurs à suivre : 4 étiquettes */
+  .cx-kpi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cx-kpi span {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--text-primary) 8%, transparent);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .cx-kpi span.is-ok {
+    background: var(--woop-gradient);
+    color: var(--hp-on-grad);
+  }
+
+  /* ===== 6. LE RAPPORT : texte à gauche, le rapport à droite (dès 980 px) ===== */
+  .cx-rp {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+    padding: 34px 22px;
+    border-radius: 34px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .cx-rp { padding: 44px 40px; }
+  }
+
+  @media (min-width: 980px) {
+    .cx-rp {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 60px;
+      padding: 56px;
+    }
+  }
+
+  .cx-rp__txt {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cx-rp__txt :global(.cx-rp__head) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--home-head-gap);
+    margin-bottom: 18px;
+  }
+
+  .cx-rp__txt :global(.cx-rp__head .hp-title) { margin-bottom: 0; }
+
+  .cx-rp__txt > p {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  .cx-toc {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    margin: 22px 0 30px;
+    list-style: none;
+  }
+
+  .cx-toc li {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--hp-line);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .cx-toc b {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--md-pink-soft);
+  }
+
+  /* Le rapport : 3 pages superposées, la première lisible */
+  .cx-docs {
+    position: relative;
+    height: 450px;
+  }
+
+  @media (min-width: 600px) {
+    .cx-docs { height: 440px; }
+  }
+
+  .cx-pg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 260px;
+    height: 400px;
+    border-radius: 14px;
+    background: var(--cx-paper);
+    box-shadow: 0 30px 70px var(--hp-shadow);
+  }
+
+  @media (min-width: 600px) {
+    .cx-pg { width: 300px; height: 400px; }
+  }
+
+  .cx-pg--3 { transform: translate(-38%, -50%) rotate(9deg); background: var(--cx-tint-2); }
+  .cx-pg--2 { transform: translate(-44%, -50%) rotate(4deg); background: var(--cx-tint); }
+
+  .cx-pg--1 {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    color: var(--bg-deep);
+    transform: translate(-55%, -50%) rotate(-3deg);
+  }
+
+  @media (min-width: 600px) {
+    .cx-pg--1 { gap: 16px; padding: 28px; }
+  }
+
+  .cx-pg__h {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cx-pg__lg {
+    width: 26px;
+    height: 14px;
+    border-radius: 7px;
+    box-shadow: inset 0 0 0 3px var(--woop-pink);
+  }
+
+  .cx-pg__h small {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .cx-pg__t {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.1;
+    text-transform: uppercase;
+    background: var(--woop-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (min-width: 600px) {
+    .cx-pg__t { font-size: 26px; }
+  }
+
+  .cx-pg__l {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .cx-pg__l i {
+    display: block;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--cx-line);
+  }
+
+  .cx-prio {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cx-prio div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: var(--cx-tint);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  @media (min-width: 600px) {
+    .cx-prio div { padding: 10px 12px; font-size: 12.5px; }
+  }
+
+  .cx-prio span {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .cx-prio .is-hi { background: var(--woop-gradient); }
+  .cx-prio .is-mid { background: var(--woop-orange); }
+
+  .cx-prio em {
+    margin-left: auto;
+    font-style: normal;
+    font-size: 9.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--text-muted);
+  }
+
+  .cx-pg__f {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--cx-tint-2);
+  }
+
+  .cx-pg__f small {
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text-muted);
+  }
+
+  .cx-pg__sg {
+    flex: none;
+    width: 60px;
+    height: 22px;
+    border-bottom: 2px solid var(--woop-pink);
+    border-radius: 0 0 40% 10%;
+  }
+
+  /* ===== 7. L'ÉCOSYSTÈME : test de visibilité sous le cycle ===== */
+  /* Le bandeau a déjà 22 px de marge au-dessus */
+  .cx-teaser { margin-top: 34px; }
+
+  @media (min-width: 900px) {
+    .cx-teaser { margin-top: 50px; }
+  }
+
+  /* Mouvement réduit : aucune transition dans les illustrations (état final) */
+  @media (prefers-reduced-motion: reduce) {
+    .cx-st,
+    .cx-pat,
+    .cx-chip,
+    .cx-ci,
+    .cx-dot,
+    .cx-mo b,
+    .cx-pn,
+    .cx-play { transition: none; }
+
+    .cx-play:hover { transform: none; }
+  }
+</style>
