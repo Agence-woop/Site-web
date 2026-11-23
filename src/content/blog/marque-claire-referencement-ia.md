@@ -35,7 +35,7 @@ Une étude publiée par quelqu'un qui vend la solution peut être juste. Elle m�
 
 ## Ce que cherche une IA quand elle recommande une entreprise
 
-Un assistant IA recoupe ce qu'il trouve. Il lit votre site, votre fiche d'établissement, les répertoires où vous figurez, [vos avis](/blog/avis-google-salle-attente) et les articles qui parlent de vous, puis il tente de résumer qui vous êtes et à qui vous servez.
+Un assistant IA recoupe ce qu'il trouve. Il lit votre site, votre fiche d'établissement, les répertoires où vous figurez, [vos avis](/blog/avis-google-salle-attente/) et les articles qui parlent de vous, puis il tente de résumer qui vous êtes et à qui vous servez.
 
 Quand toutes ces sources racontent la même histoire, il peut vous recommander avec assurance. Quand votre site parle de clinique multidisciplinaire, votre fiche de centre de physiothérapie et qu'un répertoire affiche encore votre ancienne adresse, il réagit comme n'importe quel lecteur pressé et passe à une entreprise plus simple à résumer.
 
